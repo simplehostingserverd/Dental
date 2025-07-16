@@ -14,14 +14,14 @@ import {
   MessageSquare,
   Settings,
   Bot,
-  Tooth
+  Heart
 } from "lucide-react"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Schedule", href: "/dashboard/schedule", icon: Calendar },
   { name: "Patients", href: "/dashboard/patients", icon: Users },
-  { name: "Charting", href: "/dashboard/charting", icon: Tooth },
+  { name: "Charting", href: "/dashboard/charting", icon: Heart },
   { name: "Treatment Plans", href: "/dashboard/treatments", icon: FileText },
   { name: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { name: "Imaging", href: "/dashboard/imaging", icon: Camera },
