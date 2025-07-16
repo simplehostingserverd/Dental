@@ -1,101 +1,259 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  url      = env("DATABASE_URL")
 }
 
 model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([name])
+  @@index([name])
 }
 
 // Necessary for Next auth
 model Account {
-    id                       String  @id @default(cuid())
-    userId                   String
-    type                     String
-    provider                 String
-    providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
-    expires_at               Int?
-    token_type               String?
-    scope                    String?
-    id_token                 String? // @db.Text
-    session_state            String?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    refresh_token_expires_in Int?
+  id                       String        @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? // @db.Text
+  access_token             String? // @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? // @db.Text
+  session_state            String?
+  user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refresh_token_expires_in Int?
+  PracticeUser             PracticeUser? @relation(fields: [practiceUserId], references: [id])
+  practiceUserId           String?
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String        @id @default(cuid())
+  sessionToken   String        @unique
+  userId         String
+  expires        DateTime
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  PracticeUser   PracticeUser? @relation(fields: [practiceUserId], references: [id])
+  practiceUserId String?
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-    @@unique([identifier, token])
+  @@unique([identifier, token])
 }
 
-// schema.prisma
+// Enterprise Authentication Schema
 
+// Practice Users (Dentists, Staff, Admins)
+model PracticeUser {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  emailVerified DateTime?
+  password      String?
+  firstName     String
+  lastName      String
+  role          PracticeRole @default(STAFF)
+  isActive      Boolean      @default(true)
+  lastLogin     DateTime?
+  practiceId    String
+  practice      Practice     @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  // Security fields
+  twoFactorEnabled Boolean   @default(false)
+  twoFactorSecret  String?
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  loginAttempts    Int       @default(0)
+  lockedUntil      DateTime?
+
+  // Profile fields
+  phone          String?
+  licenseNumber  String?
+  specialization String?
+  image          String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  accounts     Account[]
+  sessions     Session[]
+  patients     Patient[]     @relation("AssignedPatients")
+  appointments Appointment[]
+  tasks        Task[]        @relation("AssignedTasks")
+  messagesSent Message[]     @relation("SentMessages")
+  auditLogs    AuditLog[]
+
+  @@map("practice_users")
+}
+
+// Patient Users (Separate authentication system)
+model PatientUser {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  isActive      Boolean   @default(true)
+  lastLogin     DateTime?
+
+  // Security fields
+  twoFactorEnabled Boolean   @default(false)
+  twoFactorSecret  String?
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  loginAttempts    Int       @default(0)
+  lockedUntil      DateTime?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  patient         Patient?         @relation("PatientAuth")
+  patientSessions PatientSession[]
+
+  @@map("patient_users")
+}
+
+// Practice Management
+model Practice {
+  id      String  @id @default(cuid())
+  name    String
+  address String?
+  phone   String?
+  email   String?
+  website String?
+
+  // Subscription & Billing
+  subscriptionTier   SubscriptionTier   @default(BASIC)
+  subscriptionStatus SubscriptionStatus @default(ACTIVE)
+  billingEmail       String?
+
+  // Settings
+  timezone String  @default("UTC")
+  isActive Boolean @default(true)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users    PracticeUser[]
+  patients Patient[]
+
+  @@map("practices")
+}
+
+// Separate session management for patients
+model PatientSession {
+  id           String      @id @default(cuid())
+  sessionToken String      @unique
+  userId       String
+  expires      DateTime
+  user         PatientUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("patient_sessions")
+}
+
+// Audit logging for security
+model AuditLog {
+  id         String        @id @default(cuid())
+  action     String
+  resource   String?
+  resourceId String?
+  userId     String?
+  user       PracticeUser? @relation(fields: [userId], references: [id])
+  ipAddress  String?
+  userAgent  String?
+  timestamp  DateTime      @default(now())
+
+  @@map("audit_logs")
+}
+
+enum PracticeRole {
+  ADMIN
+  DOCTOR
+  HYGIENIST
+  STAFF
+  RECEPTIONIST
+}
+
+enum SubscriptionTier {
+  BASIC
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  SUSPENDED
+  CANCELLED
+  TRIAL
+}
+
+// Legacy User model for NextAuth compatibility
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          Role      @default(STAFF)
-  password      String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  patients      Patient[]     @relation("AssignedPatients")
-  appointments  Appointment[]
-  tasks         Task[]        @relation("AssignedTasks")
-  messagesSent  Message[]     @relation("SentMessages")
-}
-
-enum Role {
-  ADMIN
-  DOCTOR
-  STAFF
+  accounts Account[]
+  sessions Session[]
 }
 
 model Patient {
-  id            String       @id @default(cuid())
-  firstName     String
-  lastName      String
-  dateOfBirth   DateTime
-  gender        String
-  phone         String?
-  email         String?
-  address       String?
-  createdAt     DateTime     @default(now())
+  id          String   @id @default(cuid())
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime
+  gender      String
+  phone       String?
+  email       String?
+  address     String?
 
-  userId        String?
-  assignedBy    User?        @relation("AssignedPatients", fields: [userId], references: [id])
+  // Practice association
+  practiceId String
+  practice   Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  // Assigned practice user
+  assignedUserId String?
+  assignedBy     PracticeUser? @relation("AssignedPatients", fields: [assignedUserId], references: [id])
+
+  // Patient portal authentication
+  patientUserId String?      @unique
+  patientUser   PatientUser? @relation("PatientAuth", fields: [patientUserId], references: [id])
+
+  // Medical information
+  emergencyContact String?
+  insurance        String?
+  allergies        String?
+  medicalHistory   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   appointments  Appointment[]
   treatments    Treatment[]
@@ -105,21 +263,25 @@ model Patient {
   referrals     Referral[]
   prescriptions Prescription[]
   notes         Note[]
-  messages      Message[]     @relation("PatientMessages")
+  messages      Message[]      @relation("PatientMessages")
 }
 
 model Appointment {
-  id        String    @id @default(cuid())
-  start     DateTime
-  end       DateTime
-  status    AppointmentStatus @default(SCHEDULED)
-  notes     String?
+  id     String            @id @default(cuid())
+  start  DateTime
+  end    DateTime
+  status AppointmentStatus @default(SCHEDULED)
+  notes  String?
+  type   String?
 
-  patient   Patient   @relation(fields: [patientId], references: [id])
+  patient   Patient @relation(fields: [patientId], references: [id])
   patientId String
 
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String
+  practiceUser   PracticeUser @relation(fields: [practiceUserId], references: [id])
+  practiceUserId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum AppointmentStatus {
@@ -136,19 +298,19 @@ model Treatment {
   cost        Float
   date        DateTime @default(now())
 
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  patientId   String
+  patient   Patient @relation(fields: [patientId], references: [id])
+  patientId String
 }
 
 model Invoice {
-  id          String   @id @default(cuid())
-  total       Float
-  paid        Boolean  @default(false)
-  dueDate     DateTime
-  status      InvoiceStatus
+  id      String        @id @default(cuid())
+  total   Float
+  paid    Boolean       @default(false)
+  dueDate DateTime
+  status  InvoiceStatus
 
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  patientId   String
+  patient   Patient @relation(fields: [patientId], references: [id])
+  patientId String
 }
 
 enum InvoiceStatus {
@@ -159,22 +321,32 @@ enum InvoiceStatus {
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  content   String
-  timestamp DateTime @default(now())
+  id          String      @id @default(cuid())
+  content     String
+  timestamp   DateTime    @default(now())
+  isRead      Boolean     @default(false)
+  messageType MessageType @default(GENERAL)
 
-  senderId   String
-  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId String
+  sender   PracticeUser @relation("SentMessages", fields: [senderId], references: [id])
 
-  patientId  String
-  patient    Patient  @relation("PatientMessages", fields: [patientId], references: [id])
+  patientId String
+  patient   Patient @relation("PatientMessages", fields: [patientId], references: [id])
+}
+
+enum MessageType {
+  GENERAL
+  APPOINTMENT_REMINDER
+  TREATMENT_UPDATE
+  BILLING
+  EMERGENCY
 }
 
 model Reminder {
-  id        String   @id @default(cuid())
+  id        String       @id @default(cuid())
   type      ReminderType
   scheduled DateTime
-  sent      Boolean  @default(false)
+  sent      Boolean      @default(false)
 
   patientId String
   patient   Patient @relation(fields: [patientId], references: [id])
@@ -187,39 +359,50 @@ enum ReminderType {
 }
 
 model Xray {
-  id          String   @id @default(cuid())
-  imageUrl    String
-  takenAt     DateTime @default(now())
-  notes       String?
+  id       String   @id @default(cuid())
+  imageUrl String
+  takenAt  DateTime @default(now())
+  notes    String?
 
-  patientId   String
-  patient     Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
 }
 
 model Task {
-  id        String   @id @default(cuid())
-  title     String
-  done      Boolean  @default(false)
-  dueDate   DateTime?
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  done        Boolean      @default(false)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   assignedToId String
-  assignedTo   User     @relation("AssignedTasks", fields: [assignedToId], references: [id])
+  assignedTo   PracticeUser @relation("AssignedTasks", fields: [assignedToId], references: [id])
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
 model Referral {
-  id        String   @id @default(cuid())
+  id         String  @id @default(cuid())
   referredBy String
   notes      String?
 
-  patientId  String
-  patient    Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
 }
 
 model Prescription {
-  id        String   @id @default(cuid())
-  drugName  String
-  dosage    String
-  issuedAt  DateTime @default(now())
+  id       String   @id @default(cuid())
+  drugName String
+  dosage   String
+  issuedAt DateTime @default(now())
 
   patientId String
   patient   Patient @relation(fields: [patientId], references: [id])

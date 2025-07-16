@@ -1,12 +1,66 @@
 "use client"
 
-import { signIn } from "next-auth/react"
-import { Heart, Calendar, FileText, Shield, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Heart, Calendar, FileText, Shield, Eye, EyeOff } from "lucide-react"
+import Link from "next/link"
 
 export default function SignInPage() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  })
   const [showPassword, setShowPassword] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [requiresTwoFactor, setRequiresTwoFactor] = useState(false)
+  const [twoFactorToken, setTwoFactorToken] = useState("")
+
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch("/api/auth/practice/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          twoFactorToken: requiresTwoFactor ? twoFactorToken : undefined,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        router.push(callbackUrl)
+      } else if (data.requiresTwoFactor) {
+        setRequiresTwoFactor(true)
+      } else {
+        setError(data.error || "Login failed")
+      }
+    } catch (error) {
+      setError("An error occurred during login")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
 
   return (
     <div className="min-h-screen flex">
