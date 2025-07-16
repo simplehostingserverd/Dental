@@ -156,7 +156,14 @@ export class PracticeAuthService {
 		createdBy: string,
 	): Promise<{
 		success: boolean;
-		user?: any;
+		user?: {
+			id: string;
+			email: string;
+			firstName: string;
+			lastName: string;
+			role: string;
+			practiceId: string;
+		};
 		temporaryPassword?: string;
 		error?: string;
 	}> {

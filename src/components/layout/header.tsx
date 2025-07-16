@@ -9,11 +9,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import type { CurrentUser } from "@/lib/auth/get-user";
 import { getUserDisplayName, getUserInitials } from "@/lib/utils/user-utils";
-import { Bell, ChevronDown, Moon, Search, Sun } from "lucide-react";
+import { Bell, ChevronDown, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 interface HeaderProps {
 	user: CurrentUser;
@@ -21,36 +21,6 @@ interface HeaderProps {
 
 export function Header({ user }: HeaderProps) {
 	const router = useRouter();
-	const [isDarkMode, setIsDarkMode] = useState(false);
-
-	// Check for saved theme preference or default to light mode
-	useEffect(() => {
-		const savedTheme = localStorage.getItem("theme");
-		const prefersDark = window.matchMedia(
-			"(prefers-color-scheme: dark)",
-		).matches;
-		const shouldUseDark = savedTheme === "dark" || (!savedTheme && prefersDark);
-
-		setIsDarkMode(shouldUseDark);
-		if (shouldUseDark) {
-			document.documentElement.classList.add("dark");
-		} else {
-			document.documentElement.classList.remove("dark");
-		}
-	}, []);
-
-	const toggleDarkMode = () => {
-		const newDarkMode = !isDarkMode;
-		setIsDarkMode(newDarkMode);
-
-		if (newDarkMode) {
-			document.documentElement.classList.add("dark");
-			localStorage.setItem("theme", "dark");
-		} else {
-			document.documentElement.classList.remove("dark");
-			localStorage.setItem("theme", "light");
-		}
-	};
 
 	const handleSignOut = async () => {
 		// Clear the authentication cookie
@@ -60,7 +30,7 @@ export function Header({ user }: HeaderProps) {
 		router.push("/auth/signin");
 	};
 	return (
-		<header className="border-gray-200 border-b bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-900">
+		<header className="border-gray-200 border-b bg-white px-6 py-4">
 			<div className="flex items-center justify-between">
 				{/* Search */}
 				<div className="max-w-lg flex-1">
@@ -85,19 +55,8 @@ export function Header({ user }: HeaderProps) {
 						<span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500" />
 					</button>
 
-					{/* Theme toggle */}
-					<button
-						type="button"
-						onClick={toggleDarkMode}
-						className="p-2 text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100"
-						title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-					>
-						{isDarkMode ? (
-							<Sun className="h-5 w-5" />
-						) : (
-							<Moon className="h-5 w-5" />
-						)}
-					</button>
+					{/* Language switcher */}
+					<LanguageSwitcher />
 
 					{/* User menu */}
 					<DropdownMenu>

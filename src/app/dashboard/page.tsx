@@ -1,19 +1,23 @@
+"use client";
+
 import { PendingTreatments } from "@/components/dashboard/pending-treatments";
 import { RecentPatients } from "@/components/dashboard/recent-patients";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { TodaysSchedule } from "@/components/dashboard/todays-schedule";
+import { useAppTranslations } from "@/lib/i18n/translation-context";
 import { Calendar, Plus } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardPage() {
+	const { dashboard, common } = useAppTranslations();
 	return (
 		<div className="space-y-6">
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="font-semibold text-2xl text-gray-900">Dashboard</h1>
+					<h1 className="font-semibold text-2xl text-gray-900">{dashboard('title')}</h1>
 					<p className="text-gray-600">
-						Welcome back, Dr. Chen. You have 12 appointments today.
+						{dashboard('subtitle')}
 					</p>
 				</div>
 				<div className="flex space-x-3">
@@ -22,7 +26,7 @@ export default function DashboardPage() {
 						className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 					>
 						<Plus className="mr-2 h-4 w-4" />
-						New Patient
+						{common('add')} Patient
 					</Link>
 					<Link
 						href="/dashboard/appointments/new"

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Geist } from "next/font/google";
 
+import { TranslationProvider } from "@/lib/i18n/translation-context";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
@@ -21,11 +22,13 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${geist.variable}`}>
+		<html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
 			<body>
-				<SessionProvider>
-					<TRPCReactProvider>{children}</TRPCReactProvider>
-				</SessionProvider>
+				<TranslationProvider>
+					<SessionProvider>
+						<TRPCReactProvider>{children}</TRPCReactProvider>
+					</SessionProvider>
+				</TranslationProvider>
 			</body>
 		</html>
 	);

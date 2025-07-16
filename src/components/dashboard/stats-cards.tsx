@@ -41,23 +41,23 @@ export function StatsCards() {
 			{stats.map((stat) => (
 				<div
 					key={stat.name}
-					className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+					className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
 				>
 					<div className="flex items-center">
 						<div className={`rounded-lg p-2 ${stat.bgColor}`}>
 							<stat.icon className={`h-6 w-6 ${stat.color}`} />
 						</div>
 						<div className="ml-4 flex-1">
-							<p className="font-medium text-gray-600 text-sm dark:text-gray-300">
+							<p className="font-medium text-gray-600 text-sm">
 								{stat.name}
 							</p>
-							<p className="font-semibold text-2xl text-gray-900 dark:text-white">
+							<p className="font-semibold text-2xl text-gray-900">
 								{stat.value}
 							</p>
 						</div>
 					</div>
 					<div className="mt-4">
-						<p className="text-gray-500 text-sm dark:text-gray-400">
+						<p className="text-gray-500 text-sm">
 							{stat.change}
 						</p>
 					</div>

@@ -4,3 +4,13 @@
 	--font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
 		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* Smooth transitions */
+* {
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Prevent transition on page load */
+.preload * {
+	transition: none !important;
+}
