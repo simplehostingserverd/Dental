@@ -1,13 +1,13 @@
+import { clearAllLimits } from "@/lib/auth/rate-limiter";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { clearAllLimits } from "@/lib/auth/rate-limiter";
 
 export async function POST(request: NextRequest) {
 	// Only allow in development
 	if (process.env.NODE_ENV !== "development") {
 		return NextResponse.json(
 			{ error: "Not available in production" },
-			{ status: 403 }
+			{ status: 403 },
 		);
 	}
 
@@ -20,13 +20,13 @@ export async function POST(request: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			message: "Rate limits cleared successfully"
+			message: "Rate limits cleared successfully",
 		});
 	} catch (error) {
 		console.error("Error clearing rate limits:", error);
 		return NextResponse.json({
 			success: true,
-			message: "Rate limits cleared (or were already clear)"
+			message: "Rate limits cleared (or were already clear)",
 		});
 	}
 }
@@ -36,11 +36,12 @@ export async function GET() {
 	if (process.env.NODE_ENV !== "development") {
 		return NextResponse.json(
 			{ error: "Not available in production" },
-			{ status: 403 }
+			{ status: 403 },
 		);
 	}
 
 	return NextResponse.json({
-		message: "Rate limit clearing endpoint. Use POST with {identifier: 'ip_or_email'} to clear limits."
+		message:
+			"Rate limit clearing endpoint. Use POST with {identifier: 'ip_or_email'} to clear limits.",
 	});
 }

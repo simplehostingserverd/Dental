@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Eye, EyeOff, Mail, Lock, User, Phone, Calendar } from "lucide-react";
 import { ToothIcon } from "@/components/icons/tooth-icon";
+import { Calendar, Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function PatientSignUpPage() {
 	const [formData, setFormData] = useState({
@@ -81,7 +81,7 @@ export default function PatientSignUpPage() {
 				// Show success message briefly before redirecting
 				setError(""); // Clear any previous errors
 				setIsSuccess(true);
-				
+
 				// Small delay to ensure cookie is set and user sees success
 				setTimeout(() => {
 					router.push("/patient/dashboard");
@@ -114,7 +114,8 @@ export default function PatientSignUpPage() {
 						Join thousands of patients managing their dental care online
 					</h2>
 					<p className="mb-8 text-blue-100 text-lg">
-						Create your patient portal account to access appointments, treatment history, and more.
+						Create your patient portal account to access appointments, treatment
+						history, and more.
 					</p>
 					<div className="space-y-4">
 						<div className="flex items-center">
@@ -149,7 +150,9 @@ export default function PatientSignUpPage() {
 			<div className="flex flex-1 items-center justify-center bg-gray-50 p-8">
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
-						<h2 className="font-bold text-2xl text-gray-900">Create Patient Account</h2>
+						<h2 className="font-bold text-2xl text-gray-900">
+							Create Patient Account
+						</h2>
 						<p className="mt-2 text-gray-600 text-sm">
 							Join your dental practice's patient portal
 						</p>
@@ -180,7 +183,7 @@ export default function PatientSignUpPage() {
 									First Name
 								</label>
 								<div className="relative">
-									<User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+									<User className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
 									<input
 										id="firstName"
 										name="firstName"
@@ -188,7 +191,7 @@ export default function PatientSignUpPage() {
 										required
 										value={formData.firstName}
 										onChange={handleInputChange}
-										className="w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+										className="w-full rounded-md border border-gray-300 py-2 pr-3 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 										placeholder="First name"
 									/>
 								</div>
@@ -201,7 +204,7 @@ export default function PatientSignUpPage() {
 									Last Name
 								</label>
 								<div className="relative">
-									<User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+									<User className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
 									<input
 										id="lastName"
 										name="lastName"
@@ -209,7 +212,7 @@ export default function PatientSignUpPage() {
 										required
 										value={formData.lastName}
 										onChange={handleInputChange}
-										className="w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+										className="w-full rounded-md border border-gray-300 py-2 pr-3 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 										placeholder="Last name"
 									/>
 								</div>
@@ -225,7 +228,7 @@ export default function PatientSignUpPage() {
 								Email Address
 							</label>
 							<div className="relative">
-								<Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+								<Mail className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
 								<input
 									id="email"
 									name="email"
@@ -233,7 +236,7 @@ export default function PatientSignUpPage() {
 									required
 									value={formData.email}
 									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+									className="w-full rounded-md border border-gray-300 py-2 pr-3 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 									placeholder="Enter your email"
 								/>
 							</div>
@@ -248,7 +251,7 @@ export default function PatientSignUpPage() {
 								Phone Number
 							</label>
 							<div className="relative">
-								<Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+								<Phone className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
 								<input
 									id="phone"
 									name="phone"
@@ -256,7 +259,7 @@ export default function PatientSignUpPage() {
 									required
 									value={formData.phone}
 									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+									className="w-full rounded-md border border-gray-300 py-2 pr-3 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 									placeholder="(555) 123-4567"
 								/>
 							</div>
@@ -290,7 +293,7 @@ export default function PatientSignUpPage() {
 								Password
 							</label>
 							<div className="relative">
-								<Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+								<Lock className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
 								<input
 									id="password"
 									name="password"
@@ -298,13 +301,13 @@ export default function PatientSignUpPage() {
 									required
 									value={formData.password}
 									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-300 py-2 pl-10 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+									className="w-full rounded-md border border-gray-300 py-2 pr-10 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 									placeholder="Create a password"
 								/>
 								<button
 									type="button"
 									onClick={() => setShowPassword(!showPassword)}
-									className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+									className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
 								>
 									{showPassword ? (
 										<EyeOff className="h-4 w-4" />
@@ -324,7 +327,7 @@ export default function PatientSignUpPage() {
 								Confirm Password
 							</label>
 							<div className="relative">
-								<Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+								<Lock className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
 								<input
 									id="confirmPassword"
 									name="confirmPassword"
@@ -332,13 +335,13 @@ export default function PatientSignUpPage() {
 									required
 									value={formData.confirmPassword}
 									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-300 py-2 pl-10 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+									className="w-full rounded-md border border-gray-300 py-2 pr-10 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 									placeholder="Confirm your password"
 								/>
 								<button
 									type="button"
 									onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-									className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+									className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
 								>
 									{showConfirmPassword ? (
 										<EyeOff className="h-4 w-4" />
@@ -352,17 +355,23 @@ export default function PatientSignUpPage() {
 						{/* Password Strength Indicator */}
 						{formData.password && (
 							<div className="space-y-2">
-								<p className="font-medium text-gray-700 text-sm">Password Requirements:</p>
+								<p className="font-medium text-gray-700 text-sm">
+									Password Requirements:
+								</p>
 								<div className="space-y-1">
 									<div className="flex items-center">
 										<div
 											className={`mr-2 h-2 w-2 rounded-full ${
-												passwordStrength.hasMinLength ? "bg-green-500" : "bg-gray-300"
+												passwordStrength.hasMinLength
+													? "bg-green-500"
+													: "bg-gray-300"
 											}`}
 										/>
 										<span
 											className={`text-xs ${
-												passwordStrength.hasMinLength ? "text-green-600" : "text-gray-500"
+												passwordStrength.hasMinLength
+													? "text-green-600"
+													: "text-gray-500"
 											}`}
 										>
 											At least 8 characters
@@ -371,12 +380,16 @@ export default function PatientSignUpPage() {
 									<div className="flex items-center">
 										<div
 											className={`mr-2 h-2 w-2 rounded-full ${
-												passwordStrength.hasUppercase ? "bg-green-500" : "bg-gray-300"
+												passwordStrength.hasUppercase
+													? "bg-green-500"
+													: "bg-gray-300"
 											}`}
 										/>
 										<span
 											className={`text-xs ${
-												passwordStrength.hasUppercase ? "text-green-600" : "text-gray-500"
+												passwordStrength.hasUppercase
+													? "text-green-600"
+													: "text-gray-500"
 											}`}
 										>
 											One uppercase letter
@@ -385,12 +398,16 @@ export default function PatientSignUpPage() {
 									<div className="flex items-center">
 										<div
 											className={`mr-2 h-2 w-2 rounded-full ${
-												passwordStrength.hasNumber ? "bg-green-500" : "bg-gray-300"
+												passwordStrength.hasNumber
+													? "bg-green-500"
+													: "bg-gray-300"
 											}`}
 										/>
 										<span
 											className={`text-xs ${
-												passwordStrength.hasNumber ? "text-green-600" : "text-gray-500"
+												passwordStrength.hasNumber
+													? "text-green-600"
+													: "text-gray-500"
 											}`}
 										>
 											One number
@@ -408,16 +425,22 @@ export default function PatientSignUpPage() {
 									type="checkbox"
 									checked={formData.agreeToTerms}
 									onChange={handleInputChange}
-									className="mr-3 mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+									className="mt-0.5 mr-3 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
 									required
 								/>
 								<span className="text-gray-700 text-sm">
 									I agree to the{" "}
-									<Link href="/terms" className="text-blue-600 hover:text-blue-500">
+									<Link
+										href="/terms"
+										className="text-blue-600 hover:text-blue-500"
+									>
 										Terms of Service
 									</Link>{" "}
 									and{" "}
-									<Link href="/privacy" className="text-blue-600 hover:text-blue-500">
+									<Link
+										href="/privacy"
+										className="text-blue-600 hover:text-blue-500"
+									>
 										Privacy Policy
 									</Link>
 								</span>
@@ -428,10 +451,11 @@ export default function PatientSignUpPage() {
 									type="checkbox"
 									checked={formData.allowMarketing}
 									onChange={handleInputChange}
-									className="mr-3 mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+									className="mt-0.5 mr-3 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
 								/>
 								<span className="text-gray-700 text-sm">
-									I would like to receive appointment reminders and dental health tips
+									I would like to receive appointment reminders and dental
+									health tips
 								</span>
 							</label>
 						</div>

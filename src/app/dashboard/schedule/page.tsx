@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-	Calendar, 
-	Clock, 
-	Plus, 
-	ChevronLeft, 
+import { Button } from "@/components/ui/button";
+import {
+	Calendar,
+	ChevronLeft,
 	ChevronRight,
-	User,
+	Clock,
 	MapPin,
-	Phone
+	Phone,
+	Plus,
+	User,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -59,18 +59,34 @@ const appointments = [
 ];
 
 const timeSlots = [
-	"08:00", "08:30", "09:00", "09:30", "10:00", "10:30", 
-	"11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
-	"14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
+	"08:00",
+	"08:30",
+	"09:00",
+	"09:30",
+	"10:00",
+	"10:30",
+	"11:00",
+	"11:30",
+	"12:00",
+	"12:30",
+	"13:00",
+	"13:30",
+	"14:00",
+	"14:30",
+	"15:00",
+	"15:30",
+	"16:00",
+	"16:30",
+	"17:00",
 ];
 
 export default function SchedulePage() {
 	const currentDate = new Date();
-	const dateString = currentDate.toLocaleDateString('en-US', { 
-		weekday: 'long', 
-		year: 'numeric', 
-		month: 'long', 
-		day: 'numeric' 
+	const dateString = currentDate.toLocaleDateString("en-US", {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
 	});
 
 	const getStatusColor = (status: string) => {
@@ -91,7 +107,7 @@ export default function SchedulePage() {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-2xl font-semibold text-gray-900">Schedule</h1>
+					<h1 className="font-semibold text-2xl text-gray-900">Schedule</h1>
 					<p className="text-gray-600">Manage appointments and availability</p>
 				</div>
 				<Link href="/dashboard/appointments/new">
@@ -110,29 +126,38 @@ export default function SchedulePage() {
 					</Button>
 					<div className="flex items-center space-x-2">
 						<Calendar className="h-5 w-5 text-gray-400" />
-						<span className="text-lg font-medium">{dateString}</span>
+						<span className="font-medium text-lg">{dateString}</span>
 					</div>
 					<Button variant="outline" size="sm">
 						<ChevronRight className="h-4 w-4" />
 					</Button>
 				</div>
 				<div className="flex space-x-2">
-					<Button variant="outline" size="sm">Day</Button>
-					<Button variant="outline" size="sm">Week</Button>
-					<Button variant="outline" size="sm">Month</Button>
+					<Button variant="outline" size="sm">
+						Day
+					</Button>
+					<Button variant="outline" size="sm">
+						Week
+					</Button>
+					<Button variant="outline" size="sm">
+						Month
+					</Button>
 				</div>
 			</div>
 
 			{/* Schedule Grid */}
-			<div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
 				{/* Time Column */}
 				<div className="lg:col-span-1">
 					<div className="rounded-lg border bg-white p-4">
-						<h3 className="font-medium text-gray-900 mb-4">Time Slots</h3>
+						<h3 className="mb-4 font-medium text-gray-900">Time Slots</h3>
 						<div className="space-y-2">
 							{timeSlots.map((time) => (
-								<div key={time} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
-									<span className="text-sm text-gray-600">{time}</span>
+								<div
+									key={time}
+									className="flex items-center justify-between border-gray-100 border-b py-2 last:border-b-0"
+								>
+									<span className="text-gray-600 text-sm">{time}</span>
 									<Button variant="ghost" size="sm" className="h-6 w-6 p-0">
 										<Plus className="h-3 w-3" />
 									</Button>
@@ -145,13 +170,18 @@ export default function SchedulePage() {
 				{/* Appointments Column */}
 				<div className="lg:col-span-3">
 					<div className="rounded-lg border bg-white p-4">
-						<h3 className="font-medium text-gray-900 mb-4">Today's Appointments</h3>
+						<h3 className="mb-4 font-medium text-gray-900">
+							Today's Appointments
+						</h3>
 						<div className="space-y-4">
 							{appointments.map((appointment) => (
-								<div key={appointment.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+								<div
+									key={appointment.id}
+									className="rounded-lg border p-4 transition-colors hover:bg-gray-50"
+								>
 									<div className="flex items-start justify-between">
 										<div className="flex-1">
-											<div className="flex items-center space-x-3 mb-2">
+											<div className="mb-2 flex items-center space-x-3">
 												<div className="flex items-center space-x-2">
 													<Clock className="h-4 w-4 text-gray-400" />
 													<span className="font-medium text-sm">
@@ -162,46 +192,46 @@ export default function SchedulePage() {
 													{appointment.status}
 												</Badge>
 											</div>
-											
-											<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+											<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 												<div>
-													<div className="flex items-center space-x-2 mb-1">
+													<div className="mb-1 flex items-center space-x-2">
 														<User className="h-4 w-4 text-gray-400" />
 														<span className="font-medium text-gray-900">
 															{appointment.patient.name}
 														</span>
 													</div>
-													<div className="flex items-center space-x-2 mb-1">
+													<div className="mb-1 flex items-center space-x-2">
 														<Phone className="h-4 w-4 text-gray-400" />
-														<span className="text-sm text-gray-600">
+														<span className="text-gray-600 text-sm">
 															{appointment.patient.phone}
 														</span>
 													</div>
 													<div className="flex items-center space-x-2">
 														<MapPin className="h-4 w-4 text-gray-400" />
-														<span className="text-sm text-gray-600">
+														<span className="text-gray-600 text-sm">
 															{appointment.room}
 														</span>
 													</div>
 												</div>
-												
+
 												<div>
-													<p className="font-medium text-gray-900 mb-1">
+													<p className="mb-1 font-medium text-gray-900">
 														{appointment.treatment}
 													</p>
-													<p className="text-sm text-gray-600 mb-1">
+													<p className="mb-1 text-gray-600 text-sm">
 														Provider: {appointment.provider}
 													</p>
 													{appointment.notes && (
-														<p className="text-sm text-gray-500 italic">
+														<p className="text-gray-500 text-sm italic">
 															{appointment.notes}
 														</p>
 													)}
 												</div>
 											</div>
 										</div>
-										
-										<div className="flex space-x-2 ml-4">
+
+										<div className="ml-4 flex space-x-2">
 											<Button variant="outline" size="sm">
 												Edit
 											</Button>
@@ -213,11 +243,13 @@ export default function SchedulePage() {
 								</div>
 							))}
 						</div>
-						
+
 						{appointments.length === 0 && (
-							<div className="text-center py-8">
-								<Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-								<p className="text-gray-500">No appointments scheduled for today</p>
+							<div className="py-8 text-center">
+								<Calendar className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+								<p className="text-gray-500">
+									No appointments scheduled for today
+								</p>
 								<Link href="/dashboard/appointments/new">
 									<Button className="mt-4">
 										<Plus className="mr-2 h-4 w-4" />
@@ -231,22 +263,22 @@ export default function SchedulePage() {
 			</div>
 
 			{/* Quick Stats */}
-			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
 				<div className="rounded-lg border bg-white p-4 text-center">
-					<div className="text-2xl font-bold text-blue-600">12</div>
-					<div className="text-sm text-gray-600">Total Today</div>
+					<div className="font-bold text-2xl text-blue-600">12</div>
+					<div className="text-gray-600 text-sm">Total Today</div>
 				</div>
 				<div className="rounded-lg border bg-white p-4 text-center">
-					<div className="text-2xl font-bold text-green-600">8</div>
-					<div className="text-sm text-gray-600">Completed</div>
+					<div className="font-bold text-2xl text-green-600">8</div>
+					<div className="text-gray-600 text-sm">Completed</div>
 				</div>
 				<div className="rounded-lg border bg-white p-4 text-center">
-					<div className="text-2xl font-bold text-yellow-600">3</div>
-					<div className="text-sm text-gray-600">Pending</div>
+					<div className="font-bold text-2xl text-yellow-600">3</div>
+					<div className="text-gray-600 text-sm">Pending</div>
 				</div>
 				<div className="rounded-lg border bg-white p-4 text-center">
-					<div className="text-2xl font-bold text-red-600">1</div>
-					<div className="text-sm text-gray-600">Cancelled</div>
+					<div className="font-bold text-2xl text-red-600">1</div>
+					<div className="text-gray-600 text-sm">Cancelled</div>
 				</div>
 			</div>
 		</div>

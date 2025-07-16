@@ -1,6 +1,6 @@
-import validator from 'validator';
-import * as emailValidator from 'email-validator';
-import disposableDomains from 'disposable-email-domains';
+import disposableDomains from "disposable-email-domains";
+import * as emailValidator from "email-validator";
+import validator from "validator";
 
 export interface EmailValidationResult {
 	isValid: boolean;
@@ -15,22 +15,39 @@ export interface EmailValidationResult {
 export class EmailValidationService {
 	// Common suspicious patterns
 	private static readonly SUSPICIOUS_PATTERNS = [
-		/^[0-9]+@/,                    // Starts with only numbers
-		/^.{1,2}@/,                    // Very short local part
-		/\+.*\+/,                      // Multiple plus signs
-		/\.{2,}/,                      // Multiple consecutive dots
-		/^.*\.(tk|ml|ga|cf)$/i,        // Suspicious TLDs
-		/temp|fake|test|spam|trash/i,  // Suspicious keywords
-		/^(admin|root|test|demo)@/i,   // Common test accounts
+		/^[0-9]+@/, // Starts with only numbers
+		/^.{1,2}@/, // Very short local part
+		/\+.*\+/, // Multiple plus signs
+		/\.{2,}/, // Multiple consecutive dots
+		/^.*\.(tk|ml|ga|cf)$/i, // Suspicious TLDs
+		/temp|fake|test|spam|trash/i, // Suspicious keywords
+		/^(admin|root|test|demo)@/i, // Common test accounts
 	];
 
 	// Trusted email domains (major providers)
 	private static readonly TRUSTED_DOMAINS = [
-		'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com',
-		'icloud.com', 'me.com', 'mac.com', 'live.com', 'msn.com',
-		'comcast.net', 'verizon.net', 'att.net', 'cox.net', 'charter.net',
-		'earthlink.net', 'sbcglobal.net', 'bellsouth.net', 'rr.com',
-		'protonmail.com', 'tutanota.com', 'fastmail.com'
+		"gmail.com",
+		"yahoo.com",
+		"hotmail.com",
+		"outlook.com",
+		"aol.com",
+		"icloud.com",
+		"me.com",
+		"mac.com",
+		"live.com",
+		"msn.com",
+		"comcast.net",
+		"verizon.net",
+		"att.net",
+		"cox.net",
+		"charter.net",
+		"earthlink.net",
+		"sbcglobal.net",
+		"bellsouth.net",
+		"rr.com",
+		"protonmail.com",
+		"tutanota.com",
+		"fastmail.com",
 	];
 
 	/**
@@ -41,8 +58,8 @@ export class EmailValidationService {
 		const warnings: string[] = [];
 
 		// Basic validation
-		if (!email || typeof email !== 'string') {
-			errors.push('Email is required');
+		if (!email || typeof email !== "string") {
+			errors.push("Email is required");
 			return { isValid: false, errors, warnings };
 		}
 
@@ -50,35 +67,39 @@ export class EmailValidationService {
 
 		// Check basic format
 		if (!validator.isEmail(trimmedEmail)) {
-			errors.push('Invalid email format');
+			errors.push("Invalid email format");
 		}
 
 		// Double check with another validator
 		if (!emailValidator.validate(trimmedEmail)) {
-			errors.push('Email format is not valid');
+			errors.push("Email format is not valid");
 		}
 
 		// Check length
 		if (trimmedEmail.length > 254) {
-			errors.push('Email address is too long');
+			errors.push("Email address is too long");
 		}
 
 		// Extract domain
-		const domain = trimmedEmail.split('@')[1];
+		const domain = trimmedEmail.split("@")[1];
 		if (!domain) {
-			errors.push('Invalid email domain');
+			errors.push("Invalid email domain");
 			return { isValid: false, errors, warnings };
 		}
 
 		// Check for disposable email domains
 		if (disposableDomains.includes(domain)) {
-			errors.push('Disposable email addresses are not allowed. Please use a permanent email address.');
+			errors.push(
+				"Disposable email addresses are not allowed. Please use a permanent email address.",
+			);
 		}
 
 		// Check for suspicious patterns
 		for (const pattern of this.SUSPICIOUS_PATTERNS) {
 			if (pattern.test(trimmedEmail)) {
-				warnings.push('Email address appears suspicious. Please verify it is correct.');
+				warnings.push(
+					"Email address appears suspicious. Please verify it is correct.",
+				);
 				break;
 			}
 		}
@@ -93,7 +114,9 @@ export class EmailValidationService {
 			// Check if it's a business domain (has company-like structure)
 			const isBusinessDomain = this.isLikelyBusinessDomain(domain);
 			if (!isBusinessDomain) {
-				warnings.push('Please verify your email domain is correct. We recommend using a well-known email provider.');
+				warnings.push(
+					"Please verify your email domain is correct. We recommend using a well-known email provider.",
+				);
 			}
 		}
 
@@ -106,7 +129,7 @@ export class EmailValidationService {
 		return {
 			isValid: errors.length === 0,
 			errors,
-			warnings
+			warnings,
 		};
 	}
 
@@ -118,10 +141,20 @@ export class EmailValidationService {
 		// - More than one dot (subdomain structure)
 		// - Common business TLDs
 		// - Not in disposable list
-		const businessTlds = ['.com', '.org', '.net', '.edu', '.gov', '.mil', '.co.', '.inc', '.llc'];
-		const hasBusinessTld = businessTlds.some(tld => domain.includes(tld));
-		const hasSubdomain = domain.split('.').length > 2;
-		
+		const businessTlds = [
+			".com",
+			".org",
+			".net",
+			".edu",
+			".gov",
+			".mil",
+			".co.",
+			".inc",
+			".llc",
+		];
+		const hasBusinessTld = businessTlds.some((tld) => domain.includes(tld));
+		const hasSubdomain = domain.split(".").length > 2;
+
 		return hasBusinessTld || hasSubdomain;
 	}
 
@@ -130,17 +163,17 @@ export class EmailValidationService {
 	 */
 	private static checkForTypos(domain: string): string | null {
 		const commonTypos: Record<string, string> = {
-			'gmai.com': 'gmail.com',
-			'gmial.com': 'gmail.com',
-			'gmail.co': 'gmail.com',
-			'yahooo.com': 'yahoo.com',
-			'yaho.com': 'yahoo.com',
-			'hotmial.com': 'hotmail.com',
-			'hotmai.com': 'hotmail.com',
-			'outlok.com': 'outlook.com',
-			'outloo.com': 'outlook.com',
-			'iclod.com': 'icloud.com',
-			'icoud.com': 'icloud.com',
+			"gmai.com": "gmail.com",
+			"gmial.com": "gmail.com",
+			"gmail.co": "gmail.com",
+			"yahooo.com": "yahoo.com",
+			"yaho.com": "yahoo.com",
+			"hotmial.com": "hotmail.com",
+			"hotmai.com": "hotmail.com",
+			"outlok.com": "outlook.com",
+			"outloo.com": "outlook.com",
+			"iclod.com": "icloud.com",
+			"icoud.com": "icloud.com",
 		};
 
 		return commonTypos[domain] || null;
@@ -151,14 +184,16 @@ export class EmailValidationService {
 	 */
 	static validatePatientEmail(email: string): EmailValidationResult {
 		const result = this.validateEmail(email);
-		
+
 		// Additional patient-specific validations
 		if (result.isValid) {
 			const trimmedEmail = email.trim().toLowerCase();
-			
+
 			// Patients should use personal email addresses
 			if (this.looksLikeBusinessEmail(trimmedEmail)) {
-				result.warnings.push('Consider using a personal email address for your patient account.');
+				result.warnings.push(
+					"Consider using a personal email address for your patient account.",
+				);
 			}
 		}
 
@@ -170,15 +205,17 @@ export class EmailValidationService {
 	 */
 	static validatePracticeEmail(email: string): EmailValidationResult {
 		const result = this.validateEmail(email);
-		
+
 		// Additional practice-specific validations
 		if (result.isValid) {
 			const trimmedEmail = email.trim().toLowerCase();
-			const domain = trimmedEmail.split('@')[1];
-			
+			const domain = trimmedEmail.split("@")[1];
+
 			// Practices should ideally use business domains
 			if (this.TRUSTED_DOMAINS.includes(domain)) {
-				result.warnings.push('Consider using your practice\'s business email domain for professional communication.');
+				result.warnings.push(
+					"Consider using your practice's business email domain for professional communication.",
+				);
 			}
 		}
 
@@ -189,10 +226,19 @@ export class EmailValidationService {
 	 * Check if email looks like a business email
 	 */
 	private static looksLikeBusinessEmail(email: string): boolean {
-		const businessKeywords = ['admin', 'info', 'contact', 'support', 'office', 'reception', 'dental', 'clinic'];
-		const localPart = email.split('@')[0];
-		
-		return businessKeywords.some(keyword => localPart.includes(keyword));
+		const businessKeywords = [
+			"admin",
+			"info",
+			"contact",
+			"support",
+			"office",
+			"reception",
+			"dental",
+			"clinic",
+		];
+		const localPart = email.split("@")[0];
+
+		return businessKeywords.some((keyword) => localPart.includes(keyword));
 	}
 
 	/**

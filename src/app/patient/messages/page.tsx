@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ArrowLeft, Send, MessageSquare, User } from "lucide-react";
+import { ArrowLeft, MessageSquare, Send, User } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface Message {
 	id: string;
@@ -49,13 +49,13 @@ export default function MessagesPage() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					content: newMessage.trim()
+					content: newMessage.trim(),
 				}),
 			});
 
 			if (response.ok) {
 				const data = await response.json();
-				setMessages(prev => [...prev, data.message]);
+				setMessages((prev) => [...prev, data.message]);
 				setNewMessage("");
 			} else {
 				alert("Failed to send message");
@@ -75,10 +75,10 @@ export default function MessagesPage() {
 	};
 
 	const formatTime = (date: Date) => {
-		return new Intl.DateTimeFormat('en-US', {
-			hour: 'numeric',
-			minute: '2-digit',
-			hour12: true
+		return new Intl.DateTimeFormat("en-US", {
+			hour: "numeric",
+			minute: "2-digit",
+			hour12: true,
 		}).format(new Date(date));
 	};
 
@@ -104,13 +104,13 @@ export default function MessagesPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<div className="flex items-center">
-							<Link 
+							<Link
 								href="/patient/dashboard"
 								className="mr-4 flex items-center text-gray-600 hover:text-gray-900"
 							>
 								<ArrowLeft className="h-5 w-5" />
 							</Link>
-							<h1 className="font-bold text-xl text-gray-900">Messages</h1>
+							<h1 className="font-bold text-gray-900 text-xl">Messages</h1>
 						</div>
 					</div>
 				</div>
@@ -120,9 +120,11 @@ export default function MessagesPage() {
 			<main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
 				<div className="rounded-lg bg-white shadow-sm">
 					{/* Messages Header */}
-					<div className="border-b border-gray-200 px-6 py-4">
-						<h2 className="text-lg font-semibold text-gray-900">Dental Team Communication</h2>
-						<p className="mt-1 text-sm text-gray-600">
+					<div className="border-gray-200 border-b px-6 py-4">
+						<h2 className="font-semibold text-gray-900 text-lg">
+							Dental Team Communication
+						</h2>
+						<p className="mt-1 text-gray-600 text-sm">
 							Send messages to your dental care team
 						</p>
 					</div>
@@ -132,39 +134,49 @@ export default function MessagesPage() {
 						{/* Messages List */}
 						<div className="flex-1 overflow-y-auto p-6">
 							{isLoading ? (
-								<div className="flex items-center justify-center h-full">
+								<div className="flex h-full items-center justify-center">
 									<div className="text-gray-500">Loading messages...</div>
 								</div>
 							) : messages.length > 0 ? (
 								<div className="space-y-4">
 									{messages.map((message, index) => {
-										const showDate = index === 0 || 
-											formatDate(messages[index - 1].timestamp) !== formatDate(message.timestamp);
-										
+										const showDate =
+											index === 0 ||
+											formatDate(messages[index - 1].timestamp) !==
+												formatDate(message.timestamp);
+
 										return (
 											<div key={message.id}>
 												{showDate && (
-													<div className="flex justify-center mb-4">
-														<span className="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full">
+													<div className="mb-4 flex justify-center">
+														<span className="rounded-full bg-gray-100 px-3 py-1 text-gray-600 text-xs">
 															{formatDate(message.timestamp)}
 														</span>
 													</div>
 												)}
-												<div className={`flex ${message.senderType === "patient" ? "justify-end" : "justify-start"}`}>
-													<div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-														message.senderType === "patient"
-															? "bg-blue-600 text-white"
-															: "bg-gray-100 text-gray-900"
-													}`}>
+												<div
+													className={`flex ${message.senderType === "patient" ? "justify-end" : "justify-start"}`}
+												>
+													<div
+														className={`max-w-xs rounded-lg px-4 py-2 lg:max-w-md ${
+															message.senderType === "patient"
+																? "bg-blue-600 text-white"
+																: "bg-gray-100 text-gray-900"
+														}`}
+													>
 														{message.senderType === "staff" && (
-															<div className="text-xs font-medium mb-1 opacity-75">
+															<div className="mb-1 font-medium text-xs opacity-75">
 																{message.senderName}
 															</div>
 														)}
 														<div className="text-sm">{message.content}</div>
-														<div className={`text-xs mt-1 ${
-															message.senderType === "patient" ? "text-blue-100" : "text-gray-500"
-														}`}>
+														<div
+															className={`mt-1 text-xs ${
+																message.senderType === "patient"
+																	? "text-blue-100"
+																	: "text-gray-500"
+															}`}
+														>
 															{formatTime(message.timestamp)}
 														</div>
 													</div>
@@ -174,10 +186,12 @@ export default function MessagesPage() {
 									})}
 								</div>
 							) : (
-								<div className="flex flex-col items-center justify-center h-full text-center">
-									<MessageSquare className="h-12 w-12 text-gray-400 mb-4" />
-									<h3 className="text-lg font-medium text-gray-900 mb-2">No messages yet</h3>
-									<p className="text-gray-500 mb-4">
+								<div className="flex h-full flex-col items-center justify-center text-center">
+									<MessageSquare className="mb-4 h-12 w-12 text-gray-400" />
+									<h3 className="mb-2 font-medium text-gray-900 text-lg">
+										No messages yet
+									</h3>
+									<p className="mb-4 text-gray-500">
 										Start a conversation with your dental team
 									</p>
 								</div>
@@ -185,7 +199,7 @@ export default function MessagesPage() {
 						</div>
 
 						{/* Message Input */}
-						<div className="border-t border-gray-200 p-4">
+						<div className="border-gray-200 border-t p-4">
 							<div className="flex space-x-4">
 								<div className="flex-1">
 									<textarea
@@ -209,7 +223,7 @@ export default function MessagesPage() {
 									)}
 								</button>
 							</div>
-							<p className="mt-2 text-xs text-gray-500">
+							<p className="mt-2 text-gray-500 text-xs">
 								Press Enter to send, Shift+Enter for new line
 							</p>
 						</div>
@@ -218,7 +232,9 @@ export default function MessagesPage() {
 
 				{/* Quick Message Templates */}
 				<div className="mt-6 rounded-lg bg-white p-6 shadow-sm">
-					<h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Messages</h3>
+					<h3 className="mb-4 font-semibold text-gray-900 text-lg">
+						Quick Messages
+					</h3>
 					<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 						{[
 							"I need to reschedule my appointment",
@@ -226,12 +242,12 @@ export default function MessagesPage() {
 							"I'm experiencing some discomfort",
 							"Can you send me my treatment plan?",
 							"I need to update my insurance information",
-							"Thank you for the excellent care!"
+							"Thank you for the excellent care!",
 						].map((template, index) => (
 							<button
 								key={index}
 								onClick={() => setNewMessage(template)}
-								className="rounded-md border border-gray-300 bg-white px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+								className="rounded-md border border-gray-300 bg-white px-3 py-2 text-left text-gray-700 text-sm hover:bg-gray-50"
 							>
 								{template}
 							</button>

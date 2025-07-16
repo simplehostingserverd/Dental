@@ -1,5 +1,5 @@
-import { headers } from "next/headers";
 import { db } from "@/server/db";
+import { headers } from "next/headers";
 
 export interface CurrentUser {
 	id: string;

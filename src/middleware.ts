@@ -1,6 +1,6 @@
+import { jwtVerify } from "jose";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { jwtVerify } from "jose";
 
 interface PracticeJWTPayload {
 	userId: string;
@@ -52,7 +52,9 @@ export async function middleware(request: NextRequest) {
 		try {
 			const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 			const secret = new TextEncoder().encode(JWT_SECRET);
-			const { payload } = await jwtVerify(token, secret) as { payload: JWTPayload };
+			const { payload } = (await jwtVerify(token, secret)) as {
+				payload: JWTPayload;
+			};
 
 			if (payload.type !== "practice") {
 				return NextResponse.redirect(new URL("/auth/signin", request.url));
@@ -70,27 +72,39 @@ export async function middleware(request: NextRequest) {
 			return response;
 		} catch (error) {
 			// Invalid token, redirect to login
-			const response = NextResponse.redirect(new URL("/auth/signin", request.url));
+			const response = NextResponse.redirect(
+				new URL("/auth/signin", request.url),
+			);
 			response.cookies.delete("practice-auth-token");
 			return response;
 		}
 	}
 
 	// Check for patient portal routes (excluding auth routes)
-	if (pathname.startsWith("/patient") && !pathname.startsWith("/patient/auth")) {
+	if (
+		pathname.startsWith("/patient") &&
+		!pathname.startsWith("/patient/auth")
+	) {
 		const token = request.cookies.get("patient-auth-token")?.value;
 
 		if (!token) {
-			return NextResponse.redirect(new URL("/patient/auth/signin", request.url));
+			return NextResponse.redirect(
+				new URL("/patient/auth/signin", request.url),
+			);
 		}
 
 		try {
-			const PATIENT_JWT_SECRET = process.env.PATIENT_JWT_SECRET || "patient-secret-key";
+			const PATIENT_JWT_SECRET =
+				process.env.PATIENT_JWT_SECRET || "patient-secret-key";
 			const secret = new TextEncoder().encode(PATIENT_JWT_SECRET);
-			const { payload } = await jwtVerify(token, secret) as { payload: JWTPayload };
+			const { payload } = (await jwtVerify(token, secret)) as {
+				payload: JWTPayload;
+			};
 
 			if (payload.type !== "patient") {
-				return NextResponse.redirect(new URL("/patient/auth/signin", request.url));
+				return NextResponse.redirect(
+					new URL("/patient/auth/signin", request.url),
+				);
 			}
 
 			// Add user info to headers for use in components
@@ -105,7 +119,9 @@ export async function middleware(request: NextRequest) {
 			return response;
 		} catch (error) {
 			// Invalid token, redirect to login
-			const response = NextResponse.redirect(new URL("/patient/auth/signin", request.url));
+			const response = NextResponse.redirect(
+				new URL("/patient/auth/signin", request.url),
+			);
 			response.cookies.delete("patient-auth-token");
 			return response;
 		}
@@ -116,22 +132,19 @@ export async function middleware(request: NextRequest) {
 		const token = request.cookies.get("patient-auth-token")?.value;
 
 		if (!token) {
-			return NextResponse.json(
-				{ error: "Unauthorized" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		try {
-			const PATIENT_JWT_SECRET = process.env.PATIENT_JWT_SECRET || "patient-secret-key";
+			const PATIENT_JWT_SECRET =
+				process.env.PATIENT_JWT_SECRET || "patient-secret-key";
 			const secret = new TextEncoder().encode(PATIENT_JWT_SECRET);
-			const { payload } = await jwtVerify(token, secret) as { payload: JWTPayload };
+			const { payload } = (await jwtVerify(token, secret)) as {
+				payload: JWTPayload;
+			};
 
 			if (payload.type !== "patient") {
-				return NextResponse.json(
-					{ error: "Unauthorized" },
-					{ status: 401 }
-				);
+				return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 			}
 
 			// Add user info to headers for use in API routes
@@ -145,10 +158,7 @@ export async function middleware(request: NextRequest) {
 
 			return response;
 		} catch (error) {
-			return NextResponse.json(
-				{ error: "Invalid token" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "Invalid token" }, { status: 401 });
 		}
 	}
 

@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { Calendar, Clock, X } from "lucide-react";
+import { useState } from "react";
 
 interface AppointmentActionsProps {
 	appointmentId: string;
 	onUpdate: () => void;
 }
 
-export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActionsProps) {
+export function AppointmentActions({
+	appointmentId,
+	onUpdate,
+}: AppointmentActionsProps) {
 	const [showReschedule, setShowReschedule] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [rescheduleDate, setRescheduleDate] = useState("");
@@ -21,13 +24,16 @@ export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActio
 
 		setIsLoading(true);
 		try {
-			const response = await fetch(`/api/patient/appointments/${appointmentId}`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await fetch(
+				`/api/patient/appointments/${appointmentId}`,
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ action: "cancel" }),
 				},
-				body: JSON.stringify({ action: "cancel" }),
-			});
+			);
 
 			if (response.ok) {
 				alert("Appointment cancelled successfully");
@@ -51,17 +57,20 @@ export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActio
 
 		setIsLoading(true);
 		try {
-			const response = await fetch(`/api/patient/appointments/${appointmentId}`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await fetch(
+				`/api/patient/appointments/${appointmentId}`,
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						action: "reschedule",
+						date: rescheduleDate,
+						time: rescheduleTime,
+					}),
 				},
-				body: JSON.stringify({
-					action: "reschedule",
-					date: rescheduleDate,
-					time: rescheduleTime
-				}),
-			});
+			);
 
 			if (response.ok) {
 				alert("Appointment rescheduled successfully");
@@ -85,9 +94,22 @@ export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActio
 	maxDate.setMonth(maxDate.getMonth() + 3);
 
 	const timeSlots = [
-		"09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-		"12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-		"15:00", "15:30", "16:00", "16:30"
+		"09:00",
+		"09:30",
+		"10:00",
+		"10:30",
+		"11:00",
+		"11:30",
+		"12:00",
+		"12:30",
+		"13:00",
+		"13:30",
+		"14:00",
+		"14:30",
+		"15:00",
+		"15:30",
+		"16:00",
+		"16:30",
 	];
 
 	return (
@@ -95,14 +117,14 @@ export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActio
 			<button
 				onClick={() => setShowReschedule(true)}
 				disabled={isLoading}
-				className="rounded-md border border-blue-600 bg-white px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
+				className="rounded-md border border-blue-600 bg-white px-3 py-1 text-blue-600 text-sm hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
 			>
 				Reschedule
 			</button>
 			<button
 				onClick={handleCancel}
 				disabled={isLoading}
-				className="rounded-md border border-red-600 bg-white px-3 py-1 text-sm text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+				className="rounded-md border border-red-600 bg-white px-3 py-1 text-red-600 text-sm hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
 			>
 				Cancel
 			</button>
@@ -112,7 +134,9 @@ export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActio
 				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 					<div className="w-full max-w-md rounded-lg bg-white p-6">
 						<div className="mb-4 flex items-center justify-between">
-							<h3 className="text-lg font-semibold text-gray-900">Reschedule Appointment</h3>
+							<h3 className="font-semibold text-gray-900 text-lg">
+								Reschedule Appointment
+							</h3>
 							<button
 								onClick={() => setShowReschedule(false)}
 								className="text-gray-400 hover:text-gray-600"
@@ -123,21 +147,21 @@ export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActio
 
 						<div className="space-y-4">
 							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-2">
+								<label className="mb-2 block font-medium text-gray-700 text-sm">
 									New Date
 								</label>
 								<input
 									type="date"
 									value={rescheduleDate}
 									onChange={(e) => setRescheduleDate(e.target.value)}
-									min={today.toISOString().split('T')[0]}
-									max={maxDate.toISOString().split('T')[0]}
+									min={today.toISOString().split("T")[0]}
+									max={maxDate.toISOString().split("T")[0]}
 									className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 								/>
 							</div>
 
 							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-2">
+								<label className="mb-2 block font-medium text-gray-700 text-sm">
 									New Time
 								</label>
 								<select
@@ -158,14 +182,14 @@ export function AppointmentActions({ appointmentId, onUpdate }: AppointmentActio
 						<div className="mt-6 flex justify-end space-x-3">
 							<button
 								onClick={() => setShowReschedule(false)}
-								className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+								className="rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm hover:bg-gray-50"
 							>
 								Cancel
 							</button>
 							<button
 								onClick={handleReschedule}
 								disabled={isLoading || !rescheduleDate || !rescheduleTime}
-								className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+								className="rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 							>
 								{isLoading ? "Rescheduling..." : "Reschedule"}
 							</button>

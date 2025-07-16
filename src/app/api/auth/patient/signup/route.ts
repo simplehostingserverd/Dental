@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/server/db";
 import { hashPassword, validatePassword } from "@/lib/auth/password";
 import { EmailValidationService } from "@/lib/validation/email-validator";
+import { db } from "@/server/db";
 import jwt from "jsonwebtoken";
+import { type NextRequest, NextResponse } from "next/server";
 
 interface PatientSignupRequest {
 	firstName: string;
@@ -34,24 +34,31 @@ export async function POST(request: NextRequest) {
 		} = body;
 
 		// Validation
-		if (!firstName || !lastName || !email || !phone || !dateOfBirth || !password) {
+		if (
+			!firstName ||
+			!lastName ||
+			!email ||
+			!phone ||
+			!dateOfBirth ||
+			!password
+		) {
 			return NextResponse.json(
 				{ error: "All required fields must be provided" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		if (password !== confirmPassword) {
 			return NextResponse.json(
 				{ error: "Passwords do not match" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		if (!agreeToTerms) {
 			return NextResponse.json(
 				{ error: "You must agree to the terms of service" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -60,7 +67,7 @@ export async function POST(request: NextRequest) {
 		if (!emailValidation.isValid) {
 			return NextResponse.json(
 				{ error: emailValidation.errors[0] || "Invalid email address" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -70,7 +77,7 @@ export async function POST(request: NextRequest) {
 		} catch (error) {
 			return NextResponse.json(
 				{ error: error instanceof Error ? error.message : "Invalid password" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -82,7 +89,7 @@ export async function POST(request: NextRequest) {
 		if (existingUser) {
 			return NextResponse.json(
 				{ error: "An account with this email already exists" },
-				{ status: 409 }
+				{ status: 409 },
 			);
 		}
 
@@ -91,10 +98,10 @@ export async function POST(request: NextRequest) {
 
 		// Parse date of birth
 		const dob = new Date(dateOfBirth);
-		if (isNaN(dob.getTime())) {
+		if (Number.isNaN(dob.getTime())) {
 			return NextResponse.json(
 				{ error: "Invalid date of birth" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -105,13 +112,16 @@ export async function POST(request: NextRequest) {
 		if (!defaultPracticeId) {
 			// Find the first available practice (single-tenant mode)
 			const firstPractice = await db.practice.findFirst({
-				select: { id: true, name: true }
+				select: { id: true, name: true },
 			});
 
 			if (!firstPractice) {
 				return NextResponse.json(
-					{ error: "Practice not found. Please contact support to set up your account." },
-					{ status: 500 }
+					{
+						error:
+							"Practice not found. Please contact support to set up your account.",
+					},
+					{ status: 500 },
 				);
 			}
 
@@ -205,16 +215,17 @@ export async function POST(request: NextRequest) {
 			if (error.message.includes("Unique constraint")) {
 				return NextResponse.json(
 					{ error: "An account with this email already exists" },
-					{ status: 409 }
+					{ status: 409 },
 				);
 			}
 		}
 
 		return NextResponse.json(
 			{
-				error: "An error occurred while creating your account. Please try again.",
+				error:
+					"An error occurred while creating your account. Please try again.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

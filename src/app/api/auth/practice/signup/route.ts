@@ -6,8 +6,8 @@ import {
 import { EmailValidationService } from "@/lib/validation/email-validator";
 import { db } from "@/server/db";
 import { PracticeRole } from "@prisma/client";
-import { type NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { type NextRequest, NextResponse } from "next/server";
 
 interface SignupRequest {
 	firstName: string;
@@ -61,7 +61,8 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Validate email thoroughly
-		const emailValidation = EmailValidationService.validatePracticeEmail(workEmail);
+		const emailValidation =
+			EmailValidationService.validatePracticeEmail(workEmail);
 		if (!emailValidation.isValid) {
 			return NextResponse.json(
 				{ error: emailValidation.errors[0] || "Invalid email address" },

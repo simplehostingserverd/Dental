@@ -75,31 +75,31 @@ export async function clearAllLimits(identifier: string): Promise<void> {
  * Check if an action is rate limited
  */
 export async function checkRateLimit(
-		type: keyof typeof rateLimiters,
-		key: string,
-	): Promise<{
-		allowed: boolean;
-		remainingPoints?: number;
-		msBeforeNext?: number;
-	}> {
-		try {
-			const limiter = rateLimiters[type];
-			const result = await limiter.consume(key);
+	type: keyof typeof rateLimiters,
+	key: string,
+): Promise<{
+	allowed: boolean;
+	remainingPoints?: number;
+	msBeforeNext?: number;
+}> {
+	try {
+		const limiter = rateLimiters[type];
+		const result = await limiter.consume(key);
 
-			return {
-				allowed: true,
-				remainingPoints: result.remainingPoints,
-				msBeforeNext: result.msBeforeNext,
-			};
-		} catch (rejRes: unknown) {
-			return {
-				allowed: false,
-				remainingPoints:
-					(rejRes as { remainingPoints?: number }).remainingPoints || 0,
-				msBeforeNext: (rejRes as { msBeforeNext?: number }).msBeforeNext || 0,
-			};
-		}
+		return {
+			allowed: true,
+			remainingPoints: result.remainingPoints,
+			msBeforeNext: result.msBeforeNext,
+		};
+	} catch (rejRes: unknown) {
+		return {
+			allowed: false,
+			remainingPoints:
+				(rejRes as { remainingPoints?: number }).remainingPoints || 0,
+			msBeforeNext: (rejRes as { msBeforeNext?: number }).msBeforeNext || 0,
+		};
 	}
+}
 
 /**
  * Reset rate limit for a key
@@ -144,10 +144,7 @@ export async function checkMultipleRateLimits(
 	msBeforeNext?: number;
 }> {
 	for (const check of checks) {
-		const result = await checkRateLimit(
-			check.type,
-			check.key,
-		);
+		const result = await checkRateLimit(check.type, check.key);
 		if (!result.allowed) {
 			return {
 				allowed: false,
@@ -198,9 +195,7 @@ export function createMiddleware(type: keyof typeof rateLimiters) {
 		const result = await checkRateLimit(type, key);
 
 		if (!result.allowed) {
-			const timeRemaining = formatTimeRemaining(
-				result.msBeforeNext || 0,
-			);
+			const timeRemaining = formatTimeRemaining(result.msBeforeNext || 0);
 			return (res as ExpressResponse).status(429).json({
 				error: "Too many requests",
 				message: `Rate limit exceeded. Try again in ${timeRemaining}.`,
@@ -209,8 +204,14 @@ export function createMiddleware(type: keyof typeof rateLimiters) {
 		}
 
 		// Add rate limit headers
-		(res as ExpressResponse).setHeader("X-RateLimit-Limit", rateLimiters[type].points);
-		(res as ExpressResponse).setHeader("X-RateLimit-Remaining", result.remainingPoints || 0);
+		(res as ExpressResponse).setHeader(
+			"X-RateLimit-Limit",
+			rateLimiters[type].points,
+		);
+		(res as ExpressResponse).setHeader(
+			"X-RateLimit-Remaining",
+			result.remainingPoints || 0,
+		);
 		(res as ExpressResponse).setHeader(
 			"X-RateLimit-Reset",
 			new Date(Date.now() + (result.msBeforeNext || 0)),

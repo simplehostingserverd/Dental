@@ -1,16 +1,13 @@
-import { db } from "@/server/db";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/server/db";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
 		const user = await getCurrentUser();
-		
+
 		if (!user || user.type !== "patient") {
-			return NextResponse.json(
-				{ error: "Unauthorized" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		const body = await request.json();
@@ -20,52 +17,52 @@ export async function POST(request: NextRequest) {
 		if (!date || !time || !type) {
 			return NextResponse.json(
 				{ error: "Date, time, and appointment type are required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Find the patient record
 		const patient = await db.patient.findUnique({
 			where: { patientUserId: user.id },
-			include: { practice: true }
+			include: { practice: true },
 		});
 
 		if (!patient) {
 			return NextResponse.json(
 				{ error: "Patient record not found" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
 		// Find an available practice user (dentist/staff) for the appointment
 		// For now, we'll assign to the first available practice user
 		const practiceUser = await db.practiceUser.findFirst({
-			where: { 
+			where: {
 				practiceId: patient.practiceId,
-				isActive: true 
-			}
+				isActive: true,
+			},
 		});
 
 		if (!practiceUser) {
 			return NextResponse.json(
 				{ error: "No available staff found" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
 		// Create start and end datetime
-		const [hours, minutes] = time.split(':').map(Number);
+		const [hours, minutes] = time.split(":").map(Number);
 		const startDateTime = new Date(date);
 		startDateTime.setHours(hours, minutes, 0, 0);
-		
+
 		// Default duration based on appointment type
 		const durations: Record<string, number> = {
 			cleaning: 60,
 			checkup: 30,
 			consultation: 45,
-			emergency: 30
+			emergency: 30,
 		};
-		
+
 		const duration = durations[type] || 30;
 		const endDateTime = new Date(startDateTime);
 		endDateTime.setMinutes(endDateTime.getMinutes() + duration);
@@ -78,32 +75,32 @@ export async function POST(request: NextRequest) {
 					{
 						AND: [
 							{ start: { lte: startDateTime } },
-							{ end: { gt: startDateTime } }
-						]
+							{ end: { gt: startDateTime } },
+						],
 					},
 					{
 						AND: [
 							{ start: { lt: endDateTime } },
-							{ end: { gte: endDateTime } }
-						]
+							{ end: { gte: endDateTime } },
+						],
 					},
 					{
 						AND: [
 							{ start: { gte: startDateTime } },
-							{ end: { lte: endDateTime } }
-						]
-					}
+							{ end: { lte: endDateTime } },
+						],
+					},
 				],
 				status: {
-					not: "CANCELED"
-				}
-			}
+					not: "CANCELED",
+				},
+			},
 		});
 
 		if (conflictingAppointment) {
 			return NextResponse.json(
 				{ error: "This time slot is no longer available" },
-				{ status: 409 }
+				{ status: 409 },
 			);
 		}
 
@@ -116,23 +113,23 @@ export async function POST(request: NextRequest) {
 				appointmentType: type,
 				notes: notes || null,
 				patientId: patient.id,
-				practiceUserId: practiceUser.id
+				practiceUserId: practiceUser.id,
 			},
 			include: {
 				patient: {
 					select: {
 						firstName: true,
 						lastName: true,
-						email: true
-					}
+						email: true,
+					},
 				},
 				practiceUser: {
 					select: {
 						firstName: true,
-						lastName: true
-					}
-				}
-			}
+						lastName: true,
+					},
+				},
+			},
 		});
 
 		return NextResponse.json({
@@ -144,15 +141,14 @@ export async function POST(request: NextRequest) {
 				type: appointment.appointmentType,
 				status: appointment.status,
 				notes: appointment.notes,
-				provider: `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`
-			}
+				provider: `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`,
+			},
 		});
-
 	} catch (error) {
 		console.error("Error creating appointment:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -160,67 +156,63 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
 	try {
 		const user = await getCurrentUser();
-		
+
 		if (!user || user.type !== "patient") {
-			return NextResponse.json(
-				{ error: "Unauthorized" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		// Find the patient record
 		const patient = await db.patient.findUnique({
-			where: { patientUserId: user.id }
+			where: { patientUserId: user.id },
 		});
 
 		if (!patient) {
 			return NextResponse.json(
 				{ error: "Patient record not found" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
 		// Get patient's appointments
 		const appointments = await db.appointment.findMany({
-			where: { 
+			where: {
 				patientId: patient.id,
 				status: {
-					not: "CANCELED"
-				}
+					not: "CANCELED",
+				},
 			},
 			include: {
 				practiceUser: {
 					select: {
 						firstName: true,
-						lastName: true
-					}
-				}
+						lastName: true,
+					},
+				},
 			},
 			orderBy: {
-				start: "asc"
-			}
+				start: "asc",
+			},
 		});
 
-		const formattedAppointments = appointments.map(appointment => ({
+		const formattedAppointments = appointments.map((appointment) => ({
 			id: appointment.id,
 			start: appointment.start,
 			end: appointment.end,
 			type: appointment.appointmentType,
 			status: appointment.status,
 			notes: appointment.notes,
-			provider: `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`
+			provider: `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`,
 		}));
 
 		return NextResponse.json({
 			success: true,
-			appointments: formattedAppointments
+			appointments: formattedAppointments,
 		});
-
 	} catch (error) {
 		console.error("Error fetching appointments:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

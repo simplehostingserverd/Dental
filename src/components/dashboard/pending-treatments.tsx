@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, AlertCircle } from "lucide-react";
+import { AlertCircle, Clock } from "lucide-react";
 
 interface Treatment {
 	id: string;
@@ -67,9 +67,12 @@ export function PendingTreatments() {
 	return (
 		<div className="rounded-lg bg-white p-6 shadow">
 			<div className="mb-4 flex items-center justify-between">
-				<h3 className="font-medium text-lg text-gray-900">Pending Treatments</h3>
-				<span className="rounded-full bg-red-100 px-2 py-1 text-red-800 text-xs font-medium">
-					{sampleTreatments.filter(t => t.status === "pending").length} pending
+				<h3 className="font-medium text-gray-900 text-lg">
+					Pending Treatments
+				</h3>
+				<span className="rounded-full bg-red-100 px-2 py-1 font-medium text-red-800 text-xs">
+					{sampleTreatments.filter((t) => t.status === "pending").length}{" "}
+					pending
 				</span>
 			</div>
 
@@ -85,14 +88,16 @@ export function PendingTreatments() {
 								<p className="font-medium text-gray-900 text-sm">
 									{treatment.patientName}
 								</p>
-								<p className="text-gray-600 text-xs">{treatment.treatmentType}</p>
+								<p className="text-gray-600 text-xs">
+									{treatment.treatmentType}
+								</p>
 							</div>
 						</div>
 
 						<div className="flex items-center space-x-2">
 							<span
-								className={`rounded-full px-2 py-1 text-xs font-medium ${getPriorityColor(
-									treatment.priority
+								className={`rounded-full px-2 py-1 font-medium text-xs ${getPriorityColor(
+									treatment.priority,
 								)}`}
 							>
 								{treatment.priority}
@@ -108,14 +113,16 @@ export function PendingTreatments() {
 			{sampleTreatments.length === 0 && (
 				<div className="py-8 text-center">
 					<AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
-					<h3 className="mt-2 font-medium text-gray-900 text-sm">No pending treatments</h3>
+					<h3 className="mt-2 font-medium text-gray-900 text-sm">
+						No pending treatments
+					</h3>
 					<p className="mt-1 text-gray-500 text-sm">
 						All treatments are up to date.
 					</p>
 				</div>
 			)}
 
-			<div className="mt-4 pt-4 border-t border-gray-200">
+			<div className="mt-4 border-gray-200 border-t pt-4">
 				<button className="w-full rounded-md bg-gray-50 px-3 py-2 font-medium text-gray-700 text-sm hover:bg-gray-100">
 					View All Treatments
 				</button>

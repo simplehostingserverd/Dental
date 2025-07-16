@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
 		// Create response and clear the auth cookie
 		const response = NextResponse.json(
 			{ success: true, message: "Logged out successfully" },
-			{ status: 200 }
+			{ status: 200 },
 		);
 
 		// Clear the patient auth token cookie
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 		console.error("Error during logout:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

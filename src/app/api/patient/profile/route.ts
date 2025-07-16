@@ -1,27 +1,24 @@
-import { db } from "@/server/db";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/server/db";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
 	try {
 		const user = await getCurrentUser();
-		
+
 		if (!user || user.type !== "patient") {
-			return NextResponse.json(
-				{ error: "Unauthorized" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		// Find the patient record
 		const patient = await db.patient.findUnique({
-			where: { patientUserId: user.id }
+			where: { patientUserId: user.id },
 		});
 
 		if (!patient) {
 			return NextResponse.json(
 				{ error: "Patient record not found" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
@@ -31,7 +28,7 @@ export async function GET(request: NextRequest) {
 			lastName: patient.lastName,
 			email: patient.email || "",
 			phone: patient.phone || "",
-			dateOfBirth: patient.dateOfBirth.toISOString().split('T')[0],
+			dateOfBirth: patient.dateOfBirth.toISOString().split("T")[0],
 			gender: patient.gender,
 			address: patient.address || "",
 			city: patient.city || "",
@@ -41,19 +38,18 @@ export async function GET(request: NextRequest) {
 			emergencyPhone: patient.emergencyPhone || "",
 			insurance: patient.insurance || "",
 			insuranceProvider: patient.insuranceProvider || "",
-			insurancePolicyNumber: patient.insurancePolicyNumber || ""
+			insurancePolicyNumber: patient.insurancePolicyNumber || "",
 		};
 
 		return NextResponse.json({
 			success: true,
-			profile
+			profile,
 		});
-
 	} catch (error) {
 		console.error("Error fetching profile:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -61,12 +57,9 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
 	try {
 		const user = await getCurrentUser();
-		
+
 		if (!user || user.type !== "patient") {
-			return NextResponse.json(
-				{ error: "Unauthorized" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		const body = await request.json();
@@ -85,26 +78,29 @@ export async function PUT(request: NextRequest) {
 			emergencyPhone,
 			insurance,
 			insuranceProvider,
-			insurancePolicyNumber
+			insurancePolicyNumber,
 		} = body;
 
 		// Validate required fields
 		if (!firstName || !lastName || !dateOfBirth || !gender) {
 			return NextResponse.json(
-				{ error: "First name, last name, date of birth, and gender are required" },
-				{ status: 400 }
+				{
+					error:
+						"First name, last name, date of birth, and gender are required",
+				},
+				{ status: 400 },
 			);
 		}
 
 		// Find the patient record
 		const patient = await db.patient.findUnique({
-			where: { patientUserId: user.id }
+			where: { patientUserId: user.id },
 		});
 
 		if (!patient) {
 			return NextResponse.json(
 				{ error: "Patient record not found" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
@@ -126,8 +122,8 @@ export async function PUT(request: NextRequest) {
 				emergencyPhone: emergencyPhone?.trim() || null,
 				insurance: insurance?.trim() || null,
 				insuranceProvider: insuranceProvider?.trim() || null,
-				insurancePolicyNumber: insurancePolicyNumber?.trim() || null
-			}
+				insurancePolicyNumber: insurancePolicyNumber?.trim() || null,
+			},
 		});
 
 		// Also update the patient user email if it changed
@@ -135,21 +131,20 @@ export async function PUT(request: NextRequest) {
 			await db.patientUser.update({
 				where: { id: user.id },
 				data: {
-					email: email.trim()
-				}
+					email: email.trim(),
+				},
 			});
 		}
 
 		return NextResponse.json({
 			success: true,
-			message: "Profile updated successfully"
+			message: "Profile updated successfully",
 		});
-
 	} catch (error) {
 		console.error("Error updating profile:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

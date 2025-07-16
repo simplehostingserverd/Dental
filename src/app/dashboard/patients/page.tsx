@@ -1,25 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { 
-	Calendar, 
-	Mail, 
-	Phone, 
-	Plus, 
-	Search, 
-	Filter,
-	MoreHorizontal,
-	Eye,
-	Edit,
-	Trash2
-} from "lucide-react";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+	Calendar,
+	Edit,
+	Eye,
+	Filter,
+	Mail,
+	MoreHorizontal,
+	Phone,
+	Plus,
+	Search,
+	Trash2,
+} from "lucide-react";
+import Link from "next/link";
 
 // Mock data - in real app this would come from database
 const patients = [
@@ -34,7 +34,7 @@ const patients = [
 		nextAppointment: "2024-01-25",
 		status: "Active",
 		insurance: "Delta Dental",
-		balance: 150.00,
+		balance: 150.0,
 	},
 	{
 		id: "2",
@@ -60,7 +60,7 @@ const patients = [
 		nextAppointment: "2024-01-30",
 		status: "Inactive",
 		insurance: "Aetna",
-		balance: 75.50,
+		balance: 75.5,
 	},
 ];
 
@@ -70,8 +70,10 @@ export default function PatientsPage() {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-2xl font-semibold text-gray-900">Patients</h1>
-					<p className="text-gray-600">Manage your patient records and information</p>
+					<h1 className="font-semibold text-2xl text-gray-900">Patients</h1>
+					<p className="text-gray-600">
+						Manage your patient records and information
+					</p>
 				</div>
 				<Link href="/dashboard/patients/new">
 					<Button>
@@ -83,12 +85,9 @@ export default function PatientsPage() {
 
 			{/* Search and Filters */}
 			<div className="flex items-center space-x-4">
-				<div className="relative flex-1 max-w-md">
-					<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-					<Input
-						placeholder="Search patients..."
-						className="pl-10"
-					/>
+				<div className="relative max-w-md flex-1">
+					<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
+					<Input placeholder="Search patients..." className="pl-10" />
 				</div>
 				<Button variant="outline">
 					<Filter className="mr-2 h-4 w-4" />
@@ -102,25 +101,25 @@ export default function PatientsPage() {
 					<table className="w-full">
 						<thead className="border-b bg-gray-50">
 							<tr>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Patient
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Contact
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Last Visit
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Next Appointment
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Status
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Balance
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Actions
 								</th>
 							</tr>
@@ -128,52 +127,57 @@ export default function PatientsPage() {
 						<tbody className="divide-y divide-gray-200">
 							{patients.map((patient) => (
 								<tr key={patient.id} className="hover:bg-gray-50">
-									<td className="px-6 py-4 whitespace-nowrap">
+									<td className="whitespace-nowrap px-6 py-4">
 										<div>
-											<div className="text-sm font-medium text-gray-900">
+											<div className="font-medium text-gray-900 text-sm">
 												{patient.firstName} {patient.lastName}
 											</div>
-											<div className="text-sm text-gray-500">
-												DOB: {new Date(patient.dateOfBirth).toLocaleDateString()}
+											<div className="text-gray-500 text-sm">
+												DOB:{" "}
+												{new Date(patient.dateOfBirth).toLocaleDateString()}
 											</div>
 										</div>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
+									<td className="whitespace-nowrap px-6 py-4">
 										<div className="space-y-1">
-											<div className="flex items-center text-sm text-gray-900">
+											<div className="flex items-center text-gray-900 text-sm">
 												<Mail className="mr-2 h-4 w-4 text-gray-400" />
 												{patient.email}
 											</div>
-											<div className="flex items-center text-sm text-gray-500">
+											<div className="flex items-center text-gray-500 text-sm">
 												<Phone className="mr-2 h-4 w-4 text-gray-400" />
 												{patient.phone}
 											</div>
 										</div>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+									<td className="whitespace-nowrap px-6 py-4 text-gray-900 text-sm">
 										{new Date(patient.lastVisit).toLocaleDateString()}
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
+									<td className="whitespace-nowrap px-6 py-4">
 										{patient.nextAppointment ? (
-											<div className="flex items-center text-sm text-gray-900">
+											<div className="flex items-center text-gray-900 text-sm">
 												<Calendar className="mr-2 h-4 w-4 text-gray-400" />
 												{new Date(patient.nextAppointment).toLocaleDateString()}
 											</div>
 										) : (
-											<span className="text-sm text-gray-500">None scheduled</span>
+											<span className="text-gray-500 text-sm">
+												None scheduled
+											</span>
 										)}
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
-										<Badge 
-											variant={patient.status === "Active" ? "default" : "secondary"}
+									<td className="whitespace-nowrap px-6 py-4">
+										<Badge
+											variant={
+												patient.status === "Active" ? "default" : "secondary"
+											}
 										>
 											{patient.status}
 										</Badge>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+									<td className="whitespace-nowrap px-6 py-4 text-gray-900 text-sm">
 										${patient.balance.toFixed(2)}
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									<td className="whitespace-nowrap px-6 py-4 text-gray-500 text-sm">
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button variant="ghost" size="sm">
@@ -209,8 +213,9 @@ export default function PatientsPage() {
 
 			{/* Pagination */}
 			<div className="flex items-center justify-between">
-				<p className="text-sm text-gray-700">
-					Showing <span className="font-medium">1</span> to <span className="font-medium">3</span> of{" "}
+				<p className="text-gray-700 text-sm">
+					Showing <span className="font-medium">1</span> to{" "}
+					<span className="font-medium">3</span> of{" "}
 					<span className="font-medium">3</span> results
 				</p>
 				<div className="flex space-x-2">

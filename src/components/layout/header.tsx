@@ -9,9 +9,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getUserDisplayName, getUserInitials, type CurrentUser } from "@/lib/auth/get-user";
-import { Bell, ChevronDown, Moon, Search } from "lucide-react";
+import type { CurrentUser } from "@/lib/auth/get-user";
+import { getUserDisplayName, getUserInitials } from "@/lib/utils/user-utils";
+import { Bell, ChevronDown, Moon, Search, Sun } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface HeaderProps {
 	user: CurrentUser;
@@ -19,15 +21,46 @@ interface HeaderProps {
 
 export function Header({ user }: HeaderProps) {
 	const router = useRouter();
+	const [isDarkMode, setIsDarkMode] = useState(false);
+
+	// Check for saved theme preference or default to light mode
+	useEffect(() => {
+		const savedTheme = localStorage.getItem("theme");
+		const prefersDark = window.matchMedia(
+			"(prefers-color-scheme: dark)",
+		).matches;
+		const shouldUseDark = savedTheme === "dark" || (!savedTheme && prefersDark);
+
+		setIsDarkMode(shouldUseDark);
+		if (shouldUseDark) {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
+	}, []);
+
+	const toggleDarkMode = () => {
+		const newDarkMode = !isDarkMode;
+		setIsDarkMode(newDarkMode);
+
+		if (newDarkMode) {
+			document.documentElement.classList.add("dark");
+			localStorage.setItem("theme", "dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+			localStorage.setItem("theme", "light");
+		}
+	};
 
 	const handleSignOut = async () => {
 		// Clear the authentication cookie
-		document.cookie = "practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
 		// Redirect to sign in page
 		router.push("/auth/signin");
 	};
 	return (
-		<header className="border-gray-200 border-b bg-white px-6 py-4">
+		<header className="border-gray-200 border-b bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-900">
 			<div className="flex items-center justify-between">
 				{/* Search */}
 				<div className="max-w-lg flex-1">
@@ -55,9 +88,15 @@ export function Header({ user }: HeaderProps) {
 					{/* Theme toggle */}
 					<button
 						type="button"
-						className="p-2 text-gray-400 transition-colors hover:text-gray-600"
+						onClick={toggleDarkMode}
+						className="p-2 text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100"
+						title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
 					>
-						<Moon className="h-5 w-5" />
+						{isDarkMode ? (
+							<Sun className="h-5 w-5" />
+						) : (
+							<Moon className="h-5 w-5" />
+						)}
 					</button>
 
 					{/* User menu */}
@@ -68,7 +107,9 @@ export function Header({ user }: HeaderProps) {
 									src="/placeholder-avatar.jpg"
 									alt={getUserDisplayName(user)}
 								/>
-								<AvatarFallback>{getUserInitials(user.firstName, user.lastName)}</AvatarFallback>
+								<AvatarFallback>
+									{getUserInitials(user.firstName, user.lastName)}
+								</AvatarFallback>
 							</Avatar>
 							<span>{getUserDisplayName(user)}</span>
 							<ChevronDown className="h-4 w-4" />

@@ -1,27 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { 
-	DollarSign, 
-	Plus, 
-	Search, 
-	Filter,
-	Download,
-	Send,
-	Eye,
-	MoreHorizontal,
-	CreditCard,
-	FileText,
-	TrendingUp,
-	AlertCircle
-} from "lucide-react";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+	AlertCircle,
+	CreditCard,
+	DollarSign,
+	Download,
+	Eye,
+	FileText,
+	Filter,
+	MoreHorizontal,
+	Plus,
+	Search,
+	Send,
+	TrendingUp,
+} from "lucide-react";
+import Link from "next/link";
 
 // Mock data - in real app this would come from database
 const invoices = [
@@ -30,8 +30,8 @@ const invoices = [
 		patient: "John Smith",
 		date: "2024-01-15",
 		dueDate: "2024-02-15",
-		amount: 450.00,
-		paid: 300.00,
+		amount: 450.0,
+		paid: 300.0,
 		status: "partial",
 		treatments: ["Cleaning", "X-Ray"],
 		insurance: "Delta Dental",
@@ -41,8 +41,8 @@ const invoices = [
 		patient: "Sarah Johnson",
 		date: "2024-01-10",
 		dueDate: "2024-02-10",
-		amount: 1200.00,
-		paid: 1200.00,
+		amount: 1200.0,
+		paid: 1200.0,
 		status: "paid",
 		treatments: ["Root Canal", "Crown"],
 		insurance: "Cigna",
@@ -52,7 +52,7 @@ const invoices = [
 		patient: "Michael Brown",
 		date: "2024-01-08",
 		dueDate: "2024-02-08",
-		amount: 200.00,
+		amount: 200.0,
 		paid: 0,
 		status: "overdue",
 		treatments: ["Consultation"],
@@ -116,8 +116,10 @@ export default function BillingPage() {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-2xl font-semibold text-gray-900">Billing</h1>
-					<p className="text-gray-600">Manage invoices, payments, and insurance claims</p>
+					<h1 className="font-semibold text-2xl text-gray-900">Billing</h1>
+					<p className="text-gray-600">
+						Manage invoices, payments, and insurance claims
+					</p>
 				</div>
 				<div className="flex space-x-3">
 					<Button variant="outline">
@@ -160,12 +162,9 @@ export default function BillingPage() {
 
 			{/* Search and Filters */}
 			<div className="flex items-center space-x-4">
-				<div className="relative flex-1 max-w-md">
-					<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-					<Input
-						placeholder="Search invoices..."
-						className="pl-10"
-					/>
+				<div className="relative max-w-md flex-1">
+					<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
+					<Input placeholder="Search invoices..." className="pl-10" />
 				</div>
 				<Button variant="outline">
 					<Filter className="mr-2 h-4 w-4" />
@@ -179,22 +178,22 @@ export default function BillingPage() {
 					<table className="w-full">
 						<thead className="border-b bg-gray-50">
 							<tr>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Invoice
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Patient
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Date
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Amount
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Status
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 									Actions
 								</th>
 							</tr>
@@ -202,47 +201,47 @@ export default function BillingPage() {
 						<tbody className="divide-y divide-gray-200">
 							{invoices.map((invoice) => (
 								<tr key={invoice.id} className="hover:bg-gray-50">
-									<td className="px-6 py-4 whitespace-nowrap">
+									<td className="whitespace-nowrap px-6 py-4">
 										<div>
-											<div className="text-sm font-medium text-gray-900">
+											<div className="font-medium text-gray-900 text-sm">
 												{invoice.id}
 											</div>
-											<div className="text-sm text-gray-500">
+											<div className="text-gray-500 text-sm">
 												Due: {new Date(invoice.dueDate).toLocaleDateString()}
 											</div>
 										</div>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
+									<td className="whitespace-nowrap px-6 py-4">
 										<div>
-											<div className="text-sm font-medium text-gray-900">
+											<div className="font-medium text-gray-900 text-sm">
 												{invoice.patient}
 											</div>
-											<div className="text-sm text-gray-500">
+											<div className="text-gray-500 text-sm">
 												{invoice.insurance}
 											</div>
 										</div>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+									<td className="whitespace-nowrap px-6 py-4 text-gray-900 text-sm">
 										{new Date(invoice.date).toLocaleDateString()}
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
+									<td className="whitespace-nowrap px-6 py-4">
 										<div>
-											<div className="text-sm font-medium text-gray-900">
+											<div className="font-medium text-gray-900 text-sm">
 												${invoice.amount.toFixed(2)}
 											</div>
 											{invoice.paid > 0 && (
-												<div className="text-sm text-gray-500">
+												<div className="text-gray-500 text-sm">
 													Paid: ${invoice.paid.toFixed(2)}
 												</div>
 											)}
 										</div>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
+									<td className="whitespace-nowrap px-6 py-4">
 										<Badge className={getStatusColor(invoice.status)}>
 											{invoice.status}
 										</Badge>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									<td className="whitespace-nowrap px-6 py-4 text-gray-500 text-sm">
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button variant="ghost" size="sm">
@@ -277,28 +276,34 @@ export default function BillingPage() {
 			</div>
 
 			{/* Quick Actions */}
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 				<div className="rounded-lg border bg-white p-6">
-					<h3 className="font-medium text-gray-900 mb-2">Quick Payment</h3>
-					<p className="text-sm text-gray-600 mb-4">Record a payment for an existing invoice</p>
+					<h3 className="mb-2 font-medium text-gray-900">Quick Payment</h3>
+					<p className="mb-4 text-gray-600 text-sm">
+						Record a payment for an existing invoice
+					</p>
 					<Button className="w-full">
 						<CreditCard className="mr-2 h-4 w-4" />
 						Record Payment
 					</Button>
 				</div>
-				
+
 				<div className="rounded-lg border bg-white p-6">
-					<h3 className="font-medium text-gray-900 mb-2">Insurance Claims</h3>
-					<p className="text-sm text-gray-600 mb-4">Submit and track insurance claims</p>
+					<h3 className="mb-2 font-medium text-gray-900">Insurance Claims</h3>
+					<p className="mb-4 text-gray-600 text-sm">
+						Submit and track insurance claims
+					</p>
 					<Button variant="outline" className="w-full">
 						<FileText className="mr-2 h-4 w-4" />
 						Manage Claims
 					</Button>
 				</div>
-				
+
 				<div className="rounded-lg border bg-white p-6">
-					<h3 className="font-medium text-gray-900 mb-2">Reports</h3>
-					<p className="text-sm text-gray-600 mb-4">Generate financial reports and analytics</p>
+					<h3 className="mb-2 font-medium text-gray-900">Reports</h3>
+					<p className="mb-4 text-gray-600 text-sm">
+						Generate financial reports and analytics
+					</p>
 					<Button variant="outline" className="w-full">
 						<TrendingUp className="mr-2 h-4 w-4" />
 						View Reports
