@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
 				secure: process.env.NODE_ENV === "production",
 				sameSite: "strict",
 				maxAge: rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60, // 30 days or 24 hours
-				path: "/patient",
+				path: "/",
 			});
 		}
 

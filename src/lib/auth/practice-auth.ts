@@ -15,7 +15,7 @@ import {
 	validatePassword,
 	verifyPassword,
 } from "./password";
-import { RateLimitService } from "./rate-limiter";
+import { checkMultipleRateLimits, formatTimeRemaining } from "./rate-limiter";
 import { TwoFactorService } from "./two-factor";
 
 // Using types from @/types/auth instead of duplicating interfaces
@@ -51,7 +51,7 @@ export class PracticeAuthService {
 
 		try {
 			// Rate limiting checks
-			const rateLimitResult = await RateLimitService.checkMultipleRateLimits([
+			const rateLimitResult = await checkMultipleRateLimits([
 				{ type: "login", key: ipAddress },
 				{ type: "loginEmail", key: email.toLowerCase() },
 			]);
@@ -59,7 +59,7 @@ export class PracticeAuthService {
 			if (!rateLimitResult.allowed) {
 				return {
 					success: false,
-					error: `Too many login attempts. Try again in ${RateLimitService.formatTimeRemaining(rateLimitResult.msBeforeNext || 0)}.`,
+					error: `Too many login attempts. Try again in ${formatTimeRemaining(rateLimitResult.msBeforeNext || 0)}.`,
 					lockoutTime: rateLimitResult.msBeforeNext,
 				};
 			}
@@ -87,7 +87,7 @@ export class PracticeAuthService {
 				const lockoutTime = user.lockedUntil.getTime() - Date.now();
 				return {
 					success: false,
-					error: `Account is locked. Try again in ${RateLimitService.formatTimeRemaining(lockoutTime)}.`,
+					error: `Account is locked. Try again in ${formatTimeRemaining(lockoutTime)}.`,
 					lockoutTime,
 				};
 			}

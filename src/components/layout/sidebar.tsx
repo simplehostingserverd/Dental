@@ -37,7 +37,7 @@ export function Sidebar() {
 		<div className="w-64 border-gray-200 border-r bg-white shadow-sm">
 			{/* Logo */}
 			<div className="flex items-center border-gray-200 border-b px-6 py-4">
-				<Tooth className="h-8 w-8 text-blue-600" />
+				<Heart className="h-8 w-8 text-blue-600" />
 				<span className="ml-2 font-semibold text-gray-900 text-xl">
 					DentalCloud
 				</span>

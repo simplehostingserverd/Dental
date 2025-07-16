@@ -9,10 +9,23 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getUserDisplayName, getUserInitials, type CurrentUser } from "@/lib/auth/get-user";
 import { Bell, ChevronDown, Moon, Search } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export function Header() {
+interface HeaderProps {
+	user: CurrentUser;
+}
+
+export function Header({ user }: HeaderProps) {
+	const router = useRouter();
+
+	const handleSignOut = async () => {
+		// Clear the authentication cookie
+		document.cookie = "practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		// Redirect to sign in page
+		router.push("/auth/signin");
+	};
 	return (
 		<header className="border-gray-200 border-b bg-white px-6 py-4">
 			<div className="flex items-center justify-between">
@@ -53,11 +66,11 @@ export function Header() {
 							<Avatar className="h-8 w-8">
 								<AvatarImage
 									src="/placeholder-avatar.jpg"
-									alt="Dr. Sarah Chen"
+									alt={getUserDisplayName(user)}
 								/>
-								<AvatarFallback>SC</AvatarFallback>
+								<AvatarFallback>{getUserInitials(user.firstName, user.lastName)}</AvatarFallback>
 							</Avatar>
-							<span>Dr. Sarah Chen</span>
+							<span>{getUserDisplayName(user)}</span>
 							<ChevronDown className="h-4 w-4" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
@@ -67,7 +80,7 @@ export function Header() {
 							<DropdownMenuItem>Settings</DropdownMenuItem>
 							<DropdownMenuItem>Support</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={() => signOut()}>
+							<DropdownMenuItem onClick={handleSignOut}>
 								Sign out
 							</DropdownMenuItem>
 						</DropdownMenuContent>

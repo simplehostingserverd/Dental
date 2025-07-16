@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
-import { auth } from "@/server/auth";
+import { getCurrentUser } from "@/lib/auth/get-user";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
@@ -8,9 +8,9 @@ export default async function DashboardLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const session = await auth();
+	const user = await getCurrentUser();
 
-	if (!session?.user) {
+	if (!user || user.type !== "practice") {
 		redirect("/auth/signin");
 	}
 
@@ -18,7 +18,7 @@ export default async function DashboardLayout({
 		<div className="flex h-screen bg-gray-50">
 			<Sidebar />
 			<div className="flex flex-1 flex-col overflow-hidden">
-				<Header />
+				<Header user={user} />
 				<main className="flex-1 overflow-y-auto p-6">{children}</main>
 			</div>
 		</div>

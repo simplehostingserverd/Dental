@@ -1,6 +1,6 @@
 import { PracticeAuthService } from "@/lib/auth/practice-auth";
-import { RateLimitService } from "@/lib/auth/rate-limiter";
-import { type NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {

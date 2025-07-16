@@ -1,12 +1,12 @@
 import { db } from "@/server/db";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 import {
 	generateResetToken,
 	hashPassword,
 	validatePassword,
 	verifyPassword,
 } from "./password";
-import { RateLimitService } from "./rate-limiter";
+import { checkMultipleRateLimits, formatTimeRemaining } from "./rate-limiter";
 import { TwoFactorService } from "./two-factor";
 
 export interface PatientLoginCredentials {
@@ -59,7 +59,7 @@ export const PatientAuthService = {
 
 		try {
 			// Rate limiting checks
-			const rateLimitResult = await RateLimitService.checkMultipleRateLimits([
+			const rateLimitResult = await checkMultipleRateLimits([
 				{ type: "login", key: `patient_${ipAddress}` },
 				{ type: "loginEmail", key: `patient_${email.toLowerCase()}` },
 			]);
@@ -67,7 +67,7 @@ export const PatientAuthService = {
 			if (!rateLimitResult.allowed) {
 				return {
 					success: false,
-					error: `Too many login attempts. Try again in ${RateLimitService.formatTimeRemaining(rateLimitResult.msBeforeNext || 0)}.`,
+					error: `Too many login attempts. Try again in ${formatTimeRemaining(rateLimitResult.msBeforeNext || 0)}.`,
 					lockoutTime: rateLimitResult.msBeforeNext,
 				};
 			}
@@ -101,7 +101,7 @@ export const PatientAuthService = {
 				const lockoutTime = patientUser.lockedUntil.getTime() - Date.now();
 				return {
 					success: false,
-					error: `Account is locked. Try again in ${RateLimitService.formatTimeRemaining(lockoutTime)}.`,
+					error: `Account is locked. Try again in ${formatTimeRemaining(lockoutTime)}.`,
 					lockoutTime,
 				};
 			}
@@ -109,17 +109,7 @@ export const PatientAuthService = {
 			// Verify password
 			if (
 				!patientUser.password ||
-				!(
-					(await hashPassword) |
-					verifyPassword |
-					generateSecurePassword |
-					generateResetToken |
-					validatePassword |
-					calculatePasswordStrengthverifyPassword(
-						password,
-						patientUser.password,
-					)
-				)
+				!(await verifyPassword(password, patientUser.password))
 			) {
 				await this.handleFailedLogin(patientUser.id);
 				return { success: false, error: "Invalid email or password" };
@@ -158,11 +148,14 @@ export const PatientAuthService = {
 				type: "patient",
 			};
 
-			const token = jwt.sign(tokenPayload, this.JWT_SECRET, {
-				expiresIn: rememberMe
-					? this.REMEMBER_ME_EXPIRES_IN
-					: this.JWT_EXPIRES_IN,
-			});
+			const secret = new TextEncoder().encode(this.JWT_SECRET);
+			const expirationTime = rememberMe ? "30d" : "24h";
+
+			const token = await new SignJWT(tokenPayload)
+				.setProtectedHeader({ alg: "HS256" })
+				.setIssuedAt()
+				.setExpirationTime(expirationTime)
+				.sign(secret);
 
 			// Remove sensitive data
 			const { password: _, twoFactorSecret: __, ...safeUser } = patientUser;
@@ -225,13 +218,7 @@ export const PatientAuthService = {
 			}
 
 			// Hash password
-			const hashedPassword =
-				(await hashPassword) |
-				verifyPassword |
-				generateSecurePassword |
-				generateResetToken |
-				validatePassword |
-				calculatePasswordStrengthhashPassword(password);
+			const hashedPassword = await hashPassword(password);
 
 			// Create patient user account
 			const patientUser = await db.patientUser.create({

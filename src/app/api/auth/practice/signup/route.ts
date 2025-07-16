@@ -3,9 +3,11 @@ import {
 	hashPassword,
 	validatePassword,
 } from "@/lib/auth/password";
+import { EmailValidationService } from "@/lib/validation/email-validator";
 import { db } from "@/server/db";
 import { PracticeRole } from "@prisma/client";
 import { type NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 interface SignupRequest {
 	firstName: string;
@@ -58,11 +60,11 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// Validate email format
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		if (!emailRegex.test(workEmail)) {
+		// Validate email thoroughly
+		const emailValidation = EmailValidationService.validatePracticeEmail(workEmail);
+		if (!emailValidation.isValid) {
 			return NextResponse.json(
-				{ error: "Please enter a valid email address" },
+				{ error: emailValidation.errors[0] || "Invalid email address" },
 				{ status: 400 },
 			);
 		}
@@ -143,26 +145,33 @@ export async function POST(request: NextRequest) {
 			await tx.practiceSettings.create({
 				data: {
 					practiceId: practice.id,
-					allowOnlineBooking: true,
-					requireInsurance: false,
-					autoConfirmAppointments: false,
-					sendReminders: true,
+					appointmentDuration: 30,
+					workingHoursStart: "09:00",
+					workingHoursEnd: "17:00",
+					workingDays: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+					timeZone: "America/New_York",
+					emailNotifications: true,
+					smsNotifications: false,
 					reminderHours: 24,
-					businessHours: {
-						monday: { open: "08:00", close: "17:00", closed: false },
-						tuesday: { open: "08:00", close: "17:00", closed: false },
-						wednesday: { open: "08:00", close: "17:00", closed: false },
-						thursday: { open: "08:00", close: "17:00", closed: false },
-						friday: { open: "08:00", close: "17:00", closed: false },
-						saturday: { open: "09:00", close: "14:00", closed: false },
-						sunday: { open: "09:00", close: "14:00", closed: true },
-					},
-					practiceSize,
-					marketingOptIn: receiveUpdates,
+					allowOnlineBooking: false,
 				},
 			});
 
 			return { practice, practiceUser };
+		});
+
+		// Generate JWT token for automatic login
+		const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+		const tokenPayload = {
+			userId: result.practiceUser.id,
+			email: result.practiceUser.email,
+			role: result.practiceUser.role,
+			practiceId: result.practice.id,
+			type: "practice",
+		};
+
+		const token = jwt.sign(tokenPayload, JWT_SECRET, {
+			expiresIn: "24h",
 		});
 
 		// TODO: Send verification email
@@ -179,7 +188,8 @@ export async function POST(request: NextRequest) {
 		//   details: { practiceName, practiceSize }
 		// })
 
-		return NextResponse.json({
+		// Create response with authentication cookie
+		const response = NextResponse.json({
 			success: true,
 			message: "Account created successfully",
 			practice: {
@@ -200,6 +210,17 @@ export async function POST(request: NextRequest) {
 				scheduleDemo: true,
 			},
 		});
+
+		// Set HTTP-only cookie for authentication
+		response.cookies.set("practice-auth-token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "strict",
+			maxAge: 24 * 60 * 60, // 24 hours
+			path: "/",
+		});
+
+		return response;
 	} catch (error) {
 		console.error("Practice signup error:", error);
 

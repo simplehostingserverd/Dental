@@ -61,14 +61,14 @@ export async function testAuthentication() {
 export async function testRateLimiting() {
 	console.log("\n🚦 Testing Rate Limiting:");
 
-	const { RateLimitService } = await import("./rate-limiter");
+	const { checkRateLimit } = await import("./rate-limiter");
 
 	try {
 		// Test login rate limiting
 		const testKey = "test-ip-123";
 
 		for (let i = 0; i < 3; i++) {
-			const result = await RateLimitService.checkRateLimit("login", testKey);
+			const result = await checkRateLimit("login", testKey);
 			console.log(
 				`Attempt ${i + 1}: ${result.allowed ? "ALLOWED" : "BLOCKED"} (${result.remainingPoints} remaining)`,
 			);

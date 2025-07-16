@@ -20,6 +20,7 @@ export default function SignUpPage() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
+	const [isSuccess, setIsSuccess] = useState(false);
 	const [passwordStrength, setPasswordStrength] = useState({
 		hasMinLength: false,
 		hasUppercase: false,
@@ -66,8 +67,14 @@ export default function SignUpPage() {
 			const data = await response.json();
 
 			if (data.success) {
-				// Redirect to success page
-				router.push("/auth/signup/success");
+				// Show success message briefly before redirecting
+				setError(""); // Clear any previous errors
+				setIsSuccess(true);
+
+				// Small delay to ensure cookie is set and user sees success
+				setTimeout(() => {
+					router.push("/dashboard");
+				}, 1500);
 			} else {
 				setError(data.error || "An error occurred during signup");
 			}
@@ -165,6 +172,14 @@ export default function SignUpPage() {
 					{error && (
 						<div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
 							<p className="text-red-600 text-sm">{error}</p>
+						</div>
+					)}
+
+					{isSuccess && (
+						<div className="mb-4 rounded-md border border-green-200 bg-green-50 p-3">
+							<p className="text-green-600 text-sm">
+								Account created successfully! Redirecting to your dashboard...
+							</p>
 						</div>
 					)}
 
@@ -425,6 +440,19 @@ export default function SignUpPage() {
 								className="font-medium text-blue-600 hover:text-blue-500"
 							>
 								Sign In
+							</Link>
+						</p>
+					</div>
+
+					{/* Patient Portal Link */}
+					<div className="mt-4 text-center">
+						<p className="text-gray-500 text-xs">
+							Are you a patient?{" "}
+							<Link
+								href="/patient/auth/signup"
+								className="text-blue-600 hover:text-blue-500"
+							>
+								Access Patient Portal
 							</Link>
 						</p>
 					</div>
