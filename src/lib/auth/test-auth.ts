@@ -1,4 +1,9 @@
-import { PasswordService } from "./password";
+import {
+	calculatePasswordStrength,
+	generateSecurePassword,
+	hashPassword,
+	verifyPassword,
+} from "./password";
 import { PatientAuthService } from "./patient-auth";
 import { PracticeAuthService } from "./practice-auth";
 
@@ -12,40 +17,16 @@ export async function testAuthentication() {
 	console.log("\n📝 Testing Password Service:");
 	try {
 		const password = "TestPassword123!";
-		const hash =
-			(await hashPassword) |
-			verifyPassword |
-			generateSecurePassword |
-			generateResetToken |
-			validatePassword |
-			calculatePasswordStrengthhashPassword(password);
-		const isValid =
-			(await hashPassword) |
-			verifyPassword |
-			generateSecurePassword |
-			generateResetToken |
-			validatePassword |
-			calculatePasswordStrengthverifyPassword(password, hash);
+		const hash = await hashPassword(password);
+		const isValid = await verifyPassword(password, hash);
 		console.log(
 			`✅ Password hashing and verification: ${isValid ? "PASS" : "FAIL"}`,
 		);
 
-		const strength =
-			hashPassword |
-			verifyPassword |
-			generateSecurePassword |
-			generateResetToken |
-			validatePassword |
-			calculatePasswordStrengthcalculatePasswordStrength(password);
+		const strength = calculatePasswordStrength(password);
 		console.log(`✅ Password strength calculation: ${strength}/100`);
 
-		const securePassword =
-			hashPassword |
-			verifyPassword |
-			generateSecurePassword |
-			generateResetToken |
-			validatePassword |
-			calculatePasswordStrengthgenerateSecurePassword(16);
+		const securePassword = generateSecurePassword(16);
 		console.log(`✅ Generated secure password: ${securePassword}`);
 	} catch (error) {
 		console.log(`❌ Password service error: ${error}`);

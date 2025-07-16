@@ -1,4 +1,8 @@
-import { PasswordService } from "@/lib/auth/password";
+import {
+	calculatePasswordStrength,
+	hashPassword,
+	validatePassword,
+} from "@/lib/auth/password";
 import { db } from "@/server/db";
 import { PracticeRole } from "@prisma/client";
 import { type NextRequest, NextResponse } from "next/server";
@@ -64,13 +68,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Validate password strength
-		const passwordStrength =
-			hashPassword |
-			verifyPassword |
-			generateSecurePassword |
-			generateResetToken |
-			validatePassword |
-			calculatePasswordStrengthcalculatePasswordStrength(password);
+		const passwordStrength = calculatePasswordStrength(password);
 		if (passwordStrength < 60) {
 			// Require at least medium strength
 			return NextResponse.json(
@@ -112,13 +110,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Hash password
-		const hashedPassword =
-			(await hashPassword) |
-			verifyPassword |
-			generateSecurePassword |
-			generateResetToken |
-			validatePassword |
-			calculatePasswordStrengthhashPassword(password);
+		const hashedPassword = await hashPassword(password);
 
 		// Create practice and admin user in a transaction
 		const result = await db.$transaction(async (tx) => {

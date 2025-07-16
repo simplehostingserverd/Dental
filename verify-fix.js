@@ -8,7 +8,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-console.log("🔍 Verifying syntax error fix...\n");
+console.log("[EMOJI][EMOJI] Verifying syntax error fix...\n");
 
 // Test 1: Check if all source files have proper bracket matching
 function checkAllFiles() {
@@ -66,7 +66,7 @@ function checkAllFiles() {
 				(count) => count !== 0,
 			);
 			if (fileHasIssues) {
-				console.log(`❌ ${file}:`);
+				console.log(`[EMOJI] ${file}:`);
 				for (const [bracket, count] of Object.entries(brackets)) {
 					if (count !== 0) {
 						console.log(
@@ -77,12 +77,12 @@ function checkAllFiles() {
 				hasIssues = true;
 			}
 		} catch (error) {
-			console.log(`⚠️  Could not check ${file}: ${error.message}`);
+			console.log(`[EMOJI][EMOJI]  Could not check ${file}: ${error.message}`);
 		}
 	}
 
 	if (!hasIssues) {
-		console.log("✅ All files have proper bracket matching!");
+		console.log("[EMOJI] All files have proper bracket matching!");
 	}
 
 	return !hasIssues;
@@ -95,7 +95,9 @@ function testNextJSStart() {
 	return new Promise((resolve) => {
 		const timeout = setTimeout(() => {
 			nextProcess.kill();
-			console.log("⏱️  Server test timed out (15s) - this might be normal");
+			console.log(
+				"[EMOJI][EMOJI]  Server test timed out (15s) - this might be normal",
+			);
 			resolve(true); // Timeout is not necessarily a failure
 		}, 15000);
 
@@ -121,7 +123,7 @@ function testNextJSStart() {
 				hasStarted = true;
 				clearTimeout(timeout);
 				nextProcess.kill();
-				console.log("✅ Next.js server started successfully!");
+				console.log("[EMOJI] Next.js server started successfully!");
 				resolve(true);
 			}
 		});
@@ -137,7 +139,7 @@ function testNextJSStart() {
 			) {
 				clearTimeout(timeout);
 				nextProcess.kill();
-				console.log("❌ Syntax error still present!");
+				console.log("[EMOJI] Syntax error still present!");
 				resolve(false);
 			}
 		});
@@ -152,7 +154,7 @@ function testNextJSStart() {
 
 		nextProcess.on("error", (error) => {
 			clearTimeout(timeout);
-			console.log(`❌ Failed to start Next.js: ${error.message}`);
+			console.log(`[EMOJI] Failed to start Next.js: ${error.message}`);
 			resolve(false);
 		});
 	});
@@ -163,15 +165,15 @@ async function main() {
 	const bracketsOk = checkAllFiles();
 
 	if (bracketsOk) {
-		console.log("\n🎉 All bracket matching tests passed!");
+		console.log("\n[EMOJI][EMOJI] All bracket matching tests passed!");
 
 		// Only test Next.js if brackets are OK
 		const nextJsOk = await testNextJSStart();
 
 		if (nextJsOk) {
-			console.log("\n🎉 SYNTAX ERROR COMPLETELY RESOLVED!");
+			console.log("\n[EMOJI][EMOJI] SYNTAX ERROR COMPLETELY RESOLVED!");
 			console.log(
-				"\n✅ Your application should now work with these JWT secrets:",
+				"\n[EMOJI] Your application should now work with these JWT secrets:",
 			);
 			console.log(
 				"JWT_SECRET=3a9e2d4f3d829c7f3f74ebdfd13e99715fef320e54ca984f9cbbae47de90eee11049d9a8f73fee92ced5a50b4248fe062ef86027a9d3aba95382a3a79b31e854",
@@ -179,14 +181,14 @@ async function main() {
 			console.log(
 				"PATIENT_JWT_SECRET=da121f40bf714b296bc8bed5015313db964606eaf4c67da3b174229e607e32f886bce8ed8a53470a10850cbf0fe29e2aec3f563d97af358f8b4ddac8f8f57ce8",
 			);
-			console.log("\n🚀 Try accessing: http://localhost:3000");
+			console.log("\n[EMOJI][EMOJI] Try accessing: http://localhost:3000");
 		} else {
 			console.log(
-				"\n⚠️  Next.js test inconclusive, but bracket matching is fixed",
+				"\n[EMOJI][EMOJI]  Next.js test inconclusive, but bracket matching is fixed",
 			);
 		}
 	} else {
-		console.log("\n❌ Still have bracket matching issues in some files");
+		console.log("\n[EMOJI] Still have bracket matching issues in some files");
 	}
 }
 

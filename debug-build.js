@@ -9,7 +9,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-console.log("🔍 Starting Next.js build debugging...\n");
+console.log("[EMOJI][EMOJI] Starting Next.js build debugging...\n");
 
 // Create a verbose build log
 const logFile = "verbose-build-log.txt";
@@ -68,7 +68,7 @@ buildProcess.on("close", (code) => {
 		buildError.includes("SyntaxError") ||
 		buildError.includes("Invalid or unexpected token")
 	) {
-		log("\n❌ SYNTAX ERROR DETECTED!");
+		log("\n[EMOJI] SYNTAX ERROR DETECTED!");
 		log("Analyzing error output...\n");
 
 		// Try to extract file information from error
@@ -142,7 +142,7 @@ function checkIndividualFiles() {
 
 				// Check for binary content
 				if (content.includes("\0")) {
-					log(`❌ Binary content detected in: ${relativePath}`);
+					log(`[EMOJI] Binary content detected in: ${relativePath}`);
 				}
 
 				// Check for invalid characters (using character code checks)
@@ -161,13 +161,13 @@ function checkIndividualFiles() {
 					}
 				}
 				if (hasInvalidChars) {
-					log(`❌ Invalid characters detected in: ${relativePath}`);
+					log(`[EMOJI] Invalid characters detected in: ${relativePath}`);
 				}
 
 				// Check file size (suspiciously large files)
 				if (content.length > 100000) {
 					log(
-						`⚠️  Large file detected: ${relativePath} (${content.length} bytes)`,
+						`[EMOJI][EMOJI]  Large file detected: ${relativePath} (${content.length} bytes)`,
 					);
 				}
 
@@ -176,12 +176,12 @@ function checkIndividualFiles() {
 				const closeBraces = (content.match(/\}/g) || []).length;
 				if (openBraces !== closeBraces) {
 					log(
-						`❌ Unmatched braces in: ${relativePath} (${openBraces} open, ${closeBraces} close)`,
+						`[EMOJI] Unmatched braces in: ${relativePath} (${openBraces} open, ${closeBraces} close)`,
 					);
 				}
 			} catch (error) {
 				log(
-					`❌ Could not read file: ${path.relative(process.cwd(), file)} - ${error.message}`,
+					`[EMOJI] Could not read file: ${path.relative(process.cwd(), file)} - ${error.message}`,
 				);
 			}
 		}
@@ -206,7 +206,9 @@ function checkConfiguration() {
 		try {
 			if (fs.existsSync(configFile)) {
 				const content = fs.readFileSync(configFile, "utf8");
-				log(`✅ ${configFile} exists and readable (${content.length} bytes)`);
+				log(
+					`[EMOJI] ${configFile} exists and readable (${content.length} bytes)`,
+				);
 
 				// Check for specific issues
 				if (configFile === ".env") {
@@ -215,7 +217,9 @@ function checkConfiguration() {
 						if (line.includes("=") && !line.startsWith("#")) {
 							const [key, value] = line.split("=", 2);
 							if (value?.includes(".") && value.includes("eyJ")) {
-								log(`⚠️  JWT-like token in .env line ${index + 1}: ${key}`);
+								log(
+									`[EMOJI][EMOJI]  JWT-like token in .env line ${index + 1}: ${key}`,
+								);
 							}
 						}
 					}
@@ -226,22 +230,22 @@ function checkConfiguration() {
 						content.includes("import") &&
 						!content.includes("export default")
 					) {
-						log("❌ next.config.js has import but no export default");
+						log("[EMOJI] next.config.js has import but no export default");
 					}
 				}
 			} else {
-				log(`⚠️  ${configFile} not found`);
+				log(`[EMOJI][EMOJI]  ${configFile} not found`);
 			}
 		} catch (error) {
-			log(`❌ Error reading ${configFile}: ${error.message}`);
+			log(`[EMOJI] Error reading ${configFile}: ${error.message}`);
 		}
 	}
 
 	log("\n=== DEBUGGING COMPLETE ===");
 	log(`Full log saved to: ${logFile}`);
-	log("\n💡 Next steps:");
+	log("\n[EMOJI][EMOJI] Next steps:");
 	log("1. Review the verbose build log above");
-	log("2. Look for any files marked with ❌");
+	log("2. Look for any files marked with [EMOJI]");
 	log("3. Check for binary content or invalid characters");
 	log("4. Verify configuration files are correct");
 

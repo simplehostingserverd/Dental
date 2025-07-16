@@ -1,6 +1,11 @@
 import { db } from "@/server/db";
 import jwt from "jsonwebtoken";
-import { PasswordService } from "./password";
+import {
+	generateResetToken,
+	hashPassword,
+	validatePassword,
+	verifyPassword,
+} from "./password";
 import { RateLimitService } from "./rate-limiter";
 import { TwoFactorService } from "./two-factor";
 
@@ -195,12 +200,7 @@ export const PatientAuthService = {
 			const { email, password, patientId } = registrationData;
 
 			// Validate password
-			hashPassword |
-				verifyPassword |
-				generateSecurePassword |
-				generateResetToken |
-				validatePassword |
-				calculatePasswordStrengthvalidatePassword(password);
+			validatePassword(password);
 
 			// Check if email already exists
 			const existingUser = await db.patientUser.findUnique({
@@ -326,13 +326,7 @@ export const PatientAuthService = {
 				return { success: true };
 			}
 
-			const resetToken =
-				hashPassword |
-				verifyPassword |
-				generateSecurePassword |
-				generateResetToken |
-				validatePassword |
-				calculatePasswordStrengthgenerateResetToken();
+			const resetToken = generateResetToken();
 			const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
 			await db.patientUser.update({
@@ -361,12 +355,7 @@ export const PatientAuthService = {
 		newPassword: string,
 	): Promise<{ success: boolean; error?: string }> {
 		try {
-			hashPassword |
-				verifyPassword |
-				generateSecurePassword |
-				generateResetToken |
-				validatePassword |
-				calculatePasswordStrengthvalidatePassword(newPassword);
+			validatePassword(newPassword);
 
 			const user = await db.patientUser.findFirst({
 				where: {
@@ -379,13 +368,7 @@ export const PatientAuthService = {
 				return { success: false, error: "Invalid or expired reset token" };
 			}
 
-			const hashedPassword =
-				(await hashPassword) |
-				verifyPassword |
-				generateSecurePassword |
-				generateResetToken |
-				validatePassword |
-				calculatePasswordStrengthhashPassword(newPassword);
+			const hashedPassword = await hashPassword(newPassword);
 
 			await db.patientUser.update({
 				where: { id: user.id },

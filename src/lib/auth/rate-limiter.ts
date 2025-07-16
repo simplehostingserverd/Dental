@@ -75,7 +75,8 @@ export class RateLimitService {
 		} catch (rejRes: unknown) {
 			return {
 				allowed: false,
-				remainingPoints: (rejRes as { remainingPoints?: number }).remainingPoints || 0,
+				remainingPoints:
+					(rejRes as { remainingPoints?: number }).remainingPoints || 0,
 				msBeforeNext: (rejRes as { msBeforeNext?: number }).msBeforeNext || 0,
 			};
 		}

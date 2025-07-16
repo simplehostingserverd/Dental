@@ -1,4 +1,4 @@
-import { PasswordService } from "@/lib/auth/password";
+import { hashPassword } from "@/lib/auth/password";
 import { db } from "@/server/db";
 import type { PracticeRole } from "@prisma/client";
 
@@ -127,13 +127,7 @@ export async function createSampleUsers() {
 				}
 
 				// Hash password
-				const hashedPassword =
-					(await hashPassword) |
-					verifyPassword |
-					generateSecurePassword |
-					generateResetToken |
-					validatePassword |
-					calculatePasswordStrengthhashPassword(user.password);
+				const hashedPassword = await hashPassword(user.password);
 
 				// Create practice user
 				const practiceUser = await db.practiceUser.create({

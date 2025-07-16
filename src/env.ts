@@ -70,7 +70,9 @@ function validateEnv(): Env {
 	} catch (error) {
 		// In development, be more lenient and provide warnings instead of throwing
 		if (process.env.NODE_ENV === "development") {
-			console.warn("WARNING: Environment validation failed in development mode:");
+			console.warn(
+				"WARNING: Environment validation failed in development mode:",
+			);
 
 			if (error instanceof z.ZodError) {
 				for (const err of error.errors) {
@@ -117,7 +119,7 @@ function validateEnv(): Env {
 		);
 		console.error("  2. Copy .env.example to .env and fill in the values");
 		console.error(
-			"  3. Run \"npm run check-env\" to see detailed environment status",
+			'  3. Run "npm run check-env" to see detailed environment status',
 		);
 		console.error(
 			"  4. Use SKIP_ENV_VALIDATION=true to bypass validation (not recommended)",
