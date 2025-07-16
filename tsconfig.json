@@ -14,6 +14,9 @@
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
 		"checkJs": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
 
 		/* Bundled projects */
 		"lib": ["dom", "dom.iterable", "ES2022"],

@@ -1,0 +1,36 @@
+[2025-07-16T10:50:43.827Z] === NEXT.JS BUILD DEBUG SESSION ===
+[2025-07-16T10:50:43.828Z] Node.js Version: v24.4.1
+[2025-07-16T10:50:43.828Z] Platform: win32
+[2025-07-16T10:50:43.829Z] Working Directory: C:\Users\likea\Documents\augment-projects\DentalExpresso\coredentalapp
+[2025-07-16T10:50:43.829Z] Environment: development
+[2025-07-16T10:50:43.829Z] 
+[2025-07-16T10:50:43.829Z] === TEST 1: VERBOSE BUILD ===
+[STDERR]  ⚠ You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env
+[STDERR] unhandledRejection [SyntaxError: Invalid or unexpected token]
+[2025-07-16T10:50:45.426Z] 
+Build process exited with code: 1
+[2025-07-16T10:50:45.426Z] 
+❌ SYNTAX ERROR DETECTED!
+[2025-07-16T10:50:45.426Z] Analyzing error output...
+
+[2025-07-16T10:50:45.426Z] Error line: unhandledRejection [SyntaxError: Invalid or unexpected token]
+[2025-07-16T10:50:45.426Z] 
+=== TEST 2: CHECKING INDIVIDUAL FILES ===
+[2025-07-16T10:50:45.431Z] Found 48 source files to check
+[2025-07-16T10:50:45.438Z] ❌ Unmatched braces in: src\scripts\debug-syntax-error.ts (110 open, 107 close)
+[2025-07-16T10:50:45.439Z] 
+=== TEST 3: CONFIGURATION CHECK ===
+[2025-07-16T10:50:45.440Z] ✅ next.config.js exists and readable (288 bytes)
+[2025-07-16T10:50:45.440Z] ✅ tsconfig.json exists and readable (892 bytes)
+[2025-07-16T10:50:45.441Z] ✅ package.json exists and readable (2556 bytes)
+[2025-07-16T10:50:45.441Z] ✅ .env exists and readable (1076 bytes)
+[2025-07-16T10:50:45.441Z] ⚠️  JWT-like token in .env line 5: OPTIMIZE_API_KEY
+[2025-07-16T10:50:45.441Z] 
+=== DEBUGGING COMPLETE ===
+[2025-07-16T10:50:45.441Z] Full log saved to: verbose-build-log.txt
+[2025-07-16T10:50:45.441Z] 
+💡 Next steps:
+[2025-07-16T10:50:45.441Z] 1. Review the verbose build log above
+[2025-07-16T10:50:45.442Z] 2. Look for any files marked with ❌
+[2025-07-16T10:50:45.442Z] 3. Check for binary content or invalid characters
+[2025-07-16T10:50:45.442Z] 4. Verify configuration files are correct

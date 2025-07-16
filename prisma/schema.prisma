@@ -4,52 +4,152 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// Practice Management Models
+model Practice {
+  id           String         @id @default(cuid())
+  name         String
+  phone        String?
+  email        String?
+  address      String?
+  city         String?
+  state        String?
+  zipCode      String?
+  website      String?
+  timezone     String         @default("America/New_York")
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
-  @@index([name])
+  // Relations
+  practiceUsers PracticeUser[]
+  patients      Patient[]
+  auditLogs     AuditLog[]
+  settings      PracticeSettings?
 }
 
-// Necessary for Next auth
+model PracticeUser {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String?
+  firstName         String
+  lastName          String
+  role              PracticeRole
+  practiceId        String
+  phone             String?
+  licenseNumber     String?
+  specialization    String?
+  isActive          Boolean   @default(true)
+  emailVerified     Boolean   @default(false)
+  lastLoginAt       DateTime?
+  lastLogin         DateTime? // Alias for compatibility
+  loginAttempts     Int       @default(0)
+  lockedUntil       DateTime?
+  twoFactorEnabled  Boolean   @default(false)
+  twoFactorSecret   String?
+  backupCodes       String[]
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  practice          Practice  @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  appointments      Appointment[]
+  messagesSent      Message[] @relation("SentMessages")
+  tasks             Task[]    @relation("AssignedTasks")
+  auditLogs         AuditLog[]
+}
+
+model PatientUser {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String
+  isActive          Boolean   @default(true)
+  lastLoginAt       DateTime?
+  lastLogin         DateTime? // Alias for compatibility
+  loginAttempts     Int       @default(0)
+  lockedUntil       DateTime?
+  twoFactorEnabled  Boolean   @default(false)
+  twoFactorSecret   String?
+  backupCodes       String[]
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  patient           Patient?
+}
+
+model PracticeSettings {
+  id                    String   @id @default(cuid())
+  practiceId            String   @unique
+  appointmentDuration   Int      @default(30) // minutes
+  workingHoursStart     String   @default("09:00")
+  workingHoursEnd       String   @default("17:00")
+  workingDays           String[] @default(["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"])
+  timeZone              String   @default("America/New_York")
+  emailNotifications    Boolean  @default(true)
+  smsNotifications      Boolean  @default(false)
+  reminderHours         Int      @default(24)
+  allowOnlineBooking    Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  entityType  String
+  entityId    String
+  resource    String?  // Additional resource field
+  userId      String
+  practiceId  String
+  ipAddress   String?
+  userAgent   String?
+  details     Json?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  practice    Practice     @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  user        PracticeUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([practiceId, createdAt])
+  @@index([userId, createdAt])
+}
+
+// Legacy NextAuth models (kept for compatibility)
 model Account {
-  id                       String        @id @default(cuid())
+  id                       String  @id @default(cuid())
   userId                   String
   type                     String
   provider                 String
   providerAccountId        String
-  refresh_token            String? // @db.Text
-  access_token             String? // @db.Text
+  refresh_token            String?
+  access_token             String?
   expires_at               Int?
   token_type               String?
   scope                    String?
-  id_token                 String? // @db.Text
+  id_token                 String?
   session_state            String?
-  user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   refresh_token_expires_in Int?
-  PracticeUser             PracticeUser? @relation(fields: [practiceUserId], references: [id])
-  practiceUserId           String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id             String        @id @default(cuid())
-  sessionToken   String        @unique
-  userId         String
-  expires        DateTime
-  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  PracticeUser   PracticeUser? @relation(fields: [practiceUserId], references: [id])
-  practiceUserId String?
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -60,235 +160,84 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Enterprise Authentication Schema
-
-// Practice Users (Dentists, Staff, Admins)
-model PracticeUser {
-  id            String       @id @default(cuid())
-  email         String       @unique
-  emailVerified DateTime?
-  password      String?
-  firstName     String
-  lastName      String
-  role          PracticeRole @default(STAFF)
-  isActive      Boolean      @default(true)
-  lastLogin     DateTime?
-  practiceId    String
-  practice      Practice     @relation(fields: [practiceId], references: [id], onDelete: Cascade)
-
-  // Security fields
-  twoFactorEnabled Boolean   @default(false)
-  twoFactorSecret  String?
-  resetToken       String?
-  resetTokenExpiry DateTime?
-  loginAttempts    Int       @default(0)
-  lockedUntil      DateTime?
-
-  // Profile fields
-  phone          String?
-  licenseNumber  String?
-  specialization String?
-  image          String?
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  accounts     Account[]
-  sessions     Session[]
-  patients     Patient[]     @relation("AssignedPatients")
-  appointments Appointment[]
-  tasks        Task[]        @relation("AssignedTasks")
-  messagesSent Message[]     @relation("SentMessages")
-  auditLogs    AuditLog[]
-
-  @@map("practice_users")
-}
-
-// Patient Users (Separate authentication system)
-model PatientUser {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  emailVerified DateTime?
-  password      String?
-  isActive      Boolean   @default(true)
-  lastLogin     DateTime?
-
-  // Security fields
-  twoFactorEnabled Boolean   @default(false)
-  twoFactorSecret  String?
-  resetToken       String?
-  resetTokenExpiry DateTime?
-  loginAttempts    Int       @default(0)
-  lockedUntil      DateTime?
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  patient         Patient?         @relation("PatientAuth")
-  patientSessions PatientSession[]
-
-  @@map("patient_users")
-}
-
-// Practice Management
-model Practice {
-  id      String  @id @default(cuid())
-  name    String
-  address String?
-  phone   String?
-  email   String?
-  website String?
-
-  // Subscription & Billing
-  subscriptionTier   SubscriptionTier   @default(BASIC)
-  subscriptionStatus SubscriptionStatus @default(ACTIVE)
-  billingEmail       String?
-
-  // Settings
-  timezone String  @default("UTC")
-  isActive Boolean @default(true)
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  users    PracticeUser[]
-  patients Patient[]
-
-  @@map("practices")
-}
-
-// Separate session management for patients
-model PatientSession {
-  id           String      @id @default(cuid())
-  sessionToken String      @unique
-  userId       String
-  expires      DateTime
-  user         PatientUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("patient_sessions")
-}
-
-// Audit logging for security
-model AuditLog {
-  id         String        @id @default(cuid())
-  action     String
-  resource   String?
-  resourceId String?
-  userId     String?
-  user       PracticeUser? @relation(fields: [userId], references: [id])
-  ipAddress  String?
-  userAgent  String?
-  timestamp  DateTime      @default(now())
-
-  @@map("audit_logs")
-}
-
-enum PracticeRole {
-  ADMIN
-  DOCTOR
-  HYGIENIST
-  STAFF
-  RECEPTIONIST
-}
-
-enum SubscriptionTier {
-  BASIC
-  PROFESSIONAL
-  ENTERPRISE
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  SUSPENDED
-  CANCELLED
-  TRIAL
-}
-
-// Legacy User model for NextAuth compatibility
+// Legacy User model (kept for NextAuth compatibility)
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          Role          @default(STAFF)
+  password      String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  posts         Post[]
+}
 
-  accounts Account[]
-  sessions Session[]
+model Post {
+  id          Int      @id @default(autoincrement())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+
+  @@index([name])
 }
 
 model Patient {
-  id          String   @id @default(cuid())
-  firstName   String
-  lastName    String
-  dateOfBirth DateTime
-  gender      String
-  phone       String?
-  email       String?
-  address     String?
-
-  // Practice association
-  practiceId String
-  practice   Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
-
-  // Assigned practice user
-  assignedUserId String?
-  assignedBy     PracticeUser? @relation("AssignedPatients", fields: [assignedUserId], references: [id])
-
-  // Patient portal authentication
-  patientUserId String?      @unique
-  patientUser   PatientUser? @relation("PatientAuth", fields: [patientUserId], references: [id])
-
-  // Medical information
+  id            String         @id @default(cuid())
+  firstName     String
+  lastName      String
+  dateOfBirth   DateTime
+  gender        String
+  phone         String?
+  email         String?
+  address       String?
+  city          String?
+  state         String?
+  zipCode       String?
   emergencyContact String?
-  insurance        String?
-  allergies        String?
-  medicalHistory   String?
+  emergencyPhone   String?
+  insurance     String?        // General insurance field
+  insuranceProvider String?
+  insurancePolicyNumber String?
+  practiceId    String
+  patientUserId String?        @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  // Relations
+  practice      Practice       @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  patientUser   PatientUser?   @relation(fields: [patientUserId], references: [id])
   appointments  Appointment[]
-  treatments    Treatment[]
   invoices      Invoice[]
-  xrays         Xray[]
-  reminders     Reminder[]
-  referrals     Referral[]
-  prescriptions Prescription[]
-  notes         Note[]
   messages      Message[]      @relation("PatientMessages")
+  notes         Note[]
+  prescriptions Prescription[]
+  referrals     Referral[]
+  reminders     Reminder[]
+  treatments    Treatment[]
+  xrays         Xray[]
 }
 
 model Appointment {
-  id     String            @id @default(cuid())
-  start  DateTime
-  end    DateTime
-  status AppointmentStatus @default(SCHEDULED)
-  notes  String?
-  type   String?
+  id              String            @id @default(cuid())
+  start           DateTime
+  end             DateTime
+  status          AppointmentStatus @default(SCHEDULED)
+  notes           String?
+  appointmentType String?
+  patientId       String
+  practiceUserId  String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 
-  patient   Patient @relation(fields: [patientId], references: [id])
-  patientId String
-
-  practiceUser   PracticeUser @relation(fields: [practiceUserId], references: [id])
-  practiceUserId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-enum AppointmentStatus {
-  SCHEDULED
-  COMPLETED
-  CANCELED
-  NO_SHOW
+  // Relations
+  patient         Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practiceUser    PracticeUser      @relation(fields: [practiceUserId], references: [id], onDelete: Cascade)
 }
 
 model Treatment {
@@ -297,49 +246,31 @@ model Treatment {
   description String
   cost        Float
   date        DateTime @default(now())
-
-  patient   Patient @relation(fields: [patientId], references: [id])
-  patientId String
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
 }
 
 model Invoice {
-  id      String        @id @default(cuid())
-  total   Float
-  paid    Boolean       @default(false)
-  dueDate DateTime
-  status  InvoiceStatus
-
-  patient   Patient @relation(fields: [patientId], references: [id])
+  id        String        @id @default(cuid())
+  total     Float
+  paid      Boolean       @default(false)
+  dueDate   DateTime
+  status    InvoiceStatus
   patientId String
-}
-
-enum InvoiceStatus {
-  UNPAID
-  PAID
-  PARTIAL
-  OVERDUE
+  patient   Patient       @relation(fields: [patientId], references: [id])
 }
 
 model Message {
-  id          String      @id @default(cuid())
-  content     String
-  timestamp   DateTime    @default(now())
-  isRead      Boolean     @default(false)
-  messageType MessageType @default(GENERAL)
-
-  senderId String
-  sender   PracticeUser @relation("SentMessages", fields: [senderId], references: [id])
-
+  id        String       @id @default(cuid())
+  content   String
+  timestamp DateTime     @default(now())
+  senderId  String
   patientId String
-  patient   Patient @relation("PatientMessages", fields: [patientId], references: [id])
-}
+  isRead    Boolean      @default(false)
 
-enum MessageType {
-  GENERAL
-  APPOINTMENT_REMINDER
-  TREATMENT_UPDATE
-  BILLING
-  EMERGENCY
+  // Relations
+  patient   Patient      @relation("PatientMessages", fields: [patientId], references: [id], onDelete: Cascade)
+  sender    PracticeUser @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
 }
 
 model Reminder {
@@ -347,39 +278,91 @@ model Reminder {
   type      ReminderType
   scheduled DateTime
   sent      Boolean      @default(false)
-
   patientId String
-  patient   Patient @relation(fields: [patientId], references: [id])
+  patient   Patient      @relation(fields: [patientId], references: [id])
+}
+
+model Xray {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  takenAt   DateTime @default(now())
+  notes     String?
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+}
+
+model Task {
+  id           String       @id @default(cuid())
+  title        String
+  description  String?
+  done         Boolean      @default(false)
+  priority     TaskPriority @default(MEDIUM)
+  dueDate      DateTime?
+  assignedToId String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relations
+  assignedTo   PracticeUser @relation("AssignedTasks", fields: [assignedToId], references: [id], onDelete: Cascade)
+}
+
+model Referral {
+  id         String  @id @default(cuid())
+  referredBy String
+  notes      String?
+  patientId  String
+  patient    Patient @relation(fields: [patientId], references: [id])
+}
+
+model Prescription {
+  id        String   @id @default(cuid())
+  drugName  String
+  dosage    String
+  issuedAt  DateTime @default(now())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+  NO_SHOW
+  RESCHEDULED
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PAID
+  PARTIAL
+  OVERDUE
+  CANCELED
 }
 
 enum ReminderType {
   EMAIL
   SMS
   IN_APP
+  PHONE
 }
 
-model Xray {
-  id       String   @id @default(cuid())
-  imageUrl String
-  takenAt  DateTime @default(now())
-  notes    String?
-
-  patientId String
-  patient   Patient @relation(fields: [patientId], references: [id])
-}
-
-model Task {
-  id          String       @id @default(cuid())
-  title       String
-  description String?
-  done        Boolean      @default(false)
-  priority    TaskPriority @default(MEDIUM)
-  dueDate     DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  assignedToId String
-  assignedTo   PracticeUser @relation("AssignedTasks", fields: [assignedToId], references: [id])
+enum PracticeRole {
+  ADMIN
+  DOCTOR
+  HYGIENIST
+  ASSISTANT
+  RECEPTIONIST
+  MANAGER
 }
 
 enum TaskPriority {
@@ -389,30 +372,9 @@ enum TaskPriority {
   URGENT
 }
 
-model Referral {
-  id         String  @id @default(cuid())
-  referredBy String
-  notes      String?
-
-  patientId String
-  patient   Patient @relation(fields: [patientId], references: [id])
-}
-
-model Prescription {
-  id       String   @id @default(cuid())
-  drugName String
-  dosage   String
-  issuedAt DateTime @default(now())
-
-  patientId String
-  patient   Patient @relation(fields: [patientId], references: [id])
-}
-
-model Note {
-  id        String   @id @default(cuid())
-  content   String
-  createdAt DateTime @default(now())
-
-  patientId String
-  patient   Patient @relation(fields: [patientId], references: [id])
+// Legacy enum for NextAuth compatibility
+enum Role {
+  ADMIN
+  DOCTOR
+  STAFF
 }
