@@ -75,7 +75,6 @@ model User {
   appointments  Appointment[]
   tasks         Task[]        @relation("AssignedTasks")
   messagesSent  Message[]     @relation("SentMessages")
-  posts         Post[]
 }
 
 enum Role {
