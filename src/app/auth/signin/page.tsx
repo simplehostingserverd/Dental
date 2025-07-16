@@ -128,7 +128,13 @@ export default function SignInPage() {
             <p className="text-gray-600">Sign in to your dental practice account.</p>
           </div>
 
-          <form className="space-y-4">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email address
@@ -139,6 +145,8 @@ export default function SignInPage() {
                 type="email"
                 autoComplete="email"
                 required
+                value={formData.email}
+                onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter your email"
               />
@@ -155,6 +163,8 @@ export default function SignInPage() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
+                  value={formData.password}
+                  onChange={handleInputChange}
                   className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your password"
                 />
@@ -176,35 +186,76 @@ export default function SignInPage() {
               <div className="flex items-center">
                 <input
                   id="remember-me"
-                  name="remember-me"
+                  name="rememberMe"
                   type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
+                  checked={formData.rememberMe}
+                  onChange={handleInputChange}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                   Remember me
                 </label>
               </div>
-              <a href="#" className="text-sm text-blue-600 hover:text-blue-500">
+              <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-            >
-              Sign In
-            </button>
+            {!requiresTwoFactor ? (
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Signing in..." : "Sign In"}
+              </button>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="twoFactorToken" className="block text-sm font-medium text-gray-700 mb-1">
+                    Two-Factor Authentication Code
+                  </label>
+                  <input
+                    id="twoFactorToken"
+                    name="twoFactorToken"
+                    type="text"
+                    required
+                    value={twoFactorToken}
+                    onChange={(e) => setTwoFactorToken(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter 6-digit code"
+                    maxLength={6}
+                  />
+                  <p className="mt-1 text-sm text-gray-500">
+                    Enter the 6-digit code from your authenticator app
+                  </p>
+                </div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? "Verifying..." : "Verify Code"}
+                </button>
+              </div>
+            )}
           </form>
 
           <div className="mt-6">
             <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
-              <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
-                Sign up
-              </a>
+              Need to create an account?{" "}
+              <Link href="/auth/register" className="text-blue-600 hover:text-blue-500 font-medium">
+                Contact your administrator
+              </Link>
+            </p>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-center text-xs text-gray-500">
+              Are you a patient?{" "}
+              <Link href="/patient/auth/signin" className="text-blue-600 hover:text-blue-500">
+                Access Patient Portal
+              </Link>
             </p>
           </div>
 
