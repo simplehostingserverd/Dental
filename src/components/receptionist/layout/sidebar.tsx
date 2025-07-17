@@ -18,6 +18,8 @@ import {
 	Sun,
 	UserPlus,
 	Users,
+	BarChart3,
+	Share2,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -66,6 +68,24 @@ const navigationItems = [
 		href: "/receptionist/quick-actions",
 		icon: Clock,
 		label: "Quick Actions",
+	},
+	{
+		key: "reports",
+		href: "/receptionist/reports",
+		icon: BarChart3,
+		label: "Reports",
+	},
+	{
+		key: "marketing",
+		href: "/receptionist/marketing",
+		icon: Share2,
+		label: "Marketing",
+	},
+	{
+		key: "calendar-demo",
+		href: "/receptionist/calendar-demo",
+		icon: Calendar,
+		label: "Calendar Demo",
 	},
 	{
 		key: "settings",

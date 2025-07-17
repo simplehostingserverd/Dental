@@ -432,7 +432,7 @@ async function getTaskAnalytics(
 	const avgCompletionTime =
 		completionTimes.length > 0
 			? completionTimes.reduce((sum, task) => {
-					const diff = task.completedAt!.getTime() - task.createdAt.getTime();
+					const diff = task.completedAt?.getTime() - task.createdAt.getTime();
 					return sum + diff;
 				}, 0) /
 				completionTimes.length /

@@ -664,9 +664,11 @@ export default function DocumentsPage() {
 											</Badge>
 											<div className="mt-2 flex space-x-2">
 												{signature.status === "pending" && (
-													<Button size="sm">Send Reminder</Button>
+													<Button type="button" size="sm">
+														Send Reminder
+													</Button>
 												)}
-												<Button variant="outline" size="sm">
+												<Button type="button" variant="outline" size="sm">
 													View Document
 												</Button>
 											</div>
@@ -693,7 +695,7 @@ export default function DocumentsPage() {
 								<p className="mb-4 text-gray-600 text-sm">
 									All documents are encrypted and access is logged.
 								</p>
-								<Button variant="outline" className="w-full">
+								<Button type="button" variant="outline" className="w-full">
 									View Audit Log
 								</Button>
 							</CardContent>
@@ -711,7 +713,7 @@ export default function DocumentsPage() {
 								<p className="mb-4 text-gray-600 text-sm">
 									Documents expiring within 30 days require attention.
 								</p>
-								<Button variant="outline" className="w-full">
+								<Button type="button" variant="outline" className="w-full">
 									View Expiring
 								</Button>
 							</CardContent>
@@ -729,7 +731,7 @@ export default function DocumentsPage() {
 								<p className="mb-4 text-gray-600 text-sm">
 									Last backup: Today at 3:00 AM
 								</p>
-								<Button variant="outline" className="w-full">
+								<Button type="button" variant="outline" className="w-full">
 									Backup Settings
 								</Button>
 							</CardContent>

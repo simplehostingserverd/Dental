@@ -1,0 +1,708 @@
+"use client";
+
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+	BarChart3,
+	Calendar,
+	Camera,
+	Eye,
+	Facebook,
+	Heart,
+	Instagram,
+	MessageCircle,
+	Plus,
+	Send,
+	Share2,
+	Star,
+	TrendingUp,
+	Twitter,
+	Users,
+	Youtube,
+} from "lucide-react";
+import { useToast } from "@/components/ui/toast";
+
+// TypeScript interfaces
+interface SocialPost {
+	id: string;
+	platform: "facebook" | "instagram" | "twitter" | "linkedin" | "youtube";
+	content: string;
+	imageUrl?: string;
+	scheduledFor?: Date;
+	publishedAt?: Date;
+	status: "draft" | "scheduled" | "published" | "failed";
+	engagement: {
+		likes: number;
+		comments: number;
+		shares: number;
+		views?: number;
+	};
+	hashtags: string[];
+}
+
+interface SocialMetrics {
+	platform: string;
+	followers: number;
+	engagement: number;
+	reach: number;
+	impressions: number;
+	growth: number;
+}
+
+interface PostTemplate {
+	id: string;
+	title: string;
+	content: string;
+	category: "educational" | "promotional" | "testimonial" | "seasonal" | "general";
+	hashtags: string[];
+}
+
+export default function MarketingPage() {
+	const { showToast } = useToast();
+	
+	// State management
+	const [showCreatePostDialog, setShowCreatePostDialog] = useState(false);
+	const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+	const [isPosting, setIsPosting] = useState(false);
+	
+	// Form state
+	const [postForm, setPostForm] = useState({
+		content: "",
+		platforms: [] as string[],
+		scheduledFor: "",
+		imageUrl: "",
+		hashtags: "",
+	});
+
+	// Mock data
+	const socialMetrics: SocialMetrics[] = [
+		{
+			platform: "Facebook",
+			followers: 1250,
+			engagement: 4.2,
+			reach: 3500,
+			impressions: 8200,
+			growth: 12.5,
+		},
+		{
+			platform: "Instagram",
+			followers: 890,
+			engagement: 6.8,
+			reach: 2800,
+			impressions: 5600,
+			growth: 18.3,
+		},
+		{
+			platform: "Twitter",
+			followers: 420,
+			engagement: 3.1,
+			reach: 1200,
+			impressions: 2400,
+			growth: 8.7,
+		},
+		{
+			platform: "LinkedIn",
+			followers: 180,
+			engagement: 5.4,
+			reach: 650,
+			impressions: 1300,
+			growth: 15.2,
+		},
+	];
+
+	const recentPosts: SocialPost[] = [
+		{
+			id: "1",
+			platform: "facebook",
+			content: "🦷 Did you know that regular dental cleanings can prevent gum disease? Book your appointment today! #DentalHealth #PreventiveCare",
+			publishedAt: new Date("2025-07-16T10:00:00Z"),
+			status: "published",
+			engagement: { likes: 24, comments: 8, shares: 3 },
+			hashtags: ["DentalHealth", "PreventiveCare"],
+		},
+		{
+			id: "2",
+			platform: "instagram",
+			content: "✨ Transform your smile with our professional teeth whitening service! Before and after results speak for themselves. #SmileTransformation #TeethWhitening",
+			imageUrl: "/images/teeth-whitening.jpg",
+			publishedAt: new Date("2025-07-15T14:30:00Z"),
+			status: "published",
+			engagement: { likes: 45, comments: 12, shares: 8, views: 320 },
+			hashtags: ["SmileTransformation", "TeethWhitening"],
+		},
+		{
+			id: "3",
+			platform: "twitter",
+			content: "Quick tip: Brush your teeth for at least 2 minutes, twice a day! ⏰🦷 #DentalTips #OralHealth",
+			scheduledFor: new Date("2025-07-18T09:00:00Z"),
+			status: "scheduled",
+			engagement: { likes: 0, comments: 0, shares: 0 },
+			hashtags: ["DentalTips", "OralHealth"],
+		},
+	];
+
+	const postTemplates: PostTemplate[] = [
+		{
+			id: "1",
+			title: "Dental Health Tip",
+			content: "💡 Dental Health Tip: [Insert tip here]. Remember, prevention is always better than treatment! #DentalHealth #PreventiveCare #HealthySmile",
+			category: "educational",
+			hashtags: ["DentalHealth", "PreventiveCare", "HealthySmile"],
+		},
+		{
+			id: "2",
+			title: "Service Promotion",
+			content: "✨ Special offer on [Service Name]! Book your appointment this month and save [Amount/Percentage]. Limited time offer! #SpecialOffer #DentalCare",
+			category: "promotional",
+			hashtags: ["SpecialOffer", "DentalCare", "LimitedTime"],
+		},
+		{
+			id: "3",
+			title: "Patient Testimonial",
+			content: "🌟 \"[Patient testimonial quote]\" - [Patient Name]. We're thrilled to help our patients achieve their perfect smile! #PatientTestimonial #HappyPatients #SmileTransformation",
+			category: "testimonial",
+			hashtags: ["PatientTestimonial", "HappyPatients", "SmileTransformation"],
+		},
+		{
+			id: "4",
+			title: "Seasonal Reminder",
+			content: "🎃 As we enjoy [Season/Holiday] treats, don't forget to maintain your oral health! Here are some tips: [Tips]. #SeasonalCare #DentalHealth",
+			category: "seasonal",
+			hashtags: ["SeasonalCare", "DentalHealth", "OralHealth"],
+		},
+	];
+
+	// Handler functions
+	const handleCreatePost = async () => {
+		setIsPosting(true);
+		try {
+			const response = await fetch('/api/receptionist/marketing/posts', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					content: postForm.content,
+					platforms: selectedPlatforms,
+					scheduledFor: postForm.scheduledFor || undefined,
+					imageUrl: postForm.imageUrl || undefined,
+					hashtags: postForm.hashtags,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				throw new Error(data.error || 'Failed to create post');
+			}
+
+			// Reset form and close dialog
+			setPostForm({
+				content: "",
+				platforms: [],
+				scheduledFor: "",
+				imageUrl: "",
+				hashtags: "",
+			});
+			setSelectedPlatforms([]);
+			setShowCreatePostDialog(false);
+
+			showToast({
+				type: "success",
+				title: "Post Created",
+				message: data.message || "Post created successfully!",
+			});
+		} catch (error) {
+			console.error("Error creating post:", error);
+			showToast({
+				type: "error",
+				title: "Post Failed",
+				message: error instanceof Error ? error.message : "Failed to create post. Please try again.",
+			});
+		} finally {
+			setIsPosting(false);
+		}
+	};
+
+	const handleUseTemplate = (template: PostTemplate) => {
+		setPostForm(prev => ({
+			...prev,
+			content: template.content,
+			hashtags: template.hashtags.join(" "),
+		}));
+		setShowCreatePostDialog(true);
+	};
+
+	const getPlatformIcon = (platform: string) => {
+		switch (platform.toLowerCase()) {
+			case "facebook":
+				return <Facebook className="h-5 w-5 text-blue-600" />;
+			case "instagram":
+				return <Instagram className="h-5 w-5 text-pink-600" />;
+			case "twitter":
+				return <Twitter className="h-5 w-5 text-blue-400" />;
+			case "linkedin":
+				return <div className="h-5 w-5 bg-blue-700 rounded" />;
+			case "youtube":
+				return <Youtube className="h-5 w-5 text-red-600" />;
+			default:
+				return <Share2 className="h-5 w-5 text-gray-600" />;
+		}
+	};
+
+	const getStatusColor = (status: string) => {
+		switch (status) {
+			case "published":
+				return "bg-green-100 text-green-800";
+			case "scheduled":
+				return "bg-blue-100 text-blue-800";
+			case "draft":
+				return "bg-gray-100 text-gray-800";
+			case "failed":
+				return "bg-red-100 text-red-800";
+			default:
+				return "bg-gray-100 text-gray-800";
+		}
+	};
+
+	return (
+		<div className="space-y-6">
+			{/* Header */}
+			<div className="flex items-center justify-between">
+				<div>
+					<h1 className="text-2xl font-semibold text-gray-900">
+						Social Media Marketing
+					</h1>
+					<p className="text-gray-600">
+						Manage your practice's social media presence and patient engagement
+					</p>
+				</div>
+				<Dialog open={showCreatePostDialog} onOpenChange={setShowCreatePostDialog}>
+					<DialogTrigger asChild>
+						<Button>
+							<Plus className="mr-2 h-4 w-4" />
+							Create Post
+						</Button>
+					</DialogTrigger>
+				</Dialog>
+			</div>
+
+			{/* Social Media Metrics */}
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				{socialMetrics.map((metric) => (
+					<Card key={metric.platform}>
+						<CardHeader className="pb-2">
+							<div className="flex items-center justify-between">
+								{getPlatformIcon(metric.platform)}
+								<Badge variant="outline" className="text-xs">
+									{metric.growth > 0 ? "+" : ""}{metric.growth}%
+								</Badge>
+							</div>
+							<CardTitle className="text-lg">{metric.platform}</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<div className="space-y-2">
+								<div className="flex items-center justify-between text-sm">
+									<span className="text-gray-600">Followers</span>
+									<span className="font-medium">{metric.followers.toLocaleString()}</span>
+								</div>
+								<div className="flex items-center justify-between text-sm">
+									<span className="text-gray-600">Engagement</span>
+									<span className="font-medium">{metric.engagement}%</span>
+								</div>
+								<div className="flex items-center justify-between text-sm">
+									<span className="text-gray-600">Reach</span>
+									<span className="font-medium">{metric.reach.toLocaleString()}</span>
+								</div>
+							</div>
+						</CardContent>
+					</Card>
+				))}
+			</div>
+
+			{/* Main Content Tabs */}
+			<Tabs defaultValue="posts" className="space-y-4">
+				<TabsList>
+					<TabsTrigger value="posts">Recent Posts</TabsTrigger>
+					<TabsTrigger value="templates">Post Templates</TabsTrigger>
+					<TabsTrigger value="analytics">Analytics</TabsTrigger>
+					<TabsTrigger value="calendar">Content Calendar</TabsTrigger>
+				</TabsList>
+
+				{/* Recent Posts Tab */}
+				<TabsContent value="posts">
+					<Card>
+						<CardHeader>
+							<CardTitle>Recent Posts</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<div className="space-y-4">
+								{recentPosts.map((post) => (
+									<div key={post.id} className="border rounded-lg p-4">
+										<div className="flex items-start justify-between mb-3">
+											<div className="flex items-center space-x-2">
+												{getPlatformIcon(post.platform)}
+												<span className="font-medium capitalize">{post.platform}</span>
+												<Badge className={getStatusColor(post.status)}>
+													{post.status}
+												</Badge>
+											</div>
+											<span className="text-sm text-gray-500">
+												{post.publishedAt 
+													? post.publishedAt.toLocaleDateString()
+													: post.scheduledFor?.toLocaleDateString()
+												}
+											</span>
+										</div>
+										
+										<p className="text-gray-700 mb-3">{post.content}</p>
+										
+										{post.imageUrl && (
+											<div className="mb-3">
+												<img 
+													src={post.imageUrl} 
+													alt="Post image" 
+													className="rounded-lg max-w-xs h-32 object-cover"
+												/>
+											</div>
+										)}
+										
+										<div className="flex items-center space-x-6 text-sm text-gray-600">
+											<div className="flex items-center space-x-1">
+												<Heart className="h-4 w-4" />
+												<span>{post.engagement.likes}</span>
+											</div>
+											<div className="flex items-center space-x-1">
+												<MessageCircle className="h-4 w-4" />
+												<span>{post.engagement.comments}</span>
+											</div>
+											<div className="flex items-center space-x-1">
+												<Share2 className="h-4 w-4" />
+												<span>{post.engagement.shares}</span>
+											</div>
+											{post.engagement.views && (
+												<div className="flex items-center space-x-1">
+													<Eye className="h-4 w-4" />
+													<span>{post.engagement.views}</span>
+												</div>
+											)}
+										</div>
+									</div>
+								))}
+							</div>
+						</CardContent>
+					</Card>
+				</TabsContent>
+
+				{/* Post Templates Tab */}
+				<TabsContent value="templates">
+					<Card>
+						<CardHeader>
+							<CardTitle>Post Templates</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								{postTemplates.map((template) => (
+									<div key={template.id} className="border rounded-lg p-4">
+										<div className="flex items-center justify-between mb-2">
+											<h3 className="font-medium">{template.title}</h3>
+											<Badge variant="outline" className="text-xs">
+												{template.category}
+											</Badge>
+										</div>
+										<p className="text-sm text-gray-600 mb-3 line-clamp-3">
+											{template.content}
+										</p>
+										<div className="flex items-center justify-between">
+											<div className="flex flex-wrap gap-1">
+												{template.hashtags.slice(0, 3).map((tag) => (
+													<span key={tag} className="text-xs text-blue-600">
+														#{tag}
+													</span>
+												))}
+												{template.hashtags.length > 3 && (
+													<span className="text-xs text-gray-500">
+														+{template.hashtags.length - 3} more
+													</span>
+												)}
+											</div>
+											<Button 
+												size="sm" 
+												variant="outline"
+												onClick={() => handleUseTemplate(template)}
+											>
+												Use Template
+											</Button>
+										</div>
+									</div>
+								))}
+							</div>
+						</CardContent>
+					</Card>
+				</TabsContent>
+
+				{/* Analytics Tab */}
+				<TabsContent value="analytics">
+					<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+						<Card>
+							<CardHeader>
+								<CardTitle>Engagement Overview</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<div className="space-y-4">
+									{socialMetrics.map((metric) => (
+										<div key={metric.platform} className="flex items-center justify-between">
+											<div className="flex items-center space-x-2">
+												{getPlatformIcon(metric.platform)}
+												<span>{metric.platform}</span>
+											</div>
+											<div className="text-right">
+												<div className="font-medium">{metric.engagement}%</div>
+												<div className="text-sm text-gray-500">
+													{metric.impressions.toLocaleString()} impressions
+												</div>
+											</div>
+										</div>
+									))}
+								</div>
+							</CardContent>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<CardTitle>Growth Trends</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<div className="space-y-4">
+									{socialMetrics.map((metric) => (
+										<div key={metric.platform} className="flex items-center justify-between">
+											<div className="flex items-center space-x-2">
+												{getPlatformIcon(metric.platform)}
+												<span>{metric.platform}</span>
+											</div>
+											<div className="flex items-center space-x-2">
+												<TrendingUp className={`h-4 w-4 ${metric.growth > 0 ? 'text-green-600' : 'text-red-600'}`} />
+												<span className={`font-medium ${metric.growth > 0 ? 'text-green-600' : 'text-red-600'}`}>
+													{metric.growth > 0 ? "+" : ""}{metric.growth}%
+												</span>
+											</div>
+										</div>
+									))}
+								</div>
+							</CardContent>
+						</Card>
+					</div>
+				</TabsContent>
+
+				{/* Content Calendar Tab */}
+				<TabsContent value="calendar">
+					<Card>
+						<CardHeader>
+							<CardTitle>Content Calendar</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<div className="text-center py-12">
+								<Calendar className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+								<h3 className="text-lg font-medium text-gray-900 mb-2">
+									Content Calendar Coming Soon
+								</h3>
+								<p className="text-gray-600">
+									Plan and schedule your social media content with our visual calendar interface.
+								</p>
+							</div>
+						</CardContent>
+					</Card>
+				</TabsContent>
+			</Tabs>
+
+			{/* Create Post Dialog */}
+			<Dialog open={showCreatePostDialog} onOpenChange={setShowCreatePostDialog}>
+				<DialogContent className="max-w-2xl">
+					<DialogHeader>
+						<DialogTitle>Create Social Media Post</DialogTitle>
+					</DialogHeader>
+					<div className="space-y-6">
+						{/* Platform Selection */}
+						<div>
+							<Label>Select Platforms *</Label>
+							<div className="grid grid-cols-2 gap-3 mt-2">
+								{[
+									{ id: "facebook", name: "Facebook", icon: Facebook, color: "text-blue-600" },
+									{ id: "instagram", name: "Instagram", icon: Instagram, color: "text-pink-600" },
+									{ id: "twitter", name: "Twitter", icon: Twitter, color: "text-blue-400" },
+									{ id: "linkedin", name: "LinkedIn", icon: Users, color: "text-blue-700" },
+								].map((platform) => (
+									<div
+										key={platform.id}
+										className={`
+											flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors
+											${selectedPlatforms.includes(platform.id)
+												? 'border-blue-500 bg-blue-50'
+												: 'border-gray-200 hover:border-gray-300'
+											}
+										`}
+										onClick={() => {
+											setSelectedPlatforms(prev =>
+												prev.includes(platform.id)
+													? prev.filter(p => p !== platform.id)
+													: [...prev, platform.id]
+											);
+											setPostForm(prev => ({
+												...prev,
+												platforms: selectedPlatforms.includes(platform.id)
+													? selectedPlatforms.filter(p => p !== platform.id)
+													: [...selectedPlatforms, platform.id]
+											}));
+										}}
+									>
+										<platform.icon className={`h-5 w-5 ${platform.color}`} />
+										<span className="font-medium">{platform.name}</span>
+										{selectedPlatforms.includes(platform.id) && (
+											<div className="ml-auto h-2 w-2 bg-blue-500 rounded-full" />
+										)}
+									</div>
+								))}
+							</div>
+						</div>
+
+						{/* Post Content */}
+						<div>
+							<Label htmlFor="content">Post Content *</Label>
+							<Textarea
+								id="content"
+								value={postForm.content}
+								onChange={(e) => setPostForm(prev => ({
+									...prev,
+									content: e.target.value
+								}))}
+								placeholder="What would you like to share with your patients?"
+								rows={6}
+								className="mt-2"
+							/>
+							<div className="flex justify-between mt-1">
+								<span className="text-sm text-gray-500">
+									{postForm.content.length}/280 characters
+								</span>
+								<span className="text-sm text-gray-500">
+									Tip: Use emojis and hashtags to increase engagement
+								</span>
+							</div>
+						</div>
+
+						{/* Image Upload */}
+						<div>
+							<Label htmlFor="image">Image (Optional)</Label>
+							<div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+								<Camera className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+								<p className="text-sm text-gray-600 mb-2">
+									Click to upload an image or drag and drop
+								</p>
+								<p className="text-xs text-gray-500">
+									PNG, JPG, GIF up to 10MB
+								</p>
+								<Input
+									type="file"
+									accept="image/*"
+									className="hidden"
+									onChange={(e) => {
+										// TODO: Handle file upload
+										console.log("File selected:", e.target.files?.[0]);
+									}}
+								/>
+							</div>
+						</div>
+
+						{/* Hashtags */}
+						<div>
+							<Label htmlFor="hashtags">Hashtags</Label>
+							<Input
+								id="hashtags"
+								value={postForm.hashtags}
+								onChange={(e) => setPostForm(prev => ({
+									...prev,
+									hashtags: e.target.value
+								}))}
+								placeholder="#DentalHealth #SmileTransformation #OralCare"
+								className="mt-2"
+							/>
+							<p className="text-sm text-gray-500 mt-1">
+								Separate hashtags with spaces. Recommended: 3-5 hashtags per post
+							</p>
+						</div>
+
+						{/* Scheduling */}
+						<div>
+							<Label htmlFor="schedule">Schedule Post (Optional)</Label>
+							<Input
+								id="schedule"
+								type="datetime-local"
+								value={postForm.scheduledFor}
+								onChange={(e) => setPostForm(prev => ({
+									...prev,
+									scheduledFor: e.target.value
+								}))}
+								className="mt-2"
+								min={new Date().toISOString().slice(0, 16)}
+							/>
+							<p className="text-sm text-gray-500 mt-1">
+								Leave empty to publish immediately
+							</p>
+						</div>
+
+						{/* Action Buttons */}
+						<div className="flex justify-end space-x-3 pt-4 border-t">
+							<Button
+								type="button"
+								variant="outline"
+								onClick={() => setShowCreatePostDialog(false)}
+								disabled={isPosting}
+							>
+								Cancel
+							</Button>
+							<Button
+								type="button"
+								onClick={handleCreatePost}
+								disabled={isPosting || !postForm.content || selectedPlatforms.length === 0}
+							>
+								{isPosting ? (
+									<>
+										<div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+										{postForm.scheduledFor ? 'Scheduling...' : 'Publishing...'}
+									</>
+								) : (
+									<>
+										{postForm.scheduledFor ? (
+											<>
+												<Calendar className="mr-2 h-4 w-4" />
+												Schedule Post
+											</>
+										) : (
+											<>
+												<Send className="mr-2 h-4 w-4" />
+												Publish Now
+											</>
+										)}
+									</>
+								)}
+							</Button>
+						</div>
+					</div>
+				</DialogContent>
+			</Dialog>
+		</div>
+	);
+}

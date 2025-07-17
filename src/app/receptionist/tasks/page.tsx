@@ -291,8 +291,7 @@ export default function TasksPage() {
 		const matchesSearch =
 			task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			(task.patient &&
-				task.patient.toLowerCase().includes(searchTerm.toLowerCase()));
+			task.patient?.toLowerCase().includes(searchTerm.toLowerCase());
 
 		const matchesStatus =
 			statusFilter === "all" || task.status === statusFilter;
@@ -325,7 +324,7 @@ export default function TasksPage() {
 						onOpenChange={setShowWorkflowDialog}
 					>
 						<DialogTrigger asChild>
-							<Button variant="outline">
+							<Button type="button" variant="outline">
 								<Zap className="mr-2 h-4 w-4" />
 								Create Workflow
 							</Button>
@@ -358,12 +357,13 @@ export default function TasksPage() {
 								</div>
 								<div className="flex justify-end space-x-3">
 									<Button
+										type="button"
 										variant="outline"
 										onClick={() => setShowWorkflowDialog(false)}
 									>
 										Cancel
 									</Button>
-									<Button>Create Workflow</Button>
+									<Button type="button">Create Workflow</Button>
 								</div>
 							</div>
 						</DialogContent>
@@ -371,7 +371,7 @@ export default function TasksPage() {
 
 					<Dialog open={showTaskDialog} onOpenChange={setShowTaskDialog}>
 						<DialogTrigger asChild>
-							<Button>
+							<Button type="button">
 								<Plus className="mr-2 h-4 w-4" />
 								New Task
 							</Button>
@@ -483,12 +483,13 @@ export default function TasksPage() {
 								</div>
 								<div className="flex justify-end space-x-3">
 									<Button
+										type="button"
 										variant="outline"
 										onClick={() => setShowTaskDialog(false)}
 									>
 										Cancel
 									</Button>
-									<Button onClick={handleCreateTask}>
+									<Button type="button" onClick={handleCreateTask}>
 										<Plus className="mr-2 h-4 w-4" />
 										Create Task
 									</Button>

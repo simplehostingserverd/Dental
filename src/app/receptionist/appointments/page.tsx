@@ -33,7 +33,8 @@ import {
 	Users,
 	XCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import DragDropCalendar, { type Appointment } from "@/components/calendar/DragDropCalendar";
 
 // Mock data for appointments
 const todayAppointments = [
@@ -126,13 +127,96 @@ const waitlistPatients = [
 ];
 
 export default function AppointmentsPage() {
-	const [selectedDate, setSelectedDate] = useState(
+	const [selectedDateString, setSelectedDateString] = useState(
 		new Date().toISOString().split("T")[0],
 	);
+	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [calendarView, setCalendarView] = useState<"day" | "week" | "month">("day");
 	const [searchTerm, setSearchTerm] = useState("");
 	const [statusFilter, setStatusFilter] = useState("all");
 	const [appointments, setAppointments] = useState(todayAppointments);
 	const [waitlist, setWaitlist] = useState(waitlistPatients);
+	const [calendarAppointments, setCalendarAppointments] = useState<Appointment[]>([]);
+
+	// Convert mock appointments to calendar format
+	const convertToCalendarAppointments = useCallback((mockAppointments: typeof todayAppointments): Appointment[] => {
+		return mockAppointments.map(apt => {
+			const today = new Date();
+			const [startHour, startMinute] = apt.time.includes('AM') || apt.time.includes('PM')
+				? parseTime(apt.time)
+				: [9, 0];
+			const [endHour, endMinute] = apt.endTime.includes('AM') || apt.endTime.includes('PM')
+				? parseTime(apt.endTime)
+				: [10, 0];
+
+			const start = new Date(today);
+			start.setHours(startHour, startMinute, 0, 0);
+
+			const end = new Date(today);
+			end.setHours(endHour, endMinute, 0, 0);
+
+			return {
+				id: apt.id,
+				title: `${apt.patient.name} - ${apt.treatment}`,
+				patient: apt.patient,
+				provider: apt.provider,
+				treatment: apt.treatment,
+				room: apt.room,
+				status: apt.status as Appointment['status'],
+				start,
+				end,
+				notes: apt.notes,
+				isRecurring: apt.isRecurring,
+			};
+		});
+	}, []);
+
+	const parseTime = (timeStr: string): [number, number] => {
+		const [time, period] = timeStr.split(' ');
+		const [hours, minutes] = time.split(':').map(Number);
+		let hour24 = hours;
+
+		if (period === 'PM' && hours !== 12) {
+			hour24 += 12;
+		} else if (period === 'AM' && hours === 12) {
+			hour24 = 0;
+		}
+
+		return [hour24, minutes || 0];
+	};
+
+	// Initialize calendar appointments
+	useEffect(() => {
+		const initialAppointments = convertToCalendarAppointments(todayAppointments);
+		setCalendarAppointments(initialAppointments);
+	}, [convertToCalendarAppointments]);
+
+	const handleAppointmentMove = (appointmentId: string, newTimeSlot: string, newDate: Date) => {
+		setCalendarAppointments(prev => prev.map(apt => {
+			if (apt.id === appointmentId) {
+				const [hours, minutes] = newTimeSlot.split(':').map(Number);
+				const newStart = new Date(newDate);
+				newStart.setHours(hours, minutes, 0, 0);
+
+				const duration = apt.end.getTime() - apt.start.getTime();
+				const newEnd = new Date(newStart.getTime() + duration);
+
+				return { ...apt, start: newStart, end: newEnd };
+			}
+			return apt;
+		}));
+	};
+
+	const handleAppointmentUpdate = (updatedAppointment: Appointment) => {
+		setCalendarAppointments(prev => prev.map(apt =>
+			apt.id === updatedAppointment.id ? updatedAppointment : apt
+		));
+	};
+
+	const handleNewAppointment = (timeSlot: string, date: Date) => {
+		// TODO: Open new appointment dialog
+		console.log('New appointment requested for:', timeSlot, date);
+	};
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
@@ -468,21 +552,16 @@ export default function AppointmentsPage() {
 
 				{/* Calendar View Tab */}
 				<TabsContent value="calendar">
-					<Card>
-						<CardContent className="p-6">
-							<div className="flex h-96 items-center justify-center">
-								<div className="text-center">
-									<Calendar className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-									<h3 className="font-medium text-gray-900 text-lg">
-										Calendar View
-									</h3>
-									<p className="text-gray-500">
-										Drag-and-drop calendar coming soon
-									</p>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
+					<DragDropCalendar
+						appointments={calendarAppointments}
+						onAppointmentMove={handleAppointmentMove}
+						onAppointmentUpdate={handleAppointmentUpdate}
+						onNewAppointment={handleNewAppointment}
+						selectedDate={selectedDate}
+						onDateChange={setSelectedDate}
+						view={calendarView}
+						onViewChange={setCalendarView}
+					/>
 				</TabsContent>
 
 				{/* Waitlist Tab */}
