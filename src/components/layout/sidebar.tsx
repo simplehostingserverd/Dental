@@ -20,10 +20,15 @@ import { usePathname } from "next/navigation";
 
 const navigationItems = [
 	{ key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
+	{ key: "receptionist", href: "/dashboard/receptionist", icon: Calendar },
 	{ key: "appointments", href: "/dashboard/schedule", icon: Calendar },
 	{ key: "patients", href: "/dashboard/patients", icon: Users },
 	{ key: "charting", href: "/dashboard/charting", icon: ToothIcon },
-	{ key: "treatment_plans", href: "/dashboard/treatment-plans", icon: FileText },
+	{
+		key: "treatment_plans",
+		href: "/dashboard/treatment-plans",
+		icon: FileText,
+	},
 	{ key: "billing", href: "/dashboard/billing", icon: CreditCard },
 	{ key: "imaging", href: "/dashboard/imaging", icon: Camera },
 	{ key: "prescriptions", href: "/dashboard/prescriptions", icon: Pill },

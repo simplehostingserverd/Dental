@@ -48,18 +48,14 @@ export function StatsCards() {
 							<stat.icon className={`h-6 w-6 ${stat.color}`} />
 						</div>
 						<div className="ml-4 flex-1">
-							<p className="font-medium text-gray-600 text-sm">
-								{stat.name}
-							</p>
+							<p className="font-medium text-gray-600 text-sm">{stat.name}</p>
 							<p className="font-semibold text-2xl text-gray-900">
 								{stat.value}
 							</p>
 						</div>
 					</div>
 					<div className="mt-4">
-						<p className="text-gray-500 text-sm">
-							{stat.change}
-						</p>
+						<p className="text-gray-500 text-sm">{stat.change}</p>
 					</div>
 				</div>
 			))}

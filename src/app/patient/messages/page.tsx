@@ -90,11 +90,11 @@ export default function MessagesPage() {
 
 		if (messageDate.toDateString() === today.toDateString()) {
 			return "Today";
-		} else if (messageDate.toDateString() === yesterday.toDateString()) {
-			return "Yesterday";
-		} else {
-			return messageDate.toLocaleDateString();
 		}
+		if (messageDate.toDateString() === yesterday.toDateString()) {
+			return "Yesterday";
+		}
+		return messageDate.toLocaleDateString();
 	};
 
 	return (

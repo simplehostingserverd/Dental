@@ -28,6 +28,23 @@ model Practice {
   patients      Patient[]
   auditLogs     AuditLog[]
   settings      PracticeSettings?
+
+  // New relations for receptionist features
+  payments              Payment[]
+  insuranceClaims       InsuranceClaim[]
+  documents             Document[]
+  formTemplates         FormTemplate[]
+  forms                 Form[]
+  communicationTemplates CommunicationTemplate[]
+  communicationLogs     CommunicationLog[]
+  workflowTemplates     WorkflowTemplate[]
+  workflowInstances     WorkflowInstance[]
+  analyticsEvents       AnalyticsEvent[]
+  reports               Report[]
+  socialMediaAccounts   SocialMediaAccount[]
+  socialPosts           SocialPost[]
+  marketingCampaigns    MarketingCampaign[]
+  automationRules       AutomationRule[]
 }
 
 model PracticeUser {
@@ -61,6 +78,15 @@ model PracticeUser {
   messagesSent      Message[] @relation("SentMessages")
   tasks             Task[]    @relation("AssignedTasks")
   auditLogs         AuditLog[]
+
+  // New relations for receptionist features
+  documentsUploaded    Document[]
+  communicationsSent   CommunicationLog[]
+  workflowsTriggered   WorkflowInstance[]
+  analyticsEvents      AnalyticsEvent[]
+  reportsGenerated     Report[]
+  socialPostsCreated   SocialPost[]
+  campaignsCreated     MarketingCampaign[]
 }
 
 model PatientUser {
@@ -221,6 +247,15 @@ model Patient {
   reminders     Reminder[]
   treatments    Treatment[]
   xrays         Xray[]
+
+  // New relations for receptionist features
+  payments           Payment[]
+  insuranceClaims    InsuranceClaim[]
+  documents          Document[]
+  forms              Form[]
+  communicationLogs  CommunicationLog[]
+  analyticsEvents    AnalyticsEvent[]
+  workflowInstances  WorkflowInstance[]
 }
 
 model Appointment {
@@ -238,6 +273,7 @@ model Appointment {
   // Relations
   patient         Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
   practiceUser    PracticeUser      @relation(fields: [practiceUserId], references: [id], onDelete: Cascade)
+  insuranceClaims InsuranceClaim[]
 }
 
 model Treatment {
@@ -258,6 +294,7 @@ model Invoice {
   status    InvoiceStatus
   patientId String
   patient   Patient       @relation(fields: [patientId], references: [id])
+  payments  Payment[]
 }
 
 model Message {
@@ -331,6 +368,310 @@ model Note {
   patient   Patient  @relation(fields: [patientId], references: [id])
 }
 
+// Billing and Payments
+model Payment {
+  id            String        @id @default(cuid())
+  amount        Float
+  paymentMethod PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  transactionId String?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  patientId     String
+  invoiceId     String?
+  practiceId    String
+
+  // Relations
+  patient  Patient  @relation(fields: [patientId], references: [id])
+  invoice  Invoice? @relation(fields: [invoiceId], references: [id])
+  practice Practice @relation(fields: [practiceId], references: [id])
+}
+
+model InsuranceClaim {
+  id              String      @id @default(cuid())
+  claimNumber     String      @unique
+  amount          Float
+  status          ClaimStatus @default(SUBMITTED)
+  submittedAt     DateTime    @default(now())
+  processedAt     DateTime?
+  deniedReason    String?
+  notes           String?
+  patientId       String
+  appointmentId   String?
+  practiceId      String
+
+  // Relations
+  patient     Patient      @relation(fields: [patientId], references: [id])
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+  practice    Practice     @relation(fields: [practiceId], references: [id])
+}
+
+// Documents and Forms
+model Document {
+  id          String       @id @default(cuid())
+  name        String
+  type        DocumentType
+  fileUrl     String
+  fileSize    Int?
+  mimeType    String?
+  uploadedAt  DateTime     @default(now())
+  expiresAt   DateTime?
+  isRequired  Boolean      @default(false)
+  isSigned    Boolean      @default(false)
+  signedAt    DateTime?
+  patientId   String?
+  practiceId  String
+  uploadedById String
+
+  // Relations
+  patient    Patient?     @relation(fields: [patientId], references: [id])
+  practice   Practice     @relation(fields: [practiceId], references: [id])
+  uploadedBy PracticeUser @relation(fields: [uploadedById], references: [id])
+}
+
+model FormTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  fields      Json     // JSON structure for form fields
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  practiceId  String
+
+  // Relations
+  practice Practice @relation(fields: [practiceId], references: [id])
+  forms    Form[]
+}
+
+model Form {
+  id           String       @id @default(cuid())
+  data         Json         // JSON data with form responses
+  status       FormStatus   @default(PENDING)
+  submittedAt  DateTime?
+  completedAt  DateTime?
+  patientId    String?
+  templateId   String
+  practiceId   String
+
+  // Relations
+  patient  Patient?     @relation(fields: [patientId], references: [id])
+  template FormTemplate @relation(fields: [templateId], references: [id])
+  practice Practice     @relation(fields: [practiceId], references: [id])
+}
+
+// Communication and Templates
+model CommunicationTemplate {
+  id          String            @id @default(cuid())
+  name        String
+  type        TemplateType
+  channel     CommunicationChannel
+  subject     String?
+  content     String
+  variables   Json?             // JSON array of available variables
+  isActive    Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  practiceId  String
+
+  // Relations
+  practice Practice @relation(fields: [practiceId], references: [id])
+  messages CommunicationLog[]
+}
+
+model CommunicationLog {
+  id          String               @id @default(cuid())
+  channel     CommunicationChannel
+  direction   MessageDirection
+  content     String
+  status      MessageStatus        @default(PENDING)
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  readAt      DateTime?
+  response    String?
+  templateId  String?
+  patientId   String
+  sentById    String
+  practiceId  String
+
+  // Relations
+  patient  Patient                @relation(fields: [patientId], references: [id])
+  sentBy   PracticeUser           @relation(fields: [sentById], references: [id])
+  practice Practice               @relation(fields: [practiceId], references: [id])
+  template CommunicationTemplate? @relation(fields: [templateId], references: [id])
+}
+
+// Tasks and Workflows
+model WorkflowTemplate {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  steps       Json      // JSON array of workflow steps
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  practiceId  String
+
+  // Relations
+  practice  Practice           @relation(fields: [practiceId], references: [id])
+  instances WorkflowInstance[]
+}
+
+model WorkflowInstance {
+  id           String         @id @default(cuid())
+  status       WorkflowStatus @default(PENDING)
+  currentStep  Int            @default(0)
+  data         Json?          // JSON data for workflow context
+  startedAt    DateTime       @default(now())
+  completedAt  DateTime?
+  templateId   String
+  triggeredById String?
+  patientId    String?
+  practiceId   String
+
+  // Relations
+  template    WorkflowTemplate @relation(fields: [templateId], references: [id])
+  triggeredBy PracticeUser?    @relation(fields: [triggeredById], references: [id])
+  patient     Patient?         @relation(fields: [patientId], references: [id])
+  practice    Practice         @relation(fields: [practiceId], references: [id])
+  steps       WorkflowStep[]
+}
+
+model WorkflowStep {
+  id           String           @id @default(cuid())
+  stepNumber   Int
+  name         String
+  type         WorkflowStepType
+  config       Json             // JSON configuration for the step
+  status       StepStatus       @default(PENDING)
+  executedAt   DateTime?
+  completedAt  DateTime?
+  error        String?
+  instanceId   String
+
+  // Relations
+  instance WorkflowInstance @relation(fields: [instanceId], references: [id])
+}
+
+// Analytics and Reporting
+model AnalyticsEvent {
+  id         String    @id @default(cuid())
+  eventType  String
+  eventData  Json
+  timestamp  DateTime  @default(now())
+  userId     String?
+  patientId  String?
+  practiceId String
+
+  // Relations
+  user     PracticeUser? @relation(fields: [userId], references: [id])
+  patient  Patient?      @relation(fields: [patientId], references: [id])
+  practice Practice      @relation(fields: [practiceId], references: [id])
+}
+
+model Report {
+  id          String     @id @default(cuid())
+  name        String
+  type        ReportType
+  parameters  Json?      // JSON parameters for report generation
+  data        Json?      // JSON report data
+  generatedAt DateTime   @default(now())
+  generatedBy String
+  practiceId  String
+
+  // Relations
+  generator PracticeUser @relation(fields: [generatedBy], references: [id])
+  practice  Practice     @relation(fields: [practiceId], references: [id])
+}
+
+// Social Media Marketing
+model SocialMediaAccount {
+  id          String            @id @default(cuid())
+  platform    SocialPlatform
+  accountName String
+  accessToken String?           // Encrypted access token
+  isActive    Boolean           @default(true)
+  lastSync    DateTime?
+  practiceId  String
+
+  // Relations
+  practice Practice     @relation(fields: [practiceId], references: [id])
+  posts    SocialPost[]
+}
+
+model SocialPost {
+  id          String         @id @default(cuid())
+  content     String
+  imageUrls   Json?          // JSON array of image URLs
+  status      PostStatus     @default(DRAFT)
+  scheduledAt DateTime?
+  publishedAt DateTime?
+  engagement  Json?          // JSON object with likes, shares, comments
+  accountId   String
+  createdById String
+  practiceId  String
+
+  // Relations
+  account   SocialMediaAccount @relation(fields: [accountId], references: [id])
+  createdBy PracticeUser       @relation(fields: [createdById], references: [id])
+  practice  Practice           @relation(fields: [practiceId], references: [id])
+}
+
+model MarketingCampaign {
+  id          String         @id @default(cuid())
+  name        String
+  type        CampaignType
+  status      CampaignStatus @default(DRAFT)
+  startDate   DateTime?
+  endDate     DateTime?
+  budget      Float?
+  spent       Float          @default(0)
+  metrics     Json?          // JSON object with campaign metrics
+  config      Json           // JSON configuration for campaign
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  createdById String
+  practiceId  String
+
+  // Relations
+  createdBy PracticeUser @relation(fields: [createdById], references: [id])
+  practice  Practice     @relation(fields: [practiceId], references: [id])
+}
+
+// Automation and Triggers
+model AutomationRule {
+  id          String           @id @default(cuid())
+  name        String
+  description String?
+  trigger     Json             // JSON trigger configuration
+  actions     Json             // JSON array of actions
+  isActive    Boolean          @default(true)
+  lastRun     DateTime?
+  runCount    Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  practiceId  String
+
+  // Relations
+  practice   Practice            @relation(fields: [practiceId], references: [id])
+  executions AutomationExecution[]
+}
+
+model AutomationExecution {
+  id          String            @id @default(cuid())
+  status      ExecutionStatus   @default(RUNNING)
+  startedAt   DateTime          @default(now())
+  completedAt DateTime?
+  error       String?
+  logs        Json?             // JSON array of execution logs
+  ruleId      String
+  triggeredBy String?           // What triggered this execution
+
+  // Relations
+  rule AutomationRule @relation(fields: [ruleId], references: [id])
+}
+
 enum AppointmentStatus {
   SCHEDULED
   CONFIRMED
@@ -370,6 +711,178 @@ enum TaskPriority {
   MEDIUM
   HIGH
   URGENT
+}
+
+// Payment and Billing Enums
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  CHECK
+  BANK_TRANSFER
+  INSURANCE
+  PAYMENT_PLAN
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELED
+}
+
+enum ClaimStatus {
+  SUBMITTED
+  PROCESSING
+  APPROVED
+  DENIED
+  PARTIAL
+  RESUBMITTED
+}
+
+// Document and Form Enums
+enum DocumentType {
+  INSURANCE_CARD
+  ID_DOCUMENT
+  MEDICAL_HISTORY
+  CONSENT_FORM
+  TREATMENT_PLAN
+  XRAY
+  PHOTO
+  PRESCRIPTION
+  REFERRAL
+  OTHER
+}
+
+enum FormStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  EXPIRED
+  CANCELED
+}
+
+// Communication Enums
+enum TemplateType {
+  APPOINTMENT_REMINDER
+  APPOINTMENT_CONFIRMATION
+  PAYMENT_REMINDER
+  FOLLOW_UP
+  MARKETING
+  EMERGENCY
+  RECALL
+  BIRTHDAY
+  HOLIDAY
+}
+
+enum CommunicationChannel {
+  SMS
+  EMAIL
+  PHONE
+  IN_APP
+  POSTAL_MAIL
+}
+
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+  BOUNCED
+}
+
+// Workflow Enums
+enum WorkflowStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELED
+  PAUSED
+}
+
+enum WorkflowStepType {
+  SEND_MESSAGE
+  SCHEDULE_APPOINTMENT
+  CREATE_TASK
+  UPDATE_PATIENT
+  WAIT_DELAY
+  CONDITIONAL
+  WEBHOOK
+  EMAIL
+  SMS
+}
+
+enum StepStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  SKIPPED
+}
+
+// Analytics and Reporting Enums
+enum ReportType {
+  FINANCIAL
+  PATIENT_DEMOGRAPHICS
+  APPOINTMENT_ANALYTICS
+  TREATMENT_STATISTICS
+  MARKETING_PERFORMANCE
+  STAFF_PRODUCTIVITY
+  CUSTOM
+}
+
+// Social Media Enums
+enum SocialPlatform {
+  FACEBOOK
+  INSTAGRAM
+  TWITTER
+  LINKEDIN
+  YOUTUBE
+  TIKTOK
+  GOOGLE_BUSINESS
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  FAILED
+  ARCHIVED
+}
+
+enum CampaignType {
+  AWARENESS
+  PROMOTION
+  EDUCATION
+  SEASONAL
+  EVENT
+  REFERRAL
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELED
+}
+
+// Automation Enums
+enum ExecutionStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELED
 }
 
 // Legacy enum for NextAuth compatibility

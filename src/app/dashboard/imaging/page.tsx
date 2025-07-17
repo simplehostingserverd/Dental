@@ -199,11 +199,16 @@ export default function ImagingPage() {
 
 	const getQualityColor = (quality: string) => {
 		switch (quality) {
-			case "excellent": return "bg-green-500 text-white";
-			case "good": return "bg-blue-500 text-white";
-			case "fair": return "bg-yellow-500 text-white";
-			case "poor": return "bg-red-500 text-white";
-			default: return "bg-gray-500 text-white";
+			case "excellent":
+				return "bg-green-500 text-white";
+			case "good":
+				return "bg-blue-500 text-white";
+			case "fair":
+				return "bg-yellow-500 text-white";
+			case "poor":
+				return "bg-red-500 text-white";
+			default:
+				return "bg-gray-500 text-white";
 		}
 	};
 

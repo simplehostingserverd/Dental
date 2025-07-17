@@ -101,13 +101,19 @@ export default function SchedulePage() {
 
 		switch (viewType) {
 			case "day":
-				newDate.setDate(currentDate.getDate() + (direction === "next" ? 1 : -1));
+				newDate.setDate(
+					currentDate.getDate() + (direction === "next" ? 1 : -1),
+				);
 				break;
 			case "week":
-				newDate.setDate(currentDate.getDate() + (direction === "next" ? 7 : -7));
+				newDate.setDate(
+					currentDate.getDate() + (direction === "next" ? 7 : -7),
+				);
 				break;
 			case "month":
-				newDate.setMonth(currentDate.getMonth() + (direction === "next" ? 1 : -1));
+				newDate.setMonth(
+					currentDate.getMonth() + (direction === "next" ? 1 : -1),
+				);
 				break;
 		}
 
@@ -126,7 +132,10 @@ export default function SchedulePage() {
 				return `${weekStart.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${weekEnd.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
 			}
 			case "month":
-				return currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+				return currentDate.toLocaleDateString("en-US", {
+					month: "long",
+					year: "numeric",
+				});
 			default:
 				return dateString;
 		}
@@ -312,7 +321,8 @@ export default function SchedulePage() {
 								<div className="py-8 text-center">
 									<Calendar className="mx-auto mb-4 h-12 w-12 text-gray-400" />
 									<p className="text-gray-500">
-										No appointments scheduled for {viewType === "day" ? "today" : "this period"}
+										No appointments scheduled for{" "}
+										{viewType === "day" ? "today" : "this period"}
 									</p>
 									<Link href="/dashboard/appointments/new">
 										<Button className="mt-4">
@@ -342,20 +352,25 @@ export default function SchedulePage() {
 						</div>
 
 						{/* Days columns */}
-						{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-							<div key={day} className="space-y-2">
-								<div className="border-gray-200 border-b pb-2 text-center font-medium text-sm">
-									{day}
+						{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+							(day, index) => (
+								<div key={day} className="space-y-2">
+									<div className="border-gray-200 border-b pb-2 text-center font-medium text-sm">
+										{day}
+									</div>
+									<div className="space-y-12">
+										{timeSlots.slice(0, 10).map((time) => (
+											<div
+												key={time}
+												className="h-8 rounded border border-gray-100 hover:bg-gray-50"
+											>
+												{/* Appointment slots would go here */}
+											</div>
+										))}
+									</div>
 								</div>
-								<div className="space-y-12">
-									{timeSlots.slice(0, 10).map((time) => (
-										<div key={time} className="h-8 rounded border border-gray-100 hover:bg-gray-50">
-											{/* Appointment slots would go here */}
-										</div>
-									))}
-								</div>
-							</div>
-						))}
+							),
+						)}
 					</div>
 				</div>
 			)}
@@ -366,7 +381,10 @@ export default function SchedulePage() {
 					<div className="grid grid-cols-7 gap-2">
 						{/* Day headers */}
 						{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-							<div key={day} className="border-gray-200 border-b pb-2 text-center font-medium text-sm">
+							<div
+								key={day}
+								className="border-gray-200 border-b pb-2 text-center font-medium text-sm"
+							>
 								{day}
 							</div>
 						))}
@@ -375,7 +393,8 @@ export default function SchedulePage() {
 						{Array.from({ length: 35 }, (_, i) => {
 							const dayNumber = i - 6; // Adjust for month start
 							const isCurrentMonth = dayNumber > 0 && dayNumber <= 31;
-							const isToday = dayNumber === currentDate.getDate() && isCurrentMonth;
+							const isToday =
+								dayNumber === currentDate.getDate() && isCurrentMonth;
 
 							return (
 								<div
@@ -386,7 +405,9 @@ export default function SchedulePage() {
 								>
 									{isCurrentMonth && (
 										<>
-											<div className={`text-sm ${isToday ? "font-bold text-blue-600" : "text-gray-900"}`}>
+											<div
+												className={`text-sm ${isToday ? "font-bold text-blue-600" : "text-gray-900"}`}
+											>
 												{dayNumber}
 											</div>
 											{/* Sample appointments for demo */}

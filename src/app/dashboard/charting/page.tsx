@@ -175,9 +175,9 @@ export default function ChartingPage() {
 	};
 
 	const toggleToothSelection = (toothNumber: number) => {
-		setSelectedTeeth(prev => {
+		setSelectedTeeth((prev) => {
 			if (prev.includes(toothNumber)) {
-				return prev.filter(t => t !== toothNumber);
+				return prev.filter((t) => t !== toothNumber);
 			}
 			return [...prev, toothNumber];
 		});
@@ -188,25 +188,23 @@ export default function ChartingPage() {
 	};
 
 	const addCondition = () => {
-		if (
-			!newCondition.condition ||
-			!newCondition.treatment
-		) {
+		if (!newCondition.condition || !newCondition.treatment) {
 			return;
 		}
 
 		// Use selected teeth or the manually entered tooth number
-		const teethToProcess = selectedTeeth.length > 0
-			? selectedTeeth
-			: newCondition.toothNumber
-				? [Number.parseInt(newCondition.toothNumber)]
-				: [];
+		const teethToProcess =
+			selectedTeeth.length > 0
+				? selectedTeeth
+				: newCondition.toothNumber
+					? [Number.parseInt(newCondition.toothNumber)]
+					: [];
 
 		if (teethToProcess.length === 0) {
 			return;
 		}
 
-		const newConditions: ToothCondition[] = teethToProcess.map(toothNum => ({
+		const newConditions: ToothCondition[] = teethToProcess.map((toothNum) => ({
 			id: `${Date.now()}-${toothNum}`,
 			toothNumber: toothNum,
 			surface: newCondition.surface,
@@ -304,19 +302,13 @@ export default function ChartingPage() {
 			{/* Dental Chart Visualization */}
 			<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 				<div className="mb-4 flex items-center justify-between">
-					<h2 className="font-medium text-gray-900 text-lg">
-						Dental Chart
-					</h2>
+					<h2 className="font-medium text-gray-900 text-lg">Dental Chart</h2>
 					<div className="flex items-center space-x-2">
 						<span className="text-gray-600 text-sm">
 							Selected: {selectedTeeth.length} teeth
 						</span>
 						{selectedTeeth.length > 0 && (
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={clearToothSelection}
-							>
+							<Button variant="outline" size="sm" onClick={clearToothSelection}>
 								Clear Selection
 							</Button>
 						)}
@@ -372,7 +364,8 @@ export default function ChartingPage() {
 				{selectedTeeth.length > 0 && (
 					<div className="mt-4 rounded-lg bg-blue-50 p-3">
 						<p className="text-blue-800 text-sm">
-							<strong>Multi-tooth selection:</strong> You can add the same condition/treatment to multiple teeth for same-day procedures.
+							<strong>Multi-tooth selection:</strong> You can add the same
+							condition/treatment to multiple teeth for same-day procedures.
 						</p>
 					</div>
 				)}
@@ -475,7 +468,10 @@ export default function ChartingPage() {
 						<Select
 							value={newCondition.priority}
 							onValueChange={(value) =>
-								setNewCondition({ ...newCondition, priority: value as "low" | "medium" | "high" | "urgent" })
+								setNewCondition({
+									...newCondition,
+									priority: value as "low" | "medium" | "high" | "urgent",
+								})
 							}
 						>
 							<SelectTrigger>
@@ -500,7 +496,6 @@ export default function ChartingPage() {
 						onChange={(e) =>
 							setNewCondition({ ...newCondition, notes: e.target.value })
 						}
-
 					/>
 				</div>
 
@@ -513,17 +508,13 @@ export default function ChartingPage() {
 			</div>
 
 			{/* Current Conditions */}
-			<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 				<div className="mb-4 flex items-center justify-between">
-					<h2 className="font-medium text-gray-900 text-lg dark:text-white">
+					<h2 className="font-medium text-gray-900 text-lg">
 						Current Conditions & Treatments
 					</h2>
 					<div className="flex items-center space-x-2">
-						<Button
-							variant="outline"
-							size="sm"
-							className="dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-						>
+						<Button variant="outline" size="sm">
 							<Filter className="mr-2 h-4 w-4" />
 							Filter
 						</Button>
@@ -534,12 +525,12 @@ export default function ChartingPage() {
 					{conditions.map((condition) => (
 						<div
 							key={condition.id}
-							className="rounded-lg border border-gray-200 p-4 dark:border-gray-600 dark:bg-gray-700"
+							className="rounded-lg border border-gray-200 p-4"
 						>
 							<div className="flex items-start justify-between">
 								<div className="flex-1">
 									<div className="flex items-center space-x-3">
-										<span className="font-medium text-gray-900 dark:text-white">
+										<span className="font-medium text-gray-900">
 											Tooth #{condition.toothNumber} - {condition.surface}
 										</span>
 										<Badge className={getPriorityColor(condition.priority)}>
@@ -552,27 +543,23 @@ export default function ChartingPage() {
 
 									<div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-3">
 										<div>
-											<span className="text-gray-500 text-sm dark:text-gray-400">
-												Condition:
-											</span>
-											<p className="font-medium text-gray-900 dark:text-white">
+											<span className="text-gray-500 text-sm">Condition:</span>
+											<p className="font-medium text-gray-900">
 												{condition.condition}
 											</p>
 										</div>
 										<div>
-											<span className="text-gray-500 text-sm dark:text-gray-400">
-												Treatment:
-											</span>
-											<p className="font-medium text-gray-900 dark:text-white">
+											<span className="text-gray-500 text-sm">Treatment:</span>
+											<p className="font-medium text-gray-900">
 												{condition.treatment}
 											</p>
 										</div>
 										<div>
-											<span className="text-gray-500 text-sm dark:text-gray-400">
+											<span className="text-gray-500 text-sm">
 												Estimated Cost:
 											</span>
 											<div className="flex items-center space-x-2">
-												<p className="font-medium text-gray-900 dark:text-white">
+												<p className="font-medium text-gray-900">
 													${condition.estimatedCost}
 												</p>
 												{condition.insuranceCovered ? (
@@ -592,19 +579,15 @@ export default function ChartingPage() {
 
 									{condition.notes && (
 										<div className="mt-2">
-											<span className="text-gray-500 text-sm dark:text-gray-400">
-												Notes:
-											</span>
-											<p className="text-gray-700 text-sm dark:text-gray-300">
-												{condition.notes}
-											</p>
+											<span className="text-gray-500 text-sm">Notes:</span>
+											<p className="text-gray-700 text-sm">{condition.notes}</p>
 										</div>
 									)}
 
-									<div className="mt-2 flex items-center space-x-4 text-gray-500 text-sm dark:text-gray-400">
+									<div className="mt-2 flex items-center space-x-4 text-gray-500 text-sm">
 										<span>Added: {condition.dateAdded}</span>
 										{condition.status === "needs-approval" && (
-											<span className="flex items-center text-red-600 dark:text-red-400">
+											<span className="flex items-center text-red-600">
 												<Clock className="mr-1 h-3 w-3" />
 												Pending Insurance Approval
 											</span>
@@ -613,26 +596,17 @@ export default function ChartingPage() {
 								</div>
 
 								<div className="ml-4 flex flex-col space-y-2">
-									<Button
-										size="sm"
-										variant="outline"
-										className="dark:border-gray-600 dark:bg-gray-600 dark:text-gray-200"
-									>
+									<Button size="sm" variant="outline">
 										Edit
 									</Button>
 									{condition.status === "planned" && (
-										<Button
-											size="sm"
-											className="dark:bg-green-600 dark:hover:bg-green-700"
-										>
-											Start Treatment
-										</Button>
+										<Button size="sm">Start Treatment</Button>
 									)}
 									{condition.status === "needs-approval" && (
 										<Button
 											size="sm"
 											variant="outline"
-											className="border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900"
+											className="border-blue-500 text-blue-600 hover:bg-blue-50"
 										>
 											Check Status
 										</Button>
@@ -645,63 +619,44 @@ export default function ChartingPage() {
 			</div>
 
 			{/* Insurance Integration Panel */}
-			<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-				<h2 className="mb-4 font-medium text-gray-900 text-lg dark:text-white">
+			<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+				<h2 className="mb-4 font-medium text-gray-900 text-lg">
 					Insurance Integration
 				</h2>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<div>
-						<h3 className="mb-3 font-medium text-gray-900 dark:text-white">
-							Coverage Summary
-						</h3>
+						<h3 className="mb-3 font-medium text-gray-900">Coverage Summary</h3>
 						<div className="space-y-3">
-							<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
-								<span className="text-gray-600 text-sm dark:text-gray-300">
-									Annual Maximum
-								</span>
-								<span className="font-medium text-gray-900 dark:text-white">
-									$1,500
-								</span>
+							<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
+								<span className="text-gray-600 text-sm">Annual Maximum</span>
+								<span className="font-medium text-gray-900">$1,500</span>
 							</div>
-							<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
-								<span className="text-gray-600 text-sm dark:text-gray-300">
-									Used This Year
-								</span>
-								<span className="font-medium text-gray-900 dark:text-white">
-									$450
-								</span>
+							<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
+								<span className="text-gray-600 text-sm">Used This Year</span>
+								<span className="font-medium text-gray-900">$450</span>
 							</div>
-							<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
-								<span className="text-gray-600 text-sm dark:text-gray-300">
-									Remaining
-								</span>
-								<span className="font-medium text-green-600 dark:text-green-400">
-									$1,050
-								</span>
+							<div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
+								<span className="text-gray-600 text-sm">Remaining</span>
+								<span className="font-medium text-green-600">$1,050</span>
 							</div>
 						</div>
 					</div>
 
 					<div>
-						<h3 className="mb-3 font-medium text-gray-900 dark:text-white">
+						<h3 className="mb-3 font-medium text-gray-900">
 							Pre-Authorization Status
 						</h3>
 						<div className="space-y-3">
-							<div className="flex items-center justify-between rounded-lg bg-yellow-50 p-3 dark:bg-yellow-900/20">
+							<div className="flex items-center justify-between rounded-lg bg-yellow-50 p-3">
 								<div>
-									<p className="font-medium text-sm text-yellow-800 dark:text-yellow-200">
+									<p className="font-medium text-sm text-yellow-800">
 										Root Canal + Crown
 									</p>
-									<p className="text-xs text-yellow-600 dark:text-yellow-300">
-										Tooth #3
-									</p>
+									<p className="text-xs text-yellow-600">Tooth #3</p>
 								</div>
 								<Badge className="bg-yellow-500 text-white">Pending</Badge>
 							</div>
-							<Button
-								variant="outline"
-								className="w-full dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-							>
+							<Button variant="outline" className="w-full">
 								<DollarSign className="mr-2 h-4 w-4" />
 								Submit New Pre-Auth
 							</Button>

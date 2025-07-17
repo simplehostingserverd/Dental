@@ -331,12 +331,14 @@ export default function BookAppointmentPage() {
 
 							<div className="flex justify-between">
 								<button
+									type="button"
 									onClick={() => setStep(2)}
 									className="rounded-md border border-gray-300 px-6 py-2 text-gray-700 hover:bg-gray-50"
 								>
 									Back
 								</button>
 								<button
+									type="button"
 									onClick={handleSubmit}
 									disabled={isLoading}
 									className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"

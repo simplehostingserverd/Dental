@@ -61,34 +61,33 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 				practiceId: user.practiceId,
 				type: "practice",
 			};
-		} else {
-			// Fetch patient user details
-			const user = await db.patientUser.findUnique({
-				where: { id: userId },
-				include: {
-					patient: {
-						select: {
-							id: true,
-							firstName: true,
-							lastName: true,
-							practiceId: true,
-						},
+		}
+		// Fetch patient user details
+		const user = await db.patientUser.findUnique({
+			where: { id: userId },
+			include: {
+				patient: {
+					select: {
+						id: true,
+						firstName: true,
+						lastName: true,
+						practiceId: true,
 					},
 				},
-			});
+			},
+		});
 
-			if (!user || !user.patient) return null;
+		if (!user || !user.patient) return null;
 
-			return {
-				id: user.id,
-				email: user.email,
-				firstName: user.patient.firstName,
-				lastName: user.patient.lastName,
-				practiceId: user.patient.practiceId,
-				patientId: user.patient.id,
-				type: "patient",
-			};
-		}
+		return {
+			id: user.id,
+			email: user.email,
+			firstName: user.patient.firstName,
+			lastName: user.patient.lastName,
+			practiceId: user.patient.practiceId,
+			patientId: user.patient.id,
+			type: "patient",
+		};
 	} catch (error) {
 		console.error("Error getting current user:", error);
 		return null;

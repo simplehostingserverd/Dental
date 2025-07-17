@@ -24,7 +24,7 @@ export function LanguageSwitcher() {
 	};
 
 	const getCurrentLanguage = () => {
-		return languages.find(lang => lang.code === locale) || languages[0];
+		return languages.find((lang) => lang.code === locale) || languages[0];
 	};
 
 	return (

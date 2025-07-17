@@ -123,7 +123,10 @@ export function PendingTreatments() {
 			)}
 
 			<div className="mt-4 border-gray-200 border-t pt-4">
-				<button className="w-full rounded-md bg-gray-50 px-3 py-2 font-medium text-gray-700 text-sm hover:bg-gray-100">
+				<button
+					type="button"
+					className="w-full rounded-md bg-gray-50 px-3 py-2 font-medium text-gray-700 text-sm hover:bg-gray-100"
+				>
 					View All Treatments
 				</button>
 			</div>

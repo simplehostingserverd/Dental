@@ -95,7 +95,7 @@ export class EmailValidationService {
 		}
 
 		// Check for suspicious patterns
-		for (const pattern of this.SUSPICIOUS_PATTERNS) {
+		for (const pattern of EmailValidationService.SUSPICIOUS_PATTERNS) {
 			if (pattern.test(trimmedEmail)) {
 				warnings.push(
 					"Email address appears suspicious. Please verify it is correct.",
@@ -109,10 +109,12 @@ export class EmailValidationService {
 		// For now, we'll just check against known good domains
 
 		// Check for trusted domains
-		const isTrustedDomain = this.TRUSTED_DOMAINS.includes(domain);
+		const isTrustedDomain =
+			EmailValidationService.TRUSTED_DOMAINS.includes(domain);
 		if (!isTrustedDomain) {
 			// Check if it's a business domain (has company-like structure)
-			const isBusinessDomain = this.isLikelyBusinessDomain(domain);
+			const isBusinessDomain =
+				EmailValidationService.isLikelyBusinessDomain(domain);
 			if (!isBusinessDomain) {
 				warnings.push(
 					"Please verify your email domain is correct. We recommend using a well-known email provider.",
@@ -121,7 +123,7 @@ export class EmailValidationService {
 		}
 
 		// Check for common typos in popular domains
-		const typoSuggestion = this.checkForTypos(domain);
+		const typoSuggestion = EmailValidationService.checkForTypos(domain);
 		if (typoSuggestion) {
 			warnings.push(`Did you mean ${typoSuggestion}?`);
 		}
@@ -183,14 +185,14 @@ export class EmailValidationService {
 	 * Validate email for patient signup (stricter)
 	 */
 	static validatePatientEmail(email: string): EmailValidationResult {
-		const result = this.validateEmail(email);
+		const result = EmailValidationService.validateEmail(email);
 
 		// Additional patient-specific validations
 		if (result.isValid) {
 			const trimmedEmail = email.trim().toLowerCase();
 
 			// Patients should use personal email addresses
-			if (this.looksLikeBusinessEmail(trimmedEmail)) {
+			if (EmailValidationService.looksLikeBusinessEmail(trimmedEmail)) {
 				result.warnings.push(
 					"Consider using a personal email address for your patient account.",
 				);
@@ -204,7 +206,7 @@ export class EmailValidationService {
 	 * Validate email for practice signup (different rules)
 	 */
 	static validatePracticeEmail(email: string): EmailValidationResult {
-		const result = this.validateEmail(email);
+		const result = EmailValidationService.validateEmail(email);
 
 		// Additional practice-specific validations
 		if (result.isValid) {
@@ -212,7 +214,7 @@ export class EmailValidationService {
 			const domain = trimmedEmail.split("@")[1];
 
 			// Practices should ideally use business domains
-			if (this.TRUSTED_DOMAINS.includes(domain)) {
+			if (EmailValidationService.TRUSTED_DOMAINS.includes(domain)) {
 				result.warnings.push(
 					"Consider using your practice's business email domain for professional communication.",
 				);

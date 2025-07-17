@@ -4,8 +4,9 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
+	const { id } = await params;
 	try {
 		const user = await getCurrentUser();
 
@@ -31,7 +32,7 @@ export async function PUT(
 		// Find the appointment
 		const appointment = await db.appointment.findFirst({
 			where: {
-				id: params.id,
+				id: id,
 				patientId: patient.id,
 			},
 		});
@@ -58,7 +59,7 @@ export async function PUT(
 		if (action === "cancel") {
 			// Cancel the appointment
 			const updatedAppointment = await db.appointment.update({
-				where: { id: params.id },
+				where: { id: id },
 				data: {
 					status: "CANCELED",
 				},
@@ -96,7 +97,7 @@ export async function PUT(
 			const conflictingAppointment = await db.appointment.findFirst({
 				where: {
 					practiceUserId: appointment.practiceUserId,
-					id: { not: params.id }, // Exclude current appointment
+					id: { not: id }, // Exclude current appointment
 					OR: [
 						{
 							AND: [
@@ -132,7 +133,7 @@ export async function PUT(
 
 			// Update the appointment
 			const updatedAppointment = await db.appointment.update({
-				where: { id: params.id },
+				where: { id: id },
 				data: {
 					start: newStartDateTime,
 					end: newEndDateTime,
@@ -159,8 +160,9 @@ export async function PUT(
 
 export async function DELETE(
 	request: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
+	const { id } = await params;
 	try {
 		const user = await getCurrentUser();
 
@@ -183,7 +185,7 @@ export async function DELETE(
 		// Find and cancel the appointment
 		const appointment = await db.appointment.findFirst({
 			where: {
-				id: params.id,
+				id: id,
 				patientId: patient.id,
 			},
 		});
@@ -209,7 +211,7 @@ export async function DELETE(
 
 		// Cancel the appointment
 		const updatedAppointment = await db.appointment.update({
-			where: { id: params.id },
+			where: { id: id },
 			data: {
 				status: "CANCELED",
 			},

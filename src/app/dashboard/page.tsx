@@ -15,10 +15,10 @@ export default function DashboardPage() {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="font-semibold text-2xl text-gray-900">{dashboard('title')}</h1>
-					<p className="text-gray-600">
-						{dashboard('subtitle')}
-					</p>
+					<h1 className="font-semibold text-2xl text-gray-900">
+						{dashboard("title")}
+					</h1>
+					<p className="text-gray-600">{dashboard("subtitle")}</p>
 				</div>
 				<div className="flex space-x-3">
 					<Link
@@ -26,7 +26,7 @@ export default function DashboardPage() {
 						className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 					>
 						<Plus className="mr-2 h-4 w-4" />
-						{common('add')} Patient
+						{common("add")} Patient
 					</Link>
 					<Link
 						href="/dashboard/appointments/new"
