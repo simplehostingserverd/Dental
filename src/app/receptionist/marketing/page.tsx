@@ -35,6 +35,10 @@ import {
 	Youtube,
 } from "lucide-react";
 import { useToast } from "@/components/ui/toast";
+import ContentLibrary from "@/components/marketing/ContentLibrary";
+import ContentCalendar from "@/components/marketing/ContentCalendar";
+import CalendarAnalytics from "@/components/marketing/CalendarAnalytics";
+import CalendarDashboard from "@/components/marketing/CalendarDashboard";
 
 // TypeScript interfaces
 interface SocialPost {
@@ -238,11 +242,11 @@ export default function MarketingPage() {
 		}
 	};
 
-	const handleUseTemplate = (template: PostTemplate) => {
+	const handleUseTemplate = (template: PostTemplate | { content: string; hashtags: string[] }) => {
 		setPostForm(prev => ({
 			...prev,
 			content: template.content,
-			hashtags: template.hashtags.join(" "),
+			hashtags: Array.isArray(template.hashtags) ? template.hashtags.join(" ") : template.hashtags,
 		}));
 		setShowCreatePostDialog(true);
 	};
@@ -339,6 +343,7 @@ export default function MarketingPage() {
 				<TabsList>
 					<TabsTrigger value="posts">Recent Posts</TabsTrigger>
 					<TabsTrigger value="templates">Post Templates</TabsTrigger>
+					<TabsTrigger value="library">Content Library</TabsTrigger>
 					<TabsTrigger value="analytics">Analytics</TabsTrigger>
 					<TabsTrigger value="calendar">Content Calendar</TabsTrigger>
 				</TabsList>
@@ -455,6 +460,18 @@ export default function MarketingPage() {
 					</Card>
 				</TabsContent>
 
+				{/* Content Library Tab */}
+				<TabsContent value="library">
+					<Card>
+						<CardHeader>
+							<CardTitle>Content Library</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<ContentLibrary onUseTemplate={handleUseTemplate} />
+						</CardContent>
+					</Card>
+				</TabsContent>
+
 				{/* Analytics Tab */}
 				<TabsContent value="analytics">
 					<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -510,22 +527,42 @@ export default function MarketingPage() {
 
 				{/* Content Calendar Tab */}
 				<TabsContent value="calendar">
-					<Card>
-						<CardHeader>
-							<CardTitle>Content Calendar</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="text-center py-12">
-								<Calendar className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-								<h3 className="text-lg font-medium text-gray-900 mb-2">
-									Content Calendar Coming Soon
-								</h3>
-								<p className="text-gray-600">
-									Plan and schedule your social media content with our visual calendar interface.
-								</p>
-							</div>
-						</CardContent>
-					</Card>
+					<div className="space-y-6">
+						<CalendarDashboard
+							onSchedulePost={() => setShowCreatePostDialog(true)}
+							onViewCalendar={() => {
+								// Scroll to calendar section or switch to calendar view
+								console.log("Viewing calendar");
+							}}
+						/>
+						<ContentCalendar
+							onCreatePost={(post) => {
+								console.log("Creating scheduled post:", post);
+								showToast({
+									type: "success",
+									title: "Post Scheduled",
+									message: `Post scheduled for ${new Date(post.scheduledFor).toLocaleString()}`,
+								});
+							}}
+							onEditPost={(post) => {
+								console.log("Editing post:", post);
+								showToast({
+									type: "info",
+									title: "Edit Post",
+									message: "Post editing functionality coming soon!",
+								});
+							}}
+							onDeletePost={(postId) => {
+								console.log("Deleting post:", postId);
+								showToast({
+									type: "success",
+									title: "Post Deleted",
+									message: "Scheduled post has been deleted.",
+								});
+							}}
+						/>
+						<CalendarAnalytics />
+					</div>
 				</TabsContent>
 			</Tabs>
 
