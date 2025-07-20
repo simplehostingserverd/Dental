@@ -1,19 +1,17 @@
 "use client";
 
-// Temporarily disable Stack Auth to debug the error
-// import { SignIn } from "@stackframe/stack";
-import { Calendar, FileText, Heart, Shield } from "lucide-react";
+import { Calendar, FileText, Heart, Shield, Users, Phone } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function SignInPage() {
+export default function EmployeeSignInPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		// Temporary fallback - just redirect to dashboard
-		window.location.href = "/dashboard";
+		// Redirect to employee dashboard
+		window.location.href = "/dashboard/employee";
 	};
 
 	return (
@@ -27,13 +25,13 @@ export default function SignInPage() {
 							<span className="font-bold text-3xl text-white">Cognident</span>
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-white">
-							Welcome back
+							Employee Portal
 						</h2>
 						<p className="text-gray-400">
-							Sign in to your dental practice account.
+							Access your work dashboard and patient management tools.
 						</p>
 					</div>
-
+					
 					<div className="rounded-lg bg-gray-800 p-6 shadow-xl">
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<div>
@@ -68,42 +66,55 @@ export default function SignInPage() {
 								type="submit"
 								className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
 							>
-								Sign In
+								Sign In to Employee Portal
 							</button>
 						</form>
 					</div>
 					
 					<div className="mt-6 text-center">
 						<p className="text-gray-400 text-sm">
-							Don't have an account?{" "}
+							Need access?{" "}
 							<Link
-								href="/auth/signup"
+								href="/contact"
 								className="font-medium text-blue-400 hover:text-blue-300"
 							>
-								Sign up here
+								Contact Administrator
 							</Link>
 						</p>
+						<div className="mt-4 space-y-2">
+							<Link
+								href="/auth/dentist/signin"
+								className="block text-gray-400 hover:text-white text-sm transition-colors"
+							>
+								Dentist Portal →
+							</Link>
+							<Link
+								href="/auth/patient/signin"
+								className="block text-gray-400 hover:text-white text-sm transition-colors"
+							>
+								Patient Portal →
+							</Link>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			{/* Right Panel - Dental Office Background */}
+			{/* Right Panel - Office Background */}
 			<div className="hidden lg:flex lg:w-1/2 relative">
 				<div 
 					className="absolute inset-0 bg-cover bg-center bg-no-repeat"
 					style={{
-						backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80')`
+						backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2068&q=80')`
 					}}
 				/>
 				<div className="relative z-10 flex flex-col justify-center p-12 text-white">
 					<div className="max-w-md">
 						<h1 className="mb-4 font-bold text-4xl">
-							Next-Gen Dental Practice Management
+							Employee Dashboard
 						</h1>
 
 						<p className="mb-8 text-xl text-gray-200">
-							HIPAA-compliant cloud platform with AI-powered insights, smart
-							scheduling, and seamless patient care.
+							Manage appointments, patient communications, and daily operations efficiently.
 						</p>
 
 						<div className="space-y-6">
@@ -112,33 +123,33 @@ export default function SignInPage() {
 									<Calendar className="h-5 w-5 text-blue-300" />
 								</div>
 								<div>
-									<h3 className="mb-1 font-semibold text-lg">Smart Scheduling</h3>
+									<h3 className="mb-1 font-semibold text-lg">Appointment Management</h3>
 									<p className="text-gray-300">
-										AI-powered appointment optimization and automated reminders
+										Schedule, modify, and track patient appointments
 									</p>
 								</div>
 							</div>
 
 							<div className="flex items-start">
 								<div className="mr-4 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-600/20 backdrop-blur-sm">
-									<FileText className="h-5 w-5 text-blue-300" />
+									<Users className="h-5 w-5 text-blue-300" />
 								</div>
 								<div>
-									<h3 className="mb-1 font-semibold text-lg">Digital Charting</h3>
+									<h3 className="mb-1 font-semibold text-lg">Patient Communication</h3>
 									<p className="text-gray-300">
-										Interactive odontogram with real-time collaboration
+										Handle patient inquiries and appointment confirmations
 									</p>
 								</div>
 							</div>
 
 							<div className="flex items-start">
 								<div className="mr-4 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-600/20 backdrop-blur-sm">
-									<Shield className="h-5 w-5 text-blue-300" />
+									<Phone className="h-5 w-5 text-blue-300" />
 								</div>
 								<div>
-									<h3 className="mb-1 font-semibold text-lg">HIPAA Compliant</h3>
+									<h3 className="mb-1 font-semibold text-lg">Front Desk Operations</h3>
 									<p className="text-gray-300">
-										Enterprise-grade security and data protection
+										Check-in patients and manage daily workflow
 									</p>
 								</div>
 							</div>

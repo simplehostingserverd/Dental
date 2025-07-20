@@ -1,12 +1,10 @@
 "use client";
 
-// Temporarily disable Stack Auth to debug the error
-// import { SignIn } from "@stackframe/stack";
 import { Calendar, FileText, Heart, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function SignInPage() {
+export default function SignInPageFallback() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -24,7 +22,7 @@ export default function SignInPage() {
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
 							<Heart className="mr-3 h-10 w-10 text-blue-400" />
-							<span className="font-bold text-3xl text-white">Cognident</span>
+							<span className="font-bold text-3xl text-white">DentalCloud</span>
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-white">
 							Welcome back
@@ -33,7 +31,7 @@ export default function SignInPage() {
 							Sign in to your dental practice account.
 						</p>
 					</div>
-
+					
 					<div className="rounded-lg bg-gray-800 p-6 shadow-xl">
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<div>

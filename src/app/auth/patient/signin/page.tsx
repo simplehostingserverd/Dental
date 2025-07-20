@@ -1,19 +1,17 @@
 "use client";
 
-// Temporarily disable Stack Auth to debug the error
-// import { SignIn } from "@stackframe/stack";
-import { Calendar, FileText, Heart, Shield } from "lucide-react";
+import { Calendar, FileText, Heart, Shield, Clock, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function SignInPage() {
+export default function PatientSignInPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		// Temporary fallback - just redirect to dashboard
-		window.location.href = "/dashboard";
+		// Redirect to patient dashboard
+		window.location.href = "/dashboard/patient";
 	};
 
 	return (
@@ -27,13 +25,13 @@ export default function SignInPage() {
 							<span className="font-bold text-3xl text-white">Cognident</span>
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-white">
-							Welcome back
+							Patient Portal
 						</h2>
 						<p className="text-gray-400">
-							Sign in to your dental practice account.
+							Access your dental records and appointments.
 						</p>
 					</div>
-
+					
 					<div className="rounded-lg bg-gray-800 p-6 shadow-xl">
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<div>
@@ -68,7 +66,7 @@ export default function SignInPage() {
 								type="submit"
 								className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
 							>
-								Sign In
+								Sign In to Patient Portal
 							</button>
 						</form>
 					</div>
@@ -77,33 +75,46 @@ export default function SignInPage() {
 						<p className="text-gray-400 text-sm">
 							Don't have an account?{" "}
 							<Link
-								href="/auth/signup"
+								href="/auth/patient/signup"
 								className="font-medium text-blue-400 hover:text-blue-300"
 							>
-								Sign up here
+								Register here
 							</Link>
 						</p>
+						<div className="mt-4 space-y-2">
+							<Link
+								href="/auth/dentist/signin"
+								className="block text-gray-400 hover:text-white text-sm transition-colors"
+							>
+								Dentist Portal →
+							</Link>
+							<Link
+								href="/auth/employee/signin"
+								className="block text-gray-400 hover:text-white text-sm transition-colors"
+							>
+								Employee Portal →
+							</Link>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			{/* Right Panel - Dental Office Background */}
+			{/* Right Panel - Patient Care Background */}
 			<div className="hidden lg:flex lg:w-1/2 relative">
 				<div 
 					className="absolute inset-0 bg-cover bg-center bg-no-repeat"
 					style={{
-						backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80')`
+						backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2068&q=80')`
 					}}
 				/>
 				<div className="relative z-10 flex flex-col justify-center p-12 text-white">
 					<div className="max-w-md">
 						<h1 className="mb-4 font-bold text-4xl">
-							Next-Gen Dental Practice Management
+							Your Health, Our Priority
 						</h1>
 
 						<p className="mb-8 text-xl text-gray-200">
-							HIPAA-compliant cloud platform with AI-powered insights, smart
-							scheduling, and seamless patient care.
+							Access your dental records, schedule appointments, and manage your oral health journey.
 						</p>
 
 						<div className="space-y-6">
@@ -112,9 +123,9 @@ export default function SignInPage() {
 									<Calendar className="h-5 w-5 text-blue-300" />
 								</div>
 								<div>
-									<h3 className="mb-1 font-semibold text-lg">Smart Scheduling</h3>
+									<h3 className="mb-1 font-semibold text-lg">Easy Scheduling</h3>
 									<p className="text-gray-300">
-										AI-powered appointment optimization and automated reminders
+										Book, reschedule, or cancel appointments online 24/7
 									</p>
 								</div>
 							</div>
@@ -124,21 +135,21 @@ export default function SignInPage() {
 									<FileText className="h-5 w-5 text-blue-300" />
 								</div>
 								<div>
-									<h3 className="mb-1 font-semibold text-lg">Digital Charting</h3>
+									<h3 className="mb-1 font-semibold text-lg">Medical Records</h3>
 									<p className="text-gray-300">
-										Interactive odontogram with real-time collaboration
+										View your treatment history and upcoming procedures
 									</p>
 								</div>
 							</div>
 
 							<div className="flex items-start">
 								<div className="mr-4 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-600/20 backdrop-blur-sm">
-									<Shield className="h-5 w-5 text-blue-300" />
+									<CreditCard className="h-5 w-5 text-blue-300" />
 								</div>
 								<div>
-									<h3 className="mb-1 font-semibold text-lg">HIPAA Compliant</h3>
+									<h3 className="mb-1 font-semibold text-lg">Billing & Insurance</h3>
 									<p className="text-gray-300">
-										Enterprise-grade security and data protection
+										Manage payments and insurance claims seamlessly
 									</p>
 								</div>
 							</div>

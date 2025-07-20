@@ -31,6 +31,12 @@ const envSchema = z.object({
 	AUTH_DISCORD_ID: z.string().optional(),
 	AUTH_DISCORD_SECRET: z.string().optional(),
 
+	// Stack Auth
+	NEXT_PUBLIC_STACK_PROJECT_ID: z.string(),
+	NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: z.string(),
+	STACK_SECRET_SERVER_KEY: z.string(),
+	NEXT_PUBLIC_STACK_URL: z.string().url().optional(),
+
 	// API keys (optional)
 	OPTIMIZE_API_KEY: z.string().optional(),
 

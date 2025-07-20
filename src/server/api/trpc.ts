@@ -11,8 +11,9 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { auth } from "@/server/auth";
+import { stackServerApp } from "@/stack";
 import { db } from "@/server/db";
+import { setRLSContext } from "@/server/db/rls-context";
 
 /**
  * 1. CONTEXT
@@ -26,12 +27,21 @@ import { db } from "@/server/db";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { headers: Headers }) => {
-	const session = await auth();
+export const createTRPCContext = async (opts: { headers: Headers; request?: Request }) => {
+	// Get Stack Auth user from request
+	let user = null;
+	try {
+		if (opts.request) {
+			user = await stackServerApp.getUser();
+		}
+	} catch (error) {
+		// User not authenticated, which is fine for public procedures
+		console.log("No authenticated user found");
+	}
 
 	return {
 		db,
-		session,
+		user,
 		...opts,
 	};
 };
@@ -87,16 +97,19 @@ export const createTRPCRouter = t.router;
 const timingMiddleware = t.middleware(async ({ next, path }) => {
 	const start = Date.now();
 
-	if (t._config.isDev) {
-		// artificial delay in dev
+	// Remove artificial delay for production
+	if (t._config.isDev && process.env.NODE_ENV === "development") {
 		const waitMs = Math.floor(Math.random() * 400) + 100;
 		await new Promise((resolve) => setTimeout(resolve, waitMs));
 	}
 
 	const result = await next();
-
 	const end = Date.now();
-	console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
+	
+	// Only log in development
+	if (process.env.NODE_ENV === "development") {
+		console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
+	}
 
 	return result;
 });
@@ -114,20 +127,42 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
  * Protected (authenticated) procedure
  *
  * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
- * the session is valid and guarantees `ctx.session.user` is not null.
+ * the user is authenticated and guarantees `ctx.user` is not null.
  *
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure
 	.use(timingMiddleware)
-	.use(({ ctx, next }) => {
-		if (!ctx.session?.user) {
+	.use(async ({ ctx, next }) => {
+		if (!ctx.user) {
 			throw new TRPCError({ code: "UNAUTHORIZED" });
 		}
+
+		// For now, we'll need to get practice info from the database
+		// In a full implementation, you'd store this in Stack Auth user metadata
+		let practiceUser = null;
+		try {
+			practiceUser = await ctx.db.practiceUser.findUnique({
+				where: { email: ctx.user.primaryEmail || "" },
+				include: { practice: true }
+			});
+		} catch (error) {
+			console.log("Could not find practice user:", error);
+		}
+
+		// Set RLS context if we have practice info
+		if (practiceUser) {
+			await setRLSContext({
+				userId: practiceUser.id,
+				practiceId: practiceUser.practiceId,
+				role: practiceUser.role,
+			});
+		}
+
 		return next({
 			ctx: {
-				// infers the `session` as non-nullable
-				session: { ...ctx.session, user: ctx.session.user },
+				user: ctx.user,
+				practiceUser,
 			},
 		});
 	});

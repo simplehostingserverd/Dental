@@ -1,7 +1,9 @@
 import "@/styles/globals.css";
 
+// Temporarily disable Stack Auth to debug the error
+// import { StackProvider, StackTheme } from "@stackframe/stack";
+// import { stackClientApp } from "@/lib/stack-client";
 import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
 import { Geist } from "next/font/google";
 
 import { TranslationProvider } from "@/lib/i18n/translation-context";
@@ -24,11 +26,14 @@ export default function RootLayout({
 	return (
 		<html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
 			<body>
-				<TranslationProvider>
-					<SessionProvider>
-						<TRPCReactProvider>{children}</TRPCReactProvider>
-					</SessionProvider>
-				</TranslationProvider>
+				{/* Temporarily disable Stack Auth to debug the error */}
+				{/* <StackProvider app={stackClientApp}>
+					<StackTheme> */}
+						<TranslationProvider>
+							<TRPCReactProvider>{children}</TRPCReactProvider>
+						</TranslationProvider>
+					{/* </StackTheme>
+				</StackProvider> */}
 			</body>
 		</html>
 	);

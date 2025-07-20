@@ -49,6 +49,7 @@ model Practice {
 
 model PracticeUser {
   id                String    @id @default(cuid())
+  stackUserId       String?   @unique // Stack Auth user ID
   email             String    @unique
   password          String?
   firstName         String
@@ -91,6 +92,7 @@ model PracticeUser {
 
 model PatientUser {
   id                String    @id @default(cuid())
+  stackUserId       String?   @unique // Stack Auth user ID
   email             String    @unique
   password          String
   isActive          Boolean   @default(true)

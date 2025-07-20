@@ -4,8 +4,16 @@ import { env } from "@/env";
 
 const createPrismaClient = () =>
 	new PrismaClient({
-		log:
-			env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+		log: env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+		datasources: {
+			db: {
+				url: env.DATABASE_URL,
+			},
+		},
+		// Add connection pooling for production
+		...(env.NODE_ENV === "production" && {
+			datasourceUrl: env.DATABASE_URL,
+		}),
 	});
 
 const globalForPrisma = globalThis as unknown as {
