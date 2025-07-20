@@ -28,110 +28,142 @@ interface RealtimeState {
   method: 'polling' | 'sse' | 'none';
 }
 
-export function useWebSocket(options: UseWebSocketOptions = {}) {
+export function useRealtime(options: UseRealtimeOptions = {}) {
   const { data: session } = useSession();
-  const socketRef = useRef<Socket | null>(null);
-  const [state, setState] = useState<WebSocketState>({
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
+  const [state, setState] = useState<RealtimeState>({
     connected: false,
     connecting: false,
     error: null,
-    lastPing: null,
+    lastUpdate: null,
+    method: 'none',
   });
 
-  const connect = useCallback(() => {
-    if (!session?.user || socketRef.current?.connected) return;
+  const pollingInterval = options.pollingInterval || 5000; // 5 seconds default
 
-    setState(prev => ({ ...prev, connecting: true, error: null }));
+  // Polling-based real-time updates
+  const startPolling = useCallback(async () => {
+    if (!session?.user) return;
 
-    const socket = io({
-      path: '/api/socket',
-      autoConnect: false,
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      timeout: 20000,
-    });
+    setState(prev => ({ ...prev, connecting: true, error: null, method: 'polling' }));
 
-    // Connection events
-    socket.on('connect', () => {
-      console.log('WebSocket connected');
-      setState(prev => ({ 
-        ...prev, 
-        connected: true, 
-        connecting: false, 
-        error: null 
+    const poll = async () => {
+      try {
+        const params = new URLSearchParams({
+          types: 'appointments,patients,tasks',
+          ...(state.lastUpdate && { lastUpdate: state.lastUpdate.toISOString() })
+        });
+
+        const response = await fetch(`/api/socket/poll?${params}`);
+        if (!response.ok) throw new Error('Polling failed');
+
+        const data = await response.json();
+
+        // Process updates
+        data.updates.forEach((update: any) => {
+          switch (update.type) {
+            case 'appointment':
+              options.onAppointmentUpdate?.(update.data);
+              break;
+            case 'patient':
+              options.onPatientUpdate?.(update.data);
+              break;
+            case 'task':
+              options.onTaskUpdate?.(update.data);
+              break;
+          }
+        });
+
+        setState(prev => ({
+          ...prev,
+          connected: true,
+          connecting: false,
+          error: null,
+          lastUpdate: new Date()
+        }));
+
+        if (!state.connected) {
+          options.onConnect?.();
+        }
+
+      } catch (error) {
+        console.error('Polling error:', error);
+        setState(prev => ({
+          ...prev,
+          connected: false,
+          connecting: false,
+          error: error instanceof Error ? error.message : 'Polling failed'
+        }));
+        options.onError?.(error);
+      }
+    };
+
+    // Initial poll
+    await poll();
+
+    // Set up interval
+    pollingRef.current = setInterval(poll, pollingInterval);
+  }, [session, options, pollingInterval, state.lastUpdate, state.connected]);
+
+  // Server-Sent Events fallback
+  const startSSE = useCallback(() => {
+    if (!session?.user) return;
+
+    setState(prev => ({ ...prev, connecting: true, error: null, method: 'sse' }));
+
+    const eventSource = new EventSource('/api/socket/events');
+
+    eventSource.onopen = () => {
+      console.log('SSE connected');
+      setState(prev => ({
+        ...prev,
+        connected: true,
+        connecting: false,
+        error: null
       }));
       options.onConnect?.();
-    });
+    };
 
-    socket.on('disconnect', (reason) => {
-      console.log('WebSocket disconnected:', reason);
-      setState(prev => ({ 
-        ...prev, 
-        connected: false, 
-        connecting: false 
-      }));
-      options.onDisconnect?.();
-    });
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
 
-    socket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
-      setState(prev => ({ 
-        ...prev, 
-        connected: false, 
-        connecting: false, 
-        error: error.message 
+        switch (data.type) {
+          case 'connection':
+          case 'heartbeat':
+            setState(prev => ({ ...prev, lastUpdate: new Date() }));
+            break;
+          case 'appointment':
+            options.onAppointmentUpdate?.(data);
+            break;
+          case 'patient':
+            options.onPatientUpdate?.(data);
+            break;
+          case 'task':
+            options.onTaskUpdate?.(data);
+            break;
+          case 'notification':
+            options.onNotification?.(data);
+            break;
+        }
+      } catch (error) {
+        console.error('SSE message parse error:', error);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('SSE error:', error);
+      setState(prev => ({
+        ...prev,
+        connected: false,
+        connecting: false,
+        error: 'SSE connection failed'
       }));
       options.onError?.(error);
-    });
+    };
 
-    // Authentication events
-    socket.on('connected', (data) => {
-      console.log('WebSocket authenticated:', data);
-    });
-
-    socket.on('auth_error', (error) => {
-      console.error('WebSocket auth error:', error);
-      setState(prev => ({ 
-        ...prev, 
-        error: error.message 
-      }));
-    });
-
-    // Data update events
-    socket.on('appointment:updated', (data: AppointmentUpdate) => {
-      console.log('Appointment updated:', data);
-      options.onAppointmentUpdate?.(data);
-    });
-
-    socket.on('patient:updated', (data: PatientUpdate) => {
-      console.log('Patient updated:', data);
-      options.onPatientUpdate?.(data);
-    });
-
-    socket.on('task:updated', (data: TaskUpdate) => {
-      console.log('Task updated:', data);
-      options.onTaskUpdate?.(data);
-    });
-
-    socket.on('notification:received', (data: NotificationUpdate) => {
-      console.log('Notification received:', data);
-      options.onNotification?.(data);
-    });
-
-    // Doctor-specific events
-    socket.on('doctor:appointment_update', (data: AppointmentUpdate) => {
-      console.log('Doctor appointment update:', data);
-      options.onAppointmentUpdate?.(data);
-    });
-
-    // Ping/pong for connection health
-    socket.on('pong', () => {
-      setState(prev => ({ ...prev, lastPing: new Date() }));
-    });
-
-    socketRef.current = socket;
-    socket.connect();
+    eventSourceRef.current = eventSource;
   }, [session, options]);
 
   const disconnect = useCallback(() => {
