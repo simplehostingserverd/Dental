@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Server as HTTPServer } from 'http';
-import { webSocketManager } from '@/lib/websocket/server';
-
-// This will be used to initialize the WebSocket server
-let httpServer: HTTPServer | null = null;
 
 export async function GET(request: NextRequest) {
   try {
-    // In a real Next.js app, you'd typically initialize the WebSocket server
-    // in a custom server.js file or in the middleware
-    // For now, we'll return connection info
-    
+    // WebSocket connection info endpoint
+    // In production, you would typically use a separate WebSocket server
+    // or integrate with services like Pusher, Ably, or Socket.IO with a custom server
+
     return NextResponse.json({
-      message: 'WebSocket server endpoint',
+      message: 'WebSocket endpoint - Use polling or external WebSocket service',
       path: '/api/socket',
-      status: 'ready'
+      status: 'available',
+      alternatives: {
+        polling: '/api/socket/poll',
+        sse: '/api/socket/events'
+      },
+      note: 'For real-time features, consider using Server-Sent Events or polling'
     });
   } catch (error) {
     console.error('WebSocket endpoint error:', error);
@@ -25,11 +25,44 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Initialize WebSocket server (this would typically be done in server.js)
-export function initializeWebSocket(server: HTTPServer) {
-  if (!httpServer) {
-    httpServer = server;
-    webSocketManager.initialize(server);
-    console.log('WebSocket server initialized on /api/socket');
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { event, data } = body;
+
+    // Handle WebSocket-like events via HTTP POST
+    // This is a fallback for real-time functionality
+
+    switch (event) {
+      case 'appointment:update':
+        // Handle appointment updates
+        console.log('Appointment update received:', data);
+        break;
+      case 'patient:update':
+        // Handle patient updates
+        console.log('Patient update received:', data);
+        break;
+      case 'task:update':
+        // Handle task updates
+        console.log('Task update received:', data);
+        break;
+      default:
+        return NextResponse.json(
+          { error: 'Unknown event type' },
+          { status: 400 }
+        );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Event ${event} processed`,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('WebSocket POST error:', error);
+    return NextResponse.json(
+      { error: 'Failed to process event' },
+      { status: 500 }
+    );
   }
 }

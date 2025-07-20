@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { io, Socket } from 'socket.io-client';
 import { useSession } from 'next-auth/react';
-import type { 
-  AppointmentUpdate, 
-  PatientUpdate, 
-  TaskUpdate, 
-  NotificationUpdate 
+import type {
+  AppointmentUpdate,
+  PatientUpdate,
+  TaskUpdate,
+  NotificationUpdate
 } from './server';
 
-interface UseWebSocketOptions {
+interface UseRealtimeOptions {
   onAppointmentUpdate?: (data: AppointmentUpdate) => void;
   onPatientUpdate?: (data: PatientUpdate) => void;
   onTaskUpdate?: (data: TaskUpdate) => void;
@@ -18,13 +17,15 @@ interface UseWebSocketOptions {
   onConnect?: () => void;
   onDisconnect?: () => void;
   onError?: (error: any) => void;
+  pollingInterval?: number; // milliseconds
 }
 
-interface WebSocketState {
+interface RealtimeState {
   connected: boolean;
   connecting: boolean;
   error: string | null;
-  lastPing: Date | null;
+  lastUpdate: Date | null;
+  method: 'polling' | 'sse' | 'none';
 }
 
 export function useWebSocket(options: UseWebSocketOptions = {}) {
