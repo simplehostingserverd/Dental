@@ -15,6 +15,9 @@ console.log("[EMOJI][EMOJI] Starting Next.js build debugging...\n");
 const logFile = "verbose-build-log.txt";
 const logStream = fs.createWriteStream(logFile, { flags: "w" });
 
+/**
+ * @param {string} message
+ */
 function log(message) {
 	const timestamp = new Date().toISOString();
 	const logMessage = `[${timestamp}] ${message}\n`;
@@ -101,9 +104,17 @@ buildProcess.on("error", (error) => {
 });
 
 // Function to check individual files
+/**
+ * Check individual files for compilation issues
+ */
 function checkIndividualFiles() {
 	const srcDir = path.join(process.cwd(), "src");
 
+	/**
+	 * @param {string} dir
+	 * @param {string[]} fileList
+	 * @returns {string[]}
+	 */
 	function getAllFiles(dir, fileList = []) {
 		const files = fs.readdirSync(dir);
 
@@ -181,12 +192,12 @@ function checkIndividualFiles() {
 				}
 			} catch (error) {
 				log(
-					`[EMOJI] Could not read file: ${path.relative(process.cwd(), file)} - ${error.message}`,
+					`[EMOJI] Could not read file: ${path.relative(process.cwd(), file)} - ${error instanceof Error ? error.message : String(error)}`,
 				);
 			}
 		}
 	} catch (error) {
-		log(`Error scanning files: ${error.message}`);
+		log(`Error scanning files: ${error instanceof Error ? error.message : String(error)}`);
 	}
 
 	log("\n=== TEST 3: CONFIGURATION CHECK ===");
@@ -194,6 +205,9 @@ function checkIndividualFiles() {
 }
 
 // Function to check configuration files
+/**
+ * Check configuration files
+ */
 function checkConfiguration() {
 	const configFiles = [
 		"next.config.js",

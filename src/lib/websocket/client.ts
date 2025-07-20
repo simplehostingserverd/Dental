@@ -167,20 +167,70 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
   }, [session, options]);
 
   const disconnect = useCallback(() => {
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-      socketRef.current = null;
-      setState(prev => ({ 
-        ...prev, 
-        connected: false, 
-        connecting: false 
-      }));
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
     }
-  }, []);
+
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+
+    setState(prev => ({
+      ...prev,
+      connected: false,
+      connecting: false,
+      method: 'none'
+    }));
+
+    options.onDisconnect?.();
+  }, [options]);
+
+  // Connect using preferred method (try SSE first, fallback to polling)
+  const connect = useCallback(async () => {
+    if (!session?.user || state.connected) return;
+
+    // Try SSE first
+    try {
+      startSSE();
+      // If SSE fails, it will trigger onerror and we can fallback to polling
+      setTimeout(() => {
+        if (!state.connected && state.method === 'sse') {
+          console.log('SSE failed, falling back to polling');
+          disconnect();
+          startPolling();
+        }
+      }, 3000);
+    } catch (error) {
+      console.log('SSE not available, using polling');
+      startPolling();
+    }
+  }, [session, state.connected, state.method, startSSE, startPolling, disconnect]);
+
+  // Emit updates via HTTP POST (since we don't have WebSocket)
+  const emitUpdate = useCallback(async (event: string, data: any) => {
+    if (!session?.user) return;
+
+    try {
+      const response = await fetch('/api/socket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event, data })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to emit update');
+      }
+    } catch (error) {
+      console.error('Failed to emit update:', error);
+      options.onError?.(error);
+    }
+  }, [session, options]);
 
   // Emit appointment update
   const emitAppointmentUpdate = useCallback((data: Omit<AppointmentUpdate, 'timestamp' | 'updatedBy' | 'practiceId'>) => {
-    if (!socketRef.current?.connected || !session?.user) return;
+    if (!session?.user) return;
 
     const updateData: AppointmentUpdate = {
       ...data,
@@ -193,12 +243,12 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
       practiceId: session.user.practiceId,
     };
 
-    socketRef.current.emit('appointment:update', updateData);
-  }, [session]);
+    emitUpdate('appointment:update', updateData);
+  }, [session, emitUpdate]);
 
   // Emit patient update
   const emitPatientUpdate = useCallback((data: Omit<PatientUpdate, 'timestamp' | 'updatedBy' | 'practiceId'>) => {
-    if (!socketRef.current?.connected || !session?.user) return;
+    if (!session?.user) return;
 
     const updateData: PatientUpdate = {
       ...data,
@@ -211,12 +261,12 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
       practiceId: session.user.practiceId,
     };
 
-    socketRef.current.emit('patient:update', updateData);
-  }, [session]);
+    emitUpdate('patient:update', updateData);
+  }, [session, emitUpdate]);
 
   // Emit task update
   const emitTaskUpdate = useCallback((data: Omit<TaskUpdate, 'timestamp' | 'updatedBy' | 'practiceId'>) => {
-    if (!socketRef.current?.connected || !session?.user) return;
+    if (!session?.user) return;
 
     const updateData: TaskUpdate = {
       ...data,
@@ -229,12 +279,12 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
       practiceId: session.user.practiceId,
     };
 
-    socketRef.current.emit('task:update', updateData);
-  }, [session]);
+    emitUpdate('task:update', updateData);
+  }, [session, emitUpdate]);
 
   // Send notification
   const sendNotification = useCallback((data: Omit<NotificationUpdate, 'timestamp' | 'practiceId'>) => {
-    if (!socketRef.current?.connected || !session?.user) return;
+    if (!session?.user) return;
 
     const notificationData: NotificationUpdate = {
       ...data,
@@ -242,15 +292,8 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
       practiceId: session.user.practiceId,
     };
 
-    socketRef.current.emit('notification:send', notificationData);
-  }, [session]);
-
-  // Ping server to check connection
-  const ping = useCallback(() => {
-    if (socketRef.current?.connected) {
-      socketRef.current.emit('ping');
-    }
-  }, []);
+    emitUpdate('notification:send', notificationData);
+  }, [session, emitUpdate]);
 
   // Auto-connect when session is available
   useEffect(() => {
@@ -263,14 +306,6 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
     };
   }, [session, connect, disconnect]);
 
-  // Ping server every 30 seconds to maintain connection
-  useEffect(() => {
-    if (!state.connected) return;
-
-    const interval = setInterval(ping, 30000);
-    return () => clearInterval(interval);
-  }, [state.connected, ping]);
-
   return {
     ...state,
     connect,
@@ -279,56 +314,73 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
     emitPatientUpdate,
     emitTaskUpdate,
     sendNotification,
-    ping,
   };
 }
 
-// Context for WebSocket connection
-import { createContext, useContext, ReactNode } from 'react';
+// Context for Realtime connection
+import React, { createContext, useContext, ReactNode } from 'react';
 
-interface WebSocketContextType {
+interface RealtimeContextType {
   connected: boolean;
   connecting: boolean;
   error: string | null;
+  method: 'polling' | 'sse' | 'none';
   emitAppointmentUpdate: (data: Omit<AppointmentUpdate, 'timestamp' | 'updatedBy' | 'practiceId'>) => void;
   emitPatientUpdate: (data: Omit<PatientUpdate, 'timestamp' | 'updatedBy' | 'practiceId'>) => void;
   emitTaskUpdate: (data: Omit<TaskUpdate, 'timestamp' | 'updatedBy' | 'practiceId'>) => void;
   sendNotification: (data: Omit<NotificationUpdate, 'timestamp' | 'practiceId'>) => void;
 }
 
-const WebSocketContext = createContext<WebSocketContextType | null>(null);
+const RealtimeContext = createContext<RealtimeContextType | null>(null);
 
-export function WebSocketProvider({ 
-  children, 
+export function RealtimeProvider({
+  children,
   onAppointmentUpdate,
   onPatientUpdate,
   onTaskUpdate,
   onNotification,
-}: { 
+  pollingInterval,
+}: {
   children: ReactNode;
   onAppointmentUpdate?: (data: AppointmentUpdate) => void;
   onPatientUpdate?: (data: PatientUpdate) => void;
   onTaskUpdate?: (data: TaskUpdate) => void;
   onNotification?: (data: NotificationUpdate) => void;
+  pollingInterval?: number;
 }) {
-  const webSocket = useWebSocket({
+  const realtime = useRealtime({
     onAppointmentUpdate,
     onPatientUpdate,
     onTaskUpdate,
     onNotification,
+    pollingInterval,
   });
 
   return (
-    <WebSocketContext.Provider value={webSocket}>
+    <RealtimeContext.Provider value={{
+      connected: realtime.connected,
+      connecting: realtime.connecting,
+      error: realtime.error,
+      method: realtime.method,
+      emitAppointmentUpdate: realtime.emitAppointmentUpdate,
+      emitPatientUpdate: realtime.emitPatientUpdate,
+      emitTaskUpdate: realtime.emitTaskUpdate,
+      sendNotification: realtime.sendNotification,
+    }}>
       {children}
-    </WebSocketContext.Provider>
+    </RealtimeContext.Provider>
   );
 }
 
-export function useWebSocketContext() {
-  const context = useContext(WebSocketContext);
+export function useRealtimeContext() {
+  const context = useContext(RealtimeContext);
   if (!context) {
-    throw new Error('useWebSocketContext must be used within a WebSocketProvider');
+    throw new Error('useRealtimeContext must be used within a RealtimeProvider');
   }
   return context;
 }
+
+// Legacy exports for backward compatibility
+export const useWebSocket = useRealtime;
+export const WebSocketProvider = RealtimeProvider;
+export const useWebSocketContext = useRealtimeContext;

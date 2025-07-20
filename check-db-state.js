@@ -52,12 +52,12 @@ async function checkDatabaseState() {
 				);
 			}
 
-			resolve();
+			resolve(undefined);
 		});
 
 		introspectProcess.on("error", (error) => {
 			console.log("❌ Failed to run introspection:", error.message);
-			resolve();
+			resolve(undefined);
 		});
 	});
 }
@@ -87,12 +87,12 @@ async function checkForDuplicates() {
 			console.log("3. Look for duplicate patientUserId values");
 			console.log("4. If found, clean them up before proceeding");
 
-			resolve();
+			resolve(undefined);
 		}, 3000);
 
 		queryProcess.on("error", (error) => {
 			console.log("⚠️  Could not start Prisma Studio:", error.message);
-			resolve();
+			resolve(undefined);
 		});
 	});
 }
