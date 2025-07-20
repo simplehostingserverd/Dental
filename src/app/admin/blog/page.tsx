@@ -39,6 +39,7 @@ const initialBlogPosts = [
 ];
 
 export default function BlogAdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [blogPosts, setBlogPosts] = useState(initialBlogPosts);
   const [showNewPostForm, setShowNewPostForm] = useState(false);
   const [newPost, setNewPost] = useState({
@@ -47,8 +48,27 @@ export default function BlogAdminPage() {
     content: '',
     author: '',
     category: 'Patient Care',
-    status: 'Draft'
+    status: 'Draft',
+    image: ''
   });
+
+  useEffect(() => {
+    // Check if admin is authenticated
+    const adminAuth = localStorage.getItem("adminAuthenticated");
+    if (adminAuth === "true") {
+      setIsAuthenticated(true);
+    } else {
+      window.location.href = "/admin/login";
+    }
+  }, []);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
 
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +85,8 @@ export default function BlogAdminPage() {
       content: '',
       author: '',
       category: 'Patient Care',
-      status: 'Draft'
+      status: 'Draft',
+      image: ''
     });
     setShowNewPostForm(false);
   };
@@ -77,9 +98,14 @@ export default function BlogAdminPage() {
   };
 
   const handleStatusChange = (id: number, newStatus: string) => {
-    setBlogPosts(blogPosts.map(post => 
+    setBlogPosts(blogPosts.map(post =>
       post.id === id ? { ...post, status: newStatus } : post
     ));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminAuthenticated");
+    window.location.href = "/admin/login";
   };
 
   return (
@@ -96,9 +122,15 @@ export default function BlogAdminPage() {
               <Link href="/blog" className="text-gray-300 hover:text-white transition-colors">
                 View Blog
               </Link>
-              <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors">
-                Dashboard
+              <Link href="/" className="text-gray-300 hover:text-white transition-colors">
+                Home
               </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>
@@ -207,6 +239,21 @@ export default function BlogAdminPage() {
                     <option value="Published">Published</option>
                   </select>
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Featured Image URL
+                </label>
+                <input
+                  type="url"
+                  value={newPost.image}
+                  onChange={(e) => setNewPost({...newPost, image: e.target.value})}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="https://example.com/image.jpg"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Use Unsplash or other image URLs. Recommended size: 800x400px
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
