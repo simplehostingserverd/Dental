@@ -188,7 +188,15 @@ export default function BookAppointmentPage() {
 								{appointmentTypes.map((type) => (
 									<div
 										key={type.id}
+										role="button"
+										tabIndex={0}
 										onClick={() => setSelectedType(type.id)}
+										onKeyDown={(e) => {
+											if (e.key === "Enter" || e.key === " ") {
+												e.preventDefault();
+												setSelectedType(type.id);
+											}
+										}}
 										className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${
 											selectedType === type.id
 												? "border-blue-600 bg-blue-50"

@@ -115,6 +115,7 @@ export function AppointmentActions({
 	return (
 		<div className="flex space-x-2">
 			<button
+				type="button"
 				onClick={() => setShowReschedule(true)}
 				disabled={isLoading}
 				className="rounded-md border border-blue-600 bg-white px-3 py-1 text-blue-600 text-sm hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
@@ -122,6 +123,7 @@ export function AppointmentActions({
 				Reschedule
 			</button>
 			<button
+				type="button"
 				onClick={handleCancel}
 				disabled={isLoading}
 				className="rounded-md border border-red-600 bg-white px-3 py-1 text-red-600 text-sm hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
@@ -138,6 +140,7 @@ export function AppointmentActions({
 								Reschedule Appointment
 							</h3>
 							<button
+								type="button"
 								onClick={() => setShowReschedule(false)}
 								className="text-gray-400 hover:text-gray-600"
 							>
@@ -147,10 +150,14 @@ export function AppointmentActions({
 
 						<div className="space-y-4">
 							<div>
-								<label className="mb-2 block font-medium text-gray-700 text-sm">
+								<label
+									htmlFor="reschedule-date"
+									className="mb-2 block font-medium text-gray-700 text-sm"
+								>
 									New Date
 								</label>
 								<input
+									id="reschedule-date"
 									type="date"
 									value={rescheduleDate}
 									onChange={(e) => setRescheduleDate(e.target.value)}
@@ -161,10 +168,14 @@ export function AppointmentActions({
 							</div>
 
 							<div>
-								<label className="mb-2 block font-medium text-gray-700 text-sm">
+								<label
+									htmlFor="reschedule-time"
+									className="mb-2 block font-medium text-gray-700 text-sm"
+								>
 									New Time
 								</label>
 								<select
+									id="reschedule-time"
 									value={rescheduleTime}
 									onChange={(e) => setRescheduleTime(e.target.value)}
 									className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -181,12 +192,14 @@ export function AppointmentActions({
 
 						<div className="mt-6 flex justify-end space-x-3">
 							<button
+								type="button"
 								onClick={() => setShowReschedule(false)}
 								className="rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm hover:bg-gray-50"
 							>
 								Cancel
 							</button>
 							<button
+								type="button"
 								onClick={handleReschedule}
 								disabled={isLoading || !rescheduleDate || !rescheduleTime}
 								className="rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"

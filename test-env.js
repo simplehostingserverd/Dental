@@ -202,7 +202,8 @@ function analyzeSyntaxErrors() {
 			}
 
 			// Check for invalid characters
-			if (/[^\x00-\x7F]/.test(line)) {
+			// biome-ignore lint/suspicious/noControlCharactersInRegex: Need to check for non-ASCII characters
+			if (/[^\u0000-\u007F]/.test(line)) {
 				console.log(`❌ Line ${lineNum}: Non-ASCII characters detected`);
 				console.log(`   ${trimmed}`);
 				issueFound = true;
@@ -221,14 +222,14 @@ function analyzeSyntaxErrors() {
 			else if (char === "}") brackets["{"]--;
 		}
 
-		Object.entries(brackets).forEach(([bracket, count]) => {
+		for (const [bracket, count] of Object.entries(brackets)) {
 			if (count !== 0) {
 				console.log(
 					`❌ Unmatched ${bracket} brackets: ${count} (${count > 0 ? "missing closing" : "extra closing"})`,
 				);
 				issueFound = true;
 			}
-		});
+		}
 
 		if (!issueFound) {
 			console.log("✅ No obvious syntax issues found in manual analysis");

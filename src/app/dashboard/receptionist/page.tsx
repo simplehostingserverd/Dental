@@ -542,6 +542,8 @@ export default function ReceptionistDashboard() {
 									filteredPatients.map((patient) => (
 										<div
 											key={patient.id}
+											role="button"
+											tabIndex={0}
 											className="cursor-pointer rounded-md border border-gray-200 p-4 hover:bg-gray-50"
 											onClick={() => {
 												setSelectedPatient(patient);
@@ -552,6 +554,19 @@ export default function ReceptionistDashboard() {
 												setShowPatientSearch(false);
 												setShowNewAppointment(true);
 												setPatientSearchTerm("");
+											}}
+											onKeyDown={(e) => {
+												if (e.key === "Enter" || e.key === " ") {
+													e.preventDefault();
+													setSelectedPatient(patient);
+													setAppointmentForm((prev) => ({
+														...prev,
+														patientId: patient.id,
+													}));
+													setShowPatientSearch(false);
+													setShowNewAppointment(true);
+													setPatientSearchTerm("");
+												}
 											}}
 										>
 											<div className="flex items-center justify-between">

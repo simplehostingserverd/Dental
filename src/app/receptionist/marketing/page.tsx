@@ -414,7 +414,7 @@ export default function MarketingPage() {
 											<div className="mb-3">
 												<img
 													src={post.imageUrl}
-													alt="Post image"
+													alt="Social media post content"
 													className="h-32 max-w-xs rounded-lg object-cover"
 												/>
 											</div>

@@ -149,6 +149,7 @@ export default function ProfilePage() {
 							const Icon = tab.icon;
 							return (
 								<button
+									type="button"
 									key={tab.id}
 									onClick={() => setActiveTab(tab.id)}
 									className={`flex items-center rounded-md px-3 py-2 font-medium text-sm ${
@@ -175,10 +176,14 @@ export default function ProfilePage() {
 								</h2>
 								<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="firstName"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											First Name
 										</label>
 										<input
+											id="firstName"
 											type="text"
 											name="firstName"
 											value={profile.firstName}
@@ -187,10 +192,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="lastName"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Last Name
 										</label>
 										<input
+											id="lastName"
 											type="text"
 											name="lastName"
 											value={profile.lastName}
@@ -199,10 +208,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="dateOfBirth"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Date of Birth
 										</label>
 										<input
+											id="dateOfBirth"
 											type="date"
 											name="dateOfBirth"
 											value={profile.dateOfBirth}
@@ -211,10 +224,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="gender"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Gender
 										</label>
 										<select
+											id="gender"
 											name="gender"
 											value={profile.gender}
 											onChange={handleInputChange}
@@ -241,10 +258,14 @@ export default function ProfilePage() {
 								</h2>
 								<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 									<div className="sm:col-span-2">
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="email"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Email Address
 										</label>
 										<input
+											id="email"
 											type="email"
 											name="email"
 											value={profile.email}
@@ -253,10 +274,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="phone"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Phone Number
 										</label>
 										<input
+											id="phone"
 											type="tel"
 											name="phone"
 											value={profile.phone}
@@ -265,10 +290,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div className="sm:col-span-2">
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="address"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Address
 										</label>
 										<input
+											id="address"
 											type="text"
 											name="address"
 											value={profile.address}
@@ -277,10 +306,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="city"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											City
 										</label>
 										<input
+											id="city"
 											type="text"
 											name="city"
 											value={profile.city}
@@ -289,10 +322,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="state"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											State
 										</label>
 										<input
+											id="state"
 											type="text"
 											name="state"
 											value={profile.state}
@@ -301,10 +338,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="zipCode"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											ZIP Code
 										</label>
 										<input
+											id="zipCode"
 											type="text"
 											name="zipCode"
 											value={profile.zipCode || ""}
@@ -313,10 +354,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="emergencyContact"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Emergency Contact
 										</label>
 										<input
+											id="emergencyContact"
 											type="text"
 											name="emergencyContact"
 											value={profile.emergencyContact}
@@ -325,10 +370,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="emergencyPhone"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Emergency Phone
 										</label>
 										<input
+											id="emergencyPhone"
 											type="tel"
 											name="emergencyPhone"
 											value={profile.emergencyPhone}
@@ -348,10 +397,14 @@ export default function ProfilePage() {
 								</h2>
 								<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="insuranceProvider"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Insurance Provider
 										</label>
 										<input
+											id="insuranceProvider"
 											type="text"
 											name="insuranceProvider"
 											value={profile.insuranceProvider}
@@ -360,10 +413,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div>
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="insurancePolicyNumber"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Policy Number
 										</label>
 										<input
+											id="insurancePolicyNumber"
 											type="text"
 											name="insurancePolicyNumber"
 											value={profile.insurancePolicyNumber}
@@ -372,10 +429,14 @@ export default function ProfilePage() {
 										/>
 									</div>
 									<div className="sm:col-span-2">
-										<label className="mb-2 block font-medium text-gray-700 text-sm">
+										<label
+											htmlFor="insuranceNotes"
+											className="mb-2 block font-medium text-gray-700 text-sm"
+										>
 											Additional Insurance Notes
 										</label>
 										<input
+											id="insuranceNotes"
 											type="text"
 											name="insurance"
 											value={profile.insurance}

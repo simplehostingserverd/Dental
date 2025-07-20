@@ -381,7 +381,10 @@ export default function CalendarAnalytics({
 				<CardContent>
 					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
 						{optimalTimes.map((time, index) => (
-							<div key={index} className="rounded-lg border p-4 text-center">
+							<div
+								key={`optimal-time-${time.time}-${index}`}
+								className="rounded-lg border p-4 text-center"
+							>
 								<div className="font-semibold text-blue-600 text-lg">
 									{time.time}
 								</div>
@@ -406,7 +409,7 @@ export default function CalendarAnalytics({
 					<div className="space-y-4">
 						{upcomingInsights.map((insight, index) => (
 							<div
-								key={index}
+								key={`insight-${insight.type}-${insight.date}-${index}`}
 								className="flex items-start space-x-3 rounded-lg border p-4"
 							>
 								<div className="mt-1 flex-shrink-0">

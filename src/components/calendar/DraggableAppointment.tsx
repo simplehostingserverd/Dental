@@ -125,6 +125,7 @@ export function DraggableAppointment({
 							stroke="currentColor"
 							viewBox="0 0 24 24"
 						>
+							<title>Edit appointment</title>
 							<path
 								strokeLinecap="round"
 								strokeLinejoin="round"
