@@ -223,9 +223,9 @@ export default function BillingPage() {
 			};
 
 			switch (reportType) {
-				case 'daily-revenue':
+				case "daily-revenue":
 					reportData = {
-						payments: mockPayments.map(payment => ({
+						payments: mockPayments.map((payment) => ({
 							id: payment.id,
 							patient: payment.patient,
 							amount: payment.amount,
@@ -233,72 +233,71 @@ export default function BillingPage() {
 							status: payment.status,
 							time: payment.time,
 							transactionId: payment.transactionId || `TXN-${payment.id}`,
-							invoice: payment.invoice || `INV-${payment.id}`
-						}))
+							invoice: payment.invoice || `INV-${payment.id}`,
+						})),
 					};
 					break;
-				case 'insurance-claims':
+				case "insurance-claims":
 					reportData = {
-						claims: mockClaims.map(claim => ({
+						claims: mockClaims.map((claim) => ({
 							id: claim.id,
 							patient: claim.patient,
 							amount: claim.amount,
 							status: claim.status,
 							submittedDate: claim.submittedDate,
 							provider: claim.provider,
-							claimNumber: claim.claimNumber
-						}))
+							claimNumber: claim.claimNumber,
+						})),
 					};
 					break;
-				case 'collections':
+				case "collections":
 					reportData = {
-						balances: mockOutstandingBalances.map(balance => ({
+						balances: mockOutstandingBalances.map((balance) => ({
 							id: balance.id,
 							patient: balance.patient,
 							balance: balance.balance,
 							lastPayment: balance.lastPayment,
 							daysPastDue: balance.daysPastDue,
 							phone: balance.phone,
-							email: balance.email
-						}))
+							email: balance.email,
+						})),
 					};
 					break;
 				default:
-					throw new Error('Invalid report type');
+					throw new Error("Invalid report type");
 			}
 
-			const response = await fetch('/api/receptionist/reports', {
-				method: 'POST',
+			const response = await fetch("/api/receptionist/reports", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
 					reportType,
 					dateRange: {
 						start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
-						end: new Date()
+						end: new Date(),
 					},
-					data: reportData
-				})
+					data: reportData,
+				}),
 			});
 
 			if (!response.ok) {
-				throw new Error('Failed to generate report');
+				throw new Error("Failed to generate report");
 			}
 
 			const result = await response.json();
 
 			// Create download link
-			const link = document.createElement('a');
+			const link = document.createElement("a");
 			link.href = result.data;
 			link.download = result.filename;
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
-
 		} catch (error) {
-			console.error('Error generating report:', error);
-			alert('Failed to generate report. Please try again.');
+			console.error("Error generating report:", error);
+			alert("Failed to generate report. Please try again.");
 		}
 	};
 
@@ -721,7 +720,7 @@ export default function BillingPage() {
 									type="button"
 									variant="outline"
 									className="w-full"
-									onClick={() => handleGenerateReport('daily-revenue')}
+									onClick={() => handleGenerateReport("daily-revenue")}
 								>
 									<Download className="mr-2 h-4 w-4" />
 									Generate Report
@@ -743,7 +742,7 @@ export default function BillingPage() {
 									type="button"
 									variant="outline"
 									className="w-full"
-									onClick={() => handleGenerateReport('insurance-claims')}
+									onClick={() => handleGenerateReport("insurance-claims")}
 								>
 									<Download className="mr-2 h-4 w-4" />
 									Generate Report
@@ -763,7 +762,7 @@ export default function BillingPage() {
 									type="button"
 									variant="outline"
 									className="w-full"
-									onClick={() => handleGenerateReport('collections')}
+									onClick={() => handleGenerateReport("collections")}
 								>
 									<Download className="mr-2 h-4 w-4" />
 									Generate Report

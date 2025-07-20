@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
 	Calendar,
@@ -31,6 +36,7 @@ import {
 	Users,
 	X,
 } from "lucide-react";
+import { useMemo, useState } from "react";
 
 interface ScheduledPost {
 	id: string;
@@ -39,7 +45,12 @@ interface ScheduledPost {
 	platforms: string[];
 	scheduledFor: Date;
 	status: "scheduled" | "published" | "failed" | "draft";
-	category: "educational" | "promotional" | "testimonial" | "seasonal" | "general";
+	category:
+		| "educational"
+		| "promotional"
+		| "testimonial"
+		| "seasonal"
+		| "general";
 	hashtags: string[];
 	imageUrl?: string;
 	engagement?: {
@@ -50,15 +61,15 @@ interface ScheduledPost {
 }
 
 interface ContentCalendarProps {
-	onCreatePost?: (post: Omit<ScheduledPost, 'id'>) => void;
+	onCreatePost?: (post: Omit<ScheduledPost, "id">) => void;
 	onEditPost?: (post: ScheduledPost) => void;
 	onDeletePost?: (postId: string) => void;
 }
 
-export default function ContentCalendar({ 
-	onCreatePost, 
-	onEditPost, 
-	onDeletePost 
+export default function ContentCalendar({
+	onCreatePost,
+	onEditPost,
+	onDeletePost,
 }: ContentCalendarProps) {
 	const [currentDate, setCurrentDate] = useState(new Date());
 	const [viewMode, setViewMode] = useState<"month" | "week" | "day">("month");
@@ -85,7 +96,8 @@ export default function ContentCalendar({
 		{
 			id: "1",
 			title: "Daily Oral Hygiene Tip",
-			content: "💡 Daily Tip: Brush your teeth for at least 2 minutes, twice a day! #DentalHealth #OralHygiene",
+			content:
+				"💡 Daily Tip: Brush your teeth for at least 2 minutes, twice a day! #DentalHealth #OralHygiene",
 			platforms: ["facebook", "instagram"],
 			scheduledFor: new Date(2025, 6, 18, 9, 0), // July 18, 2025, 9:00 AM
 			status: "scheduled",
@@ -95,7 +107,8 @@ export default function ContentCalendar({
 		{
 			id: "2",
 			title: "Teeth Whitening Promotion",
-			content: "✨ SPECIAL OFFER: Professional teeth whitening for just $299! Book this month and save! #TeethWhitening #SpecialOffer",
+			content:
+				"✨ SPECIAL OFFER: Professional teeth whitening for just $299! Book this month and save! #TeethWhitening #SpecialOffer",
 			platforms: ["facebook", "instagram", "twitter"],
 			scheduledFor: new Date(2025, 6, 19, 14, 30), // July 19, 2025, 2:30 PM
 			status: "scheduled",
@@ -105,7 +118,8 @@ export default function ContentCalendar({
 		{
 			id: "3",
 			title: "Patient Success Story",
-			content: "🌟 \"Amazing experience with my dental implant!\" - Sarah M. We're here to help you achieve your perfect smile! #PatientTestimonial",
+			content:
+				'🌟 "Amazing experience with my dental implant!" - Sarah M. We\'re here to help you achieve your perfect smile! #PatientTestimonial',
 			platforms: ["facebook", "linkedin"],
 			scheduledFor: new Date(2025, 6, 20, 11, 0), // July 20, 2025, 11:00 AM
 			status: "scheduled",
@@ -115,7 +129,8 @@ export default function ContentCalendar({
 		{
 			id: "4",
 			title: "Weekend Dental Care Tips",
-			content: "🦷 Weekend reminder: Don't forget to floss! It's just as important as brushing. #WeekendTips #DentalCare",
+			content:
+				"🦷 Weekend reminder: Don't forget to floss! It's just as important as brushing. #WeekendTips #DentalCare",
 			platforms: ["instagram", "twitter"],
 			scheduledFor: new Date(2025, 6, 21, 10, 0), // July 21, 2025, 10:00 AM
 			status: "scheduled",
@@ -125,7 +140,8 @@ export default function ContentCalendar({
 		{
 			id: "5",
 			title: "Monday Motivation",
-			content: "💪 Start your week with a healthy smile! Remember to schedule your next cleaning appointment. #MondayMotivation #HealthySmile",
+			content:
+				"💪 Start your week with a healthy smile! Remember to schedule your next cleaning appointment. #MondayMotivation #HealthySmile",
 			platforms: ["facebook", "instagram", "linkedin"],
 			scheduledFor: new Date(2025, 6, 22, 8, 30), // July 22, 2025, 8:30 AM
 			status: "scheduled",
@@ -136,21 +152,26 @@ export default function ContentCalendar({
 
 	// Filter posts based on current filters
 	const filteredPosts = useMemo(() => {
-		return scheduledPosts.filter(post => {
-			const matchesPlatform = filterPlatform === "all" || post.platforms.includes(filterPlatform);
-			const matchesCategory = filterCategory === "all" || post.category === filterCategory;
-			const matchesSearch = searchTerm === "" || 
+		return scheduledPosts.filter((post) => {
+			const matchesPlatform =
+				filterPlatform === "all" || post.platforms.includes(filterPlatform);
+			const matchesCategory =
+				filterCategory === "all" || post.category === filterCategory;
+			const matchesSearch =
+				searchTerm === "" ||
 				post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				post.hashtags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-			
+				post.hashtags.some((tag) =>
+					tag.toLowerCase().includes(searchTerm.toLowerCase()),
+				);
+
 			return matchesPlatform && matchesCategory && matchesSearch;
 		});
 	}, [filterPlatform, filterCategory, searchTerm]);
 
 	// Get posts for a specific date
 	const getPostsForDate = (date: Date) => {
-		return filteredPosts.filter(post => {
+		return filteredPosts.filter((post) => {
 			const postDate = new Date(post.scheduledFor);
 			return postDate.toDateString() === date.toDateString();
 		});
@@ -164,15 +185,16 @@ export default function ContentCalendar({
 		const lastDay = new Date(year, month + 1, 0);
 		const startDate = new Date(firstDay);
 		startDate.setDate(startDate.getDate() - firstDay.getDay());
-		
+
 		const days = [];
 		const currentDay = new Date(startDate);
-		
-		for (let i = 0; i < 42; i++) { // 6 weeks * 7 days
+
+		for (let i = 0; i < 42; i++) {
+			// 6 weeks * 7 days
 			days.push(new Date(currentDay));
 			currentDay.setDate(currentDay.getDate() + 1);
 		}
-		
+
 		return days;
 	};
 
@@ -237,23 +259,31 @@ export default function ContentCalendar({
 
 	// Handle form submission
 	const handleCreatePost = () => {
-		if (!postForm.title || !postForm.content || !postForm.scheduledFor || postForm.platforms.length === 0) {
+		if (
+			!postForm.title ||
+			!postForm.content ||
+			!postForm.scheduledFor ||
+			postForm.platforms.length === 0
+		) {
 			return;
 		}
 
-		const newPost: Omit<ScheduledPost, 'id'> = {
+		const newPost: Omit<ScheduledPost, "id"> = {
 			title: postForm.title,
 			content: postForm.content,
 			platforms: postForm.platforms,
 			scheduledFor: new Date(postForm.scheduledFor),
 			status: "scheduled",
 			category: postForm.category,
-			hashtags: postForm.hashtags.split(/\s+/).filter(tag => tag.startsWith('#')).map(tag => tag.slice(1)),
+			hashtags: postForm.hashtags
+				.split(/\s+/)
+				.filter((tag) => tag.startsWith("#"))
+				.map((tag) => tag.slice(1)),
 			imageUrl: postForm.imageUrl || undefined,
 		};
 
 		onCreatePost?.(newPost);
-		
+
 		// Reset form
 		setPostForm({
 			title: "",
@@ -270,8 +300,18 @@ export default function ContentCalendar({
 	const calendarDays = generateCalendarDays();
 	const today = new Date();
 	const monthNames = [
-		"January", "February", "March", "April", "May", "June",
-		"July", "August", "September", "October", "November", "December"
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
 	];
 
 	return (
@@ -279,7 +319,7 @@ export default function ContentCalendar({
 			{/* Calendar Header */}
 			<div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
 				<div className="flex items-center space-x-4">
-					<h2 className="text-2xl font-semibold text-gray-900">
+					<h2 className="font-semibold text-2xl text-gray-900">
 						{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
 					</h2>
 					<div className="flex items-center space-x-2">
@@ -290,11 +330,7 @@ export default function ContentCalendar({
 						>
 							<ChevronLeft className="h-4 w-4" />
 						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={navigateToToday}
-						>
+						<Button variant="outline" size="sm" onClick={navigateToToday}>
 							Today
 						</Button>
 						<Button
@@ -320,10 +356,10 @@ export default function ContentCalendar({
 			</div>
 
 			{/* Filters */}
-			<div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+			<div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
 				<div className="flex-1">
 					<div className="relative">
-						<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+						<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 						<Input
 							placeholder="Search posts..."
 							value={searchTerm}
@@ -332,7 +368,7 @@ export default function ContentCalendar({
 						/>
 					</div>
 				</div>
-				
+
 				<Select value={filterPlatform} onValueChange={setFilterPlatform}>
 					<SelectTrigger className="w-full sm:w-40">
 						<SelectValue placeholder="Platform" />
@@ -367,7 +403,10 @@ export default function ContentCalendar({
 					{/* Calendar Header */}
 					<div className="grid grid-cols-7 border-b">
 						{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-							<div key={day} className="p-3 text-center text-sm font-medium text-gray-500 border-r last:border-r-0">
+							<div
+								key={day}
+								className="border-r p-3 text-center font-medium text-gray-500 text-sm last:border-r-0"
+							>
 								{day}
 							</div>
 						))}
@@ -379,40 +418,40 @@ export default function ContentCalendar({
 							const isCurrentMonth = day.getMonth() === currentDate.getMonth();
 							const isToday = day.toDateString() === today.toDateString();
 							const postsForDay = getPostsForDate(day);
-							
+
 							return (
 								<div
 									key={index}
-									className={`
-										min-h-[120px] border-r border-b last:border-r-0 p-2 cursor-pointer hover:bg-gray-50 transition-colors
-										${!isCurrentMonth ? 'bg-gray-50 text-gray-400' : ''}
-										${isToday ? 'bg-blue-50' : ''}
+									className={`min-h-[120px] cursor-pointer border-r border-b p-2 last:border-r-0 hover:bg-gray-50 transition-colors${!isCurrentMonth ? "bg-gray-50 text-gray-400" : ""}
+										${isToday ? "bg-blue-50" : ""}
 									`}
 									onClick={() => setSelectedDate(day)}
 								>
-									<div className={`
-										text-sm font-medium mb-2
-										${isToday ? 'text-blue-600' : isCurrentMonth ? 'text-gray-900' : 'text-gray-400'}
-									`}>
+									<div
+										className={`font-medium text-sm mb-2${isToday ? "text-blue-600" : isCurrentMonth ? "text-gray-900" : "text-gray-400"}
+									`}
+									>
 										{day.getDate()}
 									</div>
-									
+
 									<div className="space-y-1">
 										{postsForDay.slice(0, 3).map((post) => (
 											<div
 												key={post.id}
-												className={`
-													text-xs p-1 rounded border cursor-pointer hover:shadow-sm transition-shadow
-													${getCategoryColor(post.category)}
+												className={`cursor-pointer rounded border p-1 text-xs hover:shadow-sm transition-shadow${getCategoryColor(post.category)}
 												`}
 												onClick={(e) => {
 													e.stopPropagation();
 													setSelectedPost(post);
 												}}
 											>
-												<div className="flex items-center justify-between mb-1">
-													<span className="font-medium truncate">{post.title}</span>
-													<Badge className={`text-xs ${getStatusColor(post.status)}`}>
+												<div className="mb-1 flex items-center justify-between">
+													<span className="truncate font-medium">
+														{post.title}
+													</span>
+													<Badge
+														className={`text-xs ${getStatusColor(post.status)}`}
+													>
 														{post.status}
 													</Badge>
 												</div>
@@ -423,17 +462,20 @@ export default function ContentCalendar({
 														</span>
 													))}
 													<span className="text-gray-500">
-														{new Date(post.scheduledFor).toLocaleTimeString([], { 
-															hour: '2-digit', 
-															minute: '2-digit' 
-														})}
+														{new Date(post.scheduledFor).toLocaleTimeString(
+															[],
+															{
+																hour: "2-digit",
+																minute: "2-digit",
+															},
+														)}
 													</span>
 												</div>
 											</div>
 										))}
-										
+
 										{postsForDay.length > 3 && (
-											<div className="text-xs text-gray-500 text-center py-1">
+											<div className="py-1 text-center text-gray-500 text-xs">
 												+{postsForDay.length - 3} more
 											</div>
 										)}
@@ -458,7 +500,9 @@ export default function ContentCalendar({
 								<Input
 									id="title"
 									value={postForm.title}
-									onChange={(e) => setPostForm(prev => ({ ...prev, title: e.target.value }))}
+									onChange={(e) =>
+										setPostForm((prev) => ({ ...prev, title: e.target.value }))
+									}
 									placeholder="Enter post title"
 								/>
 							</div>
@@ -466,7 +510,9 @@ export default function ContentCalendar({
 								<Label htmlFor="category">Category *</Label>
 								<Select
 									value={postForm.category}
-									onValueChange={(value: any) => setPostForm(prev => ({ ...prev, category: value }))}
+									onValueChange={(value: any) =>
+										setPostForm((prev) => ({ ...prev, category: value }))
+									}
 								>
 									<SelectTrigger>
 										<SelectValue />
@@ -487,7 +533,9 @@ export default function ContentCalendar({
 							<Textarea
 								id="content"
 								value={postForm.content}
-								onChange={(e) => setPostForm(prev => ({ ...prev, content: e.target.value }))}
+								onChange={(e) =>
+									setPostForm((prev) => ({ ...prev, content: e.target.value }))
+								}
 								placeholder="Write your post content..."
 								rows={4}
 							/>
@@ -495,7 +543,7 @@ export default function ContentCalendar({
 
 						<div>
 							<Label>Platforms *</Label>
-							<div className="grid grid-cols-2 gap-3 mt-2">
+							<div className="mt-2 grid grid-cols-2 gap-3">
 								{[
 									{ id: "facebook", name: "Facebook", icon: Facebook },
 									{ id: "instagram", name: "Instagram", icon: Instagram },
@@ -504,26 +552,25 @@ export default function ContentCalendar({
 								].map((platform) => (
 									<div
 										key={platform.id}
-										className={`
-											flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors
-											${postForm.platforms.includes(platform.id)
-												? 'border-blue-500 bg-blue-50'
-												: 'border-gray-200 hover:border-gray-300'
-											}
+										className={`flex cursor-pointer items-center space-x-3 rounded-lg border p-3 transition-colors${
+											postForm.platforms.includes(platform.id)
+												? "border-blue-500 bg-blue-50"
+												: "border-gray-200 hover:border-gray-300"
+										}
 										`}
 										onClick={() => {
-											setPostForm(prev => ({
+											setPostForm((prev) => ({
 												...prev,
 												platforms: prev.platforms.includes(platform.id)
-													? prev.platforms.filter(p => p !== platform.id)
-													: [...prev.platforms, platform.id]
+													? prev.platforms.filter((p) => p !== platform.id)
+													: [...prev.platforms, platform.id],
 											}));
 										}}
 									>
 										<platform.icon className="h-5 w-5" />
 										<span className="font-medium">{platform.name}</span>
 										{postForm.platforms.includes(platform.id) && (
-											<div className="ml-auto h-2 w-2 bg-blue-500 rounded-full" />
+											<div className="ml-auto h-2 w-2 rounded-full bg-blue-500" />
 										)}
 									</div>
 								))}
@@ -537,7 +584,12 @@ export default function ContentCalendar({
 									id="scheduledFor"
 									type="datetime-local"
 									value={postForm.scheduledFor}
-									onChange={(e) => setPostForm(prev => ({ ...prev, scheduledFor: e.target.value }))}
+									onChange={(e) =>
+										setPostForm((prev) => ({
+											...prev,
+											scheduledFor: e.target.value,
+										}))
+									}
 									min={new Date().toISOString().slice(0, 16)}
 								/>
 							</div>
@@ -546,7 +598,12 @@ export default function ContentCalendar({
 								<Input
 									id="hashtags"
 									value={postForm.hashtags}
-									onChange={(e) => setPostForm(prev => ({ ...prev, hashtags: e.target.value }))}
+									onChange={(e) =>
+										setPostForm((prev) => ({
+											...prev,
+											hashtags: e.target.value,
+										}))
+									}
 									placeholder="#DentalHealth #SmileTransformation"
 								/>
 							</div>
@@ -563,7 +620,12 @@ export default function ContentCalendar({
 							<Button
 								type="button"
 								onClick={handleCreatePost}
-								disabled={!postForm.title || !postForm.content || !postForm.scheduledFor || postForm.platforms.length === 0}
+								disabled={
+									!postForm.title ||
+									!postForm.content ||
+									!postForm.scheduledFor ||
+									postForm.platforms.length === 0
+								}
 							>
 								<Calendar className="mr-2 h-4 w-4" />
 								Schedule Post
@@ -575,7 +637,10 @@ export default function ContentCalendar({
 
 			{/* Post Details Modal */}
 			{selectedPost && (
-				<Dialog open={!!selectedPost} onOpenChange={() => setSelectedPost(null)}>
+				<Dialog
+					open={!!selectedPost}
+					onOpenChange={() => setSelectedPost(null)}
+				>
 					<DialogContent className="max-w-lg">
 						<DialogHeader>
 							<DialogTitle className="flex items-center justify-between">
@@ -606,19 +671,19 @@ export default function ContentCalendar({
 								<Badge className={getStatusColor(selectedPost.status)}>
 									{selectedPost.status}
 								</Badge>
-								<Badge variant="outline">
-									{selectedPost.category}
-								</Badge>
+								<Badge variant="outline">{selectedPost.category}</Badge>
 							</div>
 
 							<div>
-								<Label className="text-sm font-medium">Content</Label>
-								<p className="text-sm text-gray-700 mt-1">{selectedPost.content}</p>
+								<Label className="font-medium text-sm">Content</Label>
+								<p className="mt-1 text-gray-700 text-sm">
+									{selectedPost.content}
+								</p>
 							</div>
 
 							<div>
-								<Label className="text-sm font-medium">Platforms</Label>
-								<div className="flex items-center space-x-2 mt-1">
+								<Label className="font-medium text-sm">Platforms</Label>
+								<div className="mt-1 flex items-center space-x-2">
 									{selectedPost.platforms.map((platform) => (
 										<div key={platform} className="flex items-center space-x-1">
 											{getPlatformIcon(platform)}
@@ -629,8 +694,8 @@ export default function ContentCalendar({
 							</div>
 
 							<div>
-								<Label className="text-sm font-medium">Scheduled For</Label>
-								<div className="flex items-center space-x-2 mt-1">
+								<Label className="font-medium text-sm">Scheduled For</Label>
+								<div className="mt-1 flex items-center space-x-2">
 									<Clock className="h-4 w-4 text-gray-500" />
 									<span className="text-sm">
 										{new Date(selectedPost.scheduledFor).toLocaleString()}
@@ -640,10 +705,10 @@ export default function ContentCalendar({
 
 							{selectedPost.hashtags.length > 0 && (
 								<div>
-									<Label className="text-sm font-medium">Hashtags</Label>
-									<div className="flex flex-wrap gap-1 mt-1">
+									<Label className="font-medium text-sm">Hashtags</Label>
+									<div className="mt-1 flex flex-wrap gap-1">
 										{selectedPost.hashtags.map((tag) => (
-											<span key={tag} className="text-xs text-blue-600">
+											<span key={tag} className="text-blue-600 text-xs">
 												#{tag}
 											</span>
 										))}
@@ -653,8 +718,8 @@ export default function ContentCalendar({
 
 							{selectedPost.engagement && (
 								<div>
-									<Label className="text-sm font-medium">Engagement</Label>
-									<div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+									<Label className="font-medium text-sm">Engagement</Label>
+									<div className="mt-1 flex items-center space-x-4 text-gray-600 text-sm">
 										<span>{selectedPost.engagement.likes} likes</span>
 										<span>{selectedPost.engagement.comments} comments</span>
 										<span>{selectedPost.engagement.shares} shares</span>

@@ -212,6 +212,7 @@ export default function MessagesPage() {
 									/>
 								</div>
 								<button
+									type="button"
 									onClick={sendMessage}
 									disabled={!newMessage.trim() || isSending}
 									className="flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
@@ -245,7 +246,8 @@ export default function MessagesPage() {
 							"Thank you for the excellent care!",
 						].map((template, index) => (
 							<button
-								key={index}
+								type="button"
+								key={`template-${template.slice(0, 20)}-${index}`}
 								onClick={() => setNewMessage(template)}
 								className="rounded-md border border-gray-300 bg-white px-3 py-2 text-left text-gray-700 text-sm hover:bg-gray-50"
 							>

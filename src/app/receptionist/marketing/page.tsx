@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import CalendarAnalytics from "@/components/marketing/CalendarAnalytics";
+import CalendarDashboard from "@/components/marketing/CalendarDashboard";
+import ContentCalendar from "@/components/marketing/ContentCalendar";
+import ContentLibrary from "@/components/marketing/ContentLibrary";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,9 +16,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/toast";
 import {
 	BarChart3,
 	Calendar,
@@ -34,11 +44,7 @@ import {
 	Users,
 	Youtube,
 } from "lucide-react";
-import { useToast } from "@/components/ui/toast";
-import ContentLibrary from "@/components/marketing/ContentLibrary";
-import ContentCalendar from "@/components/marketing/ContentCalendar";
-import CalendarAnalytics from "@/components/marketing/CalendarAnalytics";
-import CalendarDashboard from "@/components/marketing/CalendarDashboard";
+import { useState } from "react";
 
 // TypeScript interfaces
 interface SocialPost {
@@ -71,18 +77,23 @@ interface PostTemplate {
 	id: string;
 	title: string;
 	content: string;
-	category: "educational" | "promotional" | "testimonial" | "seasonal" | "general";
+	category:
+		| "educational"
+		| "promotional"
+		| "testimonial"
+		| "seasonal"
+		| "general";
 	hashtags: string[];
 }
 
 export default function MarketingPage() {
 	const { showToast } = useToast();
-	
+
 	// State management
 	const [showCreatePostDialog, setShowCreatePostDialog] = useState(false);
 	const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
 	const [isPosting, setIsPosting] = useState(false);
-	
+
 	// Form state
 	const [postForm, setPostForm] = useState({
 		content: "",
@@ -132,7 +143,8 @@ export default function MarketingPage() {
 		{
 			id: "1",
 			platform: "facebook",
-			content: "🦷 Did you know that regular dental cleanings can prevent gum disease? Book your appointment today! #DentalHealth #PreventiveCare",
+			content:
+				"🦷 Did you know that regular dental cleanings can prevent gum disease? Book your appointment today! #DentalHealth #PreventiveCare",
 			publishedAt: new Date("2025-07-16T10:00:00Z"),
 			status: "published",
 			engagement: { likes: 24, comments: 8, shares: 3 },
@@ -141,7 +153,8 @@ export default function MarketingPage() {
 		{
 			id: "2",
 			platform: "instagram",
-			content: "✨ Transform your smile with our professional teeth whitening service! Before and after results speak for themselves. #SmileTransformation #TeethWhitening",
+			content:
+				"✨ Transform your smile with our professional teeth whitening service! Before and after results speak for themselves. #SmileTransformation #TeethWhitening",
 			imageUrl: "/images/teeth-whitening.jpg",
 			publishedAt: new Date("2025-07-15T14:30:00Z"),
 			status: "published",
@@ -151,7 +164,8 @@ export default function MarketingPage() {
 		{
 			id: "3",
 			platform: "twitter",
-			content: "Quick tip: Brush your teeth for at least 2 minutes, twice a day! ⏰🦷 #DentalTips #OralHealth",
+			content:
+				"Quick tip: Brush your teeth for at least 2 minutes, twice a day! ⏰🦷 #DentalTips #OralHealth",
 			scheduledFor: new Date("2025-07-18T09:00:00Z"),
 			status: "scheduled",
 			engagement: { likes: 0, comments: 0, shares: 0 },
@@ -163,28 +177,32 @@ export default function MarketingPage() {
 		{
 			id: "1",
 			title: "Dental Health Tip",
-			content: "💡 Dental Health Tip: [Insert tip here]. Remember, prevention is always better than treatment! #DentalHealth #PreventiveCare #HealthySmile",
+			content:
+				"💡 Dental Health Tip: [Insert tip here]. Remember, prevention is always better than treatment! #DentalHealth #PreventiveCare #HealthySmile",
 			category: "educational",
 			hashtags: ["DentalHealth", "PreventiveCare", "HealthySmile"],
 		},
 		{
 			id: "2",
 			title: "Service Promotion",
-			content: "✨ Special offer on [Service Name]! Book your appointment this month and save [Amount/Percentage]. Limited time offer! #SpecialOffer #DentalCare",
+			content:
+				"✨ Special offer on [Service Name]! Book your appointment this month and save [Amount/Percentage]. Limited time offer! #SpecialOffer #DentalCare",
 			category: "promotional",
 			hashtags: ["SpecialOffer", "DentalCare", "LimitedTime"],
 		},
 		{
 			id: "3",
 			title: "Patient Testimonial",
-			content: "🌟 \"[Patient testimonial quote]\" - [Patient Name]. We're thrilled to help our patients achieve their perfect smile! #PatientTestimonial #HappyPatients #SmileTransformation",
+			content:
+				'🌟 "[Patient testimonial quote]" - [Patient Name]. We\'re thrilled to help our patients achieve their perfect smile! #PatientTestimonial #HappyPatients #SmileTransformation',
 			category: "testimonial",
 			hashtags: ["PatientTestimonial", "HappyPatients", "SmileTransformation"],
 		},
 		{
 			id: "4",
 			title: "Seasonal Reminder",
-			content: "🎃 As we enjoy [Season/Holiday] treats, don't forget to maintain your oral health! Here are some tips: [Tips]. #SeasonalCare #DentalHealth",
+			content:
+				"🎃 As we enjoy [Season/Holiday] treats, don't forget to maintain your oral health! Here are some tips: [Tips]. #SeasonalCare #DentalHealth",
 			category: "seasonal",
 			hashtags: ["SeasonalCare", "DentalHealth", "OralHealth"],
 		},
@@ -194,10 +212,10 @@ export default function MarketingPage() {
 	const handleCreatePost = async () => {
 		setIsPosting(true);
 		try {
-			const response = await fetch('/api/receptionist/marketing/posts', {
-				method: 'POST',
+			const response = await fetch("/api/receptionist/marketing/posts", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
 					content: postForm.content,
@@ -211,7 +229,7 @@ export default function MarketingPage() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.error || 'Failed to create post');
+				throw new Error(data.error || "Failed to create post");
 			}
 
 			// Reset form and close dialog
@@ -235,18 +253,25 @@ export default function MarketingPage() {
 			showToast({
 				type: "error",
 				title: "Post Failed",
-				message: error instanceof Error ? error.message : "Failed to create post. Please try again.",
+				message:
+					error instanceof Error
+						? error.message
+						: "Failed to create post. Please try again.",
 			});
 		} finally {
 			setIsPosting(false);
 		}
 	};
 
-	const handleUseTemplate = (template: PostTemplate | { content: string; hashtags: string[] }) => {
-		setPostForm(prev => ({
+	const handleUseTemplate = (
+		template: PostTemplate | { content: string; hashtags: string[] },
+	) => {
+		setPostForm((prev) => ({
 			...prev,
 			content: template.content,
-			hashtags: Array.isArray(template.hashtags) ? template.hashtags.join(" ") : template.hashtags,
+			hashtags: Array.isArray(template.hashtags)
+				? template.hashtags.join(" ")
+				: template.hashtags,
 		}));
 		setShowCreatePostDialog(true);
 	};
@@ -260,7 +285,7 @@ export default function MarketingPage() {
 			case "twitter":
 				return <Twitter className="h-5 w-5 text-blue-400" />;
 			case "linkedin":
-				return <div className="h-5 w-5 bg-blue-700 rounded" />;
+				return <div className="h-5 w-5 rounded bg-blue-700" />;
 			case "youtube":
 				return <Youtube className="h-5 w-5 text-red-600" />;
 			default:
@@ -288,14 +313,17 @@ export default function MarketingPage() {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-2xl font-semibold text-gray-900">
+					<h1 className="font-semibold text-2xl text-gray-900">
 						Social Media Marketing
 					</h1>
 					<p className="text-gray-600">
 						Manage your practice's social media presence and patient engagement
 					</p>
 				</div>
-				<Dialog open={showCreatePostDialog} onOpenChange={setShowCreatePostDialog}>
+				<Dialog
+					open={showCreatePostDialog}
+					onOpenChange={setShowCreatePostDialog}
+				>
 					<DialogTrigger asChild>
 						<Button>
 							<Plus className="mr-2 h-4 w-4" />
@@ -313,7 +341,8 @@ export default function MarketingPage() {
 							<div className="flex items-center justify-between">
 								{getPlatformIcon(metric.platform)}
 								<Badge variant="outline" className="text-xs">
-									{metric.growth > 0 ? "+" : ""}{metric.growth}%
+									{metric.growth > 0 ? "+" : ""}
+									{metric.growth}%
 								</Badge>
 							</div>
 							<CardTitle className="text-lg">{metric.platform}</CardTitle>
@@ -322,7 +351,9 @@ export default function MarketingPage() {
 							<div className="space-y-2">
 								<div className="flex items-center justify-between text-sm">
 									<span className="text-gray-600">Followers</span>
-									<span className="font-medium">{metric.followers.toLocaleString()}</span>
+									<span className="font-medium">
+										{metric.followers.toLocaleString()}
+									</span>
 								</div>
 								<div className="flex items-center justify-between text-sm">
 									<span className="text-gray-600">Engagement</span>
@@ -330,7 +361,9 @@ export default function MarketingPage() {
 								</div>
 								<div className="flex items-center justify-between text-sm">
 									<span className="text-gray-600">Reach</span>
-									<span className="font-medium">{metric.reach.toLocaleString()}</span>
+									<span className="font-medium">
+										{metric.reach.toLocaleString()}
+									</span>
 								</div>
 							</div>
 						</CardContent>
@@ -357,36 +390,37 @@ export default function MarketingPage() {
 						<CardContent>
 							<div className="space-y-4">
 								{recentPosts.map((post) => (
-									<div key={post.id} className="border rounded-lg p-4">
-										<div className="flex items-start justify-between mb-3">
+									<div key={post.id} className="rounded-lg border p-4">
+										<div className="mb-3 flex items-start justify-between">
 											<div className="flex items-center space-x-2">
 												{getPlatformIcon(post.platform)}
-												<span className="font-medium capitalize">{post.platform}</span>
+												<span className="font-medium capitalize">
+													{post.platform}
+												</span>
 												<Badge className={getStatusColor(post.status)}>
 													{post.status}
 												</Badge>
 											</div>
-											<span className="text-sm text-gray-500">
-												{post.publishedAt 
+											<span className="text-gray-500 text-sm">
+												{post.publishedAt
 													? post.publishedAt.toLocaleDateString()
-													: post.scheduledFor?.toLocaleDateString()
-												}
+													: post.scheduledFor?.toLocaleDateString()}
 											</span>
 										</div>
-										
-										<p className="text-gray-700 mb-3">{post.content}</p>
-										
+
+										<p className="mb-3 text-gray-700">{post.content}</p>
+
 										{post.imageUrl && (
 											<div className="mb-3">
-												<img 
-													src={post.imageUrl} 
-													alt="Post image" 
-													className="rounded-lg max-w-xs h-32 object-cover"
+												<img
+													src={post.imageUrl}
+													alt="Post image"
+													className="h-32 max-w-xs rounded-lg object-cover"
 												/>
 											</div>
 										)}
-										
-										<div className="flex items-center space-x-6 text-sm text-gray-600">
+
+										<div className="flex items-center space-x-6 text-gray-600 text-sm">
 											<div className="flex items-center space-x-1">
 												<Heart className="h-4 w-4" />
 												<span>{post.engagement.likes}</span>
@@ -422,31 +456,31 @@ export default function MarketingPage() {
 						<CardContent>
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								{postTemplates.map((template) => (
-									<div key={template.id} className="border rounded-lg p-4">
-										<div className="flex items-center justify-between mb-2">
+									<div key={template.id} className="rounded-lg border p-4">
+										<div className="mb-2 flex items-center justify-between">
 											<h3 className="font-medium">{template.title}</h3>
 											<Badge variant="outline" className="text-xs">
 												{template.category}
 											</Badge>
 										</div>
-										<p className="text-sm text-gray-600 mb-3 line-clamp-3">
+										<p className="mb-3 line-clamp-3 text-gray-600 text-sm">
 											{template.content}
 										</p>
 										<div className="flex items-center justify-between">
 											<div className="flex flex-wrap gap-1">
 												{template.hashtags.slice(0, 3).map((tag) => (
-													<span key={tag} className="text-xs text-blue-600">
+													<span key={tag} className="text-blue-600 text-xs">
 														#{tag}
 													</span>
 												))}
 												{template.hashtags.length > 3 && (
-													<span className="text-xs text-gray-500">
+													<span className="text-gray-500 text-xs">
 														+{template.hashtags.length - 3} more
 													</span>
 												)}
 											</div>
-											<Button 
-												size="sm" 
+											<Button
+												size="sm"
 												variant="outline"
 												onClick={() => handleUseTemplate(template)}
 											>
@@ -482,14 +516,17 @@ export default function MarketingPage() {
 							<CardContent>
 								<div className="space-y-4">
 									{socialMetrics.map((metric) => (
-										<div key={metric.platform} className="flex items-center justify-between">
+										<div
+											key={metric.platform}
+											className="flex items-center justify-between"
+										>
 											<div className="flex items-center space-x-2">
 												{getPlatformIcon(metric.platform)}
 												<span>{metric.platform}</span>
 											</div>
 											<div className="text-right">
 												<div className="font-medium">{metric.engagement}%</div>
-												<div className="text-sm text-gray-500">
+												<div className="text-gray-500 text-sm">
 													{metric.impressions.toLocaleString()} impressions
 												</div>
 											</div>
@@ -506,15 +543,23 @@ export default function MarketingPage() {
 							<CardContent>
 								<div className="space-y-4">
 									{socialMetrics.map((metric) => (
-										<div key={metric.platform} className="flex items-center justify-between">
+										<div
+											key={metric.platform}
+											className="flex items-center justify-between"
+										>
 											<div className="flex items-center space-x-2">
 												{getPlatformIcon(metric.platform)}
 												<span>{metric.platform}</span>
 											</div>
 											<div className="flex items-center space-x-2">
-												<TrendingUp className={`h-4 w-4 ${metric.growth > 0 ? 'text-green-600' : 'text-red-600'}`} />
-												<span className={`font-medium ${metric.growth > 0 ? 'text-green-600' : 'text-red-600'}`}>
-													{metric.growth > 0 ? "+" : ""}{metric.growth}%
+												<TrendingUp
+													className={`h-4 w-4 ${metric.growth > 0 ? "text-green-600" : "text-red-600"}`}
+												/>
+												<span
+													className={`font-medium ${metric.growth > 0 ? "text-green-600" : "text-red-600"}`}
+												>
+													{metric.growth > 0 ? "+" : ""}
+													{metric.growth}%
 												</span>
 											</div>
 										</div>
@@ -567,7 +612,10 @@ export default function MarketingPage() {
 			</Tabs>
 
 			{/* Create Post Dialog */}
-			<Dialog open={showCreatePostDialog} onOpenChange={setShowCreatePostDialog}>
+			<Dialog
+				open={showCreatePostDialog}
+				onOpenChange={setShowCreatePostDialog}
+			>
 				<DialogContent className="max-w-2xl">
 					<DialogHeader>
 						<DialogTitle>Create Social Media Post</DialogTitle>
@@ -576,40 +624,59 @@ export default function MarketingPage() {
 						{/* Platform Selection */}
 						<div>
 							<Label>Select Platforms *</Label>
-							<div className="grid grid-cols-2 gap-3 mt-2">
+							<div className="mt-2 grid grid-cols-2 gap-3">
 								{[
-									{ id: "facebook", name: "Facebook", icon: Facebook, color: "text-blue-600" },
-									{ id: "instagram", name: "Instagram", icon: Instagram, color: "text-pink-600" },
-									{ id: "twitter", name: "Twitter", icon: Twitter, color: "text-blue-400" },
-									{ id: "linkedin", name: "LinkedIn", icon: Users, color: "text-blue-700" },
+									{
+										id: "facebook",
+										name: "Facebook",
+										icon: Facebook,
+										color: "text-blue-600",
+									},
+									{
+										id: "instagram",
+										name: "Instagram",
+										icon: Instagram,
+										color: "text-pink-600",
+									},
+									{
+										id: "twitter",
+										name: "Twitter",
+										icon: Twitter,
+										color: "text-blue-400",
+									},
+									{
+										id: "linkedin",
+										name: "LinkedIn",
+										icon: Users,
+										color: "text-blue-700",
+									},
 								].map((platform) => (
 									<div
 										key={platform.id}
-										className={`
-											flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors
-											${selectedPlatforms.includes(platform.id)
-												? 'border-blue-500 bg-blue-50'
-												: 'border-gray-200 hover:border-gray-300'
-											}
+										className={`flex cursor-pointer items-center space-x-3 rounded-lg border p-3 transition-colors${
+											selectedPlatforms.includes(platform.id)
+												? "border-blue-500 bg-blue-50"
+												: "border-gray-200 hover:border-gray-300"
+										}
 										`}
 										onClick={() => {
-											setSelectedPlatforms(prev =>
+											setSelectedPlatforms((prev) =>
 												prev.includes(platform.id)
-													? prev.filter(p => p !== platform.id)
-													: [...prev, platform.id]
+													? prev.filter((p) => p !== platform.id)
+													: [...prev, platform.id],
 											);
-											setPostForm(prev => ({
+											setPostForm((prev) => ({
 												...prev,
 												platforms: selectedPlatforms.includes(platform.id)
-													? selectedPlatforms.filter(p => p !== platform.id)
-													: [...selectedPlatforms, platform.id]
+													? selectedPlatforms.filter((p) => p !== platform.id)
+													: [...selectedPlatforms, platform.id],
 											}));
 										}}
 									>
 										<platform.icon className={`h-5 w-5 ${platform.color}`} />
 										<span className="font-medium">{platform.name}</span>
 										{selectedPlatforms.includes(platform.id) && (
-											<div className="ml-auto h-2 w-2 bg-blue-500 rounded-full" />
+											<div className="ml-auto h-2 w-2 rounded-full bg-blue-500" />
 										)}
 									</div>
 								))}
@@ -622,19 +689,21 @@ export default function MarketingPage() {
 							<Textarea
 								id="content"
 								value={postForm.content}
-								onChange={(e) => setPostForm(prev => ({
-									...prev,
-									content: e.target.value
-								}))}
+								onChange={(e) =>
+									setPostForm((prev) => ({
+										...prev,
+										content: e.target.value,
+									}))
+								}
 								placeholder="What would you like to share with your patients?"
 								rows={6}
 								className="mt-2"
 							/>
-							<div className="flex justify-between mt-1">
-								<span className="text-sm text-gray-500">
+							<div className="mt-1 flex justify-between">
+								<span className="text-gray-500 text-sm">
 									{postForm.content.length}/280 characters
 								</span>
-								<span className="text-sm text-gray-500">
+								<span className="text-gray-500 text-sm">
 									Tip: Use emojis and hashtags to increase engagement
 								</span>
 							</div>
@@ -643,12 +712,12 @@ export default function MarketingPage() {
 						{/* Image Upload */}
 						<div>
 							<Label htmlFor="image">Image (Optional)</Label>
-							<div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-								<Camera className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-								<p className="text-sm text-gray-600 mb-2">
+							<div className="mt-2 rounded-lg border-2 border-gray-300 border-dashed p-6 text-center transition-colors hover:border-gray-400">
+								<Camera className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+								<p className="mb-2 text-gray-600 text-sm">
 									Click to upload an image or drag and drop
 								</p>
-								<p className="text-xs text-gray-500">
+								<p className="text-gray-500 text-xs">
 									PNG, JPG, GIF up to 10MB
 								</p>
 								<Input
@@ -669,15 +738,18 @@ export default function MarketingPage() {
 							<Input
 								id="hashtags"
 								value={postForm.hashtags}
-								onChange={(e) => setPostForm(prev => ({
-									...prev,
-									hashtags: e.target.value
-								}))}
+								onChange={(e) =>
+									setPostForm((prev) => ({
+										...prev,
+										hashtags: e.target.value,
+									}))
+								}
 								placeholder="#DentalHealth #SmileTransformation #OralCare"
 								className="mt-2"
 							/>
-							<p className="text-sm text-gray-500 mt-1">
-								Separate hashtags with spaces. Recommended: 3-5 hashtags per post
+							<p className="mt-1 text-gray-500 text-sm">
+								Separate hashtags with spaces. Recommended: 3-5 hashtags per
+								post
 							</p>
 						</div>
 
@@ -688,20 +760,22 @@ export default function MarketingPage() {
 								id="schedule"
 								type="datetime-local"
 								value={postForm.scheduledFor}
-								onChange={(e) => setPostForm(prev => ({
-									...prev,
-									scheduledFor: e.target.value
-								}))}
+								onChange={(e) =>
+									setPostForm((prev) => ({
+										...prev,
+										scheduledFor: e.target.value,
+									}))
+								}
 								className="mt-2"
 								min={new Date().toISOString().slice(0, 16)}
 							/>
-							<p className="text-sm text-gray-500 mt-1">
+							<p className="mt-1 text-gray-500 text-sm">
 								Leave empty to publish immediately
 							</p>
 						</div>
 
 						{/* Action Buttons */}
-						<div className="flex justify-end space-x-3 pt-4 border-t">
+						<div className="flex justify-end space-x-3 border-t pt-4">
 							<Button
 								type="button"
 								variant="outline"
@@ -713,12 +787,16 @@ export default function MarketingPage() {
 							<Button
 								type="button"
 								onClick={handleCreatePost}
-								disabled={isPosting || !postForm.content || selectedPlatforms.length === 0}
+								disabled={
+									isPosting ||
+									!postForm.content ||
+									selectedPlatforms.length === 0
+								}
 							>
 								{isPosting ? (
 									<>
 										<div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-										{postForm.scheduledFor ? 'Scheduling...' : 'Publishing...'}
+										{postForm.scheduledFor ? "Scheduling..." : "Publishing..."}
 									</>
 								) : (
 									<>

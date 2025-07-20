@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +18,7 @@ import {
 	Users,
 	XCircle,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface CalendarStats {
 	totalScheduled: number;
@@ -54,9 +54,9 @@ interface CalendarDashboardProps {
 	onViewCalendar?: () => void;
 }
 
-export default function CalendarDashboard({ 
-	onSchedulePost, 
-	onViewCalendar 
+export default function CalendarDashboard({
+	onSchedulePost,
+	onViewCalendar,
 }: CalendarDashboardProps) {
 	const [stats, setStats] = useState<CalendarStats | null>(null);
 	const [upcomingPosts, setUpcomingPosts] = useState<UpcomingPost[]>([]);
@@ -165,8 +165,8 @@ export default function CalendarDashboard({
 						<Card key={i}>
 							<CardContent className="p-6">
 								<div className="animate-pulse">
-									<div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-									<div className="h-8 bg-gray-200 rounded w-1/2"></div>
+									<div className="mb-2 h-4 w-3/4 rounded bg-gray-200" />
+									<div className="h-8 w-1/2 rounded bg-gray-200" />
 								</div>
 							</CardContent>
 						</Card>
@@ -178,16 +178,20 @@ export default function CalendarDashboard({
 
 	if (!stats) return null;
 
-	const totalPosts = stats.totalScheduled + stats.totalPublished + stats.totalFailed;
-	const successRate = totalPosts > 0 ? (stats.totalPublished / totalPosts) * 100 : 0;
+	const totalPosts =
+		stats.totalScheduled + stats.totalPublished + stats.totalFailed;
+	const successRate =
+		totalPosts > 0 ? (stats.totalPublished / totalPosts) * 100 : 0;
 
 	return (
 		<div className="space-y-6">
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h3 className="text-lg font-semibold text-gray-900">Content Calendar Overview</h3>
-					<p className="text-sm text-gray-600">
+					<h3 className="font-semibold text-gray-900 text-lg">
+						Content Calendar Overview
+					</h3>
+					<p className="text-gray-600 text-sm">
 						Manage and track your scheduled social media content
 					</p>
 				</div>
@@ -209,13 +213,15 @@ export default function CalendarDashboard({
 					<CardContent className="p-6">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Scheduled</p>
-								<p className="text-2xl font-semibold text-blue-600">{stats.totalScheduled}</p>
+								<p className="text-gray-600 text-sm">Scheduled</p>
+								<p className="font-semibold text-2xl text-blue-600">
+									{stats.totalScheduled}
+								</p>
 							</div>
 							<Clock className="h-8 w-8 text-blue-600" />
 						</div>
 						<div className="mt-2">
-							<p className="text-xs text-gray-500">
+							<p className="text-gray-500 text-xs">
 								{stats.upcomingThisWeek} this week
 							</p>
 						</div>
@@ -226,13 +232,15 @@ export default function CalendarDashboard({
 					<CardContent className="p-6">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Published</p>
-								<p className="text-2xl font-semibold text-green-600">{stats.totalPublished}</p>
+								<p className="text-gray-600 text-sm">Published</p>
+								<p className="font-semibold text-2xl text-green-600">
+									{stats.totalPublished}
+								</p>
 							</div>
 							<CheckCircle className="h-8 w-8 text-green-600" />
 						</div>
 						<div className="mt-2">
-							<p className="text-xs text-gray-500">
+							<p className="text-gray-500 text-xs">
 								{successRate.toFixed(1)}% success rate
 							</p>
 						</div>
@@ -243,14 +251,19 @@ export default function CalendarDashboard({
 					<CardContent className="p-6">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Failed</p>
-								<p className="text-2xl font-semibold text-red-600">{stats.totalFailed}</p>
+								<p className="text-gray-600 text-sm">Failed</p>
+								<p className="font-semibold text-2xl text-red-600">
+									{stats.totalFailed}
+								</p>
 							</div>
 							<XCircle className="h-8 w-8 text-red-600" />
 						</div>
 						<div className="mt-2">
-							<p className="text-xs text-gray-500">
-								{totalPosts > 0 ? ((stats.totalFailed / totalPosts) * 100).toFixed(1) : 0}% failure rate
+							<p className="text-gray-500 text-xs">
+								{totalPosts > 0
+									? ((stats.totalFailed / totalPosts) * 100).toFixed(1)
+									: 0}
+								% failure rate
 							</p>
 						</div>
 					</CardContent>
@@ -260,15 +273,15 @@ export default function CalendarDashboard({
 					<CardContent className="p-6">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Total Posts</p>
-								<p className="text-2xl font-semibold text-gray-900">{totalPosts}</p>
+								<p className="text-gray-600 text-sm">Total Posts</p>
+								<p className="font-semibold text-2xl text-gray-900">
+									{totalPosts}
+								</p>
 							</div>
 							<Target className="h-8 w-8 text-gray-600" />
 						</div>
 						<div className="mt-2">
-							<p className="text-xs text-gray-500">
-								All time
-							</p>
+							<p className="text-gray-500 text-xs">All time</p>
 						</div>
 					</CardContent>
 				</Card>
@@ -283,21 +296,31 @@ export default function CalendarDashboard({
 					</CardHeader>
 					<CardContent>
 						<div className="space-y-4">
-							{Object.entries(stats.platformBreakdown).map(([platform, count]) => {
-								const percentage = totalPosts > 0 ? (count / totalPosts) * 100 : 0;
-								return (
-									<div key={platform} className="flex items-center justify-between">
-										<div className="flex items-center space-x-2">
-											{getPlatformIcon(platform)}
-											<span className="text-sm font-medium capitalize">{platform}</span>
+							{Object.entries(stats.platformBreakdown).map(
+								([platform, count]) => {
+									const percentage =
+										totalPosts > 0 ? (count / totalPosts) * 100 : 0;
+									return (
+										<div
+											key={platform}
+											className="flex items-center justify-between"
+										>
+											<div className="flex items-center space-x-2">
+												{getPlatformIcon(platform)}
+												<span className="font-medium text-sm capitalize">
+													{platform}
+												</span>
+											</div>
+											<div className="flex items-center space-x-3">
+												<Progress value={percentage} className="w-20" />
+												<span className="w-8 text-gray-600 text-sm">
+													{count}
+												</span>
+											</div>
 										</div>
-										<div className="flex items-center space-x-3">
-											<Progress value={percentage} className="w-20" />
-											<span className="text-sm text-gray-600 w-8">{count}</span>
-										</div>
-									</div>
-								);
-							})}
+									);
+								},
+							)}
 						</div>
 					</CardContent>
 				</Card>
@@ -309,22 +332,30 @@ export default function CalendarDashboard({
 					</CardHeader>
 					<CardContent>
 						<div className="space-y-4">
-							{Object.entries(stats.categoryBreakdown).map(([category, count]) => {
-								const percentage = totalPosts > 0 ? (count / totalPosts) * 100 : 0;
-								return (
-									<div key={category} className="flex items-center justify-between">
-										<div className="flex items-center space-x-2">
-											<Badge className={getCategoryColor(category)}>
-												{category}
-											</Badge>
+							{Object.entries(stats.categoryBreakdown).map(
+								([category, count]) => {
+									const percentage =
+										totalPosts > 0 ? (count / totalPosts) * 100 : 0;
+									return (
+										<div
+											key={category}
+											className="flex items-center justify-between"
+										>
+											<div className="flex items-center space-x-2">
+												<Badge className={getCategoryColor(category)}>
+													{category}
+												</Badge>
+											</div>
+											<div className="flex items-center space-x-3">
+												<Progress value={percentage} className="w-20" />
+												<span className="w-8 text-gray-600 text-sm">
+													{count}
+												</span>
+											</div>
 										</div>
-										<div className="flex items-center space-x-3">
-											<Progress value={percentage} className="w-20" />
-											<span className="text-sm text-gray-600 w-8">{count}</span>
-										</div>
-									</div>
-								);
-							})}
+									);
+								},
+							)}
 						</div>
 					</CardContent>
 				</Card>
@@ -338,21 +369,22 @@ export default function CalendarDashboard({
 				<CardContent>
 					<div className="space-y-3">
 						{upcomingPosts.slice(0, 5).map((post) => (
-							<div key={post.id} className="flex items-center justify-between p-3 border rounded-lg">
+							<div
+								key={post.id}
+								className="flex items-center justify-between rounded-lg border p-3"
+							>
 								<div className="flex-1">
-									<div className="flex items-center space-x-2 mb-1">
+									<div className="mb-1 flex items-center space-x-2">
 										<h4 className="font-medium text-sm">{post.title}</h4>
 										<Badge className={getCategoryColor(post.category)}>
 											{post.category}
 										</Badge>
 									</div>
-									<div className="flex items-center space-x-4 text-xs text-gray-500">
+									<div className="flex items-center space-x-4 text-gray-500 text-xs">
 										<span>{new Date(post.scheduledFor).toLocaleString()}</span>
 										<div className="flex items-center space-x-1">
 											{post.platforms.map((platform) => (
-												<span key={platform}>
-													{getPlatformIcon(platform)}
-												</span>
+												<span key={platform}>{getPlatformIcon(platform)}</span>
 											))}
 										</div>
 									</div>
@@ -362,12 +394,19 @@ export default function CalendarDashboard({
 								</Button>
 							</div>
 						))}
-						
+
 						{upcomingPosts.length === 0 && (
-							<div className="text-center py-8">
-								<Calendar className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-								<p className="text-sm text-gray-600">No upcoming posts scheduled</p>
-								<Button variant="outline" size="sm" className="mt-2" onClick={onSchedulePost}>
+							<div className="py-8 text-center">
+								<Calendar className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+								<p className="text-gray-600 text-sm">
+									No upcoming posts scheduled
+								</p>
+								<Button
+									variant="outline"
+									size="sm"
+									className="mt-2"
+									onClick={onSchedulePost}
+								>
 									Schedule Your First Post
 								</Button>
 							</div>

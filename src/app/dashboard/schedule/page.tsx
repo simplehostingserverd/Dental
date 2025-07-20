@@ -398,7 +398,7 @@ export default function SchedulePage() {
 
 							return (
 								<div
-									key={`day-${i}`}
+									key={`${currentDate.getFullYear()}-${currentDate.getMonth()}-day-${dayNumber}`}
 									className={`aspect-square border border-gray-100 p-2 ${
 										isCurrentMonth ? "bg-white hover:bg-gray-50" : "bg-gray-50"
 									} ${isToday ? "border-blue-200 bg-blue-50" : ""}`}

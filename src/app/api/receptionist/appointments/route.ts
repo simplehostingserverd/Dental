@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { type NextRequest, NextResponse } from "next/server";
 
 interface CreateAppointmentRequest {
 	patientName: string;
@@ -38,10 +38,17 @@ export async function POST(request: NextRequest) {
 		const body: CreateAppointmentRequest = await request.json();
 
 		// Validate required fields
-		if (!body.patientName || !body.phone || !body.provider || !body.treatment || !body.date || !body.time) {
+		if (
+			!body.patientName ||
+			!body.phone ||
+			!body.provider ||
+			!body.treatment ||
+			!body.date ||
+			!body.time
+		) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -50,7 +57,7 @@ export async function POST(request: NextRequest) {
 		if (!phoneRegex.test(body.phone)) {
 			return NextResponse.json(
 				{ error: "Invalid phone number format. Use (555) 123-4567" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -60,7 +67,7 @@ export async function POST(request: NextRequest) {
 			if (!emailRegex.test(body.email)) {
 				return NextResponse.json(
 					{ error: "Invalid email format" },
-					{ status: 400 }
+					{ status: 400 },
 				);
 			}
 		}
@@ -69,11 +76,11 @@ export async function POST(request: NextRequest) {
 		const appointmentDate = new Date(body.date);
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
-		
+
 		if (appointmentDate < today) {
 			return NextResponse.json(
 				{ error: "Appointment date cannot be in the past" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -104,14 +111,13 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({
 			success: true,
 			appointment: newAppointment,
-			message: "Appointment booked successfully"
+			message: "Appointment booked successfully",
 		});
-
 	} catch (error) {
 		console.error("Error creating appointment:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -166,28 +172,33 @@ export async function GET(request: NextRequest) {
 		let filteredAppointments = mockAppointments;
 
 		if (date) {
-			filteredAppointments = filteredAppointments.filter(apt => apt.date === date);
+			filteredAppointments = filteredAppointments.filter(
+				(apt) => apt.date === date,
+			);
 		}
 
 		if (provider) {
-			filteredAppointments = filteredAppointments.filter(apt => apt.provider === provider);
+			filteredAppointments = filteredAppointments.filter(
+				(apt) => apt.provider === provider,
+			);
 		}
 
 		if (status) {
-			filteredAppointments = filteredAppointments.filter(apt => apt.status === status);
+			filteredAppointments = filteredAppointments.filter(
+				(apt) => apt.status === status,
+			);
 		}
 
 		return NextResponse.json({
 			success: true,
 			appointments: filteredAppointments,
-			total: filteredAppointments.length
+			total: filteredAppointments.length,
 		});
-
 	} catch (error) {
 		console.error("Error fetching appointments:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -205,7 +216,7 @@ export async function PUT(request: NextRequest) {
 		if (!id) {
 			return NextResponse.json(
 				{ error: "Appointment ID is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -222,14 +233,13 @@ export async function PUT(request: NextRequest) {
 		return NextResponse.json({
 			success: true,
 			appointment: updatedAppointment,
-			message: "Appointment updated successfully"
+			message: "Appointment updated successfully",
 		});
-
 	} catch (error) {
 		console.error("Error updating appointment:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -247,7 +257,7 @@ export async function DELETE(request: NextRequest) {
 		if (!id) {
 			return NextResponse.json(
 				{ error: "Appointment ID is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -257,14 +267,13 @@ export async function DELETE(request: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			message: "Appointment cancelled successfully"
+			message: "Appointment cancelled successfully",
 		});
-
 	} catch (error) {
 		console.error("Error cancelling appointment:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

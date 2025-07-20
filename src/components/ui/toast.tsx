@@ -1,7 +1,13 @@
 "use client";
 
-import { useState, useEffect, createContext, useContext, ReactNode } from "react";
-import { CheckCircle, XCircle, AlertCircle, Info, X } from "lucide-react";
+import { AlertCircle, CheckCircle, Info, X, XCircle } from "lucide-react";
+import {
+	type ReactNode,
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 
 interface Toast {
 	id: string;
@@ -29,7 +35,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 			duration: toast.duration || 5000,
 		};
 
-		setToasts(prev => [...prev, newToast]);
+		setToasts((prev) => [...prev, newToast]);
 
 		// Auto remove after duration
 		setTimeout(() => {
@@ -38,7 +44,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 	};
 
 	const removeToast = (id: string) => {
-		setToasts(prev => prev.filter(toast => toast.id !== id));
+		setToasts((prev) => prev.filter((toast) => toast.id !== id));
 	};
 
 	return (
@@ -57,29 +63,29 @@ export function useToast() {
 	return context;
 }
 
-function ToastContainer({ 
-	toasts, 
-	onRemove 
-}: { 
-	toasts: Toast[]; 
+function ToastContainer({
+	toasts,
+	onRemove,
+}: {
+	toasts: Toast[];
 	onRemove: (id: string) => void;
 }) {
 	if (toasts.length === 0) return null;
 
 	return (
 		<div className="fixed top-4 right-4 z-50 space-y-2">
-			{toasts.map(toast => (
+			{toasts.map((toast) => (
 				<ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
 			))}
 		</div>
 	);
 }
 
-function ToastItem({ 
-	toast, 
-	onRemove 
-}: { 
-	toast: Toast; 
+function ToastItem({
+	toast,
+	onRemove,
+}: {
+	toast: Toast;
 	onRemove: (id: string) => void;
 }) {
 	const [isVisible, setIsVisible] = useState(false);
@@ -148,19 +154,13 @@ function ToastItem({
 
 	return (
 		<div
-			className={`
-				transform transition-all duration-300 ease-in-out
-				${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
-				max-w-sm w-full shadow-lg rounded-lg border p-4
-				${getBackgroundColor()}
+			className={`transform transition-all duration-300 ease-in-out${isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}max-w-sm w-full rounded-lg border shadow-lg p-4${getBackgroundColor()}
 			`}
 		>
 			<div className="flex items-start">
-				<div className="flex-shrink-0">
-					{getIcon()}
-				</div>
+				<div className="flex-shrink-0">{getIcon()}</div>
 				<div className="ml-3 w-0 flex-1">
-					<p className={`text-sm font-medium ${getTitleColor()}`}>
+					<p className={`font-medium text-sm ${getTitleColor()}`}>
 						{toast.title}
 					</p>
 					{toast.message && (
@@ -169,15 +169,13 @@ function ToastItem({
 						</p>
 					)}
 				</div>
-				<div className="ml-4 flex-shrink-0 flex">
+				<div className="ml-4 flex flex-shrink-0">
 					<button
 						type="button"
-						className={`
-							inline-flex rounded-md p-1.5 transition-colors
-							${toast.type === 'success' ? 'text-green-500 hover:bg-green-100' : ''}
-							${toast.type === 'error' ? 'text-red-500 hover:bg-red-100' : ''}
-							${toast.type === 'warning' ? 'text-yellow-500 hover:bg-yellow-100' : ''}
-							${toast.type === 'info' ? 'text-blue-500 hover:bg-blue-100' : ''}
+						className={`inline-flex rounded-md p-1.5 transition-colors${toast.type === "success" ? "text-green-500 hover:bg-green-100" : ""}
+							${toast.type === "error" ? "text-red-500 hover:bg-red-100" : ""}
+							${toast.type === "warning" ? "text-yellow-500 hover:bg-yellow-100" : ""}
+							${toast.type === "info" ? "text-blue-500 hover:bg-blue-100" : ""}
 						`}
 						onClick={handleRemove}
 					>

@@ -152,6 +152,7 @@ export default function PatientDashboardPage() {
 								{user.lastName.charAt(0)}
 							</div>
 							<button
+								type="button"
 								onClick={handleLogout}
 								className="flex items-center space-x-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 text-sm hover:bg-gray-50"
 								title="Logout"
@@ -191,7 +192,10 @@ export default function PatientDashboardPage() {
 							</div>
 						</div>
 						<Link href="/patient/appointments/book">
-							<button className="mt-4 w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700">
+							<button
+								type="button"
+								className="mt-4 w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700"
+							>
 								Book Now
 							</button>
 						</Link>
@@ -208,7 +212,10 @@ export default function PatientDashboardPage() {
 							</div>
 						</div>
 						<Link href="/patient/history">
-							<button className="mt-4 w-full rounded-md bg-green-600 px-4 py-2 font-medium text-sm text-white hover:bg-green-700">
+							<button
+								type="button"
+								className="mt-4 w-full rounded-md bg-green-600 px-4 py-2 font-medium text-sm text-white hover:bg-green-700"
+							>
 								View History
 							</button>
 						</Link>
@@ -227,7 +234,10 @@ export default function PatientDashboardPage() {
 							</div>
 						</div>
 						<Link href="/patient/messages">
-							<button className="mt-4 w-full rounded-md bg-purple-600 px-4 py-2 font-medium text-sm text-white hover:bg-purple-700">
+							<button
+								type="button"
+								className="mt-4 w-full rounded-md bg-purple-600 px-4 py-2 font-medium text-sm text-white hover:bg-purple-700"
+							>
 								Send Message
 							</button>
 						</Link>
@@ -244,7 +254,10 @@ export default function PatientDashboardPage() {
 							</div>
 						</div>
 						<Link href="/patient/profile">
-							<button className="mt-4 w-full rounded-md bg-orange-600 px-4 py-2 font-medium text-sm text-white hover:bg-orange-700">
+							<button
+								type="button"
+								className="mt-4 w-full rounded-md bg-orange-600 px-4 py-2 font-medium text-sm text-white hover:bg-orange-700"
+							>
 								Edit Profile
 							</button>
 						</Link>
@@ -260,7 +273,10 @@ export default function PatientDashboardPage() {
 								<h3 className="font-semibold text-gray-900 text-lg">
 									Upcoming Appointments
 								</h3>
-								<button className="text-blue-600 text-sm hover:text-blue-500">
+								<button
+									type="button"
+									className="text-blue-600 text-sm hover:text-blue-500"
+								>
 									View All
 								</button>
 							</div>
@@ -305,7 +321,10 @@ export default function PatientDashboardPage() {
 												Book your next appointment to maintain your oral health
 											</p>
 											<Link href="/patient/appointments/book">
-												<button className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700">
+												<button
+													type="button"
+													className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700"
+												>
 													Book Appointment
 												</button>
 											</Link>
@@ -324,7 +343,10 @@ export default function PatientDashboardPage() {
 								<h3 className="font-semibold text-gray-900 text-lg">
 									Recent Messages
 								</h3>
-								<button className="text-blue-600 text-sm hover:text-blue-500">
+								<button
+									type="button"
+									className="text-blue-600 text-sm hover:text-blue-500"
+								>
 									View All
 								</button>
 							</div>
@@ -356,7 +378,10 @@ export default function PatientDashboardPage() {
 									<div className="text-center">
 										<p className="text-gray-500 text-sm">No messages yet</p>
 										<Link href="/patient/messages">
-											<button className="mt-2 text-blue-600 text-sm hover:text-blue-500">
+											<button
+												type="button"
+												className="mt-2 text-blue-600 text-sm hover:text-blue-500"
+											>
 												Send a message
 											</button>
 										</Link>

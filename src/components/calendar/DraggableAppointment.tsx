@@ -1,10 +1,10 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Badge } from "@/components/ui/badge";
-import { User, Clock, MapPin, GripVertical } from "lucide-react";
-import { Appointment } from "./DragDropCalendar";
+import { Clock, GripVertical, MapPin, User } from "lucide-react";
+import type { Appointment } from "./DragDropCalendar";
 
 interface DraggableAppointmentProps {
 	appointment: Appointment;
@@ -34,7 +34,7 @@ export function DraggableAppointment({
 	};
 
 	const duration = Math.round(
-		(appointment.end.getTime() - appointment.start.getTime()) / (1000 * 60)
+		(appointment.end.getTime() - appointment.start.getTime()) / (1000 * 60),
 	);
 
 	return (
@@ -50,7 +50,7 @@ export function DraggableAppointment({
 			{/* Drag Handle */}
 			<div
 				{...listeners}
-				className="absolute left-1 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
+				className="-translate-y-1/2 absolute top-1/2 left-1 cursor-grab opacity-0 transition-opacity active:cursor-grabbing group-hover:opacity-100"
 			>
 				<GripVertical className="h-4 w-4 text-gray-400" />
 			</div>
@@ -60,7 +60,7 @@ export function DraggableAppointment({
 				<div className="flex items-center justify-between">
 					<div className="flex items-center space-x-2">
 						<User className="h-4 w-4 text-gray-500" />
-						<span className="font-medium text-sm text-gray-900">
+						<span className="font-medium text-gray-900 text-sm">
 							{appointment.patient.name}
 						</span>
 					</div>
@@ -73,10 +73,8 @@ export function DraggableAppointment({
 
 				{/* Treatment and Duration */}
 				<div className="space-y-1">
-					<div className="text-sm text-gray-700">
-						{appointment.treatment}
-					</div>
-					<div className="flex items-center space-x-4 text-xs text-gray-500">
+					<div className="text-gray-700 text-sm">{appointment.treatment}</div>
+					<div className="flex items-center space-x-4 text-gray-500 text-xs">
 						<div className="flex items-center space-x-1">
 							<Clock className="h-3 w-3" />
 							<span>{duration} min</span>
@@ -89,27 +87,29 @@ export function DraggableAppointment({
 				</div>
 
 				{/* Provider */}
-				<div className="text-xs text-gray-600">
-					with {appointment.provider}
-				</div>
+				<div className="text-gray-600 text-xs">with {appointment.provider}</div>
 
 				{/* Status Indicator */}
 				<div className="flex items-center justify-between">
-					<div className="text-xs text-gray-500">
-						{appointment.start.toLocaleTimeString('en-US', {
-							hour: 'numeric',
-							minute: '2-digit',
-						})} - {appointment.end.toLocaleTimeString('en-US', {
-							hour: 'numeric',
-							minute: '2-digit',
+					<div className="text-gray-500 text-xs">
+						{appointment.start.toLocaleTimeString("en-US", {
+							hour: "numeric",
+							minute: "2-digit",
+						})}{" "}
+						-{" "}
+						{appointment.end.toLocaleTimeString("en-US", {
+							hour: "numeric",
+							minute: "2-digit",
 						})}
 					</div>
-					<div className={`h-2 w-2 rounded-full ${getStatusDotColor(appointment.status)}`} />
+					<div
+						className={`h-2 w-2 rounded-full ${getStatusDotColor(appointment.status)}`}
+					/>
 				</div>
 			</div>
 
 			{/* Hover Actions */}
-			<div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
+			<div className="absolute top-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
 				<div className="flex space-x-1">
 					<button
 						type="button"
@@ -119,8 +119,18 @@ export function DraggableAppointment({
 							// Handle edit action
 						}}
 					>
-						<svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+						<svg
+							className="h-3 w-3"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+							/>
 						</svg>
 					</button>
 				</div>
@@ -129,21 +139,21 @@ export function DraggableAppointment({
 	);
 }
 
-function getStatusDotColor(status: Appointment['status']): string {
+function getStatusDotColor(status: Appointment["status"]): string {
 	switch (status) {
-		case 'confirmed':
-			return 'bg-blue-500';
-		case 'pending':
-			return 'bg-yellow-500';
-		case 'checked-in':
-			return 'bg-green-500';
-		case 'completed':
-			return 'bg-gray-500';
-		case 'cancelled':
-			return 'bg-red-500';
-		case 'no-show':
-			return 'bg-orange-500';
+		case "confirmed":
+			return "bg-blue-500";
+		case "pending":
+			return "bg-yellow-500";
+		case "checked-in":
+			return "bg-green-500";
+		case "completed":
+			return "bg-gray-500";
+		case "cancelled":
+			return "bg-red-500";
+		case "no-show":
+			return "bg-orange-500";
 		default:
-			return 'bg-gray-400';
+			return "bg-gray-400";
 	}
 }

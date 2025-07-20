@@ -347,6 +347,7 @@ export default function BillingPage() {
 				<nav className="-mb-px flex space-x-8">
 					{["invoices", "claims", "payments"].map((tab) => (
 						<button
+							type="button"
 							key={tab}
 							onClick={() =>
 								setActiveTab(tab as "invoices" | "claims" | "payments")

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { type NextRequest, NextResponse } from "next/server";
 
 interface ScheduledPost {
 	id: string;
@@ -10,7 +10,12 @@ interface ScheduledPost {
 	platforms: string[];
 	scheduledFor: Date;
 	status: "scheduled" | "published" | "failed" | "draft";
-	category: "educational" | "promotional" | "testimonial" | "seasonal" | "general";
+	category:
+		| "educational"
+		| "promotional"
+		| "testimonial"
+		| "seasonal"
+		| "general";
 	hashtags: string[];
 	imageUrl?: string;
 	createdBy: string;
@@ -29,7 +34,12 @@ interface CreateScheduledPostRequest {
 	content: string;
 	platforms: string[];
 	scheduledFor: string;
-	category: "educational" | "promotional" | "testimonial" | "seasonal" | "general";
+	category:
+		| "educational"
+		| "promotional"
+		| "testimonial"
+		| "seasonal"
+		| "general";
 	hashtags: string;
 	imageUrl?: string;
 }
@@ -44,10 +54,16 @@ export async function POST(request: NextRequest) {
 		const body: CreateScheduledPostRequest = await request.json();
 
 		// Validate required fields
-		if (!body.title || !body.content || !body.platforms || body.platforms.length === 0 || !body.scheduledFor) {
+		if (
+			!body.title ||
+			!body.content ||
+			!body.platforms ||
+			body.platforms.length === 0 ||
+			!body.scheduledFor
+		) {
 			return NextResponse.json(
 				{ error: "Title, content, platforms, and scheduled time are required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -55,7 +71,7 @@ export async function POST(request: NextRequest) {
 		if (body.title.length < 3 || body.title.length > 100) {
 			return NextResponse.json(
 				{ error: "Title must be between 3 and 100 characters" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -63,57 +79,68 @@ export async function POST(request: NextRequest) {
 		if (body.content.length < 10 || body.content.length > 2000) {
 			return NextResponse.json(
 				{ error: "Content must be between 10 and 2000 characters" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Validate platforms
-		const validPlatforms = ["facebook", "instagram", "twitter", "linkedin", "youtube"];
-		const invalidPlatforms = body.platforms.filter(p => !validPlatforms.includes(p));
+		const validPlatforms = [
+			"facebook",
+			"instagram",
+			"twitter",
+			"linkedin",
+			"youtube",
+		];
+		const invalidPlatforms = body.platforms.filter(
+			(p) => !validPlatforms.includes(p),
+		);
 		if (invalidPlatforms.length > 0) {
 			return NextResponse.json(
 				{ error: `Invalid platforms: ${invalidPlatforms.join(", ")}` },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Validate scheduled time
 		const scheduledFor = new Date(body.scheduledFor);
 		const now = new Date();
-		
+
 		if (scheduledFor <= now) {
 			return NextResponse.json(
 				{ error: "Scheduled time must be in the future" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Don't allow scheduling more than 1 year in advance
 		const maxFutureDate = new Date();
 		maxFutureDate.setFullYear(maxFutureDate.getFullYear() + 1);
-		
+
 		if (scheduledFor > maxFutureDate) {
 			return NextResponse.json(
 				{ error: "Cannot schedule posts more than 1 year in advance" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Validate category
-		const validCategories = ["educational", "promotional", "testimonial", "seasonal", "general"];
+		const validCategories = [
+			"educational",
+			"promotional",
+			"testimonial",
+			"seasonal",
+			"general",
+		];
 		if (!validCategories.includes(body.category)) {
-			return NextResponse.json(
-				{ error: "Invalid category" },
-				{ status: 400 }
-			);
+			return NextResponse.json({ error: "Invalid category" }, { status: 400 });
 		}
 
 		// Parse hashtags
 		const hashtags = body.hashtags
 			.split(/\s+/)
-			.filter(tag => tag.startsWith('#'))
-			.map(tag => tag.slice(1))
-			.filter(tag => tag.length > 0);
+			.filter((tag) => tag.startsWith("#"))
+			.map((tag) => tag.slice(1))
+			.filter((tag) => tag.length > 0);
 
 		// Create scheduled post
 		const scheduledPost: ScheduledPost = {
@@ -139,14 +166,13 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({
 			success: true,
 			post: scheduledPost,
-			message: `Post scheduled for ${scheduledFor.toLocaleString()}`
+			message: `Post scheduled for ${scheduledFor.toLocaleString()}`,
 		});
-
 	} catch (error) {
 		console.error("Error creating scheduled post:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -173,7 +199,8 @@ export async function GET(request: NextRequest) {
 				id: "sched_1",
 				practiceId: session.user.practiceId,
 				title: "Daily Oral Hygiene Tip",
-				content: "💡 Daily Tip: Brush your teeth for at least 2 minutes, twice a day! Use a soft-bristled toothbrush and fluoride toothpaste for best results. #DentalHealth #OralHygiene",
+				content:
+					"💡 Daily Tip: Brush your teeth for at least 2 minutes, twice a day! Use a soft-bristled toothbrush and fluoride toothpaste for best results. #DentalHealth #OralHygiene",
 				platforms: ["facebook", "instagram"],
 				scheduledFor: new Date(2025, 6, 18, 9, 0),
 				status: "scheduled",
@@ -187,7 +214,8 @@ export async function GET(request: NextRequest) {
 				id: "sched_2",
 				practiceId: session.user.practiceId,
 				title: "Teeth Whitening Promotion",
-				content: "✨ SPECIAL OFFER: Professional teeth whitening for just $299! Book this month and save $151! Limited time offer. #TeethWhitening #SpecialOffer",
+				content:
+					"✨ SPECIAL OFFER: Professional teeth whitening for just $299! Book this month and save $151! Limited time offer. #TeethWhitening #SpecialOffer",
 				platforms: ["facebook", "instagram", "twitter"],
 				scheduledFor: new Date(2025, 6, 19, 14, 30),
 				status: "scheduled",
@@ -201,7 +229,8 @@ export async function GET(request: NextRequest) {
 				id: "sched_3",
 				practiceId: session.user.practiceId,
 				title: "Patient Success Story",
-				content: "🌟 \"Amazing experience with my dental implant! Dr. Smith made the whole process comfortable and the results are incredible!\" - Sarah M. #PatientTestimonial #DentalImplants",
+				content:
+					'🌟 "Amazing experience with my dental implant! Dr. Smith made the whole process comfortable and the results are incredible!" - Sarah M. #PatientTestimonial #DentalImplants',
 				platforms: ["facebook", "linkedin"],
 				scheduledFor: new Date(2025, 6, 20, 11, 0),
 				status: "scheduled",
@@ -218,59 +247,67 @@ export async function GET(request: NextRequest) {
 
 		if (startDate) {
 			const start = new Date(startDate);
-			filteredPosts = filteredPosts.filter(post => 
-				new Date(post.scheduledFor) >= start
+			filteredPosts = filteredPosts.filter(
+				(post) => new Date(post.scheduledFor) >= start,
 			);
 		}
 
 		if (endDate) {
 			const end = new Date(endDate);
-			filteredPosts = filteredPosts.filter(post => 
-				new Date(post.scheduledFor) <= end
+			filteredPosts = filteredPosts.filter(
+				(post) => new Date(post.scheduledFor) <= end,
 			);
 		}
 
 		if (platform) {
-			filteredPosts = filteredPosts.filter(post => 
-				post.platforms.includes(platform)
+			filteredPosts = filteredPosts.filter((post) =>
+				post.platforms.includes(platform),
 			);
 		}
 
 		if (category) {
-			filteredPosts = filteredPosts.filter(post => 
-				post.category === category
+			filteredPosts = filteredPosts.filter(
+				(post) => post.category === category,
 			);
 		}
 
 		if (status) {
-			filteredPosts = filteredPosts.filter(post => 
-				post.status === status
-			);
+			filteredPosts = filteredPosts.filter((post) => post.status === status);
 		}
 
 		// Calculate calendar statistics
 		const stats = {
-			totalScheduled: filteredPosts.filter(p => p.status === "scheduled").length,
-			totalPublished: filteredPosts.filter(p => p.status === "published").length,
-			totalFailed: filteredPosts.filter(p => p.status === "failed").length,
-			upcomingThisWeek: filteredPosts.filter(p => {
+			totalScheduled: filteredPosts.filter((p) => p.status === "scheduled")
+				.length,
+			totalPublished: filteredPosts.filter((p) => p.status === "published")
+				.length,
+			totalFailed: filteredPosts.filter((p) => p.status === "failed").length,
+			upcomingThisWeek: filteredPosts.filter((p) => {
 				const postDate = new Date(p.scheduledFor);
 				const weekFromNow = new Date();
 				weekFromNow.setDate(weekFromNow.getDate() + 7);
 				return postDate <= weekFromNow && p.status === "scheduled";
 			}).length,
 			platformBreakdown: {
-				facebook: filteredPosts.filter(p => p.platforms.includes("facebook")).length,
-				instagram: filteredPosts.filter(p => p.platforms.includes("instagram")).length,
-				twitter: filteredPosts.filter(p => p.platforms.includes("twitter")).length,
-				linkedin: filteredPosts.filter(p => p.platforms.includes("linkedin")).length,
+				facebook: filteredPosts.filter((p) => p.platforms.includes("facebook"))
+					.length,
+				instagram: filteredPosts.filter((p) =>
+					p.platforms.includes("instagram"),
+				).length,
+				twitter: filteredPosts.filter((p) => p.platforms.includes("twitter"))
+					.length,
+				linkedin: filteredPosts.filter((p) => p.platforms.includes("linkedin"))
+					.length,
 			},
 			categoryBreakdown: {
-				educational: filteredPosts.filter(p => p.category === "educational").length,
-				promotional: filteredPosts.filter(p => p.category === "promotional").length,
-				testimonial: filteredPosts.filter(p => p.category === "testimonial").length,
-				seasonal: filteredPosts.filter(p => p.category === "seasonal").length,
-				general: filteredPosts.filter(p => p.category === "general").length,
+				educational: filteredPosts.filter((p) => p.category === "educational")
+					.length,
+				promotional: filteredPosts.filter((p) => p.category === "promotional")
+					.length,
+				testimonial: filteredPosts.filter((p) => p.category === "testimonial")
+					.length,
+				seasonal: filteredPosts.filter((p) => p.category === "seasonal").length,
+				general: filteredPosts.filter((p) => p.category === "general").length,
 			},
 		};
 
@@ -278,14 +315,13 @@ export async function GET(request: NextRequest) {
 			success: true,
 			posts: filteredPosts,
 			stats: stats,
-			total: filteredPosts.length
+			total: filteredPosts.length,
 		});
-
 	} catch (error) {
 		console.error("Error fetching scheduled posts:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -303,7 +339,7 @@ export async function PUT(request: NextRequest) {
 		if (!id) {
 			return NextResponse.json(
 				{ error: "Post ID is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -313,14 +349,13 @@ export async function PUT(request: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			message: "Scheduled post updated successfully"
+			message: "Scheduled post updated successfully",
 		});
-
 	} catch (error) {
 		console.error("Error updating scheduled post:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -338,7 +373,7 @@ export async function DELETE(request: NextRequest) {
 		if (!id) {
 			return NextResponse.json(
 				{ error: "Post ID is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -348,14 +383,13 @@ export async function DELETE(request: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			message: "Scheduled post deleted successfully"
+			message: "Scheduled post deleted successfully",
 		});
-
 	} catch (error) {
 		console.error("Error deleting scheduled post:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

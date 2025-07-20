@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import {
 	BarChart3,
 	Calendar,
@@ -17,6 +22,7 @@ import {
 	TrendingUp,
 	Users,
 } from "lucide-react";
+import { useState } from "react";
 
 interface CalendarAnalyticsProps {
 	timeframe?: "week" | "month" | "quarter" | "year";
@@ -44,7 +50,9 @@ interface OptimalTime {
 	posts: number;
 }
 
-export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnalyticsProps) {
+export default function CalendarAnalytics({
+	timeframe = "month",
+}: CalendarAnalyticsProps) {
 	const [selectedTimeframe, setSelectedTimeframe] = useState(timeframe);
 	const [selectedMetric, setSelectedMetric] = useState("engagement");
 
@@ -60,11 +68,41 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 	];
 
 	const contentPerformance: ContentPerformance[] = [
-		{ category: "Educational", posts: 15, avgEngagement: 6.4, totalReach: 4200, growth: 12.5 },
-		{ category: "Promotional", posts: 8, avgEngagement: 4.2, totalReach: 2800, growth: 8.3 },
-		{ category: "Testimonial", posts: 6, avgEngagement: 9.1, totalReach: 3600, growth: 18.7 },
-		{ category: "Seasonal", posts: 4, avgEngagement: 7.8, totalReach: 2200, growth: 15.2 },
-		{ category: "General", posts: 12, avgEngagement: 5.6, totalReach: 3400, growth: 9.8 },
+		{
+			category: "Educational",
+			posts: 15,
+			avgEngagement: 6.4,
+			totalReach: 4200,
+			growth: 12.5,
+		},
+		{
+			category: "Promotional",
+			posts: 8,
+			avgEngagement: 4.2,
+			totalReach: 2800,
+			growth: 8.3,
+		},
+		{
+			category: "Testimonial",
+			posts: 6,
+			avgEngagement: 9.1,
+			totalReach: 3600,
+			growth: 18.7,
+		},
+		{
+			category: "Seasonal",
+			posts: 4,
+			avgEngagement: 7.8,
+			totalReach: 2200,
+			growth: 15.2,
+		},
+		{
+			category: "General",
+			posts: 12,
+			avgEngagement: 5.6,
+			totalReach: 3400,
+			growth: 9.8,
+		},
 	];
 
 	const optimalTimes: OptimalTime[] = [
@@ -152,13 +190,18 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 			{/* Analytics Header */}
 			<div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
 				<div>
-					<h3 className="text-lg font-semibold text-gray-900">Calendar Analytics</h3>
-					<p className="text-sm text-gray-600">
+					<h3 className="font-semibold text-gray-900 text-lg">
+						Calendar Analytics
+					</h3>
+					<p className="text-gray-600 text-sm">
 						Insights and performance metrics for your content calendar
 					</p>
 				</div>
 				<div className="flex items-center space-x-3">
-					<Select value={selectedTimeframe} onValueChange={setSelectedTimeframe}>
+					<Select
+						value={selectedTimeframe}
+						onValueChange={setSelectedTimeframe}
+					>
 						<SelectTrigger className="w-32">
 							<SelectValue />
 						</SelectTrigger>
@@ -182,14 +225,18 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Total Posts</p>
-								<p className="text-2xl font-semibold">{monthlyStats.totalPosts}</p>
+								<p className="text-gray-600 text-sm">Total Posts</p>
+								<p className="font-semibold text-2xl">
+									{monthlyStats.totalPosts}
+								</p>
 							</div>
 							<Calendar className="h-8 w-8 text-blue-600" />
 						</div>
 						<div className="mt-2 flex items-center text-sm">
 							<TrendingUp className="mr-1 h-3 w-3 text-green-600" />
-							<span className="text-green-600">+{weeklyComparison.growth.posts}%</span>
+							<span className="text-green-600">
+								+{weeklyComparison.growth.posts}%
+							</span>
 							<span className="ml-1 text-gray-600">vs last week</span>
 						</div>
 					</CardContent>
@@ -199,14 +246,18 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Avg Engagement</p>
-								<p className="text-2xl font-semibold">{monthlyStats.avgEngagementRate}%</p>
+								<p className="text-gray-600 text-sm">Avg Engagement</p>
+								<p className="font-semibold text-2xl">
+									{monthlyStats.avgEngagementRate}%
+								</p>
 							</div>
 							<Heart className="h-8 w-8 text-red-600" />
 						</div>
 						<div className="mt-2 flex items-center text-sm">
 							<TrendingUp className="mr-1 h-3 w-3 text-green-600" />
-							<span className="text-green-600">+{weeklyComparison.growth.engagement}%</span>
+							<span className="text-green-600">
+								+{weeklyComparison.growth.engagement}%
+							</span>
 							<span className="ml-1 text-gray-600">vs last week</span>
 						</div>
 					</CardContent>
@@ -216,14 +267,18 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Total Reach</p>
-								<p className="text-2xl font-semibold">{monthlyStats.totalReach.toLocaleString()}</p>
+								<p className="text-gray-600 text-sm">Total Reach</p>
+								<p className="font-semibold text-2xl">
+									{monthlyStats.totalReach.toLocaleString()}
+								</p>
 							</div>
 							<Eye className="h-8 w-8 text-purple-600" />
 						</div>
 						<div className="mt-2 flex items-center text-sm">
 							<TrendingUp className="mr-1 h-3 w-3 text-green-600" />
-							<span className="text-green-600">+{weeklyComparison.growth.reach}%</span>
+							<span className="text-green-600">
+								+{weeklyComparison.growth.reach}%
+							</span>
 							<span className="ml-1 text-gray-600">vs last week</span>
 						</div>
 					</CardContent>
@@ -233,8 +288,10 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-gray-600">Growth Rate</p>
-								<p className="text-2xl font-semibold">{monthlyStats.growthRate}%</p>
+								<p className="text-gray-600 text-sm">Growth Rate</p>
+								<p className="font-semibold text-2xl">
+									{monthlyStats.growthRate}%
+								</p>
 							</div>
 							<TrendingUp className="h-8 w-8 text-green-600" />
 						</div>
@@ -255,17 +312,22 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 					<CardContent>
 						<div className="space-y-3">
 							{postingPatterns.map((pattern) => (
-								<div key={pattern.day} className="flex items-center justify-between">
+								<div
+									key={pattern.day}
+									className="flex items-center justify-between"
+								>
 									<div className="flex items-center space-x-3">
-										<span className="w-16 text-sm font-medium">{pattern.day}</span>
-										<div className="flex-1 bg-gray-200 rounded-full h-2">
+										<span className="w-16 font-medium text-sm">
+											{pattern.day}
+										</span>
+										<div className="h-2 flex-1 rounded-full bg-gray-200">
 											<div
-												className="bg-blue-600 h-2 rounded-full"
+												className="h-2 rounded-full bg-blue-600"
 												style={{ width: `${(pattern.posts / 10) * 100}%` }}
 											/>
 										</div>
 									</div>
-									<div className="flex items-center space-x-4 text-sm text-gray-600">
+									<div className="flex items-center space-x-4 text-gray-600 text-sm">
 										<span>{pattern.posts} posts</span>
 										<span>{pattern.engagement}% eng</span>
 									</div>
@@ -283,17 +345,24 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 					<CardContent>
 						<div className="space-y-3">
 							{contentPerformance.map((content) => (
-								<div key={content.category} className="flex items-center justify-between">
+								<div
+									key={content.category}
+									className="flex items-center justify-between"
+								>
 									<div className="flex items-center space-x-3">
-										<span className="w-20 text-sm font-medium">{content.category}</span>
-										<div className="flex-1 bg-gray-200 rounded-full h-2">
+										<span className="w-20 font-medium text-sm">
+											{content.category}
+										</span>
+										<div className="h-2 flex-1 rounded-full bg-gray-200">
 											<div
-												className="bg-green-600 h-2 rounded-full"
-												style={{ width: `${(content.avgEngagement / 10) * 100}%` }}
+												className="h-2 rounded-full bg-green-600"
+												style={{
+													width: `${(content.avgEngagement / 10) * 100}%`,
+												}}
 											/>
 										</div>
 									</div>
-									<div className="flex items-center space-x-4 text-sm text-gray-600">
+									<div className="flex items-center space-x-4 text-gray-600 text-sm">
 										<span>{content.posts} posts</span>
 										<span>{content.avgEngagement}% eng</span>
 									</div>
@@ -312,14 +381,16 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 				<CardContent>
 					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
 						{optimalTimes.map((time, index) => (
-							<div key={index} className="text-center p-4 border rounded-lg">
-								<div className="text-lg font-semibold text-blue-600">{time.time}</div>
-								<div className="text-sm text-gray-600">{time.day}</div>
+							<div key={index} className="rounded-lg border p-4 text-center">
+								<div className="font-semibold text-blue-600 text-lg">
+									{time.time}
+								</div>
+								<div className="text-gray-600 text-sm">{time.day}</div>
 								<div className="mt-2 text-sm">
 									<span className="font-medium">{time.engagementRate}%</span>
 									<span className="text-gray-500"> engagement</span>
 								</div>
-								<div className="text-xs text-gray-500">{time.posts} posts</div>
+								<div className="text-gray-500 text-xs">{time.posts} posts</div>
 							</div>
 						))}
 					</div>
@@ -334,19 +405,26 @@ export default function CalendarAnalytics({ timeframe = "month" }: CalendarAnaly
 				<CardContent>
 					<div className="space-y-4">
 						{upcomingInsights.map((insight, index) => (
-							<div key={index} className="flex items-start space-x-3 p-4 border rounded-lg">
-								<div className="flex-shrink-0 mt-1">
+							<div
+								key={index}
+								className="flex items-start space-x-3 rounded-lg border p-4"
+							>
+								<div className="mt-1 flex-shrink-0">
 									{getInsightIcon(insight.type)}
 								</div>
 								<div className="flex-1">
-									<div className="flex items-center space-x-2 mb-1">
+									<div className="mb-1 flex items-center space-x-2">
 										<h4 className="font-medium">{insight.title}</h4>
 										<Badge className={getPriorityColor(insight.priority)}>
 											{insight.priority}
 										</Badge>
 									</div>
-									<p className="text-sm text-gray-600 mb-2">{insight.description}</p>
-									<p className="text-sm font-medium text-blue-600">{insight.action}</p>
+									<p className="mb-2 text-gray-600 text-sm">
+										{insight.description}
+									</p>
+									<p className="font-medium text-blue-600 text-sm">
+										{insight.action}
+									</p>
 								</div>
 							</div>
 						))}

@@ -130,7 +130,7 @@ export default function ReceptionistDashboard() {
 		fetchAppointments();
 		fetchPatients();
 		fetchPracticeUsers();
-	}, [selectedDate]);
+	}, []);
 
 	const fetchAppointments = async () => {
 		try {

@@ -2,7 +2,7 @@
 
 import { useDroppable } from "@dnd-kit/core";
 import { Plus } from "lucide-react";
-import { TimeSlot } from "./DragDropCalendar";
+import type { TimeSlot } from "./DragDropCalendar";
 
 interface DroppableTimeSlotProps {
 	timeSlot: TimeSlot;
@@ -27,27 +27,27 @@ export function DroppableTimeSlot({
 		<div
 			ref={setNodeRef}
 			className={`relative transition-colors ${
-				isOver ? "bg-blue-50 border-blue-200" : ""
+				isOver ? "border-blue-200 bg-blue-50" : ""
 			}`}
 		>
 			{children}
-			
+
 			{/* Drop indicator */}
 			{isOver && (
-				<div className="absolute inset-0 border-2 border-dashed border-blue-400 bg-blue-50 bg-opacity-50 rounded-lg flex items-center justify-center">
-					<div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+				<div className="absolute inset-0 flex items-center justify-center rounded-lg border-2 border-blue-400 border-dashed bg-blue-50 bg-opacity-50">
+					<div className="rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-800 text-sm">
 						Drop appointment here
 					</div>
 				</div>
 			)}
-			
+
 			{/* Empty slot indicator */}
 			{timeSlot.appointments.length === 0 && !isOver && (
-				<div 
-					className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+				<div
+					className="absolute inset-0 flex cursor-pointer items-center justify-center opacity-0 transition-opacity hover:opacity-100"
 					onClick={handleAddAppointment}
 				>
-					<div className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-sm flex items-center space-x-1 transition-colors">
+					<div className="flex items-center space-x-1 rounded-full bg-gray-100 px-3 py-1 text-gray-600 text-sm transition-colors hover:bg-gray-200">
 						<Plus className="h-3 w-3" />
 						<span>Add appointment</span>
 					</div>

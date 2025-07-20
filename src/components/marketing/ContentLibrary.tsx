@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import {
 	BookOpen,
 	Calendar,
@@ -18,12 +23,19 @@ import {
 	Tag,
 	TrendingUp,
 } from "lucide-react";
+import { useState } from "react";
 
 interface ContentTemplate {
 	id: string;
 	title: string;
 	content: string;
-	category: "educational" | "promotional" | "testimonial" | "seasonal" | "general" | "emergency";
+	category:
+		| "educational"
+		| "promotional"
+		| "testimonial"
+		| "seasonal"
+		| "general"
+		| "emergency";
 	hashtags: string[];
 	platforms: string[];
 	engagement: {
@@ -51,11 +63,17 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 		{
 			id: "1",
 			title: "Daily Oral Hygiene Tip",
-			content: "💡 Daily Tip: Brush your teeth for at least 2 minutes, twice a day! Use a soft-bristled toothbrush and fluoride toothpaste for best results. Your smile will thank you! 😊 #DentalHealth #OralHygiene #HealthySmile #DentalTips",
+			content:
+				"💡 Daily Tip: Brush your teeth for at least 2 minutes, twice a day! Use a soft-bristled toothbrush and fluoride toothpaste for best results. Your smile will thank you! 😊 #DentalHealth #OralHygiene #HealthySmile #DentalTips",
 			category: "educational",
 			hashtags: ["DentalHealth", "OralHygiene", "HealthySmile", "DentalTips"],
 			platforms: ["facebook", "instagram", "twitter"],
-			engagement: { avgLikes: 28, avgComments: 6, avgShares: 4, usageCount: 15 },
+			engagement: {
+				avgLikes: 28,
+				avgComments: 6,
+				avgShares: 4,
+				usageCount: 15,
+			},
 			lastUsed: new Date("2025-07-15"),
 			isPopular: true,
 			difficulty: "easy",
@@ -63,11 +81,22 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 		{
 			id: "2",
 			title: "Teeth Whitening Promotion",
-			content: "✨ SPECIAL OFFER: Professional teeth whitening for just $299 (reg. $450)! Transform your smile in just one visit. Book your appointment this month and save $151! Limited time offer. Call us today! 📞 #TeethWhitening #SpecialOffer #SmileTransformation #LimitedTime",
+			content:
+				"✨ SPECIAL OFFER: Professional teeth whitening for just $299 (reg. $450)! Transform your smile in just one visit. Book your appointment this month and save $151! Limited time offer. Call us today! 📞 #TeethWhitening #SpecialOffer #SmileTransformation #LimitedTime",
 			category: "promotional",
-			hashtags: ["TeethWhitening", "SpecialOffer", "SmileTransformation", "LimitedTime"],
+			hashtags: [
+				"TeethWhitening",
+				"SpecialOffer",
+				"SmileTransformation",
+				"LimitedTime",
+			],
 			platforms: ["facebook", "instagram"],
-			engagement: { avgLikes: 45, avgComments: 12, avgShares: 8, usageCount: 8 },
+			engagement: {
+				avgLikes: 45,
+				avgComments: 12,
+				avgShares: 8,
+				usageCount: 8,
+			},
 			lastUsed: new Date("2025-07-10"),
 			isPopular: true,
 			difficulty: "medium",
@@ -75,11 +104,22 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 		{
 			id: "3",
 			title: "Patient Success Story",
-			content: "🌟 \"I was so nervous about my root canal, but Dr. Smith made the whole experience comfortable and pain-free. I can't believe how easy it was!\" - Sarah M. We're thrilled to help our patients achieve optimal oral health! #PatientTestimonial #RootCanal #ComfortableCare #HappyPatients",
+			content:
+				"🌟 \"I was so nervous about my root canal, but Dr. Smith made the whole experience comfortable and pain-free. I can't believe how easy it was!\" - Sarah M. We're thrilled to help our patients achieve optimal oral health! #PatientTestimonial #RootCanal #ComfortableCare #HappyPatients",
 			category: "testimonial",
-			hashtags: ["PatientTestimonial", "RootCanal", "ComfortableCare", "HappyPatients"],
+			hashtags: [
+				"PatientTestimonial",
+				"RootCanal",
+				"ComfortableCare",
+				"HappyPatients",
+			],
 			platforms: ["facebook", "instagram", "linkedin"],
-			engagement: { avgLikes: 52, avgComments: 18, avgShares: 12, usageCount: 6 },
+			engagement: {
+				avgLikes: 52,
+				avgComments: 18,
+				avgShares: 12,
+				usageCount: 6,
+			},
 			lastUsed: new Date("2025-07-12"),
 			isPopular: true,
 			difficulty: "easy",
@@ -87,7 +127,8 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 		{
 			id: "4",
 			title: "Holiday Dental Care",
-			content: "🎃 Enjoying Halloween treats? Here are 3 tips to protect your teeth: 1) Eat candy with meals, not as snacks 2) Choose chocolate over sticky candies 3) Rinse with water after eating sweets. Have a spook-tacular Halloween! 👻 #Halloween #DentalCare #HealthyTreats #SeasonalTips",
+			content:
+				"🎃 Enjoying Halloween treats? Here are 3 tips to protect your teeth: 1) Eat candy with meals, not as snacks 2) Choose chocolate over sticky candies 3) Rinse with water after eating sweets. Have a spook-tacular Halloween! 👻 #Halloween #DentalCare #HealthyTreats #SeasonalTips",
 			category: "seasonal",
 			hashtags: ["Halloween", "DentalCare", "HealthyTreats", "SeasonalTips"],
 			platforms: ["facebook", "instagram", "twitter"],
@@ -98,7 +139,8 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 		{
 			id: "5",
 			title: "Dental Emergency Guide",
-			content: "🚨 DENTAL EMERGENCY? Here's what to do: Knocked out tooth → Keep it moist, see us ASAP. Severe toothache → Rinse with warm salt water, take pain reliever. Broken tooth → Save pieces, rinse mouth. We offer emergency appointments! Call: [PHONE] #DentalEmergency #EmergencyCare #ToothPain",
+			content:
+				"🚨 DENTAL EMERGENCY? Here's what to do: Knocked out tooth → Keep it moist, see us ASAP. Severe toothache → Rinse with warm salt water, take pain reliever. Broken tooth → Save pieces, rinse mouth. We offer emergency appointments! Call: [PHONE] #DentalEmergency #EmergencyCare #ToothPain",
 			category: "emergency",
 			hashtags: ["DentalEmergency", "EmergencyCare", "ToothPain"],
 			platforms: ["facebook", "twitter", "linkedin"],
@@ -110,11 +152,17 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 		{
 			id: "6",
 			title: "Preventive Care Reminder",
-			content: "📅 When was your last dental cleaning? Regular cleanings every 6 months help prevent cavities, gum disease, and keep your smile bright! Book your next appointment today. Prevention is always better than treatment! 🦷 #PreventiveCare #DentalCleaning #HealthySmile #BookNow",
+			content:
+				"📅 When was your last dental cleaning? Regular cleanings every 6 months help prevent cavities, gum disease, and keep your smile bright! Book your next appointment today. Prevention is always better than treatment! 🦷 #PreventiveCare #DentalCleaning #HealthySmile #BookNow",
 			category: "general",
 			hashtags: ["PreventiveCare", "DentalCleaning", "HealthySmile", "BookNow"],
 			platforms: ["facebook", "instagram", "linkedin"],
-			engagement: { avgLikes: 31, avgComments: 7, avgShares: 5, usageCount: 12 },
+			engagement: {
+				avgLikes: 31,
+				avgComments: 7,
+				avgShares: 5,
+				usageCount: 12,
+			},
 			lastUsed: new Date("2025-07-14"),
 			isPopular: true,
 			difficulty: "easy",
@@ -122,14 +170,20 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 	];
 
 	// Filter templates based on search and filters
-	const filteredTemplates = contentTemplates.filter(template => {
-		const matchesSearch = template.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	const filteredTemplates = contentTemplates.filter((template) => {
+		const matchesSearch =
+			template.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			template.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			template.hashtags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-		
-		const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
-		const matchesPlatform = selectedPlatform === "all" || template.platforms.includes(selectedPlatform);
-		
+			template.hashtags.some((tag) =>
+				tag.toLowerCase().includes(searchTerm.toLowerCase()),
+			);
+
+		const matchesCategory =
+			selectedCategory === "all" || template.category === selectedCategory;
+		const matchesPlatform =
+			selectedPlatform === "all" ||
+			template.platforms.includes(selectedPlatform);
+
 		return matchesSearch && matchesCategory && matchesPlatform;
 	});
 
@@ -171,10 +225,10 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 	return (
 		<div className="space-y-6">
 			{/* Search and Filters */}
-			<div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+			<div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
 				<div className="flex-1">
 					<div className="relative">
-						<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+						<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 						<Input
 							placeholder="Search templates, hashtags, or content..."
 							value={searchTerm}
@@ -183,7 +237,7 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 						/>
 					</div>
 				</div>
-				
+
 				<Select value={selectedCategory} onValueChange={setSelectedCategory}>
 					<SelectTrigger className="w-full sm:w-48">
 						<SelectValue placeholder="Category" />
@@ -215,12 +269,13 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 
 			{/* Results Summary */}
 			<div className="flex items-center justify-between">
-				<p className="text-sm text-gray-600">
-					Showing {filteredTemplates.length} of {contentTemplates.length} templates
+				<p className="text-gray-600 text-sm">
+					Showing {filteredTemplates.length} of {contentTemplates.length}{" "}
+					templates
 				</p>
 				<div className="flex items-center space-x-2">
 					<Filter className="h-4 w-4 text-gray-400" />
-					<span className="text-sm text-gray-600">
+					<span className="text-gray-600 text-sm">
 						{selectedCategory !== "all" && `${selectedCategory} • `}
 						{selectedPlatform !== "all" && `${selectedPlatform} • `}
 						{searchTerm && `"${searchTerm}"`}
@@ -231,7 +286,7 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 			{/* Template Grid */}
 			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 				{filteredTemplates.map((template) => (
-					<Card key={template.id} className="hover:shadow-md transition-shadow">
+					<Card key={template.id} className="transition-shadow hover:shadow-md">
 						<CardHeader className="pb-3">
 							<div className="flex items-start justify-between">
 								<div className="space-y-2">
@@ -248,34 +303,39 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 										<Badge className={getCategoryColor(template.category)}>
 											{template.category}
 										</Badge>
-										<span className={`text-xs font-medium ${getDifficultyColor(template.difficulty)}`}>
+										<span
+											className={`font-medium text-xs ${getDifficultyColor(template.difficulty)}`}
+										>
 											{template.difficulty}
 										</span>
 									</div>
 								</div>
 							</div>
 						</CardHeader>
-						
+
 						<CardContent className="space-y-4">
-							<p className="text-sm text-gray-700 line-clamp-4">
+							<p className="line-clamp-4 text-gray-700 text-sm">
 								{template.content}
 							</p>
-							
+
 							<div className="flex flex-wrap gap-1">
 								{template.hashtags.slice(0, 4).map((tag) => (
-									<span key={tag} className="inline-flex items-center text-xs text-blue-600">
+									<span
+										key={tag}
+										className="inline-flex items-center text-blue-600 text-xs"
+									>
 										<Tag className="mr-1 h-3 w-3" />
 										{tag}
 									</span>
 								))}
 								{template.hashtags.length > 4 && (
-									<span className="text-xs text-gray-500">
+									<span className="text-gray-500 text-xs">
 										+{template.hashtags.length - 4} more
 									</span>
 								)}
 							</div>
-							
-							<div className="flex items-center justify-between text-xs text-gray-500">
+
+							<div className="flex items-center justify-between text-gray-500 text-xs">
 								<div className="flex items-center space-x-4">
 									<div className="flex items-center space-x-1">
 										<Heart className="h-3 w-3" />
@@ -287,10 +347,12 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 									</div>
 								</div>
 								{template.lastUsed && (
-									<span>Last used {template.lastUsed.toLocaleDateString()}</span>
+									<span>
+										Last used {template.lastUsed.toLocaleDateString()}
+									</span>
 								)}
 							</div>
-							
+
 							<div className="flex items-center space-x-2 pt-2">
 								<Button
 									size="sm"
@@ -314,9 +376,9 @@ export default function ContentLibrary({ onUseTemplate }: ContentLibraryProps) {
 			</div>
 
 			{filteredTemplates.length === 0 && (
-				<div className="text-center py-12">
-					<BookOpen className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-					<h3 className="text-lg font-medium text-gray-900 mb-2">
+				<div className="py-12 text-center">
+					<BookOpen className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+					<h3 className="mb-2 font-medium text-gray-900 text-lg">
 						No templates found
 					</h3>
 					<p className="text-gray-600">

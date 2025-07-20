@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   AppointmentUpdate,
+  NotificationUpdate,
   PatientUpdate,
-  TaskUpdate,
-  NotificationUpdate
+  TaskUpdate
 } from './server';
 
 interface UseRealtimeOptions {
@@ -318,7 +318,7 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 }
 
 // Context for Realtime connection
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, type ReactNode } from 'react';
 
 interface RealtimeContextType {
   connected: boolean;

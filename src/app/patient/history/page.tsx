@@ -78,7 +78,10 @@ export default async function TreatmentHistoryPage() {
 								Treatment History
 							</h1>
 						</div>
-						<button className="flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm hover:bg-gray-50">
+						<button
+							type="button"
+							className="flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm hover:bg-gray-50"
+						>
 							<Download className="mr-2 h-4 w-4" />
 							Export History
 						</button>
@@ -248,7 +251,10 @@ export default async function TreatmentHistoryPage() {
 									Your completed appointments will appear here.
 								</p>
 								<Link href="/patient/appointments/book">
-									<button className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700">
+									<button
+										type="button"
+										className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700"
+									>
 										Book Your First Appointment
 									</button>
 								</Link>

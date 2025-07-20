@@ -12,8 +12,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/toast";
 import {
 	Activity,
 	AlertTriangle,
@@ -35,7 +42,6 @@ import {
 	Users,
 } from "lucide-react";
 import { useState } from "react";
-import { useToast } from "@/components/ui/toast";
 
 // TypeScript interfaces
 interface AppointmentData {
@@ -44,7 +50,13 @@ interface AppointmentData {
 	patient: string;
 	provider: string;
 	type: string;
-	status: "checked-in" | "confirmed" | "pending" | "late" | "completed" | "cancelled";
+	status:
+		| "checked-in"
+		| "confirmed"
+		| "pending"
+		| "late"
+		| "completed"
+		| "cancelled";
 	phone: string;
 }
 
@@ -115,7 +127,7 @@ export default function ReceptionistDashboard() {
 		email: "",
 		provider: "",
 		treatment: "",
-		date: new Date().toISOString().split('T')[0],
+		date: new Date().toISOString().split("T")[0],
 		time: "",
 		notes: "",
 	});
@@ -224,10 +236,10 @@ export default function ReceptionistDashboard() {
 	const handleBookAppointment = async () => {
 		setIsProcessing(true);
 		try {
-			const response = await fetch('/api/receptionist/appointments', {
-				method: 'POST',
+			const response = await fetch("/api/receptionist/appointments", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(appointmentForm),
 			});
@@ -235,7 +247,7 @@ export default function ReceptionistDashboard() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.error || 'Failed to book appointment');
+				throw new Error(data.error || "Failed to book appointment");
 			}
 
 			// Reset form and close dialog
@@ -245,7 +257,7 @@ export default function ReceptionistDashboard() {
 				email: "",
 				provider: "",
 				treatment: "",
-				date: new Date().toISOString().split('T')[0],
+				date: new Date().toISOString().split("T")[0],
 				time: "",
 				notes: "",
 			});
@@ -261,7 +273,10 @@ export default function ReceptionistDashboard() {
 			showToast({
 				type: "error",
 				title: "Booking Failed",
-				message: error instanceof Error ? error.message : "Failed to book appointment. Please try again.",
+				message:
+					error instanceof Error
+						? error.message
+						: "Failed to book appointment. Please try again.",
 			});
 		} finally {
 			setIsProcessing(false);
@@ -271,10 +286,10 @@ export default function ReceptionistDashboard() {
 	const handleProcessPayment = async () => {
 		setIsProcessing(true);
 		try {
-			const response = await fetch('/api/receptionist/payments', {
-				method: 'POST',
+			const response = await fetch("/api/receptionist/payments", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(paymentForm),
 			});
@@ -282,7 +297,7 @@ export default function ReceptionistDashboard() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.error || 'Failed to process payment');
+				throw new Error(data.error || "Failed to process payment");
 			}
 
 			// Reset form and close dialog
@@ -305,7 +320,10 @@ export default function ReceptionistDashboard() {
 			showToast({
 				type: "error",
 				title: "Payment Failed",
-				message: error instanceof Error ? error.message : "Failed to process payment. Please try again.",
+				message:
+					error instanceof Error
+						? error.message
+						: "Failed to process payment. Please try again.",
 			});
 		} finally {
 			setIsProcessing(false);
@@ -315,10 +333,10 @@ export default function ReceptionistDashboard() {
 	const handleSendReminder = async () => {
 		setIsProcessing(true);
 		try {
-			const response = await fetch('/api/receptionist/reminders', {
-				method: 'POST',
+			const response = await fetch("/api/receptionist/reminders", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(reminderForm),
 			});
@@ -326,7 +344,7 @@ export default function ReceptionistDashboard() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.error || 'Failed to send reminder');
+				throw new Error(data.error || "Failed to send reminder");
 			}
 
 			// Reset form and close dialog
@@ -349,7 +367,10 @@ export default function ReceptionistDashboard() {
 			showToast({
 				type: "error",
 				title: "Reminder Failed",
-				message: error instanceof Error ? error.message : "Failed to send reminder. Please try again.",
+				message:
+					error instanceof Error
+						? error.message
+						: "Failed to send reminder. Please try again.",
 			});
 		} finally {
 			setIsProcessing(false);
@@ -389,7 +410,9 @@ export default function ReceptionistDashboard() {
 							</tr>
 						</thead>
 						<tbody>
-							${upcomingAppointments.map(apt => `
+							${upcomingAppointments
+								.map(
+									(apt) => `
 								<tr>
 									<td>${apt.time}</td>
 									<td>${apt.patient}</td>
@@ -398,14 +421,16 @@ export default function ReceptionistDashboard() {
 									<td class="status-${apt.status}">${apt.status.toUpperCase()}</td>
 									<td>${apt.phone}</td>
 								</tr>
-							`).join('')}
+							`,
+								)
+								.join("")}
 						</tbody>
 					</table>
 				</body>
 			</html>
 		`;
 
-		const printWindow = window.open('', '_blank');
+		const printWindow = window.open("", "_blank");
 		if (printWindow) {
 			printWindow.document.write(printContent);
 			printWindow.document.close();
@@ -634,7 +659,10 @@ export default function ReceptionistDashboard() {
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-2">
-								<Dialog open={showAppointmentDialog} onOpenChange={setShowAppointmentDialog}>
+								<Dialog
+									open={showAppointmentDialog}
+									onOpenChange={setShowAppointmentDialog}
+								>
 									<DialogTrigger asChild>
 										<Button variant="outline" className="w-full justify-start">
 											<Calendar className="mr-2 h-4 w-4" />
@@ -643,7 +671,10 @@ export default function ReceptionistDashboard() {
 									</DialogTrigger>
 								</Dialog>
 
-								<Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+								<Dialog
+									open={showPaymentDialog}
+									onOpenChange={setShowPaymentDialog}
+								>
 									<DialogTrigger asChild>
 										<Button variant="outline" className="w-full justify-start">
 											<CreditCard className="mr-2 h-4 w-4" />
@@ -652,7 +683,10 @@ export default function ReceptionistDashboard() {
 									</DialogTrigger>
 								</Dialog>
 
-								<Dialog open={showReminderDialog} onOpenChange={setShowReminderDialog}>
+								<Dialog
+									open={showReminderDialog}
+									onOpenChange={setShowReminderDialog}
+								>
 									<DialogTrigger asChild>
 										<Button variant="outline" className="w-full justify-start">
 											<Bell className="mr-2 h-4 w-4" />
@@ -676,7 +710,10 @@ export default function ReceptionistDashboard() {
 			</div>
 
 			{/* Book Appointment Dialog */}
-			<Dialog open={showAppointmentDialog} onOpenChange={setShowAppointmentDialog}>
+			<Dialog
+				open={showAppointmentDialog}
+				onOpenChange={setShowAppointmentDialog}
+			>
 				<DialogContent className="max-w-md">
 					<DialogHeader>
 						<DialogTitle>Book New Appointment</DialogTitle>
@@ -688,10 +725,12 @@ export default function ReceptionistDashboard() {
 								<Input
 									id="patientName"
 									value={appointmentForm.patientName}
-									onChange={(e) => setAppointmentForm(prev => ({
-										...prev,
-										patientName: e.target.value
-									}))}
+									onChange={(e) =>
+										setAppointmentForm((prev) => ({
+											...prev,
+											patientName: e.target.value,
+										}))
+									}
 									placeholder="Enter patient name"
 								/>
 							</div>
@@ -700,10 +739,12 @@ export default function ReceptionistDashboard() {
 								<Input
 									id="phone"
 									value={appointmentForm.phone}
-									onChange={(e) => setAppointmentForm(prev => ({
-										...prev,
-										phone: e.target.value
-									}))}
+									onChange={(e) =>
+										setAppointmentForm((prev) => ({
+											...prev,
+											phone: e.target.value,
+										}))
+									}
 									placeholder="(555) 123-4567"
 								/>
 							</div>
@@ -715,10 +756,12 @@ export default function ReceptionistDashboard() {
 								id="email"
 								type="email"
 								value={appointmentForm.email}
-								onChange={(e) => setAppointmentForm(prev => ({
-									...prev,
-									email: e.target.value
-								}))}
+								onChange={(e) =>
+									setAppointmentForm((prev) => ({
+										...prev,
+										email: e.target.value,
+									}))
+								}
 								placeholder="patient@email.com"
 							/>
 						</div>
@@ -728,10 +771,12 @@ export default function ReceptionistDashboard() {
 								<Label htmlFor="provider">Provider *</Label>
 								<Select
 									value={appointmentForm.provider}
-									onValueChange={(value) => setAppointmentForm(prev => ({
-										...prev,
-										provider: value
-									}))}
+									onValueChange={(value) =>
+										setAppointmentForm((prev) => ({
+											...prev,
+											provider: value,
+										}))
+									}
 								>
 									<SelectTrigger>
 										<SelectValue placeholder="Select provider" />
@@ -748,10 +793,12 @@ export default function ReceptionistDashboard() {
 								<Label htmlFor="treatment">Treatment *</Label>
 								<Select
 									value={appointmentForm.treatment}
-									onValueChange={(value) => setAppointmentForm(prev => ({
-										...prev,
-										treatment: value
-									}))}
+									onValueChange={(value) =>
+										setAppointmentForm((prev) => ({
+											...prev,
+											treatment: value,
+										}))
+									}
 								>
 									<SelectTrigger>
 										<SelectValue placeholder="Select treatment" />
@@ -776,20 +823,24 @@ export default function ReceptionistDashboard() {
 									id="date"
 									type="date"
 									value={appointmentForm.date}
-									onChange={(e) => setAppointmentForm(prev => ({
-										...prev,
-										date: e.target.value
-									}))}
+									onChange={(e) =>
+										setAppointmentForm((prev) => ({
+											...prev,
+											date: e.target.value,
+										}))
+									}
 								/>
 							</div>
 							<div>
 								<Label htmlFor="time">Time *</Label>
 								<Select
 									value={appointmentForm.time}
-									onValueChange={(value) => setAppointmentForm(prev => ({
-										...prev,
-										time: value
-									}))}
+									onValueChange={(value) =>
+										setAppointmentForm((prev) => ({
+											...prev,
+											time: value,
+										}))
+									}
 								>
 									<SelectTrigger>
 										<SelectValue placeholder="Select time" />
@@ -820,10 +871,12 @@ export default function ReceptionistDashboard() {
 							<Textarea
 								id="notes"
 								value={appointmentForm.notes}
-								onChange={(e) => setAppointmentForm(prev => ({
-									...prev,
-									notes: e.target.value
-								}))}
+								onChange={(e) =>
+									setAppointmentForm((prev) => ({
+										...prev,
+										notes: e.target.value,
+									}))
+								}
 								placeholder="Additional notes or special instructions"
 								rows={3}
 							/>
@@ -841,7 +894,15 @@ export default function ReceptionistDashboard() {
 							<Button
 								type="button"
 								onClick={handleBookAppointment}
-								disabled={isProcessing || !appointmentForm.patientName || !appointmentForm.phone || !appointmentForm.provider || !appointmentForm.treatment || !appointmentForm.date || !appointmentForm.time}
+								disabled={
+									isProcessing ||
+									!appointmentForm.patientName ||
+									!appointmentForm.phone ||
+									!appointmentForm.provider ||
+									!appointmentForm.treatment ||
+									!appointmentForm.date ||
+									!appointmentForm.time
+								}
 							>
 								{isProcessing ? (
 									<>
@@ -871,16 +932,18 @@ export default function ReceptionistDashboard() {
 							<Label htmlFor="patientSelect">Patient *</Label>
 							<Select
 								value={paymentForm.patientId}
-								onValueChange={(value) => setPaymentForm(prev => ({
-									...prev,
-									patientId: value
-								}))}
+								onValueChange={(value) =>
+									setPaymentForm((prev) => ({
+										...prev,
+										patientId: value,
+									}))
+								}
 							>
 								<SelectTrigger>
 									<SelectValue placeholder="Select patient" />
 								</SelectTrigger>
 								<SelectContent>
-									{upcomingAppointments.map(apt => (
+									{upcomingAppointments.map((apt) => (
 										<SelectItem key={apt.id} value={apt.id}>
 											{apt.patient} - {apt.time}
 										</SelectItem>
@@ -897,10 +960,12 @@ export default function ReceptionistDashboard() {
 									type="number"
 									step="0.01"
 									value={paymentForm.amount}
-									onChange={(e) => setPaymentForm(prev => ({
-										...prev,
-										amount: e.target.value
-									}))}
+									onChange={(e) =>
+										setPaymentForm((prev) => ({
+											...prev,
+											amount: e.target.value,
+										}))
+									}
 									placeholder="0.00"
 								/>
 							</div>
@@ -908,10 +973,12 @@ export default function ReceptionistDashboard() {
 								<Label htmlFor="method">Payment Method *</Label>
 								<Select
 									value={paymentForm.method}
-									onValueChange={(value: PaymentForm['method']) => setPaymentForm(prev => ({
-										...prev,
-										method: value
-									}))}
+									onValueChange={(value: PaymentForm["method"]) =>
+										setPaymentForm((prev) => ({
+											...prev,
+											method: value,
+										}))
+									}
 								>
 									<SelectTrigger>
 										<SelectValue />
@@ -932,10 +999,12 @@ export default function ReceptionistDashboard() {
 							<Input
 								id="invoiceNumber"
 								value={paymentForm.invoiceNumber}
-								onChange={(e) => setPaymentForm(prev => ({
-									...prev,
-									invoiceNumber: e.target.value
-								}))}
+								onChange={(e) =>
+									setPaymentForm((prev) => ({
+										...prev,
+										invoiceNumber: e.target.value,
+									}))
+								}
 								placeholder="INV-001"
 							/>
 						</div>
@@ -945,10 +1014,12 @@ export default function ReceptionistDashboard() {
 							<Textarea
 								id="description"
 								value={paymentForm.description}
-								onChange={(e) => setPaymentForm(prev => ({
-									...prev,
-									description: e.target.value
-								}))}
+								onChange={(e) =>
+									setPaymentForm((prev) => ({
+										...prev,
+										description: e.target.value,
+									}))
+								}
 								placeholder="Payment for dental cleaning, consultation, etc."
 								rows={3}
 							/>
@@ -966,7 +1037,12 @@ export default function ReceptionistDashboard() {
 							<Button
 								type="button"
 								onClick={handleProcessPayment}
-								disabled={isProcessing || !paymentForm.patientId || !paymentForm.amount || !paymentForm.description}
+								disabled={
+									isProcessing ||
+									!paymentForm.patientId ||
+									!paymentForm.amount ||
+									!paymentForm.description
+								}
 							>
 								{isProcessing ? (
 									<>
@@ -996,16 +1072,18 @@ export default function ReceptionistDashboard() {
 							<Label htmlFor="reminderPatient">Patient *</Label>
 							<Select
 								value={reminderForm.patientId}
-								onValueChange={(value) => setReminderForm(prev => ({
-									...prev,
-									patientId: value
-								}))}
+								onValueChange={(value) =>
+									setReminderForm((prev) => ({
+										...prev,
+										patientId: value,
+									}))
+								}
 							>
 								<SelectTrigger>
 									<SelectValue placeholder="Select patient" />
 								</SelectTrigger>
 								<SelectContent>
-									{upcomingAppointments.map(apt => (
+									{upcomingAppointments.map((apt) => (
 										<SelectItem key={apt.id} value={apt.id}>
 											{apt.patient} - {apt.time} ({apt.type})
 										</SelectItem>
@@ -1019,16 +1097,20 @@ export default function ReceptionistDashboard() {
 								<Label htmlFor="reminderType">Reminder Type *</Label>
 								<Select
 									value={reminderForm.type}
-									onValueChange={(value: ReminderForm['type']) => setReminderForm(prev => ({
-										...prev,
-										type: value
-									}))}
+									onValueChange={(value: ReminderForm["type"]) =>
+										setReminderForm((prev) => ({
+											...prev,
+											type: value,
+										}))
+									}
 								>
 									<SelectTrigger>
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="appointment">Appointment Reminder</SelectItem>
+										<SelectItem value="appointment">
+											Appointment Reminder
+										</SelectItem>
 										<SelectItem value="payment">Payment Due</SelectItem>
 										<SelectItem value="followup">Follow-up Care</SelectItem>
 										<SelectItem value="custom">Custom Message</SelectItem>
@@ -1039,10 +1121,12 @@ export default function ReceptionistDashboard() {
 								<Label htmlFor="reminderMethod">Method *</Label>
 								<Select
 									value={reminderForm.method}
-									onValueChange={(value: ReminderForm['method']) => setReminderForm(prev => ({
-										...prev,
-										method: value
-									}))}
+									onValueChange={(value: ReminderForm["method"]) =>
+										setReminderForm((prev) => ({
+											...prev,
+											method: value,
+										}))
+									}
 								>
 									<SelectTrigger>
 										<SelectValue />
@@ -1062,12 +1146,14 @@ export default function ReceptionistDashboard() {
 								id="scheduleTime"
 								type="datetime-local"
 								value={reminderForm.scheduleTime}
-								onChange={(e) => setReminderForm(prev => ({
-									...prev,
-									scheduleTime: e.target.value
-								}))}
+								onChange={(e) =>
+									setReminderForm((prev) => ({
+										...prev,
+										scheduleTime: e.target.value,
+									}))
+								}
 							/>
-							<p className="text-xs text-gray-500 mt-1">
+							<p className="mt-1 text-gray-500 text-xs">
 								Leave empty to send immediately
 							</p>
 						</div>
@@ -1077,18 +1163,20 @@ export default function ReceptionistDashboard() {
 							<Textarea
 								id="reminderMessage"
 								value={reminderForm.message}
-								onChange={(e) => setReminderForm(prev => ({
-									...prev,
-									message: e.target.value
-								}))}
+								onChange={(e) =>
+									setReminderForm((prev) => ({
+										...prev,
+										message: e.target.value,
+									}))
+								}
 								placeholder={
-									reminderForm.type === 'appointment'
+									reminderForm.type === "appointment"
 										? "Hi! This is a reminder about your upcoming dental appointment..."
-										: reminderForm.type === 'payment'
-										? "This is a friendly reminder about your outstanding balance..."
-										: reminderForm.type === 'followup'
-										? "We hope you're feeling better after your recent treatment..."
-										: "Enter your custom message here..."
+										: reminderForm.type === "payment"
+											? "This is a friendly reminder about your outstanding balance..."
+											: reminderForm.type === "followup"
+												? "We hope you're feeling better after your recent treatment..."
+												: "Enter your custom message here..."
 								}
 								rows={4}
 							/>
@@ -1106,7 +1194,11 @@ export default function ReceptionistDashboard() {
 							<Button
 								type="button"
 								onClick={handleSendReminder}
-								disabled={isProcessing || !reminderForm.patientId || !reminderForm.message}
+								disabled={
+									isProcessing ||
+									!reminderForm.patientId ||
+									!reminderForm.message
+								}
 							>
 								{isProcessing ? (
 									<>
@@ -1116,7 +1208,9 @@ export default function ReceptionistDashboard() {
 								) : (
 									<>
 										<Send className="mr-2 h-4 w-4" />
-										{reminderForm.scheduleTime ? 'Schedule Reminder' : 'Send Now'}
+										{reminderForm.scheduleTime
+											? "Schedule Reminder"
+											: "Send Now"}
 									</>
 								)}
 							</Button>

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { type NextRequest, NextResponse } from "next/server";
 
 interface CreatePostRequest {
 	content: string;
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
 		if (!body.content || !body.platforms || body.platforms.length === 0) {
 			return NextResponse.json(
 				{ error: "Content and at least one platform are required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -52,24 +52,32 @@ export async function POST(request: NextRequest) {
 		if (body.content.length < 10) {
 			return NextResponse.json(
 				{ error: "Post content must be at least 10 characters long" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		if (body.content.length > 2000) {
 			return NextResponse.json(
 				{ error: "Post content must be less than 2000 characters" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Validate platforms
-		const validPlatforms = ["facebook", "instagram", "twitter", "linkedin", "youtube"];
-		const invalidPlatforms = body.platforms.filter(p => !validPlatforms.includes(p));
+		const validPlatforms = [
+			"facebook",
+			"instagram",
+			"twitter",
+			"linkedin",
+			"youtube",
+		];
+		const invalidPlatforms = body.platforms.filter(
+			(p) => !validPlatforms.includes(p),
+		);
 		if (invalidPlatforms.length > 0) {
 			return NextResponse.json(
 				{ error: `Invalid platforms: ${invalidPlatforms.join(", ")}` },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -78,22 +86,22 @@ export async function POST(request: NextRequest) {
 		if (body.scheduledFor) {
 			scheduledFor = new Date(body.scheduledFor);
 			const now = new Date();
-			
+
 			if (scheduledFor <= now) {
 				return NextResponse.json(
 					{ error: "Scheduled time must be in the future" },
-					{ status: 400 }
+					{ status: 400 },
 				);
 			}
 
 			// Don't allow scheduling more than 6 months in advance
 			const maxFutureDate = new Date();
 			maxFutureDate.setMonth(maxFutureDate.getMonth() + 6);
-			
+
 			if (scheduledFor > maxFutureDate) {
 				return NextResponse.json(
 					{ error: "Cannot schedule posts more than 6 months in advance" },
-					{ status: 400 }
+					{ status: 400 },
 				);
 			}
 		}
@@ -101,9 +109,9 @@ export async function POST(request: NextRequest) {
 		// Parse hashtags
 		const hashtags = body.hashtags
 			.split(/\s+/)
-			.filter(tag => tag.startsWith('#'))
-			.map(tag => tag.slice(1))
-			.filter(tag => tag.length > 0);
+			.filter((tag) => tag.startsWith("#"))
+			.map((tag) => tag.slice(1))
+			.filter((tag) => tag.length > 0);
 
 		// Create post record
 		const post: SocialPost = {
@@ -131,7 +139,7 @@ export async function POST(request: NextRequest) {
 		if (!scheduledFor) {
 			// Publish immediately to selected platforms
 			const publishResults = await publishToSocialMedia(post);
-			if (publishResults.some(result => !result.success)) {
+			if (publishResults.some((result) => !result.success)) {
 				post.status = "failed";
 			}
 		} else {
@@ -145,16 +153,15 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({
 			success: true,
 			post: post,
-			message: scheduledFor 
+			message: scheduledFor
 				? `Post scheduled for ${scheduledFor.toLocaleString()}`
-				: "Post published successfully"
+				: "Post published successfully",
 		});
-
 	} catch (error) {
 		console.error("Error creating social media post:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -171,7 +178,7 @@ export async function GET(request: NextRequest) {
 		const status = searchParams.get("status");
 		const startDate = searchParams.get("startDate");
 		const endDate = searchParams.get("endDate");
-		const limit = parseInt(searchParams.get("limit") || "20");
+		const limit = Number.parseInt(searchParams.get("limit") || "20");
 
 		// TODO: Fetch posts from database with filters
 		// For now, return mock data
@@ -180,7 +187,8 @@ export async function GET(request: NextRequest) {
 			{
 				id: "post_1",
 				practiceId: session.user.practiceId,
-				content: "🦷 Did you know that regular dental cleanings can prevent gum disease? Book your appointment today! #DentalHealth #PreventiveCare",
+				content:
+					"🦷 Did you know that regular dental cleanings can prevent gum disease? Book your appointment today! #DentalHealth #PreventiveCare",
 				platforms: ["facebook", "instagram"],
 				hashtags: ["DentalHealth", "PreventiveCare"],
 				publishedAt: new Date("2025-07-16T10:00:00Z"),
@@ -193,7 +201,8 @@ export async function GET(request: NextRequest) {
 			{
 				id: "post_2",
 				practiceId: session.user.practiceId,
-				content: "✨ Transform your smile with our professional teeth whitening service! Before and after results speak for themselves. #SmileTransformation #TeethWhitening",
+				content:
+					"✨ Transform your smile with our professional teeth whitening service! Before and after results speak for themselves. #SmileTransformation #TeethWhitening",
 				platforms: ["instagram", "facebook"],
 				imageUrl: "/images/teeth-whitening.jpg",
 				hashtags: ["SmileTransformation", "TeethWhitening"],
@@ -210,24 +219,26 @@ export async function GET(request: NextRequest) {
 		let filteredPosts = mockPosts;
 
 		if (platform) {
-			filteredPosts = filteredPosts.filter(post => post.platforms.includes(platform));
+			filteredPosts = filteredPosts.filter((post) =>
+				post.platforms.includes(platform),
+			);
 		}
 
 		if (status) {
-			filteredPosts = filteredPosts.filter(post => post.status === status);
+			filteredPosts = filteredPosts.filter((post) => post.status === status);
 		}
 
 		if (startDate) {
 			const start = new Date(startDate);
-			filteredPosts = filteredPosts.filter(post => 
-				new Date(post.createdAt) >= start
+			filteredPosts = filteredPosts.filter(
+				(post) => new Date(post.createdAt) >= start,
 			);
 		}
 
 		if (endDate) {
 			const end = new Date(endDate);
-			filteredPosts = filteredPosts.filter(post => 
-				new Date(post.createdAt) <= end
+			filteredPosts = filteredPosts.filter(
+				(post) => new Date(post.createdAt) <= end,
 			);
 		}
 
@@ -237,20 +248,21 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json({
 			success: true,
 			posts: filteredPosts,
-			total: filteredPosts.length
+			total: filteredPosts.length,
 		});
-
 	} catch (error) {
 		console.error("Error fetching social media posts:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
 
 // Helper function to publish to social media platforms
-async function publishToSocialMedia(post: SocialPost): Promise<{ platform: string; success: boolean; error?: string }[]> {
+async function publishToSocialMedia(
+	post: SocialPost,
+): Promise<{ platform: string; success: boolean; error?: string }[]> {
 	const results = [];
 
 	for (const platform of post.platforms) {
@@ -273,16 +285,16 @@ async function publishToSocialMedia(post: SocialPost): Promise<{ platform: strin
 					console.log(`Publishing to LinkedIn: ${post.content}`);
 					break;
 			}
-			
+
 			// Simulate success (90% success rate for demo)
 			const success = Math.random() > 0.1;
 			results.push({ platform, success });
 		} catch (error) {
 			console.error(`Error publishing to ${platform}:`, error);
-			results.push({ 
-				platform, 
-				success: false, 
-				error: error instanceof Error ? error.message : "Unknown error" 
+			results.push({
+				platform,
+				success: false,
+				error: error instanceof Error ? error.message : "Unknown error",
 			});
 		}
 	}

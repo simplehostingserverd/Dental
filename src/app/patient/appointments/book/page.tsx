@@ -207,6 +207,7 @@ export default function BookAppointmentPage() {
 							</div>
 							<div className="mt-8 flex justify-end">
 								<button
+									type="button"
 									onClick={() => setStep(2)}
 									disabled={!selectedType}
 									className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
@@ -226,10 +227,14 @@ export default function BookAppointmentPage() {
 
 							{/* Date Selection */}
 							<div className="mb-6">
-								<label className="mb-2 block font-medium text-gray-700 text-sm">
+								<label
+									htmlFor="appointment-date"
+									className="mb-2 block font-medium text-gray-700 text-sm"
+								>
 									Select Date
 								</label>
 								<input
+									id="appointment-date"
 									type="date"
 									min={today.toISOString().split("T")[0]}
 									max={maxDate.toISOString().split("T")[0]}
@@ -241,12 +246,13 @@ export default function BookAppointmentPage() {
 							{/* Time Selection */}
 							{selectedDate && (
 								<div>
-									<label className="mb-2 block font-medium text-gray-700 text-sm">
+									<div className="mb-2 block font-medium text-gray-700 text-sm">
 										Available Times
-									</label>
+									</div>
 									<div className="grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-8">
 										{timeSlots.map((slot) => (
 											<button
+												type="button"
 												key={slot.time}
 												onClick={() =>
 													slot.available && setSelectedTime(slot.time)
@@ -269,12 +275,14 @@ export default function BookAppointmentPage() {
 
 							<div className="mt-8 flex justify-between">
 								<button
+									type="button"
 									onClick={() => setStep(1)}
 									className="rounded-md border border-gray-300 px-6 py-2 text-gray-700 hover:bg-gray-50"
 								>
 									Back
 								</button>
 								<button
+									type="button"
 									onClick={() => setStep(3)}
 									disabled={!selectedDate || !selectedTime}
 									className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
@@ -317,10 +325,14 @@ export default function BookAppointmentPage() {
 
 							{/* Notes */}
 							<div className="mb-6">
-								<label className="mb-2 block font-medium text-gray-700 text-sm">
+								<label
+									htmlFor="appointment-notes"
+									className="mb-2 block font-medium text-gray-700 text-sm"
+								>
 									Additional Notes (Optional)
 								</label>
 								<textarea
+									id="appointment-notes"
 									value={notes}
 									onChange={(e) => setNotes(e.target.value)}
 									rows={3}
