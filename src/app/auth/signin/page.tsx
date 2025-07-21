@@ -1,6 +1,7 @@
 "use client";
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
+import { CognidentLargeLogo } from "@/components/icons/cognident-logo";
 // Temporarily disable Stack Auth to debug the error
 // import { SignIn } from "@stackframe/stack";
 import { Calendar, FileText, Shield } from "lucide-react";
@@ -24,8 +25,7 @@ export default function SignInPage() {
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
-							<ToothIcon className="mr-3 h-10 w-10 text-blue-400" />
-							<span className="font-bold text-3xl text-white">Cognident</span>
+							<CognidentLargeLogo className="text-white" />
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-white">Welcome back</h2>
 						<p className="text-gray-400">

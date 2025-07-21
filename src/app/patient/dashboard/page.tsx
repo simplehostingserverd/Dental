@@ -1,6 +1,7 @@
 "use client";
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
+import { CognidentTextLogo } from "@/components/icons/cognident-logo";
 import { AppointmentActions } from "@/components/patient/appointment-actions";
 import {
 	Calendar,
@@ -138,10 +139,7 @@ export default function PatientDashboardPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<div className="flex items-center">
-							<ToothIcon className="mr-3 h-8 w-8 text-blue-600" />
-							<h1 className="font-bold text-gray-900 text-xl">
-								Cognident
-							</h1>
+							<CognidentTextLogo logoSize={32} className="text-gray-900" />
 						</div>
 						<div className="flex items-center space-x-4">
 							<span className="text-gray-700 text-sm">

@@ -27,6 +27,42 @@ export async function middleware(request: NextRequest) {
 		return applySecurityMiddleware(request, response);
 	}
 
+	// Check for patient routes
+	if (pathname.startsWith("/patient/")) {
+		// Skip auth for public patient pages
+		if (
+			pathname.startsWith("/patient/auth/") ||
+			pathname.startsWith("/patient/appointments/book")
+		) {
+			const response = NextResponse.next();
+			return applySecurityMiddleware(request, response);
+		}
+
+		// Check for patient authentication
+		const patientAuthToken = request.cookies.get("patient-auth-token");
+
+		if (!patientAuthToken) {
+			return NextResponse.redirect(new URL("/patient/auth/signin", request.url));
+		}
+
+		try {
+			// Verify patient token and set headers
+			const jwt = await import("jsonwebtoken");
+			const decoded = jwt.verify(patientAuthToken.value, process.env.PATIENT_JWT_SECRET || "patient-secret-key") as any;
+
+			const response = NextResponse.next();
+			response.headers.set("x-user-id", decoded.userId);
+			response.headers.set("x-user-email", decoded.email);
+			response.headers.set("x-patient-id", decoded.patientId);
+			response.headers.set("x-practice-id", decoded.practiceId);
+
+			return applySecurityMiddleware(request, response);
+		} catch (error) {
+			// Invalid token, redirect to login
+			return NextResponse.redirect(new URL("/patient/auth/signin", request.url));
+		}
+	}
+
 	// Check for protected routes
 	if (
 		pathname.startsWith("/dashboard") ||
@@ -98,10 +134,7 @@ export async function middleware(request: NextRequest) {
 		}
 	}
 
-	// For patient portal, we'll handle authentication in the page components for now
-	// Stack Auth will manage the authentication state
-
-	// Apply security headers for all routes
+	// Apply security headers for all other routes
 	const response = NextResponse.next();
 	return applySecurityMiddleware(request, response);
 }

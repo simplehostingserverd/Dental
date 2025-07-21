@@ -1,6 +1,7 @@
 "use client";
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
+import { CognidentTextLogo } from "@/components/icons/cognident-logo";
 import { useAppTranslations } from "@/lib/i18n/translation-context";
 import { cn } from "@/lib/utils";
 import {
@@ -44,10 +45,7 @@ export function Sidebar() {
 		<div className="flex h-full w-64 flex-col border-gray-200 border-r bg-white shadow-sm">
 			{/* Logo */}
 			<div className="flex items-center border-gray-200 border-b px-6 py-4">
-				<ToothIcon className="h-8 w-8 text-blue-600" />
-				<span className="ml-2 font-semibold text-gray-900 text-xl">
-					Cognident
-				</span>
+				<CognidentTextLogo logoSize={32} className="text-gray-900" />
 			</div>
 
 			{/* Navigation */}

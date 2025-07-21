@@ -1,4 +1,5 @@
 import { ArrowRight, Calendar, Heart, Search, User } from "lucide-react";
+import { CognidentTextLogo } from "@/components/icons/cognident-logo";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -38,50 +39,50 @@ const blogPosts = [
 	},
 	{
 		id: 3,
-		title: "How AI is Revolutionizing Dental Practice Management",
+		title: "Digital Transformation in Dentistry: A Complete Guide",
 		excerpt:
-			"Explore how artificial intelligence is transforming scheduling, patient care, and practice operations in modern dental offices.",
+			"Learn how digital technologies are revolutionizing dental practices and how to successfully implement them in your clinic.",
 		author: "Dr. Emily Rodriguez",
 		date: "2024-01-10",
 		category: "Technology",
 		image:
-			"https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-		readTime: "6 min read",
-	},
-	{
-		id: 4,
-		title: "Maximizing Revenue: Dental Practice Financial Best Practices",
-		excerpt:
-			"Learn proven strategies to optimize your practice's financial performance and increase profitability.",
-		author: "Dr. James Wilson",
-		date: "2024-01-08",
-		category: "Business",
-		image:
-			"https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+			"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
 		readTime: "7 min read",
 	},
 	{
-		id: 5,
-		title: "Digital Transformation in Dentistry: A Step-by-Step Guide",
+		id: 4,
+		title: "Building a Successful Dental Team: Hiring and Retention Strategies",
 		excerpt:
-			"Navigate the digital transformation of your dental practice with our comprehensive implementation guide.",
-		author: "Dr. Lisa Park",
-		date: "2024-01-05",
-		category: "Technology",
+			"Discover proven methods for recruiting top talent and creating a positive workplace culture that retains excellent team members.",
+		author: "Dr. Mark Thompson",
+		date: "2024-01-08",
+		category: "Practice Management",
 		image:
-			"https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-		readTime: "9 min read",
+			"https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		readTime: "6 min read",
+	},
+	{
+		id: 5,
+		title: "Maximizing Insurance Reimbursements: A Dental Practice Guide",
+		excerpt:
+			"Learn effective strategies to optimize insurance claim processing and maximize reimbursements for your dental practice.",
+		author: "Jennifer Walsh, RDH",
+		date: "2024-01-05",
+		category: "Financial Management",
+		image:
+			"https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		readTime: "8 min read",
 	},
 	{
 		id: 6,
-		title: "Building a Strong Online Presence for Your Dental Practice",
+		title: "Preventive Care Marketing: Educating Patients for Better Outcomes",
 		excerpt:
-			"Essential strategies for marketing your dental practice online and attracting new patients in the digital age.",
-		author: "Marketing Team",
+			"Effective strategies for promoting preventive dental care and building long-term patient relationships through education.",
+		author: "Dr. Lisa Park",
 		date: "2024-01-03",
-		category: "Marketing",
+		category: "Patient Education",
 		image:
-			"https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+			"https://images.unsplash.com/photo-1609840114035-3c981b782dfe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
 		readTime: "6 min read",
 	},
 ];
@@ -90,9 +91,10 @@ const categories = [
 	"All",
 	"Patient Care",
 	"Technology",
-	"Business",
+	"Practice Management",
 	"Compliance",
-	"Marketing",
+	"Financial Management",
+	"Patient Education",
 ];
 
 export default function BlogPage() {
@@ -271,8 +273,7 @@ export default function BlogPage() {
 					<div className="grid gap-8 md:grid-cols-4">
 						<div>
 							<div className="mb-4 flex items-center">
-								<Heart className="mr-3 h-8 w-8 text-blue-400" />
-								<span className="font-bold text-xl">Cognident</span>
+								<CognidentTextLogo logoSize={32} className="text-white" />
 							</div>
 							<p className="text-gray-400">
 								Next-generation dental practice management software designed for

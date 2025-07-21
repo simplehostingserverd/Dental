@@ -1,6 +1,7 @@
 "use client";
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
+import { CognidentTextLogo } from "@/components/icons/cognident-logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -139,8 +140,7 @@ export default function HelpPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<Link href="/" className="flex items-center">
-							<ToothIcon className="mr-3 h-8 w-8 text-blue-400" />
-							<span className="font-bold text-xl">Cognident</span>
+							<CognidentTextLogo logoSize={32} className="text-white" />
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
@@ -231,10 +231,19 @@ export default function HelpPage() {
 					<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 						{categories.map((category, index) => {
 							const IconComponent = category.icon;
+							const categorySlug = category.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+							const categoryUrl = categorySlug === 'getting-started' ? 'getting-started' :
+								categorySlug === 'scheduling-appointments' ? 'scheduling' :
+								categorySlug === 'patient-records' ? 'patient-records' :
+								categorySlug === 'billing-payments' ? 'billing' :
+								categorySlug === 'practice-settings' ? 'settings' :
+								categorySlug === 'security-privacy' ? 'security' : categorySlug;
+
 							return (
-								<div
+								<Link
 									key={index}
-									className="group cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-6 transition-all hover:border-gray-600 hover:bg-gray-750"
+									href={`/help/${categoryUrl}`}
+									className="group cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-6 transition-all hover:border-gray-600 hover:bg-gray-750 block"
 								>
 									<div className="flex items-start space-x-4">
 										<div
@@ -257,7 +266,7 @@ export default function HelpPage() {
 											</div>
 										</div>
 									</div>
-								</div>
+								</Link>
 							);
 						})}
 					</div>
@@ -468,8 +477,7 @@ export default function HelpPage() {
 					<div className="grid gap-8 md:grid-cols-4">
 						<div>
 							<div className="mb-4 flex items-center">
-								<ToothIcon className="mr-3 h-8 w-8 text-blue-400" />
-								<span className="font-bold text-xl">Cognident</span>
+								<CognidentTextLogo logoSize={32} className="text-white" />
 							</div>
 							<p className="text-gray-400">
 								Next-generation dental practice management software designed for
