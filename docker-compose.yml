@@ -37,8 +37,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 1G
+          cpus: '4'
+          memory: 8G
 
   postgres:
     image: postgres:15-alpine
@@ -63,8 +63,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 1G
+          cpus: '2'
+          memory: 4G
 
   redis:
     image: redis:7-alpine
