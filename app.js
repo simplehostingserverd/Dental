@@ -1,44 +1,56 @@
-const { spawn } = require('child_process');
+#!/usr/bin/env node
+
+// Simple startup script for cPanel Node.js hosting
+const { exec } = require('child_process');
 const path = require('path');
 
-// Set the port from environment or default to 3000
-const port = process.env.PORT || 3000;
+// Set environment variables
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+process.env.PORT = process.env.PORT || 3000;
 
-// Set NODE_ENV to production if not set
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = 'production';
-}
+console.log('🚀 Starting Cognident Application...');
+console.log('📍 Working Directory:', __dirname);
+console.log('🌍 Environment:', process.env.NODE_ENV);
+console.log('🔌 Port:', process.env.PORT);
 
-console.log('Starting Cognident application...');
-console.log('Port:', port);
-console.log('Environment:', process.env.NODE_ENV);
+// Change to application directory
+process.chdir(__dirname);
 
-// Start the Next.js application
-const nextStart = spawn('npm', ['start'], {
-  cwd: __dirname,
-  env: { ...process.env, PORT: port },
-  stdio: 'inherit'
-});
+// Start Next.js application
+console.log('📦 Starting Next.js server...');
 
-nextStart.on('error', (error) => {
-  console.error('Failed to start application:', error);
-  process.exit(1);
-});
-
-nextStart.on('close', (code) => {
-  console.log(`Application exited with code ${code}`);
-  if (code !== 0) {
-    process.exit(code);
+const startCommand = 'npm start';
+const child = exec(startCommand, (error, stdout, stderr) => {
+  if (error) {
+    console.error('❌ Error starting application:', error);
+    return;
   }
+  if (stderr) {
+    console.error('⚠️ Stderr:', stderr);
+  }
+  console.log('✅ Stdout:', stdout);
 });
 
-// Handle process termination
+// Pipe output to console
+child.stdout.on('data', (data) => {
+  console.log(data.toString());
+});
+
+child.stderr.on('data', (data) => {
+  console.error(data.toString());
+});
+
+child.on('close', (code) => {
+  console.log(`🔚 Process exited with code: ${code}`);
+});
+
+// Handle process termination gracefully
 process.on('SIGTERM', () => {
-  console.log('Received SIGTERM, shutting down gracefully...');
-  nextStart.kill('SIGTERM');
+  console.log('🛑 Received SIGTERM, shutting down...');
+  child.kill('SIGTERM');
 });
 
 process.on('SIGINT', () => {
-  console.log('Received SIGINT, shutting down gracefully...');
-  nextStart.kill('SIGINT');
+  console.log('🛑 Received SIGINT, shutting down...');
+  child.kill('SIGINT');
 });
