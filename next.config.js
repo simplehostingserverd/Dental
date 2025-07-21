@@ -5,6 +5,9 @@
 // Skip env validation for now to avoid TypeScript import issues
 // require("./src/env.ts");
 
+const createNextIntlPlugin = require('next-intl/plugin');
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
 /** @type {import("next").NextConfig} */
 const config = {
 	output: "standalone",
@@ -14,4 +17,4 @@ const config = {
 	},
 };
 
-module.exports = config;
+module.exports = withNextIntl(config);
