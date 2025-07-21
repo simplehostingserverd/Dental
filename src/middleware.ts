@@ -1,6 +1,8 @@
 import { stackServerApp } from "@/stack";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { applySecurityMiddleware } from "@/lib/security/security-headers";
+import { logger, LogLevel } from "@/lib/logger";
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
@@ -20,7 +22,9 @@ export async function middleware(request: NextRequest) {
 		pathname.startsWith("/test-login") ||
 		pathname === "/"
 	) {
-		return NextResponse.next();
+		// Apply security headers even for public routes
+		const response = NextResponse.next();
+		return applySecurityMiddleware(request, response);
 	}
 
 	// Check for protected routes
@@ -57,13 +61,18 @@ export async function middleware(request: NextRequest) {
 				if (testUserLastName)
 					response.headers.set("x-test-user-last-name", testUserLastName.value);
 
-				return response;
+				// Apply security headers
+				return applySecurityMiddleware(request, response);
 			}
 
 			// Fallback to Stack Auth
 			const user = await stackServerApp.getUser({ request });
 
 			if (!user) {
+				logger.warn("Authentication failed - redirecting to login", {
+					pathname,
+					ip: request.ip || "unknown",
+				});
 				return NextResponse.redirect(new URL("/test-login", request.url));
 			}
 
@@ -75,8 +84,15 @@ export async function middleware(request: NextRequest) {
 			// For now, we'll need to get practice info from the database
 			// This will be handled in the TRPC context
 
-			return response;
+			// Apply security headers
+			return applySecurityMiddleware(request, response);
 		} catch (error) {
+			// Log the error
+			logger.error("Authentication error in middleware", 
+				{ pathname, ip: request.ip || "unknown" },
+				error
+			);
+			
 			// Invalid token, redirect to test login
 			return NextResponse.redirect(new URL("/test-login", request.url));
 		}
@@ -85,7 +101,9 @@ export async function middleware(request: NextRequest) {
 	// For patient portal, we'll handle authentication in the page components for now
 	// Stack Auth will manage the authentication state
 
-	return NextResponse.next();
+	// Apply security headers for all routes
+	const response = NextResponse.next();
+	return applySecurityMiddleware(request, response);
 }
 
 export const config = {

@@ -1,0 +1,13 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-commit checks..."
+
+# Lint staged files
+npm run lint
+
+# Type check
+npm run typecheck
+
+# Environment variable check
+npm run check-env
