@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 			include: { practice: true },
 		});
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 		const limit = url.searchParams.get("limit"); // limit results
 
 		// Build where clause
-		const whereClause: unknown = {
+		const whereClause: any = {
 			practiceId: practiceUser.practiceId,
 		};
 
@@ -43,7 +43,6 @@ export async function GET(request: NextRequest) {
 				email: true,
 				phone: true,
 				dateOfBirth: true,
-				isActive: true,
 			},
 			orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
 			take: limit ? Number.parseInt(limit) : undefined,
@@ -70,7 +69,6 @@ export async function GET(request: NextRequest) {
 				email: patient.email,
 				phone: patient.phone,
 				dateOfBirth: patient.dateOfBirth,
-				isActive: patient.isActive,
 			})),
 		});
 	} catch (error) {

@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 			include: { practice: true },
 		});
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 		const activeOnly = url.searchParams.get("activeOnly") !== "false"; // default to active only
 
 		// Build where clause
-		const whereClause: unknown = {
+		const whereClause: any = {
 			practiceId: practiceUser.practiceId,
 		};
 
