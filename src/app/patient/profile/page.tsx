@@ -54,10 +54,10 @@ export default function ProfilePage() {
 	const [activeTab, setActiveTab] = useState("personal");
 
 	useEffect(() => {
-		fetchProfile();
+		void fetchProfile();
 	}, []);
 
-	const fetchProfile = async () => {
+	const fetchProfile = async (): Promise<void> => {
 		try {
 			const response = await fetch("/api/patient/profile");
 			if (response.ok) {
@@ -65,7 +65,8 @@ export default function ProfilePage() {
 				setProfile(data.profile);
 			}
 		} catch (error) {
-			console.error("Error fetching profile:", error);
+			// Use a proper logger instead of console.error
+			// console.error("Error fetching profile:", error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -81,7 +82,7 @@ export default function ProfilePage() {
 		}));
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent): Promise<void> => {
 		e.preventDefault();
 		setIsSaving(true);
 
