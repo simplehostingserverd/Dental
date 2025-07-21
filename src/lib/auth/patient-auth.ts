@@ -290,9 +290,12 @@ export const PatientAuthService = {
 	/**
 	 * Verify JWT token
 	 */
-	verifyToken(token: string): unknown {
+	async verifyToken(token: string): Promise<unknown> {
 		try {
-			return jwt.verify(token, this.JWT_SECRET);
+			const { jwtVerify } = await import("jose");
+			const secret = new TextEncoder().encode(this.JWT_SECRET);
+			const { payload } = await jwtVerify(token, secret);
+			return payload;
 		} catch (error) {
 			return null;
 		}

@@ -2,6 +2,7 @@
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
 import { CognidentTextLogo } from "@/components/icons/cognident-logo";
+import { HelpChatbot } from "@/components/chat/help-chatbot";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
