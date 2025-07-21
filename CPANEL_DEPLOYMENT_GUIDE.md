@@ -69,12 +69,12 @@ cd /home/yourusername/public_html
 npm run cpanel:deploy
 
 # Option 2: Step-by-step installation
-npm install --production
+npm install --production --legacy-peer-deps
 npm run db:generate
 npm run build
 ```
 
-**Note:** The npm ERESOLVE warnings are normal and safe to ignore.
+**Note:** We use `--legacy-peer-deps` to resolve peer dependency conflicts. The npm ERESOLVE warnings are normal and safe to ignore.
 
 ### **Step 5: Database Setup**
 

@@ -39,7 +39,7 @@ else
 
     # Fallback to step-by-step installation
     echo "📦 Installing dependencies..."
-    npm install --production --no-audit --no-fund
+    npm install --production --legacy-peer-deps --no-audit --no-fund
 
     if [ $? -eq 0 ]; then
         echo "✅ Dependencies installed!"
