@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { useTranslations } from 'next-intl';
 import type { Locale } from "./translations";
 import { defaultLocale, getTranslation } from "./translations";
 
