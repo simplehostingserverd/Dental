@@ -69,7 +69,153 @@ const blogPosts = [
 			"https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
 		readTime: "8 min read",
 	},
-	// Add more blog posts as needed
+	{
+		id: 3,
+		title: "Digital Transformation in Dentistry: A Complete Guide",
+		excerpt:
+			"Learn how digital technologies are revolutionizing dental practices and how to successfully implement them in your clinic.",
+		content: `
+			<p>The dental industry is experiencing a digital revolution that's transforming how practices operate, treat patients, and manage their business. From digital imaging to AI-powered diagnostics, technology is reshaping every aspect of dental care.</p>
+
+			<h2>The Current State of Digital Dentistry</h2>
+			<p>Digital dentistry encompasses a wide range of technologies including digital radiography, CAD/CAM systems, 3D printing, and practice management software. These tools are no longer luxury items—they're becoming essential for competitive practices.</p>
+
+			<h2>Key Digital Technologies for Dental Practices</h2>
+			<p><strong>Digital Imaging:</strong> Digital X-rays provide instant results with reduced radiation exposure. Intraoral cameras help patients visualize their oral health and understand treatment needs.</p>
+
+			<p><strong>Practice Management Software:</strong> Comprehensive systems that handle scheduling, billing, patient records, and communication in one integrated platform.</p>
+
+			<p><strong>CAD/CAM Technology:</strong> Computer-aided design and manufacturing systems enable same-day crowns, bridges, and other restorations.</p>
+
+			<h2>Implementation Strategy</h2>
+			<p>Start with essential technologies that provide immediate ROI, such as digital radiography and practice management software. Gradually expand to more advanced systems as your team becomes comfortable with digital workflows.</p>
+
+			<h2>Staff Training and Adoption</h2>
+			<p>Successful digital transformation requires comprehensive staff training and change management. Invest in proper training programs and allow time for your team to adapt to new technologies.</p>
+
+			<h2>Patient Benefits</h2>
+			<p>Digital technologies improve patient experience through faster treatment times, better diagnostic accuracy, and enhanced communication. Patients appreciate the convenience and quality improvements that digital dentistry provides.</p>
+		`,
+		author: "Dr. Emily Rodriguez",
+		date: "2024-01-10",
+		category: "Technology",
+		image:
+			"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		readTime: "7 min read",
+	},
+	{
+		id: 4,
+		title: "Building a Successful Dental Team: Hiring and Retention Strategies",
+		excerpt:
+			"Discover proven methods for recruiting top talent and creating a positive workplace culture that retains excellent team members.",
+		content: `
+			<p>Your dental team is the backbone of your practice's success. Building and maintaining a skilled, motivated team requires strategic planning, effective leadership, and a commitment to creating an exceptional workplace culture.</p>
+
+			<h2>Defining Your Ideal Team Member</h2>
+			<p>Before hiring, clearly define the skills, experience, and personality traits that align with your practice values. Consider both technical competencies and soft skills like communication, empathy, and teamwork.</p>
+
+			<h2>Effective Recruitment Strategies</h2>
+			<p><strong>Professional Networks:</strong> Leverage dental associations, continuing education events, and professional referrals to find qualified candidates.</p>
+
+			<p><strong>Online Platforms:</strong> Use specialized dental job boards and professional social media platforms to reach a wider pool of candidates.</p>
+
+			<p><strong>Employee Referrals:</strong> Implement a referral program that incentivizes current team members to recommend qualified candidates.</p>
+
+			<h2>The Interview Process</h2>
+			<p>Develop a structured interview process that evaluates both technical skills and cultural fit. Include practical assessments and scenario-based questions to gauge problem-solving abilities.</p>
+
+			<h2>Onboarding for Success</h2>
+			<p>Create a comprehensive onboarding program that introduces new hires to your practice culture, systems, and expectations. Assign mentors and provide clear training schedules.</p>
+
+			<h2>Retention Strategies</h2>
+			<p>Retain top talent through competitive compensation, professional development opportunities, recognition programs, and work-life balance initiatives. Regular feedback and career planning discussions are essential.</p>
+
+			<h2>Creating a Positive Culture</h2>
+			<p>Foster open communication, celebrate achievements, and address conflicts promptly. A positive workplace culture attracts quality candidates and reduces turnover.</p>
+		`,
+		author: "Dr. Mark Thompson",
+		date: "2024-01-08",
+		category: "Practice Management",
+		image:
+			"https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		readTime: "6 min read",
+	},
+	{
+		id: 5,
+		title: "Maximizing Insurance Reimbursements: A Dental Practice Guide",
+		excerpt:
+			"Learn effective strategies to optimize insurance claim processing and maximize reimbursements for your dental practice.",
+		content: `
+			<p>Insurance reimbursements represent a significant portion of most dental practices' revenue. Optimizing your insurance processes can dramatically improve cash flow and reduce administrative burden.</p>
+
+			<h2>Understanding Insurance Fundamentals</h2>
+			<p>Familiarize yourself with different insurance plan types, coverage limitations, and reimbursement schedules. Stay updated on policy changes and new regulations that affect dental benefits.</p>
+
+			<h2>Pre-Authorization Best Practices</h2>
+			<p>Submit pre-authorizations for major treatments to avoid claim denials. Include comprehensive documentation, radiographs, and detailed treatment plans to support your requests.</p>
+
+			<h2>Accurate Coding and Documentation</h2>
+			<p>Use current CDT codes accurately and provide detailed clinical notes that justify the necessity of treatments. Proper documentation is crucial for claim approval and audit protection.</p>
+
+			<h2>Claim Submission Strategies</h2>
+			<p><strong>Electronic Claims:</strong> Submit claims electronically for faster processing and reduced errors. Most insurance companies process electronic claims within 14-21 days.</p>
+
+			<p><strong>Batch Processing:</strong> Submit claims in batches to improve efficiency and track submission patterns more effectively.</p>
+
+			<h2>Managing Claim Denials</h2>
+			<p>Develop a systematic approach to handling denials. Review denial reasons, gather additional documentation if needed, and submit appeals promptly within the specified timeframes.</p>
+
+			<h2>Patient Communication</h2>
+			<p>Educate patients about their insurance benefits and limitations. Provide clear estimates and discuss payment options before treatment to avoid misunderstandings.</p>
+
+			<h2>Technology Solutions</h2>
+			<p>Invest in practice management software with robust insurance features, including eligibility verification, claim tracking, and automated follow-up capabilities.</p>
+		`,
+		author: "Jennifer Walsh, RDH",
+		date: "2024-01-05",
+		category: "Financial Management",
+		image:
+			"https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		readTime: "8 min read",
+	},
+	{
+		id: 6,
+		title: "Preventive Care Marketing: Educating Patients for Better Outcomes",
+		excerpt:
+			"Effective strategies for promoting preventive dental care and building long-term patient relationships through education.",
+		content: `
+			<p>Preventive care is the foundation of excellent oral health and a sustainable dental practice. Educating patients about the importance of prevention not only improves their health outcomes but also builds trust and loyalty.</p>
+
+			<h2>The Business Case for Prevention</h2>
+			<p>Preventive care generates consistent revenue, reduces emergency appointments, and creates satisfied patients who refer others. It's more cost-effective for patients and more predictable for practices.</p>
+
+			<h2>Patient Education Strategies</h2>
+			<p><strong>Visual Communication:</strong> Use intraoral cameras, models, and educational videos to help patients understand their oral health status and treatment needs.</p>
+
+			<p><strong>Written Materials:</strong> Provide take-home brochures and care instructions that reinforce verbal education and serve as ongoing reminders.</p>
+
+			<h2>Technology-Enhanced Education</h2>
+			<p>Leverage digital tools like patient education software, mobile apps, and online resources to provide interactive learning experiences that engage patients.</p>
+
+			<h2>Recall System Optimization</h2>
+			<p>Implement automated recall systems that send timely reminders via email, text, or phone calls. Personalize messages based on individual patient needs and preferences.</p>
+
+			<h2>Preventive Care Packages</h2>
+			<p>Create attractive preventive care packages that bundle services like cleanings, exams, and fluoride treatments. This approach simplifies decision-making for patients and ensures comprehensive care.</p>
+
+			<h2>Community Outreach</h2>
+			<p>Participate in community health fairs, school programs, and local events to promote oral health awareness and establish your practice as a trusted healthcare resource.</p>
+
+			<h2>Measuring Success</h2>
+			<p>Track key metrics like recall compliance rates, preventive treatment acceptance, and patient retention to evaluate the effectiveness of your education efforts.</p>
+		`,
+		author: "Dr. Lisa Park",
+		date: "2024-01-03",
+		category: "Patient Education",
+		image:
+			"https://images.unsplash.com/photo-1609840114035-3c981b782dfe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+		readTime: "6 min read",
+	}
 ];
 
 interface BlogPostPageProps {
@@ -312,7 +458,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 								</li>
 								<li>
 									<Link
-										href="/demo"
+										href="/contact"
 										className="transition-colors hover:text-white"
 									>
 										Demo

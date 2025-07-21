@@ -230,7 +230,7 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 									onChange={(e) => setInputMessage(e.target.value)}
 									onKeyPress={handleKeyPress}
 									placeholder="Type your message..."
-									className="flex-1"
+									className="flex-1 text-purple-800 placeholder:text-purple-400"
 								/>
 								<Button onClick={sendMessage} size="sm" className="bg-blue-600 hover:bg-blue-700">
 									<Send className="h-4 w-4" />

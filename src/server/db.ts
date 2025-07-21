@@ -11,10 +11,6 @@ const createPrismaClient = () =>
 				url: env.DATABASE_URL,
 			},
 		},
-		// Add connection pooling for production
-		...(env.NODE_ENV === "production" && {
-			datasourceUrl: env.DATABASE_URL,
-		}),
 	});
 
 const globalForPrisma = globalThis as unknown as {

@@ -147,10 +147,13 @@ export default function LandingPage() {
 										Start Free Trial
 										<ArrowRight className="ml-2 h-5 w-5" />
 									</Link>
-									<button className="inline-flex items-center justify-center rounded-lg border border-gray-600 px-8 py-4 font-semibold text-lg transition-colors hover:border-gray-500">
+									<Link
+										href="/contact"
+										className="inline-flex items-center justify-center rounded-lg border border-gray-600 px-8 py-4 font-semibold text-lg transition-colors hover:border-gray-500"
+									>
 										<Play className="mr-2 h-5 w-5" />
 										Watch Demo
-									</button>
+									</Link>
 								</div>
 								<div className="mt-8 flex items-center space-x-6 text-gray-400 text-sm">
 									<div className="flex items-center">
@@ -363,7 +366,7 @@ export default function LandingPage() {
 									</li>
 									<li>
 										<Link
-											href="/demo"
+											href="/contact"
 											className="transition-colors hover:text-white"
 										>
 											Demo

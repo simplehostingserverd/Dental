@@ -300,7 +300,7 @@ export default function BlogPage() {
 								</li>
 								<li>
 									<Link
-										href="/demo"
+										href="/contact"
 										className="transition-colors hover:text-white"
 									>
 										Demo
