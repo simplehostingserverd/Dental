@@ -29,7 +29,9 @@ export async function GET(request: NextRequest) {
 		const limit = url.searchParams.get("limit"); // limit results
 
 		// Build where clause
-		const whereClause: any = {
+		const whereClause: {
+			practiceId: string;
+		} = {
 			practiceId: practiceUser.practiceId,
 		};
 

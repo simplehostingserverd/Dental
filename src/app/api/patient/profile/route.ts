@@ -22,6 +22,12 @@ export async function GET(request: NextRequest) {
 			);
 		}
 
+		// Parse JSON fields safely
+		const address = patient.address as Record<string, unknown> | null;
+		const emergencyContact = patient.emergencyContact as Record<string, unknown> | null;
+		const insurance = patient.insurance as Record<string, unknown> | null;
+		const medicalHistory = patient.medicalHistory as Record<string, unknown> | null;
+
 		// Format the profile data
 		const profile = {
 			firstName: patient.firstName,
@@ -30,15 +36,10 @@ export async function GET(request: NextRequest) {
 			phone: patient.phone || "",
 			dateOfBirth: patient.dateOfBirth.toISOString().split("T")[0],
 			gender: patient.gender,
-			address: patient.address || "",
-			city: patient.city || "",
-			state: patient.state || "",
-			zipCode: patient.zipCode || "",
-			emergencyContact: patient.emergencyContact || "",
-			emergencyPhone: patient.emergencyPhone || "",
-			insurance: patient.insurance || "",
-			insuranceProvider: patient.insuranceProvider || "",
-			insurancePolicyNumber: patient.insurancePolicyNumber || "",
+			address: address || {},
+			emergencyContact: emergencyContact || {},
+			insurance: insurance || {},
+			medicalHistory: medicalHistory || {},
 		};
 
 		return NextResponse.json({
@@ -105,6 +106,24 @@ export async function PUT(request: NextRequest) {
 		}
 
 		// Update the patient record
+		// Prepare JSON fields
+		const addressData = address ? {
+			street: address,
+			city: city || "",
+			state: state || "",
+			zipCode: zipCode || "",
+		} : null;
+
+		const emergencyContactData = emergencyContact ? {
+			name: emergencyContact,
+			phone: emergencyPhone || "",
+		} : null;
+
+		const insuranceData = insurance ? {
+			provider: insurance,
+			policyNumber: insurancePolicyNumber || "",
+		} : null;
+
 		const updatedPatient = await db.patient.update({
 			where: { id: patient.id },
 			data: {
@@ -114,15 +133,9 @@ export async function PUT(request: NextRequest) {
 				phone: phone?.trim() || null,
 				dateOfBirth: new Date(dateOfBirth),
 				gender: gender.trim(),
-				address: address?.trim() || null,
-				city: city?.trim() || null,
-				state: state?.trim() || null,
-				zipCode: zipCode?.trim() || null,
-				emergencyContact: emergencyContact?.trim() || null,
-				emergencyPhone: emergencyPhone?.trim() || null,
-				insurance: insurance?.trim() || null,
-				insuranceProvider: insuranceProvider?.trim() || null,
-				insurancePolicyNumber: insurancePolicyNumber?.trim() || null,
+				...(addressData && { address: addressData }),
+				...(emergencyContactData && { emergencyContact: emergencyContactData }),
+				...(insuranceData && { insurance: insuranceData }),
 			},
 		});
 

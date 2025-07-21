@@ -46,7 +46,7 @@ export async function PUT(
 
 		// Check if appointment can be modified (not in the past or already completed/cancelled)
 		if (
-			appointment.start < new Date() ||
+			(appointment.start && appointment.start < new Date()) ||
 			appointment.status === "COMPLETED" ||
 			appointment.status === "CANCELED"
 		) {
@@ -87,8 +87,9 @@ export async function PUT(
 			newStartDateTime.setHours(hours, minutes, 0, 0);
 
 			// Calculate duration from original appointment
-			const originalDuration =
-				appointment.end.getTime() - appointment.start.getTime();
+			const originalDuration = appointment.end && appointment.start
+				? appointment.end.getTime() - appointment.start.getTime()
+				: 60 * 60 * 1000; // Default 1 hour if times are null
 			const newEndDateTime = new Date(
 				newStartDateTime.getTime() + originalDuration,
 			);
@@ -199,7 +200,7 @@ export async function DELETE(
 
 		// Check if appointment can be cancelled
 		if (
-			appointment.start < new Date() ||
+			(appointment.start && appointment.start < new Date()) ||
 			appointment.status === "COMPLETED" ||
 			appointment.status === "CANCELED"
 		) {

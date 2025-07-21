@@ -140,7 +140,7 @@ export default function PatientDashboardPage() {
 						<div className="flex items-center">
 							<ToothIcon className="mr-3 h-8 w-8 text-blue-600" />
 							<h1 className="font-bold text-gray-900 text-xl">
-								DentalExpresso
+								Cognident
 							</h1>
 						</div>
 						<div className="flex items-center space-x-4">

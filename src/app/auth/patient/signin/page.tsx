@@ -12,7 +12,7 @@ export default function PatientSignInPage() {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		// Redirect to patient dashboard
-		window.location.href = "/dashboard/patient";
+		window.location.href = "/patient/dashboard";
 	};
 
 	return (

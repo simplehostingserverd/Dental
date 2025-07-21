@@ -34,6 +34,13 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
+		if (!patient.practiceId) {
+			return NextResponse.json(
+				{ error: "Patient is not associated with a practice" },
+				{ status: 400 },
+			);
+		}
+
 		// Find an available practice user (dentist/staff) for the appointment
 		// For now, we'll assign to the first available practice user
 		const practiceUser = await db.practiceUser.findFirst({
@@ -107,12 +114,21 @@ export async function POST(request: NextRequest) {
 		// Create the appointment
 		const appointment = await db.appointment.create({
 			data: {
+				// Required fields
+				patientId: patient.id,
+				patientName: `${patient.firstName} ${patient.lastName}`,
+				dentistId: practiceUser.id,
+				dentistName: `${practiceUser.firstName} ${practiceUser.lastName}`,
+				date: startDateTime,
+				time: startDateTime.toTimeString().slice(0, 5), // HH:MM format
+				duration: 60, // Default 60 minutes
+				type: type || "Consultation",
+				status: "SCHEDULED",
+				notes: notes || null,
+				// Legacy fields for compatibility
 				start: startDateTime,
 				end: endDateTime,
-				status: "SCHEDULED",
 				appointmentType: type,
-				notes: notes || null,
-				patientId: patient.id,
 				practiceUserId: practiceUser.id,
 			},
 			include: {
@@ -141,7 +157,9 @@ export async function POST(request: NextRequest) {
 				type: appointment.appointmentType,
 				status: appointment.status,
 				notes: appointment.notes,
-				provider: `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`,
+				provider: appointment.practiceUser
+					? `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`
+					: "Staff Member",
 			},
 		});
 	} catch (error) {
@@ -201,7 +219,9 @@ export async function GET(request: NextRequest) {
 			type: appointment.appointmentType,
 			status: appointment.status,
 			notes: appointment.notes,
-			provider: `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`,
+			provider: appointment.practiceUser
+				? `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`
+				: "Staff Member",
 		}));
 
 		return NextResponse.json({

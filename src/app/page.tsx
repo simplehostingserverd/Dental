@@ -275,7 +275,7 @@ export default function LandingPage() {
 							{[
 								{
 									quote:
-										"DentalCloud transformed our practice efficiency. We've reduced scheduling conflicts by 90% and improved patient satisfaction significantly.",
+										"Cognident transformed our practice efficiency. We've reduced scheduling conflicts by 90% and improved patient satisfaction significantly.",
 									author: "Dr. Sarah Johnson",
 									practice: "Smile Dental Clinic",
 								},
@@ -287,7 +287,7 @@ export default function LandingPage() {
 								},
 								{
 									quote:
-										"HIPAA compliance was our biggest concern, but DentalCloud made it seamless. The security features give us and our patients peace of mind.",
+										"HIPAA compliance was our biggest concern, but Cognident made it seamless. The security features give us and our patients peace of mind.",
 									author: "Dr. Emily Rodriguez",
 									practice: "Downtown Dental Care",
 								},
@@ -315,7 +315,7 @@ export default function LandingPage() {
 							Ready to Transform Your Practice?
 						</h2>
 						<p className="mb-8 text-blue-100 text-xl">
-							Join thousands of dental practices already using DentalCloud to
+							Join thousands of dental practices already using Cognident to
 							streamline operations and improve patient care.
 						</p>
 						<Link
@@ -335,7 +335,7 @@ export default function LandingPage() {
 							<div>
 								<div className="mb-4 flex items-center">
 									<ToothIcon className="mr-3 h-8 w-8 text-blue-400" />
-									<span className="font-bold text-xl">DentalCloud</span>
+									<span className="font-bold text-xl">Cognident</span>
 								</div>
 								<p className="text-gray-400">
 									Next-generation dental practice management software designed
@@ -431,7 +431,7 @@ export default function LandingPage() {
 							</div>
 						</div>
 						<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
-							<p>&copy; 2024 DentalCloud. All rights reserved.</p>
+							<p>&copy; 2024 Cognident. All rights reserved.</p>
 						</div>
 					</div>
 				</footer>

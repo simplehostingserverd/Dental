@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { db } from "@/server/db";
+import { AppointmentStatus } from "@prisma/client";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -31,7 +32,18 @@ export async function GET(request: NextRequest) {
 		const patientId = url.searchParams.get("patientId"); // specific patient filter
 
 		// Build where clause
-		const whereClause: any = {
+		const whereClause: {
+			practiceUser: {
+				practiceId: string;
+			};
+			status?: AppointmentStatus;
+			practiceUserId?: string;
+			patientId?: string;
+			start?: {
+				gte: Date;
+				lte: Date;
+			};
+		} = {
 			practiceUser: {
 				practiceId: practiceUser.practiceId,
 			},
@@ -44,7 +56,7 @@ export async function GET(request: NextRequest) {
 			const endOfDay = new Date(date);
 			endOfDay.setHours(23, 59, 59, 999);
 
-			(whereClause as { start: { gte: Date; lte: Date } }).start = {
+			whereClause.start = {
 				gte: startOfDay,
 				lte: endOfDay,
 			};
@@ -52,17 +64,17 @@ export async function GET(request: NextRequest) {
 
 		// Add status filter
 		if (status) {
-			(whereClause as { status: string }).status = status.toUpperCase();
+			whereClause.status = status.toUpperCase() as AppointmentStatus;
 		}
 
 		// Add provider filter
 		if (providerId) {
-			(whereClause as { practiceUserId: string }).practiceUserId = providerId;
+			whereClause.practiceUserId = providerId;
 		}
 
 		// Add patient filter
 		if (patientId) {
-			(whereClause as { patientId: string }).patientId = patientId;
+			whereClause.patientId = patientId;
 		}
 
 		// Get appointments for this practice

@@ -15,8 +15,8 @@ export async function GET(
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {
@@ -113,8 +113,8 @@ export async function PATCH(
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {
@@ -202,8 +202,8 @@ export async function DELETE(
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {

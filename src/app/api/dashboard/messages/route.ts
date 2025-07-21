@@ -30,7 +30,13 @@ export async function GET(request: NextRequest) {
 		const patientId = url.searchParams.get("patientId"); // specific patient
 
 		// Build where clause
-		const whereClause: any = {
+		const whereClause: {
+			patient: {
+				practiceId: string;
+			};
+			isRead?: boolean;
+			patientId?: string;
+		} = {
 			patient: {
 				practiceId: practiceUser.practiceId,
 			},
@@ -38,14 +44,14 @@ export async function GET(request: NextRequest) {
 
 		// Add status filter
 		if (status === "read") {
-			(whereClause as { isRead: boolean }).isRead = true;
+			whereClause.isRead = true;
 		} else if (status === "unread") {
-			(whereClause as { isRead: boolean }).isRead = false;
+			whereClause.isRead = false;
 		}
 
 		// Add patient filter
 		if (patientId) {
-			(whereClause as { patientId: string }).patientId = patientId;
+			whereClause.patientId = patientId;
 		}
 
 		// Get messages for this practice

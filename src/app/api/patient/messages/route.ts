@@ -94,6 +94,13 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
+		if (!patient.practiceId) {
+			return NextResponse.json(
+				{ error: "Patient is not associated with a practice" },
+				{ status: 400 },
+			);
+		}
+
 		// Find a practice user to send the message to (for now, use the first available)
 		const practiceUser = await db.practiceUser.findFirst({
 			where: {

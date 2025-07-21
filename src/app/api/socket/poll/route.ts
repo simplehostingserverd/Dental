@@ -1,4 +1,4 @@
-import { auth } from "@/server/auth";
+import { getCurrentUser } from "@/lib/auth/get-user";
 import { db } from "@/server/db";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -6,8 +6,8 @@ import { type NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
 	try {
 		// Check authentication
-		const session = await auth();
-		if (!session?.user) {
+		const user = await getCurrentUser();
+		if (!user || user.type !== "practice") {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
@@ -35,7 +35,9 @@ export async function GET(request: NextRequest) {
 		if (types.includes("appointments")) {
 			const appointments = await db.appointment.findMany({
 				where: {
-					practiceId: session.user.practiceId,
+					practiceUser: {
+						practiceId: user.practiceId,
+					},
 					updatedAt: { gte: since },
 				},
 				include: {
@@ -66,7 +68,7 @@ export async function GET(request: NextRequest) {
 		if (types.includes("patients")) {
 			const patients = await db.patient.findMany({
 				where: {
-					practiceId: session.user.practiceId,
+					practiceId: user.practiceId,
 					updatedAt: { gte: since },
 				},
 				select: {
@@ -74,7 +76,6 @@ export async function GET(request: NextRequest) {
 					firstName: true,
 					lastName: true,
 					phone: true,
-					status: true,
 					updatedAt: true,
 				},
 				orderBy: { updatedAt: "desc" },

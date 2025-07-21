@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 			include: { practice: true },
 		});
 
@@ -30,7 +30,12 @@ export async function GET(request: NextRequest) {
 		const limit = url.searchParams.get("limit"); // limit results
 
 		// Build where clause
-		const whereClause: unknown = {
+		const whereClause: {
+			patient: {
+				practiceId: string;
+			};
+			patientId?: string;
+		} = {
 			patient: {
 				practiceId: practiceUser.practiceId,
 			},
@@ -38,7 +43,7 @@ export async function GET(request: NextRequest) {
 
 		// Add patient filter
 		if (patientId) {
-			(whereClause as { patientId: string }).patientId = patientId;
+			whereClause.patientId = patientId;
 		}
 
 		// Get prescriptions for this practice
@@ -135,8 +140,8 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {

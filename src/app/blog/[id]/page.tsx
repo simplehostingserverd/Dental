@@ -284,7 +284,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 						<div>
 							<div className="mb-4 flex items-center">
 								<Heart className="mr-3 h-8 w-8 text-blue-400" />
-								<span className="font-bold text-xl">DentalCloud</span>
+								<span className="font-bold text-xl">Cognident</span>
 							</div>
 							<p className="text-gray-400">
 								Next-generation dental practice management software designed for
@@ -380,7 +380,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 						</div>
 					</div>
 					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
-						<p>&copy; 2024 DentalCloud. All rights reserved.</p>
+						<p>&copy; 2024 Cognident. All rights reserved.</p>
 					</div>
 				</div>
 			</footer>

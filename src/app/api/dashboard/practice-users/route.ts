@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { db } from "@/server/db";
+import { PracticeRole } from "@prisma/client";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -29,18 +30,22 @@ export async function GET(request: NextRequest) {
 		const activeOnly = url.searchParams.get("activeOnly") !== "false"; // default to active only
 
 		// Build where clause
-		const whereClause: any = {
+		const whereClause: {
+			practiceId: string;
+			role?: PracticeRole;
+			isActive?: boolean;
+		} = {
 			practiceId: practiceUser.practiceId,
 		};
 
 		// Add role filter
 		if (role) {
-			(whereClause as { role: string }).role = role.toUpperCase();
+			whereClause.role = role.toUpperCase() as PracticeRole;
 		}
 
 		// Add active filter
 		if (activeOnly) {
-			(whereClause as { isActive: boolean }).isActive = true;
+			whereClause.isActive = true;
 		}
 
 		// Get practice users
