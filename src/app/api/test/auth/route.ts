@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 			);
 		}
 
-		console.log("Running authentication tests...");
+		// Running authentication tests
 		await runAllAuthTests();
 
 		return NextResponse.json({

@@ -59,7 +59,7 @@ export default function TestLoginPage() {
 		}
 	};
 
-	const handleQuickLogin = async (testUser: any) => {
+	const handleQuickLogin = async (testUser: { email: string; password: string }) => {
 		setEmail(testUser.email);
 		setIsLoading(true);
 		setError("");

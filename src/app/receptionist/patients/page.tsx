@@ -190,7 +190,7 @@ export default function PatientsPage() {
 	const handleNewPatientSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		// TODO: Submit new patient data
-		console.log("New patient data:", newPatientData);
+		// New patient data submitted
 		setShowNewPatientForm(false);
 		setNewPatientData({
 			firstName: "",

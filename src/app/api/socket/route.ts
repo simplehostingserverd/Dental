@@ -36,15 +36,15 @@ export async function POST(request: NextRequest) {
 		switch (event) {
 			case "appointment:update":
 				// Handle appointment updates
-				console.log("Appointment update received:", data);
+				// Appointment update received
 				break;
 			case "patient:update":
 				// Handle patient updates
-				console.log("Patient update received:", data);
+				// Patient update received
 				break;
 			case "task:update":
 				// Handle task updates
-				console.log("Task update received:", data);
+				// Task update received
 				break;
 			default:
 				return NextResponse.json(

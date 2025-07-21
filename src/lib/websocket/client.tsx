@@ -16,7 +16,7 @@ interface UseRealtimeOptions {
 	onNotification?: (data: NotificationUpdate) => void;
 	onConnect?: () => void;
 	onDisconnect?: () => void;
-	onError?: (error: any) => void;
+	onError?: (error: Error) => void;
 	pollingInterval?: number; // milliseconds
 }
 

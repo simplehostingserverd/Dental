@@ -10,27 +10,23 @@
 		"preview": "npm run build && npm run start",
 		"db:generate": "prisma generate",
 		"db:migrate": "prisma migrate deploy",
-		"db:push": "prisma db push",
+		"db:push": "npx prisma db push --accept-data-loss",
 		"db:studio": "prisma studio",
-		"db:seed": "tsx scripts/seed-database.ts",
+		"db:seed": "npm run db:push && npm run seed",
 		"typecheck": "tsc --noEmit",
-		"lint": "biome check .",
-		"lint:fix": "biome check --write .",
+		"lint": "biome check src",
+		"lint:fix": "biome check --apply src",
 		"production:build": "NODE_ENV=production npm run build",
 		"production:start": "NODE_ENV=production npm run start",
 		"cpanel:install": "npm install --production --legacy-peer-deps && npm run db:generate && npm run build",
 		"cpanel:migrate": "npm run db:migrate",
 		"cpanel:deploy": "npm run cpanel:install && npm run cpanel:migrate",
 		"health:check": "tsx scripts/health-check.ts",
-		"db:push": "npx prisma db push --accept-data-loss",
-		"db:seed": "npm run db:push && npm run seed",
 		"db:reset": "npx prisma migrate reset --force && npm run seed",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"test:coverage": "jest --coverage",
 		"prepare": "husky install",
-		"lint": "biome check src",
-		"lint:fix": "biome check --apply src",
 		"health-check": "tsx scripts/health-check.ts"
 	},
 	"dependencies": {
@@ -74,7 +70,6 @@
 		"@types/qrcode": "^1.5.5",
 		"@types/three": "^0.178.1",
 		"@types/validator": "^13.15.2",
-
 		"bcryptjs": "^3.0.2",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
@@ -139,7 +134,7 @@
 		"tailwindcss": "^4.0.15",
 		"ts-jest": "^29.1.1",
 		"tsx": "^4.20.3",
-		"typescript": "^5.8.2"
+		"typescript": "5.8.3"
 	},
 	"ct3aMetadata": {
 		"initVersion": "7.39.3"

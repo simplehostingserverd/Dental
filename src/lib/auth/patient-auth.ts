@@ -189,7 +189,7 @@ export const PatientAuthService = {
 	 */
 	async register(
 		registrationData: PatientRegistrationData,
-	): Promise<{ success: boolean; user?: any; error?: string }> {
+	): Promise<{ success: boolean; user?: { id: string; email: string; patientId: string }; error?: string }> {
 		try {
 			const { email, password, patientId } = registrationData;
 
