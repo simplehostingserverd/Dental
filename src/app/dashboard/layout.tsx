@@ -10,7 +10,17 @@ export default async function DashboardLayout({
 }) {
 	const user = await getCurrentUser();
 
-	if (!user || user.type !== "practice") {
+	if (!user) {
+		redirect("/auth/signin");
+	}
+
+	// Redirect patients to their own dashboard
+	if (user.type === "patient") {
+		redirect("/dashboard/patient");
+	}
+
+	// Only practice users (dentists, receptionists) can access this dashboard
+	if (user.type !== "practice") {
 		redirect("/auth/signin");
 	}
 

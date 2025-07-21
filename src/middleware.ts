@@ -1,6 +1,6 @@
+import { stackServerApp } from "@/stack";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { stackServerApp } from "@/stack";
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
@@ -17,18 +17,54 @@ export async function middleware(request: NextRequest) {
 		pathname.startsWith("/api/test") ||
 		pathname.startsWith("/api/check-env") ||
 		pathname.startsWith("/api/create-sample-users") ||
+		pathname.startsWith("/test-login") ||
 		pathname === "/"
 	) {
 		return NextResponse.next();
 	}
 
 	// Check for protected routes
-	if (pathname.startsWith("/dashboard") || pathname.startsWith("/receptionist")) {
+	if (
+		pathname.startsWith("/dashboard") ||
+		pathname.startsWith("/receptionist")
+	) {
 		try {
+			// First check for test authentication
+			const testAuthToken = request.cookies.get("test-auth-token");
+			const testUserRole = request.cookies.get("test-user-role");
+
+			if (testAuthToken && testUserRole) {
+				// Get user details from cookies
+				const testUserId = request.cookies.get("test-user-id");
+				const testUserEmail = request.cookies.get("test-user-email");
+				const testUserFirstName = request.cookies.get("test-user-first-name");
+				const testUserLastName = request.cookies.get("test-user-last-name");
+
+				const response = NextResponse.next();
+				response.headers.set("x-test-auth", "true");
+				response.headers.set("x-test-user-role", testUserRole.value);
+
+				// Pass user details if available
+				if (testUserId)
+					response.headers.set("x-test-user-id", testUserId.value);
+				if (testUserEmail)
+					response.headers.set("x-test-user-email", testUserEmail.value);
+				if (testUserFirstName)
+					response.headers.set(
+						"x-test-user-first-name",
+						testUserFirstName.value,
+					);
+				if (testUserLastName)
+					response.headers.set("x-test-user-last-name", testUserLastName.value);
+
+				return response;
+			}
+
+			// Fallback to Stack Auth
 			const user = await stackServerApp.getUser({ request });
 
 			if (!user) {
-				return NextResponse.redirect(new URL("/auth/signin", request.url));
+				return NextResponse.redirect(new URL("/test-login", request.url));
 			}
 
 			// Add user info to headers for use in components
@@ -41,8 +77,8 @@ export async function middleware(request: NextRequest) {
 
 			return response;
 		} catch (error) {
-			// Invalid token, redirect to login
-			return NextResponse.redirect(new URL("/auth/signin", request.url));
+			// Invalid token, redirect to test login
+			return NextResponse.redirect(new URL("/test-login", request.url));
 		}
 	}
 

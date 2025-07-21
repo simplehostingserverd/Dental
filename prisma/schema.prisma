@@ -197,6 +197,11 @@ model User {
   image         String?
   role          Role          @default(STAFF)
   password      String?
+  hashedPassword String?
+  salt          String?
+  profile       Json?
+  cryptoKeys    Json?
+  lastLogin     DateTime?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   accounts      Account[]
@@ -220,25 +225,24 @@ model Patient {
   firstName     String
   lastName      String
   dateOfBirth   DateTime
-  gender        String
+  gender        String?
   phone         String?
   email         String?
-  address       String?
-  city          String?
-  state         String?
-  zipCode       String?
-  emergencyContact String?
-  emergencyPhone   String?
-  insurance     String?        // General insurance field
-  insuranceProvider String?
-  insurancePolicyNumber String?
-  practiceId    String
+  address       Json?          // JSON object for structured address
+  emergencyContact Json?       // JSON object for emergency contact
+  insurance     Json?          // JSON object for insurance details
+  medicalHistory Json?         // JSON object for medical history
+  lastVisit     DateTime?
+  nextAppointment DateTime?
+  totalVisits   Int            @default(0)
+  outstandingBalance Float      @default(0)
+  practiceId    String?
   patientUserId String?        @unique
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
   // Relations
-  practice      Practice       @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  practice      Practice?      @relation(fields: [practiceId], references: [id], onDelete: Cascade)
   patientUser   PatientUser?   @relation(fields: [patientUserId], references: [id])
   appointments  Appointment[]
   invoices      Invoice[]
@@ -262,39 +266,59 @@ model Patient {
 
 model Appointment {
   id              String            @id @default(cuid())
-  start           DateTime
-  end             DateTime
+  patientId       String
+  patientName     String
+  dentistId       String
+  dentistName     String
+  date            DateTime
+  time            String
+  duration        Int               // minutes
+  type            String
   status          AppointmentStatus @default(SCHEDULED)
   notes           String?
-  appointmentType String?
-  patientId       String
-  practiceUserId  String
+  treatmentPlan   Json?             // JSON array of treatment steps
+  estimatedCost   Float?
+  start           DateTime?         // Legacy field for compatibility
+  end             DateTime?         // Legacy field for compatibility
+  appointmentType String?           // Legacy field for compatibility
+  practiceUserId  String?           // Legacy field for compatibility
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
   // Relations
   patient         Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  practiceUser    PracticeUser      @relation(fields: [practiceUserId], references: [id], onDelete: Cascade)
+  practiceUser    PracticeUser?     @relation(fields: [practiceUserId], references: [id], onDelete: Cascade)
   insuranceClaims InsuranceClaim[]
 }
 
 model Treatment {
   id          String   @id @default(cuid())
-  title       String
-  description String
-  cost        Float
-  date        DateTime @default(now())
   patientId   String
+  dentistId   String
+  date        DateTime
+  procedure   String
+  tooth       String?
+  cost        Float
+  status      TreatmentStatus @default(PLANNED)
+  notes       String?
+  followUpRequired Boolean @default(false)
+  followUpDate DateTime?
+  title       String?  // Legacy field for compatibility
+  description String?  // Legacy field for compatibility
   patient     Patient  @relation(fields: [patientId], references: [id])
 }
 
 model Invoice {
   id        String        @id @default(cuid())
-  total     Float
-  paid      Boolean       @default(false)
-  dueDate   DateTime
-  status    InvoiceStatus
   patientId String
+  date      DateTime
+  dueDate   DateTime
+  amount    Float
+  paid      Float         @default(0)
+  status    InvoiceStatus
+  treatments Json?        // JSON array of treatment IDs
+  insuranceClaim Json?    // JSON object for insurance claim details
+  total     Float?        // Legacy field for compatibility
   patient   Patient       @relation(fields: [patientId], references: [id])
   payments  Payment[]
 }
@@ -690,6 +714,12 @@ enum InvoiceStatus {
   PARTIAL
   OVERDUE
   CANCELED
+}
+
+enum TreatmentStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
 }
 
 enum ReminderType {

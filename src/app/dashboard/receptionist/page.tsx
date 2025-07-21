@@ -23,6 +23,7 @@ import {
 	Clock,
 	Edit,
 	Eye,
+	LogOut,
 	MoreHorizontal,
 	Phone,
 	Plus,
@@ -107,6 +108,22 @@ export default function ReceptionistDashboard() {
 	const [appointments, setAppointments] = useState<Appointment[]>([]);
 	const [patients, setPatients] = useState<Patient[]>([]);
 	const [practiceUsers, setPracticeUsers] = useState<PracticeUser[]>([]);
+
+	useEffect(() => {
+		document.title = "Cognident - Receptionist Dashboard";
+	}, []);
+
+	const handleLogout = async () => {
+		try {
+			await fetch("/api/test-auth/logout", { method: "POST" });
+			localStorage.removeItem("testUser");
+			window.location.href = "/test-login";
+		} catch (error) {
+			console.error("Logout error:", error);
+			localStorage.removeItem("testUser");
+			window.location.href = "/test-login";
+		}
+	};
 	const [selectedDate, setSelectedDate] = useState(
 		new Date().toISOString().split("T")[0],
 	);
@@ -352,6 +369,14 @@ export default function ReceptionistDashboard() {
 					<Button onClick={() => setShowNewAppointment(true)}>
 						<Plus className="mr-2 h-4 w-4" />
 						New Appointment
+					</Button>
+					<Button
+						variant="outline"
+						onClick={handleLogout}
+						className="text-red-600 hover:bg-red-50 hover:text-red-700"
+					>
+						<LogOut className="mr-2 h-4 w-4" />
+						Logout
 					</Button>
 				</div>
 			</div>

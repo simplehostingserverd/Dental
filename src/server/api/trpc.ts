@@ -11,9 +11,9 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { stackServerApp } from "@/stack";
 import { db } from "@/server/db";
 import { setRLSContext } from "@/server/db/rls-context";
+import { stackServerApp } from "@/stack";
 
 /**
  * 1. CONTEXT
@@ -27,7 +27,10 @@ import { setRLSContext } from "@/server/db/rls-context";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { headers: Headers; request?: Request }) => {
+export const createTRPCContext = async (opts: {
+	headers: Headers;
+	request?: Request;
+}) => {
 	// Get Stack Auth user from request
 	let user = null;
 	try {
@@ -105,7 +108,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
 	const result = await next();
 	const end = Date.now();
-	
+
 	// Only log in development
 	if (process.env.NODE_ENV === "development") {
 		console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
@@ -144,7 +147,7 @@ export const protectedProcedure = t.procedure
 		try {
 			practiceUser = await ctx.db.practiceUser.findUnique({
 				where: { email: ctx.user.primaryEmail || "" },
-				include: { practice: true }
+				include: { practice: true },
 			});
 		} catch (error) {
 			console.log("Could not find practice user:", error);

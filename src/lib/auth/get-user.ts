@@ -18,6 +18,51 @@ export interface CurrentUser {
 export async function getCurrentUser(): Promise<CurrentUser | null> {
 	try {
 		const headersList = await headers();
+
+		// Check for test authentication first
+		const isTestAuth = headersList.get("x-test-auth");
+		const testUserRole = headersList.get("x-test-user-role");
+
+		if (isTestAuth === "true" && testUserRole) {
+			// Get the actual test user data from cookies/session
+			const testUserId = headersList.get("x-test-user-id");
+			const testUserEmail = headersList.get("x-test-user-email");
+			const testUserFirstName = headersList.get("x-test-user-first-name");
+			const testUserLastName = headersList.get("x-test-user-last-name");
+
+			// If we have detailed user info, use it; otherwise fall back to generic
+			if (
+				testUserId &&
+				testUserEmail &&
+				testUserFirstName &&
+				testUserLastName
+			) {
+				return {
+					id: testUserId,
+					email: testUserEmail,
+					firstName: testUserFirstName,
+					lastName: testUserLastName,
+					role: testUserRole.toUpperCase(),
+					practiceId: "test-practice",
+					type: testUserRole === "patient" ? "patient" : "practice",
+					...(testUserRole === "patient" && { patientId: testUserId }),
+				};
+			}
+
+			// Fallback to generic test user
+			return {
+				id: "test-user",
+				email: "test@cognident.org",
+				firstName: "Test",
+				lastName: "User",
+				role: testUserRole.toUpperCase(),
+				practiceId: "test-practice",
+				type: testUserRole === "patient" ? "patient" : "practice",
+				...(testUserRole === "patient" && { patientId: "test-user" }),
+			};
+		}
+
+		// Fallback to Stack Auth
 		const userId = headersList.get("x-user-id");
 		const email = headersList.get("x-user-email");
 		const practiceId = headersList.get("x-practice-id");

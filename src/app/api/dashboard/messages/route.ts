@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 			include: { practice: true },
 		});
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 		const patientId = url.searchParams.get("patientId"); // specific patient
 
 		// Build where clause
-		const whereClause: unknown = {
+		const whereClause: any = {
 			patient: {
 				practiceId: practiceUser.practiceId,
 			},
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
 				(message) =>
 					message.patient.firstName.toLowerCase().includes(searchLower) ||
 					message.patient.lastName.toLowerCase().includes(searchLower) ||
-					message.patient.email.toLowerCase().includes(searchLower) ||
+					message.patient.email?.toLowerCase().includes(searchLower) ||
 					message.content.toLowerCase().includes(searchLower),
 			);
 		}

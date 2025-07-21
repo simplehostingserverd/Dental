@@ -44,3 +44,66 @@ yarn-error.log*
 
 # idea files
 .idea
+
+# Security & Privacy - DO NOT COMMIT
+# Cookie files from testing
+cookies*.txt
+*.cookies
+/cookies/
+
+# Session files
+sessions/
+*.session
+
+# Private keys and certificates
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Log files with potentially sensitive data
+*.log
+logs/
+/var/log/
+
+# Configuration files that might contain secrets
+config.local.*
+.env.production
+.env.staging
+
+# Database dumps and exports
+*.sql
+*.dump
+*.backup
+
+# User uploads (might contain sensitive patient data)
+/uploads/
+/public/uploads/
+/storage/
+
+# Cache files that might contain sensitive data
+.cache/
+*.cache
+
+# IDE and editor files that might contain sensitive info
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Package manager lock files (optional - uncomment if needed)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

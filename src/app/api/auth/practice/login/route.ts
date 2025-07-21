@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
 		// Get client IP
 		const forwarded = request.headers.get("x-forwarded-for");
-		const ip = forwarded ? forwarded.split(",")[0] : request.ip || "unknown";
+		const ip = forwarded?.split(",")[0]?.trim() || "unknown";
 
 		// Attempt login
 		const result = await PracticeAuthService.login(

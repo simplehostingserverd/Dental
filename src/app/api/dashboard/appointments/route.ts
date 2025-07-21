@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 			include: { practice: true },
 		});
 
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 		const patientId = url.searchParams.get("patientId"); // specific patient filter
 
 		// Build where clause
-		const whereClause: unknown = {
+		const whereClause: any = {
 			practiceUser: {
 				practiceId: practiceUser.practiceId,
 			},
@@ -96,8 +96,8 @@ export async function GET(request: NextRequest) {
 			success: true,
 			appointments: appointments.map((appointment) => ({
 				id: appointment.id,
-				start: appointment.start.toISOString(),
-				end: appointment.end.toISOString(),
+				start: appointment.start?.toISOString() || "",
+				end: appointment.end?.toISOString() || "",
 				status: appointment.status,
 				appointmentType: appointment.appointmentType,
 				notes: appointment.notes,
@@ -108,12 +108,14 @@ export async function GET(request: NextRequest) {
 					phone: appointment.patient.phone,
 					email: appointment.patient.email,
 				},
-				practiceUser: {
-					id: appointment.practiceUser.id,
-					firstName: appointment.practiceUser.firstName,
-					lastName: appointment.practiceUser.lastName,
-					role: appointment.practiceUser.role,
-				},
+				practiceUser: appointment.practiceUser
+					? {
+							id: appointment.practiceUser.id,
+							firstName: appointment.practiceUser.firstName,
+							lastName: appointment.practiceUser.lastName,
+							role: appointment.practiceUser.role,
+						}
+					: null,
 			})),
 		});
 	} catch (error) {
@@ -148,8 +150,8 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {
@@ -249,12 +251,19 @@ export async function POST(request: NextRequest) {
 		// Create the appointment
 		const appointment = await db.appointment.create({
 			data: {
+				patientId: patient.id,
+				patientName: `${patient.firstName} ${patient.lastName}`,
+				dentistId: provider.id,
+				dentistName: `${provider.firstName} ${provider.lastName}`,
+				date: startDateTime,
+				time: startDateTime.toTimeString().split(" ")[0] || "09:00:00",
+				duration: 60,
+				type: appointmentType || "Consultation",
+				status: "SCHEDULED",
+				notes: notes,
 				start: startDateTime,
 				end: endDateTime,
-				status: "SCHEDULED",
 				appointmentType: appointmentType,
-				notes: notes || null,
-				patientId: patient.id,
 				practiceUserId: provider.id,
 			},
 			include: {
@@ -282,8 +291,8 @@ export async function POST(request: NextRequest) {
 			success: true,
 			appointment: {
 				id: appointment.id,
-				start: appointment.start.toISOString(),
-				end: appointment.end.toISOString(),
+				start: appointment.start?.toISOString() || "",
+				end: appointment.end?.toISOString() || "",
 				status: appointment.status,
 				appointmentType: appointment.appointmentType,
 				notes: appointment.notes,
@@ -294,12 +303,14 @@ export async function POST(request: NextRequest) {
 					phone: appointment.patient.phone,
 					email: appointment.patient.email,
 				},
-				practiceUser: {
-					id: appointment.practiceUser.id,
-					firstName: appointment.practiceUser.firstName,
-					lastName: appointment.practiceUser.lastName,
-					role: appointment.practiceUser.role,
-				},
+				practiceUser: appointment.practiceUser
+					? {
+							id: appointment.practiceUser.id,
+							firstName: appointment.practiceUser.firstName,
+							lastName: appointment.practiceUser.lastName,
+							role: appointment.practiceUser.role,
+						}
+					: null,
 			},
 		});
 	} catch (error) {

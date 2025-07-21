@@ -10,7 +10,7 @@ import { TranslationProvider } from "@/lib/i18n/translation-context";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
-	title: "DentalCloud - Practice Management",
+	title: "Cognident - Practice Management",
 	description: "Dental practice management made simple",
 	icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
@@ -29,10 +29,10 @@ export default function RootLayout({
 				{/* Temporarily disable Stack Auth to debug the error */}
 				{/* <StackProvider app={stackClientApp}>
 					<StackTheme> */}
-						<TranslationProvider>
-							<TRPCReactProvider>{children}</TRPCReactProvider>
-						</TranslationProvider>
-					{/* </StackTheme>
+				<TranslationProvider>
+					<TRPCReactProvider>{children}</TRPCReactProvider>
+				</TranslationProvider>
+				{/* </StackTheme>
 				</StackProvider> */}
 			</body>
 		</html>

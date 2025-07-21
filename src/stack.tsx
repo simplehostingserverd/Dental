@@ -4,11 +4,14 @@ import { StackServerApp } from "@stackframe/stack";
 
 // Add error handling for missing environment variables
 const projectId = process.env.NEXT_PUBLIC_STACK_PROJECT_ID;
-const publishableClientKey = process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY;
+const publishableClientKey =
+	process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY;
 const secretServerKey = process.env.STACK_SECRET_SERVER_KEY;
 
 if (!projectId || !publishableClientKey || !secretServerKey) {
-  console.warn("Stack Auth server environment variables are missing. Authentication may not work properly.");
+	console.warn(
+		"Stack Auth server environment variables are missing. Authentication may not work properly.",
+	);
 }
 
 export const stackServerApp = new StackServerApp({

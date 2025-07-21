@@ -15,8 +15,8 @@ export async function GET(
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {
@@ -66,8 +66,8 @@ export async function GET(
 			success: true,
 			appointment: {
 				id: appointment.id,
-				start: appointment.start.toISOString(),
-				end: appointment.end.toISOString(),
+				start: appointment.start?.toISOString() || "",
+				end: appointment.end?.toISOString() || "",
 				status: appointment.status,
 				appointmentType: appointment.appointmentType,
 				notes: appointment.notes,
@@ -78,12 +78,14 @@ export async function GET(
 					phone: appointment.patient.phone,
 					email: appointment.patient.email,
 				},
-				practiceUser: {
-					id: appointment.practiceUser.id,
-					firstName: appointment.practiceUser.firstName,
-					lastName: appointment.practiceUser.lastName,
-					role: appointment.practiceUser.role,
-				},
+				practiceUser: appointment.practiceUser
+					? {
+							id: appointment.practiceUser.id,
+							firstName: appointment.practiceUser.firstName,
+							lastName: appointment.practiceUser.lastName,
+							role: appointment.practiceUser.role,
+						}
+					: null,
 			},
 		});
 	} catch (error) {
@@ -111,8 +113,8 @@ export async function PATCH(
 		const { status, date, time, appointmentType, providerId, notes } = body;
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {
@@ -140,7 +142,7 @@ export async function PATCH(
 		}
 
 		// Prepare update data
-		const updateData: unknown = {};
+		const updateData: any = {};
 
 		// Update status if provided
 		if (status) {
@@ -273,8 +275,8 @@ export async function PATCH(
 			success: true,
 			appointment: {
 				id: updatedAppointment.id,
-				start: updatedAppointment.start.toISOString(),
-				end: updatedAppointment.end.toISOString(),
+				start: updatedAppointment.start?.toISOString() || "",
+				end: updatedAppointment.end?.toISOString() || "",
 				status: updatedAppointment.status,
 				appointmentType: updatedAppointment.appointmentType,
 				notes: updatedAppointment.notes,
@@ -285,12 +287,14 @@ export async function PATCH(
 					phone: updatedAppointment.patient.phone,
 					email: updatedAppointment.patient.email,
 				},
-				practiceUser: {
-					id: updatedAppointment.practiceUser.id,
-					firstName: updatedAppointment.practiceUser.firstName,
-					lastName: updatedAppointment.practiceUser.lastName,
-					role: updatedAppointment.practiceUser.role,
-				},
+				practiceUser: updatedAppointment.practiceUser
+					? {
+							id: updatedAppointment.practiceUser.id,
+							firstName: updatedAppointment.practiceUser.firstName,
+							lastName: updatedAppointment.practiceUser.lastName,
+							role: updatedAppointment.practiceUser.role,
+						}
+					: null,
 			},
 		});
 	} catch (error) {
@@ -315,8 +319,8 @@ export async function DELETE(
 		}
 
 		// Find the practice user record
-		const practiceUser = await db.practiceUser.findUnique({
-			where: { practiceUserId: user.id },
+		const practiceUser = await db.practiceUser.findFirst({
+			where: { email: user.email },
 		});
 
 		if (!practiceUser) {

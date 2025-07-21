@@ -7,11 +7,11 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  output: 'standalone',
-  compress: true,
-  experimental: {
-    optimizePackageImports: ['@tanstack/react-query', 'superjson'],
-  },
+	output: "standalone",
+	compress: true,
+	experimental: {
+		optimizePackageImports: ["@tanstack/react-query", "superjson"],
+	},
 };
 
 module.exports = config;
