@@ -1,5 +1,6 @@
 "use client";
 
+import { logger } from "@/lib/logger";
 import { useEffect } from "react";
 
 export default function ErrorPage({
@@ -10,8 +11,16 @@ export default function ErrorPage({
 	reset: () => void;
 }) {
 	useEffect(() => {
-		// Log the error to an error reporting service
-		console.error(error);
+		// Log the error to our centralized logger
+		logger.error("Client-side error occurred", 
+			{ 
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+				digest: error.digest
+			},
+			error
+		);
 	}, [error]);
 
 	return (
@@ -24,6 +33,11 @@ export default function ErrorPage({
 					<p className="mb-6 text-gray-600">
 						An unexpected error occurred. Please try again.
 					</p>
+					{error.digest && (
+						<p className="mb-4 text-sm text-gray-500">
+							Error ID: {error.digest}
+						</p>
+					)}
 					<button
 						type="button"
 						onClick={() => reset()}
