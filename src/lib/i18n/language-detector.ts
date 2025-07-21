@@ -7,16 +7,16 @@ import { defaultLocale } from './translations';
 export const locales = ['en', 'es'];
 
 // Get the preferred locale from the request
-export function getLocale(request: Request): string {
+export async function getLocale(request: Request): Promise<string> {
   // Check for locale cookie first
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const localeCookie = cookieStore.get('NEXT_LOCALE');
   if (localeCookie?.value && locales.includes(localeCookie.value)) {
     return localeCookie.value;
   }
 
   // Then check the Accept-Language header
-  const headersList = headers();
+  const headersList = await headers();
   const acceptLanguage = headersList.get('accept-language') || '';
   
   // Use Negotiator to parse the Accept-Language header
@@ -49,7 +49,7 @@ export function getBrowserLocale(): string {
   
   // Check navigator.language
   const browserLocale = navigator.language.split('-')[0];
-  if (locales.includes(browserLocale)) {
+  if (browserLocale && locales.includes(browserLocale)) {
     return browserLocale;
   }
   

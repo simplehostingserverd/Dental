@@ -33,7 +33,7 @@ export default async function RootLayout({
 	const locale = params.locale || 'en';
 
 	// Get the messages for the current locale
-	const messages = await getMessages(locale);
+	const messages = await getMessages({ locale });
 
 	return (
 		<html lang={locale} className={`${geist.variable}`} suppressHydrationWarning>

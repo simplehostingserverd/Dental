@@ -25,6 +25,7 @@ import { useState } from "react";
 
 export default function HelpPage() {
 	const [searchQuery, setSearchQuery] = useState("");
+	const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
 	const categories = [
 		{
@@ -352,6 +353,15 @@ export default function HelpPage() {
 									<Button
 										size="sm"
 										className="w-full bg-blue-600 hover:bg-blue-700"
+										onClick={() => {
+											if (option.title === 'Live Chat') {
+												setIsChatbotOpen(true);
+											} else if (option.title === 'Phone Support') {
+												window.open('tel:+19563575588');
+											} else if (option.title === 'Email Support') {
+												window.location.href = '/contact';
+											}
+										}}
 									>
 										{option.action}
 									</Button>
@@ -457,13 +467,17 @@ export default function HelpPage() {
 						or issues.
 					</p>
 					<div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-						<Button className="bg-blue-600 hover:bg-blue-700">
+						<Button
+							className="bg-blue-600 hover:bg-blue-700"
+							onClick={() => setIsChatbotOpen(true)}
+						>
 							<MessageCircle className="mr-2 h-4 w-4" />
 							Start Live Chat
 						</Button>
 						<Button
 							variant="outline"
 							className="border-gray-600 text-gray-300 hover:bg-gray-800"
+							onClick={() => window.open('tel:+19563575588')}
 						>
 							<Phone className="mr-2 h-4 w-4" />
 							Call Support
@@ -578,6 +592,12 @@ export default function HelpPage() {
 					</div>
 				</div>
 			</footer>
+
+			{/* Help Chatbot */}
+			<HelpChatbot
+				isOpen={isChatbotOpen}
+				onClose={() => setIsChatbotOpen(false)}
+			/>
 		</div>
 	);
 }
