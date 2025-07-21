@@ -1,0 +1,3 @@
+# Force Coolify to use Dockerfile instead of Nixpacks
+[build]
+dockerfile = "Dockerfile"
