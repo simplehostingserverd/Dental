@@ -15,7 +15,6 @@
 		"postinstall": "prisma generate",
 		"preview": "next build && next start",
 		"start": "next start",
-		"start:custom": "node server.js",
 		"typecheck": "tsc --noEmit",
 		"typecheck:watch": "tsc --noEmit --watch",
 		"check-types": "tsx src/scripts/check-types.ts",

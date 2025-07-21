@@ -70,7 +70,7 @@ NODE_ENV=production
 #    - In cPanel, go to "Node.js App" and create a new application
 #    - Set Node.js version to 18.x or higher
 #    - Set the application root to your extracted folder
-#    - Set the startup file to: server.js
+#    - Set the startup file to: app.js
 #    - Set the application URL to your domain or subdomain
 #
 # 3. CONFIGURE ENVIRONMENT VARIABLES:

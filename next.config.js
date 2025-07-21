@@ -15,6 +15,20 @@ const config = {
 	experimental: {
 		optimizePackageImports: ["@tanstack/react-query", "superjson"],
 	},
+	// Force dynamic rendering for dashboard routes that use authentication
+	async headers() {
+		return [
+			{
+				source: '/dashboard/:path*',
+				headers: [
+					{
+						key: 'Cache-Control',
+						value: 'no-cache, no-store, must-revalidate',
+					},
+				],
+			},
+		];
+	},
 };
 
 module.exports = withNextIntl(config);
