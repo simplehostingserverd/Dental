@@ -225,7 +225,7 @@ export default function BillingPage() {
 			switch (reportType) {
 				case "daily-revenue":
 					reportData = {
-						payments: mockPayments.map((payment) => ({
+						payments: todayPayments.map((payment) => ({
 							id: payment.id,
 							patient: payment.patient,
 							amount: payment.amount,
@@ -239,7 +239,7 @@ export default function BillingPage() {
 					break;
 				case "insurance-claims":
 					reportData = {
-						claims: mockClaims.map((claim) => ({
+						claims: pendingClaims.map((claim) => ({
 							id: claim.id,
 							patient: claim.patient,
 							amount: claim.amount,
@@ -252,14 +252,14 @@ export default function BillingPage() {
 					break;
 				case "collections":
 					reportData = {
-						balances: mockOutstandingBalances.map((balance) => ({
+						balances: outstandingBalances.map((balance) => ({
 							id: balance.id,
 							patient: balance.patient,
 							balance: balance.balance,
 							lastPayment: balance.lastPayment,
 							daysPastDue: balance.daysPastDue,
 							phone: balance.phone,
-							email: balance.email,
+							email: `${balance.patient.toLowerCase().replace(' ', '.')}@email.com`,
 						})),
 					};
 					break;

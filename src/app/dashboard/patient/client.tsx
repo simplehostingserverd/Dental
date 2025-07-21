@@ -21,7 +21,7 @@ interface PatientUser {
 	email: string;
 	firstName: string;
 	lastName: string;
-	role: string;
+	role?: string;
 	type: string;
 	patientId?: string;
 }

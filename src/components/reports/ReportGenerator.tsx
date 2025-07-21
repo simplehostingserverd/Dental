@@ -102,7 +102,7 @@ export default function ReportGenerator({
 							<div className="flex items-center justify-between">
 								<FileText className="h-8 w-8 text-blue-600" />
 								<Badge variant="outline" className="text-xs">
-									{report.supportedFormats[0].toUpperCase()}
+									{report.supportedFormats[0]?.toUpperCase() || "PDF"}
 								</Badge>
 							</div>
 							<CardTitle className="text-lg">{report.name}</CardTitle>

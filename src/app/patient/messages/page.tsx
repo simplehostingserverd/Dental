@@ -140,10 +140,12 @@ export default function MessagesPage() {
 							) : messages.length > 0 ? (
 								<div className="space-y-4">
 									{messages.map((message, index) => {
+										const previousMessage = messages[index - 1];
 										const showDate =
 											index === 0 ||
-											formatDate(messages[index - 1].timestamp) !==
-												formatDate(message.timestamp);
+											(previousMessage &&
+												formatDate(previousMessage.timestamp) !==
+												formatDate(message.timestamp));
 
 										return (
 											<div key={message.id}>

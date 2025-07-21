@@ -4,6 +4,7 @@ import { ToothIcon } from "@/components/icons/tooth-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { LiveAgentChatbot } from "@/components/chat/live-agent-chatbot";
 import {
 	Clock,
 	Mail,
@@ -463,6 +464,9 @@ export default function ContactPage() {
 					</div>
 				</div>
 			</footer>
+
+			{/* Live Agent Chatbot */}
+			<LiveAgentChatbot />
 		</div>
 	);
 }

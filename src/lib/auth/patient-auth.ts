@@ -1,5 +1,6 @@
 import { db } from "@/server/db";
 import { SignJWT } from "jose";
+import jwt from "jsonwebtoken";
 import {
 	generateResetToken,
 	hashPassword,
@@ -171,7 +172,7 @@ export const PatientAuthService = {
 								firstName: safeUser.patient.firstName,
 								lastName: safeUser.patient.lastName,
 								phone: safeUser.patient.phone || undefined,
-								practiceId: safeUser.patient.practiceId,
+								practiceId: safeUser.patient.practiceId || "",
 							}
 						: undefined,
 				},

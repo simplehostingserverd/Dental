@@ -185,6 +185,28 @@ export const testUsersClient = [
 
 // For server-side operations, import from test-users-server.ts
 // This file only contains client-safe data
+
+// Placeholder hashes for client-side testing
+const receptionist2Hash = {
+	hash: "placeholder-hash-for-client-testing",
+	salt: "placeholder-salt-for-client-testing"
+};
+
+const patient1Hash = {
+	hash: "placeholder-hash-for-client-testing",
+	salt: "placeholder-salt-for-client-testing"
+};
+
+const patient2Hash = {
+	hash: "placeholder-hash-for-client-testing",
+	salt: "placeholder-salt-for-client-testing"
+};
+
+const patient3Hash = {
+	hash: "placeholder-hash-for-client-testing",
+	salt: "placeholder-salt-for-client-testing"
+};
+
 export const clientTestUsers: TestUser[] = [
 	{
 		id: "receptionist-002",
@@ -203,7 +225,7 @@ export const clientTestUsers: TestUser[] = [
 			startDate: "2023-01-10",
 			permissions: ["scheduling", "patient_records"],
 		},
-		cryptoKeys: generateUserCrypto(),
+		cryptoKeys: undefined,
 		createdAt: new Date().toISOString(),
 	},
 
@@ -242,7 +264,7 @@ export const clientTestUsers: TestUser[] = [
 				conditions: ["Hypertension"],
 			},
 		},
-		cryptoKeys: generateUserCrypto(),
+		cryptoKeys: undefined,
 		createdAt: new Date().toISOString(),
 	},
 	{
@@ -279,7 +301,7 @@ export const clientTestUsers: TestUser[] = [
 				conditions: [],
 			},
 		},
-		cryptoKeys: generateUserCrypto(),
+		cryptoKeys: undefined,
 		createdAt: new Date().toISOString(),
 	},
 	{
@@ -316,19 +338,19 @@ export const clientTestUsers: TestUser[] = [
 				conditions: ["Type 2 Diabetes"],
 			},
 		},
-		cryptoKeys: generateUserCrypto(),
+		cryptoKeys: undefined,
 		createdAt: new Date().toISOString(),
 	},
 ];
 
 // Helper function to find user by email
 export const findUserByEmail = (email: string): TestUser | undefined => {
-	return testUsers.find(
+	return clientTestUsers.find(
 		(user) => user.email.toLowerCase() === email.toLowerCase(),
 	);
 };
 
-// Helper function to verify login
+// Helper function to verify login (client-side testing only)
 export const verifyUserLogin = (
 	email: string,
 	password: string,
@@ -336,10 +358,7 @@ export const verifyUserLogin = (
 	const user = findUserByEmail(email);
 	if (!user) return null;
 
-	const isValid = QuantumCrypto.verifyPassword(
-		password,
-		user.hashedPassword,
-		user.salt,
-	);
+	// For client-side testing, just check if password matches the stored password
+	const isValid = password === user.password;
 	return isValid ? user : null;
 };

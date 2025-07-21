@@ -214,7 +214,7 @@ export class EmailValidationService {
 			const domain = trimmedEmail.split("@")[1];
 
 			// Practices should ideally use business domains
-			if (EmailValidationService.TRUSTED_DOMAINS.includes(domain)) {
+			if (domain && EmailValidationService.TRUSTED_DOMAINS.includes(domain)) {
 				result.warnings.push(
 					"Consider using your practice's business email domain for professional communication.",
 				);
@@ -240,7 +240,7 @@ export class EmailValidationService {
 		];
 		const localPart = email.split("@")[0];
 
-		return businessKeywords.some((keyword) => localPart.includes(keyword));
+		return localPart ? businessKeywords.some((keyword) => localPart.includes(keyword)) : false;
 	}
 
 	/**

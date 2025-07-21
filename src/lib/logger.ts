@@ -122,7 +122,7 @@ class Logger {
       }
     } else {
       // In development, format logs for better readability
-      const timestamp = `[${entry.timestamp.split('T')[1].split('.')[0]}]`;
+      const timestamp = `[${entry.timestamp.split('T')[1]?.split('.')[0] || 'unknown'}]`;
       const level = `[${entry.level.toUpperCase()}]`;
       const message = entry.message;
       

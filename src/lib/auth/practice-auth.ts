@@ -275,9 +275,10 @@ export class PracticeAuthService {
 			await db.auditLog.create({
 				data: {
 					action,
-					resource,
-					resourceId,
+					entityType: resource,
+					entityId: resourceId || "",
 					userId,
+					practiceId: "", // TODO: Get from user context
 					ipAddress,
 					userAgent,
 				},

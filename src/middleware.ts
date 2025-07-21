@@ -66,12 +66,12 @@ export async function middleware(request: NextRequest) {
 			}
 
 			// Fallback to Stack Auth
-			const user = await stackServerApp.getUser({ request });
+			const user = await stackServerApp.getUser();
 
 			if (!user) {
 				logger.warn("Authentication failed - redirecting to login", {
 					pathname,
-					ip: request.ip || "unknown",
+					ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown",
 				});
 				return NextResponse.redirect(new URL("/test-login", request.url));
 			}
@@ -89,7 +89,7 @@ export async function middleware(request: NextRequest) {
 		} catch (error) {
 			// Log the error
 			logger.error("Authentication error in middleware", 
-				{ pathname, ip: request.ip || "unknown" },
+				{ pathname, ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown" },
 				error
 			);
 			

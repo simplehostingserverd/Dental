@@ -1,6 +1,6 @@
 import type { Server as HTTPServer } from "node:http";
 import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+import { auth } from "@/server/auth";
 import { type Socket, Server as SocketIOServer } from "socket.io";
 
 export interface AppointmentUpdate {

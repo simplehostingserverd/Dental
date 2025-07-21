@@ -392,7 +392,7 @@ export default function LandingPage() {
 									</li>
 									<li>
 										<Link
-											href="/api"
+											href="/api-docs"
 											className="transition-colors hover:text-white"
 										>
 											API Docs

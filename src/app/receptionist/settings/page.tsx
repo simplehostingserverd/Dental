@@ -31,6 +31,7 @@ import {
 	Eye,
 	EyeOff,
 	FileText,
+	Mail,
 	MessageSquare,
 	Moon,
 	Palette,

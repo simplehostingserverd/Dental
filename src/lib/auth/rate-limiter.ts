@@ -218,5 +218,6 @@ export function createMiddleware(type: keyof typeof rateLimiters) {
 		);
 
 		next();
+		return;
 	};
 }

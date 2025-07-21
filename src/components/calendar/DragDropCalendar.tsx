@@ -173,9 +173,15 @@ export default function DragDropCalendar({
 			const timeSlotId = over.id as string;
 
 			// Parse the time slot ID to get date and time
-			const [dateStr, time] = timeSlotId.split("-");
+			const parts = timeSlotId.split("-");
+			const dateStr = parts[0];
+			const time = parts[1];
+			if (!dateStr || !time) return;
+
 			const newDate = new Date(dateStr);
-			const [hours, minutes] = time.split(":").map(Number);
+			const timeParts = time.split(":").map(Number);
+			const hours = timeParts[0] || 0;
+			const minutes = timeParts[1] || 0;
 			newDate.setHours(hours, minutes, 0, 0);
 
 			onAppointmentMove(appointmentId, time, newDate);
@@ -232,6 +238,7 @@ export default function DragDropCalendar({
 		if (view === "week") {
 			const startOfWeek = weekDates[0];
 			const endOfWeek = weekDates[6];
+			if (!startOfWeek || !endOfWeek) return "";
 			return `${startOfWeek.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${endOfWeek.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
 		}
 		if (view === "month") {
@@ -412,9 +419,9 @@ export default function DragDropCalendar({
 												return (
 													aptStart.toDateString() === date.toDateString() &&
 													aptStart.getHours() ===
-														Number.parseInt(slot.time.split(":")[0]) &&
+														Number.parseInt(slot.time.split(":")[0] || "0") &&
 													aptStart.getMinutes() ===
-														Number.parseInt(slot.time.split(":")[1])
+														Number.parseInt(slot.time.split(":")[1] || "0")
 												);
 											});
 

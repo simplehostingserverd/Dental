@@ -184,7 +184,12 @@ export default function AppointmentsPage() {
 
 	const parseTime = (timeStr: string): [number, number] => {
 		const [time, period] = timeStr.split(" ");
-		const [hours, minutes] = time.split(":").map(Number);
+		if (!time) return [0, 0];
+		const timeParts = time.split(":").map(Number);
+		const hours = timeParts[0] || 0;
+		const minutes = timeParts[1] || 0;
+		if (isNaN(hours) || isNaN(minutes)) return [0, 0];
+
 		let hour24 = hours;
 
 		if (period === "PM" && hours !== 12) {
@@ -211,7 +216,9 @@ export default function AppointmentsPage() {
 		setCalendarAppointments((prev) =>
 			prev.map((apt) => {
 				if (apt.id === appointmentId) {
-					const [hours, minutes] = newTimeSlot.split(":").map(Number);
+					const timeParts = newTimeSlot.split(":").map(Number);
+					const hours = timeParts[0] || 0;
+					const minutes = timeParts[1] || 0;
 					const newStart = new Date(newDate);
 					newStart.setHours(hours, minutes, 0, 0);
 
@@ -319,7 +326,8 @@ export default function AppointmentsPage() {
 	const changeDate = (days: number) => {
 		const currentDate = new Date(selectedDate);
 		currentDate.setDate(currentDate.getDate() + days);
-		setSelectedDate(currentDate.toISOString().split("T")[0]);
+		setSelectedDate(currentDate);
+		setSelectedDateString(currentDate.toISOString().split("T")[0] || "");
 	};
 
 	return (
@@ -359,8 +367,11 @@ export default function AppointmentsPage() {
 								<Input
 									id="date-select"
 									type="date"
-									value={selectedDate}
-									onChange={(e) => setSelectedDate(e.target.value)}
+									value={selectedDateString}
+									onChange={(e) => {
+										setSelectedDateString(e.target.value);
+										setSelectedDate(new Date(e.target.value));
+									}}
 									className="w-48"
 								/>
 							</div>
@@ -369,7 +380,7 @@ export default function AppointmentsPage() {
 							</Button>
 						</div>
 						<div className="text-gray-600 text-sm">
-							{formatDate(selectedDate)}
+							{selectedDateString ? formatDate(selectedDateString) : ""}
 						</div>
 					</div>
 				</CardContent>

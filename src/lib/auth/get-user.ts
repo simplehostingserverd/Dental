@@ -129,7 +129,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 			email: user.email,
 			firstName: user.patient.firstName,
 			lastName: user.patient.lastName,
-			practiceId: user.patient.practiceId,
+			practiceId: user.patient.practiceId || "",
 			patientId: user.patient.id,
 			type: "patient",
 		};

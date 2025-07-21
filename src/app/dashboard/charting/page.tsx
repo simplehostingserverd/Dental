@@ -85,7 +85,7 @@ export default function ChartingPage() {
 		surface: "",
 		condition: "",
 		treatment: "",
-		priority: "medium" as const,
+		priority: "medium" as "low" | "medium" | "high" | "urgent",
 		notes: "",
 	});
 
@@ -565,12 +565,12 @@ export default function ChartingPage() {
 												{condition.insuranceCovered ? (
 													<CheckCircle
 														className="h-4 w-4 text-green-500"
-														title="Insurance Covered"
+														aria-label="Insurance Covered"
 													/>
 												) : (
 													<AlertTriangle
 														className="h-4 w-4 text-yellow-500"
-														title="Not Covered"
+														aria-label="Not Covered"
 													/>
 												)}
 											</div>

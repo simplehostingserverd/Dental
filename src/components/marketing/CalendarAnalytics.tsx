@@ -200,7 +200,7 @@ export default function CalendarAnalytics({
 				<div className="flex items-center space-x-3">
 					<Select
 						value={selectedTimeframe}
-						onValueChange={setSelectedTimeframe}
+						onValueChange={(value) => setSelectedTimeframe(value as "year" | "week" | "month" | "quarter")}
 					>
 						<SelectTrigger className="w-32">
 							<SelectValue />
@@ -409,7 +409,7 @@ export default function CalendarAnalytics({
 					<div className="space-y-4">
 						{upcomingInsights.map((insight, index) => (
 							<div
-								key={`insight-${insight.type}-${insight.date}-${index}`}
+								key={`insight-${insight.type}-${index}`}
 								className="flex items-start space-x-3 rounded-lg border p-4"
 							>
 								<div className="mt-1 flex-shrink-0">

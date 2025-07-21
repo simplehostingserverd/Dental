@@ -113,7 +113,9 @@ export default function CalendarDemoPage() {
 		setAppointments((prev) =>
 			prev.map((apt) => {
 				if (apt.id === appointmentId) {
-					const [hours, minutes] = newTimeSlot.split(":").map(Number);
+					const timeParts = newTimeSlot.split(":").map(Number);
+					const hours = timeParts[0] || 0;
+					const minutes = timeParts[1] || 0;
 					const newStart = new Date(newDate);
 					newStart.setHours(hours, minutes, 0, 0);
 
@@ -143,7 +145,9 @@ export default function CalendarDemoPage() {
 	};
 
 	const handleNewAppointment = (timeSlot: string, date: Date) => {
-		const [hours, minutes] = timeSlot.split(":").map(Number);
+		const timeParts = timeSlot.split(":").map(Number);
+		const hours = timeParts[0] || 0;
+		const minutes = timeParts[1] || 0;
 		const start = new Date(date);
 		start.setHours(hours, minutes, 0, 0);
 

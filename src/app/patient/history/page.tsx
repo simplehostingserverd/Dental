@@ -224,12 +224,13 @@ export default async function TreatmentHistoryPage() {
 											<div className="mt-2 flex items-center space-x-4 text-gray-500 text-sm">
 												<div className="flex items-center">
 													<Calendar className="mr-1 h-4 w-4" />
-													{formatDate(appointment.start)}
+													{appointment.start ? formatDate(appointment.start) : "Date TBD"}
 												</div>
 												<div className="flex items-center">
 													<User className="mr-1 h-4 w-4" />
-													{appointment.practiceUser.firstName}{" "}
-													{appointment.practiceUser.lastName}
+													{appointment.practiceUser
+														? `${appointment.practiceUser.firstName} ${appointment.practiceUser.lastName}`
+														: "Staff Member"}
 												</div>
 											</div>
 										</div>

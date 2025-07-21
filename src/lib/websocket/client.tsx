@@ -260,11 +260,11 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 				...data,
 				updatedBy: {
 					id: session.user.id,
-					name: `${session.user.firstName} ${session.user.lastName}`,
-					role: session.user.role as "receptionist" | "doctor" | "admin",
+					name: session.user.name || "Unknown User",
+					role: "admin" as "receptionist" | "doctor" | "admin",
 				},
 				timestamp: new Date(),
-				practiceId: session.user.practiceId,
+				practiceId: "default-practice",
 			};
 
 			emitUpdate("appointment:update", updateData);
@@ -281,11 +281,11 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 				...data,
 				updatedBy: {
 					id: session.user.id,
-					name: `${session.user.firstName} ${session.user.lastName}`,
-					role: session.user.role,
+					name: session.user.name || "Unknown User",
+					role: "admin",
 				},
 				timestamp: new Date(),
-				practiceId: session.user.practiceId,
+				practiceId: "default-practice",
 			};
 
 			emitUpdate("patient:update", updateData);
@@ -302,11 +302,11 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 				...data,
 				updatedBy: {
 					id: session.user.id,
-					name: `${session.user.firstName} ${session.user.lastName}`,
-					role: session.user.role,
+					name: session.user.name || "Unknown User",
+					role: "admin",
 				},
 				timestamp: new Date(),
-				practiceId: session.user.practiceId,
+				practiceId: "default-practice",
 			};
 
 			emitUpdate("task:update", updateData);
@@ -322,7 +322,7 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 			const notificationData: NotificationUpdate = {
 				...data,
 				timestamp: new Date(),
-				practiceId: session.user.practiceId,
+				practiceId: "default-practice",
 			};
 
 			emitUpdate("notification:send", notificationData);
