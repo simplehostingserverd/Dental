@@ -19,7 +19,7 @@ process.chdir(__dirname);
 // Start Next.js application
 console.log('📦 Starting Next.js server...');
 
-const startCommand = 'npm start';
+const startCommand = 'npm run start';
 const child = exec(startCommand, (error, stdout, stderr) => {
   if (error) {
     console.error('❌ Error starting application:', error);

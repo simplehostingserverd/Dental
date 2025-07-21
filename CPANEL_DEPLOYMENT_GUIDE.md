@@ -58,13 +58,20 @@ SMTP_PASS=your-app-specific-password
 SMTP_FROM=Cognident <noreply@cognident.org>
 ```
 
-### **Step 4: Install Dependencies**
+### **Step 4: Install Dependencies & Build**
 
 In cPanel Terminal or SSH:
 
 ```bash
 cd /home/yourusername/public_html
+
+# Option 1: One-command deployment (Recommended)
+npm run cpanel:deploy
+
+# Option 2: Step-by-step installation
 npm install --production
+npm run db:generate
+npm run build
 ```
 
 **Note:** The npm ERESOLVE warnings are normal and safe to ignore.
@@ -72,20 +79,11 @@ npm install --production
 ### **Step 5: Database Setup**
 
 ```bash
-# Generate Prisma client
-npx prisma generate
-
 # Run database migrations
-npx prisma migrate deploy
+npm run db:migrate
 
 # (Optional) Seed with sample data
 npm run db:seed
-```
-
-### **Step 6: Build Application**
-
-```bash
-npm run build
 ```
 
 ### **Step 7: Start Application**

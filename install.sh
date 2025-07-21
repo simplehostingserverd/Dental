@@ -25,44 +25,48 @@ else
 fi
 
 echo ""
-echo "📦 Installing dependencies..."
+echo "📦 Installing dependencies and building application..."
 echo "Note: npm ERESOLVE warnings are normal and safe to ignore."
 echo ""
 
-# Install dependencies
-npm install --production --no-audit --no-fund
+# Use the cPanel-optimized deployment script
+npm run cpanel:deploy
 
 if [ $? -eq 0 ]; then
-    echo "✅ Dependencies installed successfully!"
+    echo "✅ Application installed and built successfully!"
 else
-    echo "❌ Failed to install dependencies. Please check the error messages above."
-    exit 1
-fi
+    echo "❌ Installation failed. Trying step-by-step approach..."
 
-echo ""
-echo "🔧 Generating Prisma client..."
+    # Fallback to step-by-step installation
+    echo "📦 Installing dependencies..."
+    npm install --production --no-audit --no-fund
 
-# Generate Prisma client
-npx prisma generate
+    if [ $? -eq 0 ]; then
+        echo "✅ Dependencies installed!"
 
-if [ $? -eq 0 ]; then
-    echo "✅ Prisma client generated successfully!"
-else
-    echo "❌ Failed to generate Prisma client. Please check your DATABASE_URL environment variable."
-    exit 1
-fi
+        echo "🔧 Generating Prisma client..."
+        npm run db:generate
 
-echo ""
-echo "🏗️ Building application..."
+        if [ $? -eq 0 ]; then
+            echo "✅ Prisma client generated!"
 
-# Build the application
-npm run build
+            echo "🏗️ Building application..."
+            npm run build
 
-if [ $? -eq 0 ]; then
-    echo "✅ Application built successfully!"
-else
-    echo "❌ Build failed. Please check the error messages above."
-    exit 1
+            if [ $? -eq 0 ]; then
+                echo "✅ Application built successfully!"
+            else
+                echo "❌ Build failed. Please check the error messages above."
+                exit 1
+            fi
+        else
+            echo "❌ Failed to generate Prisma client. Please check your DATABASE_URL environment variable."
+            exit 1
+        fi
+    else
+        echo "❌ Failed to install dependencies. Please check the error messages above."
+        exit 1
+    fi
 fi
 
 echo ""
