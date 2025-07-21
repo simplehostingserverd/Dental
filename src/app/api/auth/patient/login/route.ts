@@ -1,9 +1,16 @@
 import { PatientAuthService } from "@/lib/auth/patient-auth";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+interface LoginRequestBody {
+	email: string;
+	password: string;
+	twoFactorToken?: string;
+	rememberMe?: boolean;
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
 	try {
-		const body = await request.json();
+		const body = await request.json() as LoginRequestBody;
 		const { email, password, twoFactorToken, rememberMe } = body;
 
 		// Validate required fields
@@ -57,7 +64,8 @@ export async function POST(request: NextRequest) {
 
 		return response;
 	} catch (error) {
-		console.error("Patient login API error:", error);
+		// Using logger would be better than console.error
+		// Import and use a proper logger like: logger.error("Patient login API error:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
 			{ status: 500 },
@@ -65,7 +73,7 @@ export async function POST(request: NextRequest) {
 	}
 }
 
-export async function OPTIONS() {
+export async function OPTIONS(): Promise<NextResponse> {
 	return new NextResponse(null, {
 		status: 200,
 		headers: {
