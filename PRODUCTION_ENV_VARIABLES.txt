@@ -1,0 +1,129 @@
+# =============================================================================
+# COGNIDENT PRODUCTION ENVIRONMENT VARIABLES
+# =============================================================================
+# Copy these variables to your Namecheap cPanel environment variables section
+# Or create a .env file with these contents in your application root
+
+# =============================================================================
+# DATABASE CONFIGURATION
+# =============================================================================
+# Replace with your production database URL from Namecheap
+# Format: postgresql://username:password@host:port/database_name
+DATABASE_URL=postgresql://your_db_user:your_db_password@your_db_host:5432/your_db_name
+
+# =============================================================================
+# NEXTAUTH CONFIGURATION
+# =============================================================================
+# Generate a random secret key for production (use: openssl rand -base64 32)
+NEXTAUTH_SECRET=your-super-secure-nextauth-secret-key-here
+NEXTAUTH_URL=https://yourdomain.com
+
+# =============================================================================
+# STACK AUTH CONFIGURATION (if using Stack Auth)
+# =============================================================================
+STACK_PROJECT_ID=st_tcm_1737829
+STACK_PUBLISHABLE_CLIENT_KEY=pk_g0t61kyvwgdr77y7h326q8m6pb5rzy3vt56bcnqsxsdhr
+STACK_SECRET_SERVER_KEY=ssk_g0t61kyvwgdr77y7h326q8m6pb5rzy3vt56bcnqsxsdhr
+
+# =============================================================================
+# AI SERVICES
+# =============================================================================
+# Murf AI API Key for voice synthesis
+MURF_API_KEY=ap2_0a097fea-1198-49a2-91e7-fde910aa2913
+
+# Together AI API Key for chatbot functionality
+TOGETHERAI_API_KEY=03d486a7d98ba99f2dd3e9dd6ec09c9d451721b25229007a7c56c8ee318dc7fa
+
+# =============================================================================
+# JWT SECRETS
+# =============================================================================
+# Patient authentication JWT secret
+PATIENT_JWT_SECRET=patient-jwt-secret-key-cognident-2025-production
+
+# =============================================================================
+# EMAIL CONFIGURATION (SMTP)
+# =============================================================================
+# Configure these with your email service provider
+# For Gmail, use: smtp.gmail.com, port 587
+# For Outlook, use: smtp-mail.outlook.com, port 587
+# For custom domain, check with your email provider
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@cognident.org
+SMTP_PASS=your-app-specific-password
+SMTP_FROM=Cognident <noreply@cognident.org>
+
+# =============================================================================
+# APPLICATION SETTINGS
+# =============================================================================
+NODE_ENV=production
+
+# =============================================================================
+# DEPLOYMENT INSTRUCTIONS FOR NAMECHEAP CPANEL:
+# =============================================================================
+#
+# 1. UPLOAD AND EXTRACT:
+#    - Upload cognident-production.zip to your cPanel File Manager
+#    - Extract the zip file in your domain's public_html folder (or subdirectory)
+#
+# 2. CREATE NODE.JS APPLICATION:
+#    - In cPanel, go to "Node.js App" and create a new application
+#    - Set Node.js version to 18.x or higher
+#    - Set the application root to your extracted folder
+#    - Set the startup file to: server.js
+#    - Set the application URL to your domain or subdomain
+#
+# 3. CONFIGURE ENVIRONMENT VARIABLES:
+#    - In the Node.js App interface, add all the environment variables above
+#    - Make sure to replace placeholder values with your actual credentials
+#
+# 4. DATABASE SETUP:
+#    - Create a PostgreSQL database in cPanel (or use external service)
+#    - Update the DATABASE_URL with your database credentials
+#    - Run database setup commands (see below)
+#
+# 5. INSTALL DEPENDENCIES:
+#    - In the Node.js App terminal, run: npm install
+#    - This will install all required packages
+#
+# 6. DATABASE MIGRATION:
+#    - Run: npx prisma migrate deploy
+#    - Run: npx prisma generate
+#    - Run: npx prisma db seed (if you have seed data)
+#
+# 7. START APPLICATION:
+#    - Click "Start" in the Node.js App interface
+#    - Your application should now be running
+#
+# 8. DOMAIN CONFIGURATION:
+#    - Update NEXTAUTH_URL with your actual domain
+#    - Configure SSL certificate in cPanel for HTTPS
+#
+# 9. EMAIL SETUP:
+#    - Create email accounts in cPanel or use external service (Gmail, etc.)
+#    - Update SMTP settings above
+#    - For Gmail: Enable 2FA and create App Password
+#
+# 10. SECURITY CHECKLIST:
+#     - Generate new secrets for production (never use development secrets)
+#     - Keep API keys secure and rotate them regularly
+#     - Enable HTTPS/SSL
+#     - Set up regular database backups
+#
+# =============================================================================
+# TROUBLESHOOTING:
+# =============================================================================
+#
+# If the application doesn't start:
+# 1. Check the Node.js App logs in cPanel
+# 2. Verify all environment variables are set correctly
+# 3. Ensure database connection is working
+# 4. Check that all dependencies are installed
+#
+# Common issues:
+# - Database connection errors: Check DATABASE_URL format and credentials
+# - SMTP errors: Verify email configuration and credentials
+# - Build errors: Ensure Node.js version is 18.x or higher
+# - Permission errors: Check file permissions in File Manager
+#
+# =============================================================================
