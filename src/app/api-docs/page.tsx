@@ -543,7 +543,7 @@ export default function ApiDocsPage() {
 						</div>
 					</div>
 					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
-						<p>&copy; 2024 Cognident. All rights reserved.</p>
+						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>
 			</footer>

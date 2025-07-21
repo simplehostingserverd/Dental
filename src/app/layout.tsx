@@ -5,6 +5,8 @@ import "@/styles/globals.css";
 // import { stackClientApp } from "@/lib/stack-client";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 import { TranslationProvider } from "@/lib/i18n/translation-context";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -20,18 +22,30 @@ const geist = Geist({
 	variable: "--font-geist-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
-}: Readonly<{ children: React.ReactNode }>) {
+	params
+}: Readonly<{
+	children: React.ReactNode,
+	params: { locale?: string }
+}>) {
+	// Get the locale from the URL or use the default locale
+	const locale = params.locale || 'en';
+
+	// Get the messages for the current locale
+	const messages = await getMessages(locale);
+
 	return (
-		<html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
+		<html lang={locale} className={`${geist.variable}`} suppressHydrationWarning>
 			<body>
 				{/* Temporarily disable Stack Auth to debug the error */}
 				{/* <StackProvider app={stackClientApp}>
 					<StackTheme> */}
-				<TranslationProvider>
-					<TRPCReactProvider>{children}</TRPCReactProvider>
-				</TranslationProvider>
+				<NextIntlClientProvider locale={locale} messages={messages}>
+					<TranslationProvider>
+						<TRPCReactProvider>{children}</TRPCReactProvider>
+					</TranslationProvider>
+				</NextIntlClientProvider>
 				{/* </StackTheme>
 				</StackProvider> */}
 			</body>

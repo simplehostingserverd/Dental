@@ -35,37 +35,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
 	const blogPosts = [
 		{
 			url: `${baseUrl}/blog/1`,
-			lastModified: new Date("2024-01-15"),
+			lastModified: new Date("2025-01-15"),
 			changeFrequency: "monthly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/blog/2`,
-			lastModified: new Date("2024-01-12"),
+			lastModified: new Date("2025-01-12"),
 			changeFrequency: "monthly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/blog/3`,
-			lastModified: new Date("2024-01-10"),
+			lastModified: new Date("2025-01-10"),
 			changeFrequency: "monthly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/blog/4`,
-			lastModified: new Date("2024-01-08"),
+			lastModified: new Date("2025-01-08"),
 			changeFrequency: "monthly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/blog/5`,
-			lastModified: new Date("2024-01-05"),
+			lastModified: new Date("2025-01-05"),
 			changeFrequency: "monthly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/blog/6`,
-			lastModified: new Date("2024-01-03"),
+			lastModified: new Date("2025-01-03"),
 			changeFrequency: "monthly" as const,
 			priority: 0.6,
 		},

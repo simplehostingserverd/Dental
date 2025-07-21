@@ -19,7 +19,7 @@ const blogPosts = [
 		excerpt:
 			"Discover proven strategies to enhance patient satisfaction and build lasting relationships that drive practice growth.",
 		author: "Dr. Sarah Johnson",
-		date: "2024-01-15",
+		date: "2025-01-15",
 		category: "Patient Care",
 		image:
 			"https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -31,7 +31,7 @@ const blogPosts = [
 		excerpt:
 			"Everything you need to know about maintaining HIPAA compliance in your dental practice, from patient records to digital communications.",
 		author: "Michael Chen",
-		date: "2024-01-12",
+		date: "2025-01-12",
 		category: "Compliance",
 		image:
 			"https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -43,7 +43,7 @@ const blogPosts = [
 		excerpt:
 			"Learn how digital technologies are revolutionizing dental practices and how to successfully implement them in your clinic.",
 		author: "Dr. Emily Rodriguez",
-		date: "2024-01-10",
+		date: "2025-01-10",
 		category: "Technology",
 		image:
 			"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -55,7 +55,7 @@ const blogPosts = [
 		excerpt:
 			"Discover proven methods for recruiting top talent and creating a positive workplace culture that retains excellent team members.",
 		author: "Dr. Mark Thompson",
-		date: "2024-01-08",
+		date: "2025-01-08",
 		category: "Practice Management",
 		image:
 			"https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -67,7 +67,7 @@ const blogPosts = [
 		excerpt:
 			"Learn effective strategies to optimize insurance claim processing and maximize reimbursements for your dental practice.",
 		author: "Jennifer Walsh, RDH",
-		date: "2024-01-05",
+		date: "2025-01-05",
 		category: "Financial Management",
 		image:
 			"https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -79,7 +79,7 @@ const blogPosts = [
 		excerpt:
 			"Effective strategies for promoting preventive dental care and building long-term patient relationships through education.",
 		author: "Dr. Lisa Park",
-		date: "2024-01-03",
+		date: "2025-01-03",
 		category: "Patient Education",
 		image:
 			"https://images.unsplash.com/photo-1609840114035-3c981b782dfe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -369,7 +369,7 @@ export default function BlogPage() {
 						</div>
 					</div>
 					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
-						<p>&copy; 2024 Cognident. All rights reserved.</p>
+						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>
 			</footer>

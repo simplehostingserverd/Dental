@@ -37,7 +37,7 @@ const blogPosts = [
       <p>Remember personal details about your patients and their preferences. Use patient management software to track important information and create personalized treatment experiences that make patients feel valued.</p>
     `,
 		author: "Dr. Sarah Johnson",
-		date: "2024-01-15",
+		date: "2025-01-15",
 		category: "Patient Care",
 		image:
 			"https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -64,7 +64,7 @@ const blogPosts = [
       <p>Implement technical controls such as access controls, audit logs, and encryption for electronic PHI. Ensure your practice management software is HIPAA-compliant and regularly update security measures.</p>
     `,
 		author: "Michael Chen",
-		date: "2024-01-12",
+		date: "2025-01-12",
 		category: "Compliance",
 		image:
 			"https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -98,7 +98,7 @@ const blogPosts = [
 			<p>Digital technologies improve patient experience through faster treatment times, better diagnostic accuracy, and enhanced communication. Patients appreciate the convenience and quality improvements that digital dentistry provides.</p>
 		`,
 		author: "Dr. Emily Rodriguez",
-		date: "2024-01-10",
+		date: "2025-01-10",
 		category: "Technology",
 		image:
 			"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -135,7 +135,7 @@ const blogPosts = [
 			<p>Foster open communication, celebrate achievements, and address conflicts promptly. A positive workplace culture attracts quality candidates and reduces turnover.</p>
 		`,
 		author: "Dr. Mark Thompson",
-		date: "2024-01-08",
+		date: "2025-01-08",
 		category: "Practice Management",
 		image:
 			"https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -173,7 +173,7 @@ const blogPosts = [
 			<p>Invest in practice management software with robust insurance features, including eligibility verification, claim tracking, and automated follow-up capabilities.</p>
 		`,
 		author: "Jennifer Walsh, RDH",
-		date: "2024-01-05",
+		date: "2025-01-05",
 		category: "Financial Management",
 		image:
 			"https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -211,7 +211,7 @@ const blogPosts = [
 			<p>Track key metrics like recall compliance rates, preventive treatment acceptance, and patient retention to evaluate the effectiveness of your education efforts.</p>
 		`,
 		author: "Dr. Lisa Park",
-		date: "2024-01-03",
+		date: "2025-01-03",
 		category: "Patient Education",
 		image:
 			"https://images.unsplash.com/photo-1609840114035-3c981b782dfe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -525,7 +525,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 						</div>
 					</div>
 					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
-						<p>&copy; 2024 Cognident. All rights reserved.</p>
+						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>
 			</footer>

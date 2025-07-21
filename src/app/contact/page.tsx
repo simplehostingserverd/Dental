@@ -43,11 +43,26 @@ export default function ContactPage() {
 		e.preventDefault();
 		setIsSubmitting(true);
 
-		// Simulate form submission
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		try {
+			const response = await fetch('/api/contact', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(formData),
+			});
 
-		setSubmitted(true);
-		setIsSubmitting(false);
+			if (response.ok) {
+				setSubmitted(true);
+			} else {
+				throw new Error('Failed to send message');
+			}
+		} catch (error) {
+			console.error('Error sending message:', error);
+			alert('Failed to send message. Please try again.');
+		} finally {
+			setIsSubmitting(false);
+		}
 		setFormData({
 			name: "",
 			email: "",
@@ -301,9 +316,9 @@ export default function ContactPage() {
 									<div>
 										<h3 className="mb-1 font-semibold">Headquarters</h3>
 										<p className="text-gray-400">
-											123 Innovation Drive
+											222 E Van Buren St.
 											<br />
-											Tech Valley, CA 94025
+											Harlingen, TX  78550
 											<br />
 											United States
 										</p>
@@ -460,7 +475,7 @@ export default function ContactPage() {
 						</div>
 					</div>
 					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
-						<p>&copy; 2024 Cognident. All rights reserved.</p>
+						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>
 			</footer>

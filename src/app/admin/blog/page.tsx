@@ -25,7 +25,7 @@ const initialBlogPosts: BlogPost[] = [
 		excerpt:
 			"Discover proven strategies to enhance patient satisfaction and build lasting relationships that drive practice growth.",
 		author: "Dr. Sarah Johnson",
-		date: "2024-01-15",
+		date: "2025-01-15",
 		category: "Patient Care",
 		status: "Published",
 		views: 1250,
@@ -39,7 +39,7 @@ const initialBlogPosts: BlogPost[] = [
 		excerpt:
 			"Everything you need to know about maintaining HIPAA compliance in your dental practice, from patient records to digital communications.",
 		author: "Michael Chen",
-		date: "2024-01-12",
+		date: "2025-01-12",
 		category: "Compliance",
 		status: "Published",
 		views: 890,
@@ -53,7 +53,7 @@ const initialBlogPosts: BlogPost[] = [
 		excerpt:
 			"Explore how artificial intelligence is transforming scheduling, patient care, and practice operations in modern dental offices.",
 		author: "Dr. Emily Rodriguez",
-		date: "2024-01-10",
+		date: "2025-01-10",
 		category: "Technology",
 		status: "Draft",
 		views: 0,

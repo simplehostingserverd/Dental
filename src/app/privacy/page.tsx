@@ -107,7 +107,7 @@ export default function PrivacyPage() {
 						Your privacy and the security of your data are our top priorities.
 					</p>
 					<p className="text-blue-200 text-sm">
-						Last updated: January 15, 2024
+						Last updated: January 15, 2025
 					</p>
 				</div>
 			</section>
@@ -403,9 +403,9 @@ export default function PrivacyPage() {
 									<br />
 									Attn: Privacy Officer
 									<br />
-									123 Innovation Drive
+									222 E Van Buren St.
 									<br />
-									Tech Valley, CA 94025
+									Harlingen, TX  78550
 								</p>
 							</div>
 						</div>
@@ -516,7 +516,7 @@ export default function PrivacyPage() {
 						</div>
 					</div>
 					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
-						<p>&copy; 2024 Cognident. All rights reserved.</p>
+						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>
 			</footer>

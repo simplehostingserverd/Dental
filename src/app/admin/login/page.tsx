@@ -15,7 +15,7 @@ export default function AdminLoginPage() {
 		// Simple authentication check (in production, this would be server-side)
 		if (
 			credentials.username === "admin" &&
-			credentials.password === "cognident2024"
+			credentials.password === "cognident2025"
 		) {
 			// Set admin session (in production, use proper JWT/session management)
 			localStorage.setItem("adminAuthenticated", "true");
@@ -106,7 +106,7 @@ export default function AdminLoginPage() {
 
 				<div className="text-center">
 					<p className="text-gray-500 text-sm">
-						Demo credentials: admin / cognident2024
+						Demo credentials: admin / cognident2025
 					</p>
 				</div>
 			</div>

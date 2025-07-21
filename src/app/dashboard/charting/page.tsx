@@ -62,7 +62,7 @@ export default function ChartingPage() {
 			priority: "medium",
 			insuranceCovered: true,
 			estimatedCost: 185,
-			dateAdded: "2024-01-15",
+			dateAdded: "2025-01-15",
 			notes: "Small cavity on chewing surface",
 		},
 		{
@@ -75,7 +75,7 @@ export default function ChartingPage() {
 			priority: "high",
 			insuranceCovered: false,
 			estimatedCost: 1850,
-			dateAdded: "2024-01-10",
+			dateAdded: "2025-01-10",
 			notes: "Patient experiencing pain, needs pre-authorization",
 		},
 	]);
@@ -96,14 +96,14 @@ export default function ChartingPage() {
 			name: "Sarah Johnson",
 			dateOfBirth: "1985-03-15",
 			insuranceProvider: "Delta Dental",
-			lastVisit: "2024-01-10",
+			lastVisit: "2025-01-10",
 		},
 		{
 			id: "2",
 			name: "Michael Chen",
 			dateOfBirth: "1978-11-22",
 			insuranceProvider: "Medicaid",
-			lastVisit: "2024-01-08",
+			lastVisit: "2025-01-08",
 		},
 	];
 

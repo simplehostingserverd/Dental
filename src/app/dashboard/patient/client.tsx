@@ -59,13 +59,13 @@ export default function PatientDashboardClient({
 		email: user.email,
 		phone: "(555) 123-4567", // This would come from user profile in real app
 		dateOfBirth: "1985-06-15", // This would come from user profile in real app
-		lastVisit: "2024-01-15", // This would come from appointments data in real app
+		lastVisit: "2025-01-15", // This would come from appointments data in real app
 	};
 
 	const upcomingAppointments = [
 		{
 			id: 1,
-			date: "2024-02-15",
+			date: "2025-02-15",
 			time: "10:00 AM",
 			procedure: "Regular Cleaning",
 			doctor: "Dr. Smith",
@@ -73,7 +73,7 @@ export default function PatientDashboardClient({
 		},
 		{
 			id: 2,
-			date: "2024-03-20",
+			date: "2025-03-20",
 			time: "2:00 PM",
 			procedure: "Crown Placement",
 			doctor: "Dr. Smith",
@@ -84,7 +84,7 @@ export default function PatientDashboardClient({
 	const recentTreatments = [
 		{
 			id: 1,
-			date: "2024-01-15",
+			date: "2025-01-15",
 			procedure: "Dental Cleaning",
 			doctor: "Dr. Smith",
 			status: "completed",
@@ -108,14 +108,14 @@ export default function PatientDashboardClient({
 	const bills = [
 		{
 			id: 1,
-			date: "2024-01-15",
+			date: "2025-01-15",
 			amount: 150,
 			description: "Dental Cleaning",
 			status: "paid",
 		},
 		{
 			id: 2,
-			date: "2024-01-15",
+			date: "2025-01-15",
 			amount: 75,
 			description: "X-Ray",
 			status: "paid",
@@ -180,7 +180,7 @@ export default function PatientDashboardClient({
 						<div className="flex items-center justify-between">
 							<div>
 								<p className="text-gray-400 text-sm">Next Appointment</p>
-								<p className="font-bold text-white text-xl">Feb 15, 2024</p>
+								<p className="font-bold text-white text-xl">Feb 15, 2025</p>
 								<p className="text-gray-400 text-sm">10:00 AM - Cleaning</p>
 							</div>
 							<Calendar className="h-8 w-8 text-blue-400" />
@@ -191,7 +191,7 @@ export default function PatientDashboardClient({
 						<div className="flex items-center justify-between">
 							<div>
 								<p className="text-gray-400 text-sm">Last Visit</p>
-								<p className="font-bold text-white text-xl">Jan 15, 2024</p>
+								<p className="font-bold text-white text-xl">Jan 15, 2025</p>
 								<p className="text-gray-400 text-sm">Cleaning completed</p>
 							</div>
 							<CheckCircle className="h-8 w-8 text-green-400" />

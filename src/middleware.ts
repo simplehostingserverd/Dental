@@ -46,15 +46,16 @@ export async function middleware(request: NextRequest) {
 		}
 
 		try {
-			// Verify patient token and set headers
-			const jwt = await import("jsonwebtoken");
-			const decoded = jwt.verify(patientAuthToken.value, process.env.PATIENT_JWT_SECRET || "patient-secret-key") as any;
+			// Verify patient token and set headers using jose library
+			const { jwtVerify } = await import("jose");
+			const secret = new TextEncoder().encode(process.env.PATIENT_JWT_SECRET || "patient-secret-key");
+			const { payload } = await jwtVerify(patientAuthToken.value, secret);
 
 			const response = NextResponse.next();
-			response.headers.set("x-user-id", decoded.userId);
-			response.headers.set("x-user-email", decoded.email);
-			response.headers.set("x-patient-id", decoded.patientId);
-			response.headers.set("x-practice-id", decoded.practiceId);
+			response.headers.set("x-user-id", payload.userId as string);
+			response.headers.set("x-user-email", payload.email as string);
+			response.headers.set("x-patient-id", payload.patientId as string);
+			response.headers.set("x-practice-id", payload.practiceId as string);
 
 			return applySecurityMiddleware(request, response);
 		} catch (error) {
