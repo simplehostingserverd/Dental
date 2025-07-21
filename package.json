@@ -109,8 +109,12 @@
 		"react-dom": "18.3.1",
 		"@types/react": "18.3.12",
 		"@types/react-dom": "18.3.1",
-		"**/@stackframe/react/lucide-react": "^0.400.0",
-		"**/@stackframe/stack/lucide-react": "^0.400.0"
+		"@stackframe/react": {
+			"lucide-react": "^0.400.0"
+		},
+		"@stackframe/stack": {
+			"lucide-react": "^0.400.0"
+		}
 	},
 	"resolutions": {
 		"react": "18.3.1",
