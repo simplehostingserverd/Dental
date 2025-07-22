@@ -95,13 +95,14 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 				}
 			} catch (error) {
 				console.error("Polling error:", error);
+				const errorObj = error instanceof Error ? error : new Error("Polling failed");
 				setState((prev) => ({
 					...prev,
 					connected: false,
 					connecting: false,
-					error: error instanceof Error ? error.message : "Polling failed",
+					error: errorObj.message,
 				}));
-				options.onError?.(error);
+				options.onError?.(errorObj);
 			}
 		};
 
@@ -165,13 +166,14 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 
 		eventSource.onerror = (error) => {
 			console.error("SSE error:", error);
+			const errorObj = new Error("SSE connection failed");
 			setState((prev) => ({
 				...prev,
 				connected: false,
 				connecting: false,
-				error: "SSE connection failed",
+				error: errorObj.message,
 			}));
-			options.onError?.(error);
+			options.onError?.(errorObj);
 		};
 
 		eventSourceRef.current = eventSource;
@@ -243,7 +245,8 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 				}
 			} catch (error) {
 				console.error("Failed to emit update:", error);
-				options.onError?.(error);
+				const errorObj = error instanceof Error ? error : new Error("Failed to emit update");
+				options.onError?.(errorObj);
 			}
 		},
 		[session, options],

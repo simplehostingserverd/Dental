@@ -51,6 +51,8 @@
 		"jest.config.js",
 		"app.js",
 		"server.js",
-		"scripts/**/*"
+		"scripts/**/*",
+		"src/lib/auth/two-factor.ts",
+		"src/lib/i18n/language-detector.ts"
 	]
 }
