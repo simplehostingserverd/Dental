@@ -62,10 +62,18 @@ export class WhatsAppService {
   constructor() {
     this.accessToken = process.env.WHATSAPP_ACCESS_TOKEN || '';
     this.phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || '';
-    
+
     if (!this.accessToken || !this.phoneNumberId) {
       console.warn('WhatsApp credentials not configured. WhatsApp features will be disabled.');
     }
+  }
+
+  /**
+   * Update credentials dynamically (for settings page)
+   */
+  updateCredentials(accessToken: string, phoneNumberId: string) {
+    this.accessToken = accessToken;
+    this.phoneNumberId = phoneNumberId;
   }
 
   /**

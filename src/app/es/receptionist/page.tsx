@@ -70,6 +70,30 @@ export default function SpanishReceptionistDashboard() {
 	const [currentTime, setCurrentTime] = useState(new Date());
 	const [searchTerm, setSearchTerm] = useState("");
 
+	const handleLogout = async () => {
+		try {
+			// Call logout API to properly clear server-side session
+			await fetch("/api/auth/practice/logout", {
+				method: "POST",
+			});
+		} catch (error) {
+			console.error("Logout API error:", error);
+		}
+
+		// Clear all authentication cookies
+		document.cookie = "practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+
+		// Clear localStorage
+		localStorage.removeItem("testUser");
+
+		// Redirect to sign in page
+		window.location.href = "/auth/signin";
+	};
+
 	useEffect(() => {
 		const timer = setInterval(() => setCurrentTime(new Date()), 1000);
 		return () => clearInterval(timer);
@@ -252,6 +276,12 @@ export default function SpanishReceptionistDashboard() {
 							>
 								{translations.navigation.settings}
 							</Link>
+							<button
+								onClick={handleLogout}
+								className="rounded-md bg-red-600 px-4 py-2 text-white text-sm font-medium hover:bg-red-700"
+							>
+								Cerrar Sesión
+							</button>
 						</div>
 					</div>
 				</div>

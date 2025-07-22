@@ -109,11 +109,12 @@ export default function BookAppointmentPage() {
 			if (response.ok) {
 				router.push("/patient/dashboard?success=appointment-booked");
 			} else {
-				const error = await response.json();
-				alert(error.message || "Failed to book appointment");
+				const errorData = await response.json();
+				alert(errorData.error || errorData.message || "Failed to book appointment");
 			}
 		} catch (error) {
-			alert("An error occurred while booking the appointment");
+			console.error("Booking error:", error);
+			alert("An error occurred while booking the appointment. Please try again.");
 		} finally {
 			setIsLoading(false);
 		}

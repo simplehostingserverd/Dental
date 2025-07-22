@@ -11,12 +11,14 @@ import {
 	CreditCard,
 	Eye,
 	EyeOff,
+	MessageSquare,
 	Save,
 	Settings as SettingsIcon,
 	Shield,
 	User,
 	Users,
 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function SettingsPage() {
@@ -44,26 +46,46 @@ export default function SettingsPage() {
 				<div className="lg:col-span-1">
 					<nav className="space-y-1">
 						{[
-							{ name: "Practice Info", icon: Building, active: true },
-							{ name: "User Profile", icon: User, active: false },
-							{ name: "Team Members", icon: Users, active: false },
-							{ name: "Notifications", icon: Bell, active: false },
-							{ name: "Security", icon: Shield, active: false },
-							{ name: "Billing", icon: CreditCard, active: false },
-						].map((item) => (
-							<button
-								key={item.name}
-								type="button"
-								className={`flex w-full items-center rounded-md px-3 py-2 font-medium text-sm ${
-									item.active
-										? "border-blue-700 border-r-2 bg-blue-50 text-blue-700"
-										: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-								}`}
-							>
-								<item.icon className="mr-3 h-5 w-5" />
-								{item.name}
-							</button>
-						))}
+							{ name: "Practice Info", icon: Building, active: true, href: null },
+							{ name: "User Profile", icon: User, active: false, href: null },
+							{ name: "Team Members", icon: Users, active: false, href: null },
+							{ name: "Communications", icon: MessageSquare, active: false, href: "/dashboard/settings/communications" },
+							{ name: "Notifications", icon: Bell, active: false, href: null },
+							{ name: "Security", icon: Shield, active: false, href: null },
+							{ name: "Billing", icon: CreditCard, active: false, href: null },
+						].map((item) => {
+							if (item.href) {
+								return (
+									<Link
+										key={item.name}
+										href={item.href}
+										className={`flex w-full items-center rounded-md px-3 py-2 font-medium text-sm ${
+											item.active
+												? "border-blue-700 border-r-2 bg-blue-50 text-blue-700"
+												: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+										}`}
+									>
+										<item.icon className="mr-3 h-5 w-5" />
+										{item.name}
+									</Link>
+								);
+							}
+
+							return (
+								<button
+									key={item.name}
+									type="button"
+									className={`flex w-full items-center rounded-md px-3 py-2 font-medium text-sm ${
+										item.active
+											? "border-blue-700 border-r-2 bg-blue-50 text-blue-700"
+											: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+									}`}
+								>
+									<item.icon className="mr-3 h-5 w-5" />
+									{item.name}
+								</button>
+							);
+						})}
 					</nav>
 				</div>
 

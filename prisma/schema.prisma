@@ -46,6 +46,7 @@ model Practice {
   marketingCampaigns    MarketingCampaign[]
   automationRules       AutomationRule[]
   integrationSettings   IntegrationSettings[]
+  communicationSettings CommunicationSettings?
 }
 
 model PracticeUser {
@@ -1006,4 +1007,17 @@ model AppointmentReminder {
   appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
 
   @@map("appointment_reminders")
+}
+
+model CommunicationSettings {
+  id         String   @id @default(cuid())
+  practiceId String   @unique
+  settings   String   // JSON string containing all communication settings
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  practice Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  @@map("communication_settings")
 }

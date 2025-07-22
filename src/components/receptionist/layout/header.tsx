@@ -37,6 +37,30 @@ export function ReceptionistHeader() {
 		day: "numeric",
 	});
 
+	const handleLogout = async () => {
+		try {
+			// Call logout API to properly clear server-side session
+			await fetch("/api/auth/practice/logout", {
+				method: "POST",
+			});
+		} catch (error) {
+			console.error("Logout API error:", error);
+		}
+
+		// Clear all authentication cookies
+		document.cookie = "practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+
+		// Clear localStorage
+		localStorage.removeItem("testUser");
+
+		// Redirect to sign in page
+		window.location.href = "/auth/signin";
+	};
+
 	return (
 		<header className="border-gray-200 border-b bg-white px-6 py-4 shadow-sm">
 			<div className="flex items-center justify-between">
@@ -153,7 +177,7 @@ export function ReceptionistHeader() {
 								<Settings className="mr-2 h-4 w-4" />
 								Settings
 							</DropdownMenuItem>
-							<DropdownMenuItem className="text-red-600">
+							<DropdownMenuItem className="text-red-600" onClick={handleLogout}>
 								<LogOut className="mr-2 h-4 w-4" />
 								Sign Out
 							</DropdownMenuItem>

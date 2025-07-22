@@ -23,11 +23,27 @@ export function Header({ user }: HeaderProps) {
 	const router = useRouter();
 
 	const handleSignOut = async () => {
-		// Clear the authentication cookie
-		document.cookie =
-			"practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		try {
+			// Call logout API to properly clear server-side session
+			await fetch("/api/auth/practice/logout", {
+				method: "POST",
+			});
+		} catch (error) {
+			console.error("Logout API error:", error);
+		}
+
+		// Clear all authentication cookies
+		document.cookie = "practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = "test-user-email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+
+		// Clear localStorage
+		localStorage.removeItem("testUser");
+
 		// Redirect to sign in page
-		router.push("/auth/signin");
+		window.location.href = "/auth/signin";
 	};
 	return (
 		<header className="border-gray-200 border-b bg-white px-6 py-4">
