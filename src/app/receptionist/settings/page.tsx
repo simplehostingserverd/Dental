@@ -22,6 +22,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { IntegrationSettings } from "@/components/settings/integration-settings";
 import {
 	Bell,
 	Calendar,
@@ -45,6 +46,8 @@ import {
 	Volume2,
 	VolumeX,
 	Zap,
+	Globe,
+	Phone,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -696,58 +699,7 @@ export default function SettingsPage() {
 
 				{/* Integrations Tab */}
 				<TabsContent value="integrations" className="space-y-4">
-					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center">
-								<Zap className="mr-2 h-5 w-5" />
-								Connected Services
-							</CardTitle>
-						</CardHeader>
-						<CardContent className="space-y-4">
-							<div className="flex items-center justify-between rounded-lg border p-4">
-								<div className="flex items-center space-x-3">
-									<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-										<Calendar className="h-5 w-5 text-blue-600" />
-									</div>
-									<div>
-										<h4 className="font-medium">Google Calendar</h4>
-										<p className="text-gray-600 text-sm">
-											Sync appointments with Google Calendar
-										</p>
-									</div>
-								</div>
-								<Badge className="bg-green-100 text-green-800">Connected</Badge>
-							</div>
-							<div className="flex items-center justify-between rounded-lg border p-4">
-								<div className="flex items-center space-x-3">
-									<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
-										<MessageSquare className="h-5 w-5 text-purple-600" />
-									</div>
-									<div>
-										<h4 className="font-medium">Twilio SMS</h4>
-										<p className="text-gray-600 text-sm">
-											Send SMS notifications to patients
-										</p>
-									</div>
-								</div>
-								<Button variant="outline">Connect</Button>
-							</div>
-							<div className="flex items-center justify-between rounded-lg border p-4">
-								<div className="flex items-center space-x-3">
-									<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
-										<CreditCard className="h-5 w-5 text-green-600" />
-									</div>
-									<div>
-										<h4 className="font-medium">Stripe Payments</h4>
-										<p className="text-gray-600 text-sm">
-											Process credit card payments
-										</p>
-									</div>
-								</div>
-								<Button variant="outline">Connect</Button>
-							</div>
-						</CardContent>
-					</Card>
+					<IntegrationSettings practiceId="practice-id-placeholder" />
 				</TabsContent>
 			</Tabs>
 		</div>

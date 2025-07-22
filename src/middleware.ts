@@ -2,39 +2,48 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { applySecurityMiddleware } from "@/lib/security/security-headers";
 import { logger, LogLevel } from "@/lib/logger";
+import { locales, defaultLocale, getLocaleFromPathname, removeLocaleFromPathname } from "@/lib/i18n/config";
 import jwt from "jsonwebtoken";
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
-	// Skip middleware for public routes and auth routes
+	// Extract locale from pathname
+	const locale = getLocaleFromPathname(pathname) || defaultLocale;
+	const pathnameWithoutLocale = removeLocaleFromPathname(pathname);
+
+	// Skip middleware for API routes, static files, and internal Next.js routes
 	if (
-		pathname.startsWith("/api/auth") ||
-		pathname.startsWith("/auth") ||
-		pathname.startsWith("/_next") ||
+		pathname.startsWith("/api/") ||
+		pathname.startsWith("/_next/") ||
 		pathname.startsWith("/favicon") ||
 		pathname.startsWith("/public") ||
-		pathname.startsWith("/api/trpc") ||
-		pathname.startsWith("/api/upload") ||
-		pathname.startsWith("/api/test") ||
-		pathname.startsWith("/api/check-env") ||
-		pathname.startsWith("/api/create-sample-users") ||
-		pathname.startsWith("/test-login") ||
-		pathname === "/"
+		pathname.includes(".") ||
+		pathnameWithoutLocale.startsWith("/api/auth") ||
+		pathnameWithoutLocale.startsWith("/auth") ||
+		pathnameWithoutLocale.startsWith("/api/trpc") ||
+		pathnameWithoutLocale.startsWith("/api/upload") ||
+		pathnameWithoutLocale.startsWith("/api/test") ||
+		pathnameWithoutLocale.startsWith("/api/check-env") ||
+		pathnameWithoutLocale.startsWith("/api/create-sample-users") ||
+		pathnameWithoutLocale.startsWith("/test-login") ||
+		pathnameWithoutLocale === "/"
 	) {
 		// Apply security headers even for public routes
 		const response = NextResponse.next();
+		response.headers.set('x-current-locale', locale);
 		return applySecurityMiddleware(request, response);
 	}
 
 	// Check for patient routes
-	if (pathname.startsWith("/patient/")) {
+	if (pathnameWithoutLocale.startsWith("/patient/")) {
 		// Skip auth for public patient pages
 		if (
-			pathname.startsWith("/patient/auth/") ||
-			pathname.startsWith("/patient/appointments/book")
+			pathnameWithoutLocale.startsWith("/patient/auth/") ||
+			pathnameWithoutLocale.startsWith("/patient/appointments/book")
 		) {
 			const response = NextResponse.next();
+			response.headers.set('x-current-locale', locale);
 			return applySecurityMiddleware(request, response);
 		}
 
@@ -56,6 +65,7 @@ export async function middleware(request: NextRequest) {
 			response.headers.set("x-user-email", payload.email as string);
 			response.headers.set("x-patient-id", payload.patientId as string);
 			response.headers.set("x-practice-id", payload.practiceId as string);
+			response.headers.set('x-current-locale', locale);
 
 			return applySecurityMiddleware(request, response);
 		} catch (error) {
@@ -66,8 +76,8 @@ export async function middleware(request: NextRequest) {
 
 	// Check for protected routes
 	if (
-		pathname.startsWith("/dashboard") ||
-		pathname.startsWith("/receptionist")
+		pathnameWithoutLocale.startsWith("/dashboard") ||
+		pathnameWithoutLocale.startsWith("/receptionist")
 	) {
 		try {
 			// Check for practice authentication token
@@ -156,7 +166,10 @@ export const config = {
 		 * - _next/image (image optimization files)
 		 * - favicon.ico (favicon file)
 		 * - api/v1/auth (Stack Auth routes)
+		 * Include locale-prefixed routes
 		 */
-		"/((?!_next/static|_next/image|favicon.ico|api/v1/auth).*)",
+		'/',
+		'/(es|en)/:path*',
+		"/((?!_next/static|_next/image|favicon.ico|api/v1/auth|.*\\..*).*)",
 	],
 };
