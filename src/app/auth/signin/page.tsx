@@ -160,7 +160,7 @@ export default function SignInPage() {
 						backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0.9)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80')`,
 					}}
 				/>
-				<div className="relative z-10 flex flex-col justify-center p-12 text-gray-900">
+				<div className="relative z-10 flex flex-col justify-center p-12 text-white">
 					<div className="max-w-md">
 						<h1 className="mb-4 font-bold text-4xl">
 							Next-Gen Dental Practice Management
