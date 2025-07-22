@@ -205,7 +205,6 @@ export class SmartTranslationService {
       'discount': 'descuento',
       'promotion': 'promoción',
       'appointment': 'cita',
-      'consultation': 'consulta',
       'check-up': 'revisión',
       'cleaning appointment': 'cita de limpieza',
       'treatment appointment': 'cita de tratamiento',
@@ -307,7 +306,7 @@ export class SmartTranslationService {
       const text = texts[i];
       
       if (!text || text.trim() === '' || this.options.targetLanguage === 'en') {
-        results[i] = text;
+        results[i] = text || '';
         continue;
       }
 
@@ -341,7 +340,9 @@ export class SmartTranslationService {
         );
 
         for (let i = 0; i < uncachedTexts.length; i++) {
-          const { index, text } = uncachedTexts[i];
+          const item = uncachedTexts[i];
+          if (!item) continue;
+          const { index, text } = item;
           const translation = apiResults[i]?.translatedText || text;
           results[index] = translation;
           this.cacheTranslation(text, translation, 'api');

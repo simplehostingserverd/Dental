@@ -201,7 +201,6 @@ export class AutoTranslator {
 			'Last Name': 'Apellido',
 			'Date of Birth': 'Fecha de Nacimiento',
 			'Phone': 'Teléfono',
-			'Email': 'Correo Electrónico',
 			'Address': 'Dirección',
 			'Insurance': 'Seguro',
 			'Emergency Contact': 'Contacto de Emergencia',
