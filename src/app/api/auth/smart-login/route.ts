@@ -63,7 +63,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
 				// Determine redirect URL based on role
 				const userType = testUser.role === 'patient' ? 'patient' : 'practice';
-				const redirectUrl = getRedirectUrl(testUser.role, userType);
+				const redirectUrl = testUser.role === 'patient' ? '/patient/dashboard' : getRedirectUrl(testUser.role, userType);
 
 				// Sign the session data for security
 				const sessionData = JSON.stringify({

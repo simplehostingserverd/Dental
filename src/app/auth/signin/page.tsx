@@ -69,25 +69,25 @@ export default function SignInPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen bg-gray-50">
+		<div className="flex min-h-screen bg-gray-900">
 			{/* Left Panel - Sign In Form */}
-			<div className="flex flex-1 items-center justify-center bg-white p-8 lg:w-1/2">
+			<div className="flex flex-1 items-center justify-center bg-gray-800 p-8 lg:w-1/2">
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
-							<CognidentLargeLogo className="text-blue-600" />
+							<CognidentLargeLogo className="text-blue-500" />
 						</div>
-						<h2 className="mb-2 font-bold text-2xl text-gray-900">Welcome back</h2>
-						<p className="text-gray-600">
+						<h2 className="mb-2 font-bold text-2xl text-white">Welcome back</h2>
+						<p className="text-gray-300">
 							Sign in to your Cognident account.
 						</p>
 					</div>
 
-					<div className="rounded-lg bg-white border border-gray-200 p-6 shadow-lg">
+					<div className="rounded-lg bg-gray-700 border border-gray-600 p-6 shadow-lg">
 
 						{error && (
-							<div className="mb-4 rounded-md bg-red-50 border border-red-200 p-3">
-								<p className="text-red-800 text-sm">{error}</p>
+							<div className="mb-4 rounded-md bg-red-900/50 border border-red-700 p-3">
+								<p className="text-red-200 text-sm">{error}</p>
 							</div>
 						)}
 
@@ -95,7 +95,7 @@ export default function SignInPage() {
 							<div>
 								<label
 									htmlFor="email"
-									className="mb-2 block font-medium text-gray-700 text-sm"
+									className="mb-2 block font-medium text-gray-300 text-sm"
 								>
 									Email
 								</label>
@@ -106,14 +106,14 @@ export default function SignInPage() {
 									onChange={(e) => setEmail(e.target.value)}
 									required
 									disabled={isLoading}
-									className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+									className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 									placeholder="Enter your email"
 								/>
 							</div>
 							<div>
 								<label
 									htmlFor="password"
-									className="mb-2 block font-medium text-gray-700 text-sm"
+									className="mb-2 block font-medium text-gray-300 text-sm"
 								>
 									Password
 								</label>
@@ -124,14 +124,14 @@ export default function SignInPage() {
 									onChange={(e) => setPassword(e.target.value)}
 									required
 									disabled={isLoading}
-									className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+									className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 									placeholder="Enter your password"
 								/>
 							</div>
 							<button
 								type="submit"
 								disabled={isLoading}
-								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-gray-900 transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								{isLoading ? "Signing In..." : "Sign In"}
 							</button>
@@ -139,11 +139,11 @@ export default function SignInPage() {
 					</div>
 
 					<div className="mt-6 text-center">
-						<p className="text-gray-600 text-sm">
+						<p className="text-gray-400 text-sm">
 							Don't have an account?{" "}
 							<Link
 								href="/auth/signup"
-								className="font-medium text-blue-600 hover:text-blue-700"
+								className="font-medium text-blue-400 hover:text-blue-300"
 							>
 								Sign up here
 							</Link>

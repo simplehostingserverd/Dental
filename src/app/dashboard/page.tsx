@@ -15,7 +15,7 @@ export default async function DashboardPage() {
 		case "receptionist":
 			redirect("/receptionist");
 		case "patient":
-			redirect("/dashboard/patient");
+			redirect("/patient/dashboard");
 		case "admin":
 			// Admin can stay on main dashboard
 			break;
