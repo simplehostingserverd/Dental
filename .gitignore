@@ -78,6 +78,10 @@ logs/
 config.local.*
 .env.production
 .env.staging
+.env.coolify
+
+# Environment variables files with sensitive data
+COOLIFY_ENV_VARIABLES.txt
 
 # Database dumps and exports
 *.sql
