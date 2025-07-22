@@ -1,7 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
-import { CognidentTextLogo, CognidentLargeLogo } from "@/components/icons/cognident-logo";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -70,7 +69,7 @@ export default function PatientSignInPage() {
 			<div className="hidden flex-col justify-center bg-blue-600 p-12 text-white lg:flex lg:w-1/2">
 				<div className="max-w-md">
 					<div className="mb-8 flex items-center">
-						<CognidentTextLogo logoSize={32} className="text-white" />
+						<HeaderLogo className="text-white" />
 					</div>
 					<h2 className="mb-6 font-bold text-3xl">
 						Welcome back to your dental care portal

@@ -1,6 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { getAllTestUsers } from "@/lib/auth-test";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -122,8 +122,7 @@ export default function TestLoginPage() {
 				<div className="rounded-2xl bg-white p-8 shadow-xl">
 					<div className="mb-8 text-center">
 						<div className="mb-4 flex items-center justify-center">
-							<ToothIcon className="mr-3 h-12 w-12 text-blue-600" />
-							<h1 className="font-bold text-3xl text-gray-900">Cognident</h1>
+							<HeaderLogo className="text-blue-600" />
 						</div>
 						<h2 className="text-gray-600 text-xl">Test Login Portal</h2>
 						<p className="mt-2 text-gray-500 text-sm">

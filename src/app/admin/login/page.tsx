@@ -1,6 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Lock, Shield } from "lucide-react";
 import { useState } from "react";
 
@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
 			<div className="w-full max-w-md space-y-8 p-8">
 				<div className="text-center">
 					<div className="mb-6 flex items-center justify-center">
-						<ToothIcon className="mr-3 h-12 w-12 text-blue-400" />
+						<HeaderLogo className="text-blue-600" />
 						<span className="font-bold text-3xl text-white">Cognident</span>
 					</div>
 					<h2 className="mb-2 font-bold text-2xl text-white">

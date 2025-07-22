@@ -1,7 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
-import { CognidentTextLogo } from "@/components/icons/cognident-logo";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
 	BarChart3,
 	Bell,
@@ -112,7 +111,7 @@ export default function DentistDashboard() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<div className="flex items-center">
-							<CognidentTextLogo logoSize={32} className="text-white" />
+							<HeaderLogo className="text-white" />
 							<span className="ml-4 text-gray-400">Dentist Dashboard</span>
 						</div>
 						<div className="flex items-center space-x-4">

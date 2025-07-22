@@ -1,7 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
-import { CognidentTextLogo } from "@/components/icons/cognident-logo";
+import { HeaderLogo, IconOnly } from "@/components/ui/tooth-logo";
 import { cn } from "@/lib/utils";
 import {
 	Bot,
@@ -22,7 +21,7 @@ const navigationItems = [
 	{ key: "dashboard", href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
 	{ key: "appointments", href: "/dashboard/schedule", icon: Calendar, label: "Appointments" },
 	{ key: "patients", href: "/dashboard/patients", icon: Users, label: "Patients" },
-	{ key: "charting", href: "/dashboard/charting", icon: ToothIcon, label: "Charting" },
+	{ key: "charting", href: "/dashboard/charting", icon: () => <IconOnly size="sm" />, label: "Charting" },
 	{
 		key: "treatment_plans",
 		href: "/dashboard/treatment-plans",
@@ -43,7 +42,7 @@ export function Sidebar() {
 		<div className="flex h-full w-64 flex-col border-gray-200 border-r bg-white shadow-sm">
 			{/* Logo */}
 			<div className="flex items-center border-gray-200 border-b px-6 py-4">
-				<CognidentTextLogo logoSize={32} className="text-gray-900" />
+				<HeaderLogo className="text-gray-900" />
 			</div>
 
 			{/* Navigation */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Button } from "@/components/ui/button";
 import {
 	Code,
@@ -89,8 +89,7 @@ export default function ApiDocsPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<Link href="/" className="flex items-center">
-							<ToothIcon className="mr-3 h-8 w-8 text-blue-600" />
-							<span className="font-bold text-xl">Cognident</span>
+							<HeaderLogo className="text-blue-600" />
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
@@ -446,8 +445,7 @@ export default function ApiDocsPage() {
 					<div className="grid gap-8 md:grid-cols-4">
 						<div>
 							<div className="mb-4 flex items-center">
-								<ToothIcon className="mr-3 h-8 w-8 text-blue-600" />
-								<span className="font-bold text-xl">Cognident</span>
+								<HeaderLogo className="text-blue-600" />
 							</div>
 							<p className="text-gray-600">
 								Next-generation dental practice management software designed for

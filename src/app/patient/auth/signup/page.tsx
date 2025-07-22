@@ -1,6 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Calendar, Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -107,7 +107,7 @@ export default function PatientSignUpPage() {
 			<div className="hidden flex-col justify-center bg-blue-600 p-12 text-white lg:flex lg:w-1/2">
 				<div className="max-w-md">
 					<div className="mb-8 flex items-center">
-						<ToothIcon className="mr-3 h-8 w-8" />
+						<HeaderLogo className="text-blue-600" />
 						<h1 className="font-bold text-2xl">DentalExpresso</h1>
 					</div>
 					<h2 className="mb-6 font-bold text-3xl">

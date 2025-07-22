@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar, Heart, Search, User } from "lucide-react";
-import { CognidentTextLogo } from "@/components/icons/cognident-logo";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -273,7 +273,7 @@ export default function BlogPage() {
 					<div className="grid gap-8 md:grid-cols-4">
 						<div>
 							<div className="mb-4 flex items-center">
-								<CognidentTextLogo logoSize={32} className="text-gray-900" />
+								<HeaderLogo className="text-gray-900" />
 							</div>
 							<p className="text-gray-600">
 								Next-generation dental practice management software designed for

@@ -1,7 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
-import { CognidentTextLogo } from "@/components/icons/cognident-logo";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Button } from "@/components/ui/button";
 import {
 	ArrowLeft,
@@ -550,7 +549,7 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 					<div className="flex h-16 items-center justify-between">
 						<div className="flex items-center space-x-4">
 							<Link href="/" className="flex items-center space-x-2">
-								<CognidentTextLogo logoSize={32} className="text-gray-900" />
+								<HeaderLogo className="text-gray-900" />
 							</Link>
 						</div>
 						<nav className="hidden md:flex items-center space-x-8">
@@ -626,7 +625,7 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-4">
 						<div className="md:col-span-2">
 							<div className="flex items-center space-x-2 mb-4">
-								<CognidentTextLogo logoSize={32} className="text-gray-900" />
+								<HeaderLogo className="text-gray-900" />
 							</div>
 							<p className="text-gray-600 mb-4">
 								The complete dental practice management solution designed for modern dental professionals.

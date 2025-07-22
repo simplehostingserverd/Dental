@@ -25,10 +25,10 @@ export function ToothLogo({
 
   const ToothIcon = () => (
     <Image
-      src="/Logos/tooth.png"
+      src="/Logos/tooth3.png"
       alt="Tooth Logo"
-      width={size === 'sm' ? 24 : size === 'md' ? 32 : size === 'lg' ? 48 : 64}
-      height={size === 'sm' ? 24 : size === 'md' ? 32 : size === 'lg' ? 48 : 64}
+      width={size === 'sm' ? 32 : size === 'md' ? 40 : size === 'lg' ? 64 : 80}
+      height={size === 'sm' ? 32 : size === 'md' ? 40 : size === 'lg' ? 64 : 80}
       className={`${toothSizeClass} ${className} object-contain`}
       priority
     />

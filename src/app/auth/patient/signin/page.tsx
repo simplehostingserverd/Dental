@@ -1,6 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Calendar, Clock, CreditCard, FileText, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -22,7 +22,7 @@ export default function PatientSignInPage() {
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
-							<ToothIcon className="mr-3 h-10 w-10 text-blue-600" />
+							<HeaderLogo className="text-blue-600" />
 							<span className="font-bold text-3xl text-gray-900">Cognident</span>
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-gray-900">
