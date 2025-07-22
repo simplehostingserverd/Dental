@@ -1,0 +1,143 @@
+{
+  "config": {
+    "configFile": "/home/tacogando/Documents/soft/Dental/playwright.config.ts",
+    "rootDir": "/home/tacogando/Documents/soft/Dental/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/home/tacogando/Documents/soft/Dental/tests/global-setup.ts",
+    "globalTeardown": "/home/tacogando/Documents/soft/Dental/tests/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/home/tacogando/Documents/soft/Dental/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/home/tacogando/Documents/soft/Dental/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/tacogando/Documents/soft/Dental/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/home/tacogando/Documents/soft/Dental/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/tacogando/Documents/soft/Dental/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/home/tacogando/Documents/soft/Dental/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/tacogando/Documents/soft/Dental/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/home/tacogando/Documents/soft/Dental/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/tacogando/Documents/soft/Dental/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/home/tacogando/Documents/soft/Dental/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.1",
+    "workers": 6,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: Command failed: npx prisma db push --force-reset",
+      "stack": "Error: Command failed: npx prisma db push --force-reset\n    at globalSetup (/home/tacogando/Documents/soft/Dental/tests/global-setup.ts:17:13)",
+      "location": {
+        "file": "/home/tacogando/Documents/soft/Dental/tests/global-setup.ts",
+        "column": 13,
+        "line": 17
+      },
+      "snippet": "\u001b[90m   at \u001b[39mglobal-setup.ts:17\n\n\u001b[0m \u001b[90m 15 |\u001b[39m     \u001b[90m// Reset and seed test database\u001b[39m\n \u001b[90m 16 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'📊 Setting up test database...'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m     execSync(\u001b[32m'npx prisma db push --force-reset'\u001b[39m\u001b[33m,\u001b[39m { \n \u001b[90m    |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m       stdio\u001b[33m:\u001b[39m \u001b[32m'inherit'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 19 |\u001b[39m       cwd\u001b[33m:\u001b[39m path\u001b[33m.\u001b[39mresolve(__dirname\u001b[33m,\u001b[39m \u001b[32m'..'\u001b[39m)\n \u001b[90m 20 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m"
+    }
+  ],
+  "stats": {
+    "startTime": "2025-07-22T08:31:40.710Z",
+    "duration": 7464.778,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

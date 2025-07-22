@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { CallInterface } from "@/components/receptionist/call-interface";
+import { LanguageSwitcher } from "@/components/language/language-switcher";
 import {
 	AlertCircle,
 	Bell,
@@ -80,6 +81,9 @@ export function ReceptionistHeader() {
 							// TODO: Handle call initiated event
 						}}
 					/>
+
+					{/* Language Switcher */}
+					<LanguageSwitcher variant="compact" data-testid="language-switcher" />
 
 					{/* Notifications */}
 					<DropdownMenu>
