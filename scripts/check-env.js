@@ -5,6 +5,9 @@
  * This script helps debug environment variable issues in production
  */
 
+// Load environment variables from parent directory
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+
 console.log('🔍 Environment Variable Checker for Coolify');
 console.log('='.repeat(50));
 

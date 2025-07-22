@@ -75,6 +75,7 @@
 		"deepl-node": "^1.19.0",
 		"disposable-email-domains": "^1.0.62",
 		"dompurify": "^3.1.7",
+		"dotenv": "^17.2.0",
 		"email-validator": "^2.0.4",
 		"express-validator": "^7.2.1",
 		"formidable": "^3.5.4",
@@ -124,6 +125,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@playwright/test": "^1.48.2",
 		"@tailwindcss/postcss": "4.1.11",
 		"@types/dompurify": "^3.1.0",
 		"@types/html2canvas": "^1.0.0",
@@ -136,7 +138,6 @@
 		"@types/speakeasy": "2.0.10",
 		"@types/twilio": "^3.19.3",
 		"@types/uuid": "^10.0.0",
-		"@playwright/test": "^1.48.2",
 		"autoprefixer": "^10.4.21",
 		"chalk": "^4.1.2",
 		"husky": "^8.0.3",
