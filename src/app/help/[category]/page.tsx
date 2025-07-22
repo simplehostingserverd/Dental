@@ -543,24 +543,24 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
+		<div className="min-h-screen bg-gray-50 text-gray-900">
 			{/* Header */}
-			<header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm">
+			<header className="border-b border-gray-800 bg-gray-50/50 backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<div className="flex items-center space-x-4">
 							<Link href="/" className="flex items-center space-x-2">
-								<CognidentTextLogo logoSize={32} className="text-white" />
+								<CognidentTextLogo logoSize={32} className="text-gray-900" />
 							</Link>
 						</div>
 						<nav className="hidden md:flex items-center space-x-8">
-							<Link href="/blog" className="hover:text-blue-400 transition-colors">
+							<Link href="/blog" className="hover:text-blue-600 transition-colors">
 								Blog
 							</Link>
-							<Link href="/help" className="hover:text-blue-400 transition-colors">
+							<Link href="/help" className="hover:text-blue-600 transition-colors">
 								Help Center
 							</Link>
-							<Link href="/contact" className="hover:text-blue-400 transition-colors">
+							<Link href="/contact" className="hover:text-blue-600 transition-colors">
 								Contact
 							</Link>
 						</nav>
@@ -569,13 +569,13 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 			</header>
 
 			{/* Breadcrumb */}
-			<div className="bg-gray-800/50 py-4">
+			<div className="bg-white/50 py-4">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex items-center space-x-2 text-sm">
-						<Link href="/help" className="text-blue-400 hover:text-blue-300">
+						<Link href="/help" className="text-blue-600 hover:text-blue-700">
 							Help Center
 						</Link>
-						<ChevronRight className="h-4 w-4 text-gray-400" />
+						<ChevronRight className="h-4 w-4 text-gray-600" />
 						<span className="text-gray-300">{categoryData.title}</span>
 					</div>
 				</div>
@@ -586,7 +586,7 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 				<div className="mb-8">
 					<Link
 						href="/help"
-						className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-4"
+						className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
 					>
 						<ArrowLeft className="mr-2 h-4 w-4" />
 						Back to Help Center
@@ -600,13 +600,13 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 					{categoryData.articles.map((article) => (
 						<div
 							key={article.id}
-							className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors"
+							className="bg-white rounded-lg p-6 hover:bg-gray-700 transition-colors"
 						>
 							<div className="flex items-start justify-between mb-4">
-								<h2 className="text-2xl font-semibold text-white">
+								<h2 className="text-2xl font-semibold text-gray-900">
 									{article.title}
 								</h2>
-								<div className="flex items-center text-sm text-gray-400">
+								<div className="flex items-center text-sm text-gray-600">
 									<Clock className="mr-1 h-4 w-4" />
 									{article.readTime}
 								</div>
@@ -621,14 +621,14 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 			</div>
 
 			{/* Footer */}
-			<footer className="border-t border-gray-800 bg-gray-900 py-12">
+			<footer className="border-t border-gray-800 bg-gray-50 py-12">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-4">
 						<div className="md:col-span-2">
 							<div className="flex items-center space-x-2 mb-4">
-								<CognidentTextLogo logoSize={32} className="text-white" />
+								<CognidentTextLogo logoSize={32} className="text-gray-900" />
 							</div>
-							<p className="text-gray-400 mb-4">
+							<p className="text-gray-600 mb-4">
 								The complete dental practice management solution designed for modern dental professionals.
 							</p>
 						</div>
@@ -636,17 +636,17 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 							<h3 className="text-lg font-semibold mb-4">Quick Links</h3>
 							<ul className="space-y-2">
 								<li>
-									<Link href="/help" className="text-gray-400 hover:text-white transition-colors">
+									<Link href="/help" className="text-gray-600 hover:text-gray-900 transition-colors">
 										Help Center
 									</Link>
 								</li>
 								<li>
-									<Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+									<Link href="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">
 										Contact Support
 									</Link>
 								</li>
 								<li>
-									<Link href="/blog" className="text-gray-400 hover:text-white transition-colors">
+									<Link href="/blog" className="text-gray-600 hover:text-gray-900 transition-colors">
 										Blog
 									</Link>
 								</li>
@@ -655,12 +655,12 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 						<div>
 							<h3 className="text-lg font-semibold mb-4">Support</h3>
 							<ul className="space-y-2">
-								<li className="text-gray-400">Email: support@cognident.org</li>
-								<li className="text-gray-400">Phone: 1-800-COGNIDENT</li>
+								<li className="text-gray-600">Email: support@cognident.org</li>
+								<li className="text-gray-600">Phone: 1-800-COGNIDENT</li>
 							</ul>
 						</div>
 					</div>
-					<div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+					<div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-600">
 						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>

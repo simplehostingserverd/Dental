@@ -10,7 +10,7 @@ function getRedirectUrl(role: string): string {
 		case "dentist":
 			return "/dashboard/dentist";
 		case "receptionist":
-			return "/dashboard/receptionist";
+			return "/receptionist";
 		case "patient":
 			return "/dashboard/patient";
 		default:

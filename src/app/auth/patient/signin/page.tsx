@@ -16,24 +16,24 @@ export default function PatientSignInPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen bg-gray-900">
+		<div className="flex min-h-screen bg-gray-50">
 			{/* Left Panel - Sign In Form */}
-			<div className="flex flex-1 items-center justify-center bg-gray-900 p-8 lg:w-1/2">
+			<div className="flex flex-1 items-center justify-center bg-gray-50 p-8 lg:w-1/2">
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
-							<ToothIcon className="mr-3 h-10 w-10 text-blue-400" />
-							<span className="font-bold text-3xl text-white">Cognident</span>
+							<ToothIcon className="mr-3 h-10 w-10 text-blue-600" />
+							<span className="font-bold text-3xl text-gray-900">Cognident</span>
 						</div>
-						<h2 className="mb-2 font-bold text-2xl text-white">
+						<h2 className="mb-2 font-bold text-2xl text-gray-900">
 							Patient Portal
 						</h2>
-						<p className="text-gray-400">
+						<p className="text-gray-600">
 							Access your dental records and appointments.
 						</p>
 					</div>
 
-					<div className="rounded-lg bg-gray-800 p-6 shadow-xl">
+					<div className="rounded-lg bg-white p-6 shadow-xl">
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<div>
 								<label
@@ -47,7 +47,7 @@ export default function PatientSignInPage() {
 									type="email"
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
 									placeholder="Enter your email"
 									required
 								/>
@@ -64,14 +64,14 @@ export default function PatientSignInPage() {
 									type="password"
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
 									placeholder="Enter your password"
 									required
 								/>
 							</div>
 							<button
 								type="submit"
-								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700"
+								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-gray-900 transition duration-200 hover:bg-blue-700"
 							>
 								Sign In to Patient Portal
 							</button>
@@ -79,11 +79,11 @@ export default function PatientSignInPage() {
 					</div>
 
 					<div className="mt-6 text-center">
-						<p className="text-gray-400 text-sm">
+						<p className="text-gray-600 text-sm">
 							Don't have an account?{" "}
 							<Link
 								href="/auth/patient/signup"
-								className="font-medium text-blue-400 hover:text-blue-300"
+								className="font-medium text-blue-600 hover:text-blue-700"
 							>
 								Register here
 							</Link>
@@ -91,13 +91,13 @@ export default function PatientSignInPage() {
 						<div className="mt-4 space-y-2">
 							<Link
 								href="/auth/dentist/signin"
-								className="block text-gray-400 text-sm transition-colors hover:text-white"
+								className="block text-gray-600 text-sm transition-colors hover:text-gray-900"
 							>
 								Dentist Portal →
 							</Link>
 							<Link
 								href="/auth/employee/signin"
-								className="block text-gray-400 text-sm transition-colors hover:text-white"
+								className="block text-gray-600 text-sm transition-colors hover:text-gray-900"
 							>
 								Employee Portal →
 							</Link>
@@ -114,7 +114,7 @@ export default function PatientSignInPage() {
 						backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2068&q=80')`,
 					}}
 				/>
-				<div className="relative z-10 flex flex-col justify-center p-12 text-white">
+				<div className="relative z-10 flex flex-col justify-center p-12 text-gray-900">
 					<div className="max-w-md">
 						<h1 className="mb-4 font-bold text-4xl">
 							Your Health, Our Priority

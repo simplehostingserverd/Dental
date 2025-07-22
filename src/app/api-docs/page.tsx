@@ -83,49 +83,49 @@ export default function ApiDocsPage() {
 	];
 
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
+		<div className="min-h-screen bg-gray-50 text-gray-900">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-900/95 backdrop-blur-sm">
+			<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-50/95 backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<Link href="/" className="flex items-center">
-							<ToothIcon className="mr-3 h-8 w-8 text-blue-400" />
+							<ToothIcon className="mr-3 h-8 w-8 text-blue-600" />
 							<span className="font-bold text-xl">Cognident</span>
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Features
 							</Link>
 							<Link
 								href="/#pricing"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Pricing
 							</Link>
 							<Link
 								href="/blog"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Blog
 							</Link>
 							<Link
 								href="/about"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								About
 							</Link>
 							<Link
 								href="/contact"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Contact
 							</Link>
 							<Link
 								href="/auth/signin"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Sign In
 							</Link>
@@ -172,7 +172,7 @@ export default function ApiDocsPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="mb-12 text-center">
 						<h2 className="mb-4 font-bold text-3xl">API Features</h2>
-						<p className="text-gray-400 text-lg">
+						<p className="text-gray-600 text-lg">
 							Built for developers, designed for healthcare
 						</p>
 					</div>
@@ -182,11 +182,11 @@ export default function ApiDocsPage() {
 							return (
 								<div
 									key={index}
-									className="rounded-lg border border-gray-700 bg-gray-800 p-6 text-center"
+									className="rounded-lg border border-gray-700 bg-white p-6 text-center"
 								>
-									<IconComponent className="mx-auto mb-4 h-12 w-12 text-blue-400" />
+									<IconComponent className="mx-auto mb-4 h-12 w-12 text-blue-600" />
 									<h3 className="mb-3 font-semibold text-xl">{feature.title}</h3>
-									<p className="text-gray-400 text-sm">{feature.description}</p>
+									<p className="text-gray-600 text-sm">{feature.description}</p>
 								</div>
 							);
 						})}
@@ -195,26 +195,26 @@ export default function ApiDocsPage() {
 			</section>
 
 			{/* Quick Start */}
-			<section className="bg-gray-800 py-16">
+			<section className="bg-white py-16">
 				<div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 					<div className="text-center">
 						<h2 className="mb-6 font-bold text-3xl">Quick Start</h2>
-						<p className="mb-8 text-gray-400 text-lg">
+						<p className="mb-8 text-gray-600 text-lg">
 							Get up and running with the Cognident API in minutes
 						</p>
 					</div>
 
 					<div className="space-y-8">
 						{/* Step 1 */}
-						<div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6">
 							<h3 className="mb-4 font-semibold text-xl">
 								1. Get Your API Key
 							</h3>
-							<p className="mb-4 text-gray-400">
+							<p className="mb-4 text-gray-600">
 								Sign up for a Cognident account and generate your API key from
 								the developer dashboard.
 							</p>
-							<div className="rounded bg-gray-800 p-4">
+							<div className="rounded bg-white p-4">
 								<code className="text-green-400 text-sm">
 									curl -H "Authorization: Bearer YOUR_API_KEY" \<br />
 									&nbsp;&nbsp;&nbsp;&nbsp;https://api.cognident.org/v1/patients
@@ -223,14 +223,14 @@ export default function ApiDocsPage() {
 						</div>
 
 						{/* Step 2 */}
-						<div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6">
 							<h3 className="mb-4 font-semibold text-xl">
 								2. Make Your First Request
 							</h3>
-							<p className="mb-4 text-gray-400">
+							<p className="mb-4 text-gray-600">
 								Retrieve your patient list with a simple GET request.
 							</p>
-							<div className="rounded bg-gray-800 p-4">
+							<div className="rounded bg-white p-4">
 								<code className="text-green-400 text-sm">
 									{`{
   "patients": [
@@ -253,9 +253,9 @@ export default function ApiDocsPage() {
 						</div>
 
 						{/* Step 3 */}
-						<div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6">
 							<h3 className="mb-4 font-semibold text-xl">3. Explore Endpoints</h3>
-							<p className="mb-4 text-gray-400">
+							<p className="mb-4 text-gray-600">
 								Browse our comprehensive API reference to discover all available
 								endpoints and capabilities.
 							</p>
@@ -273,7 +273,7 @@ export default function ApiDocsPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="mb-12 text-center">
 						<h2 className="mb-4 font-bold text-3xl">Popular Endpoints</h2>
-						<p className="text-gray-400 text-lg">
+						<p className="text-gray-600 text-lg">
 							Most commonly used API endpoints for dental practice integration
 						</p>
 					</div>
@@ -282,7 +282,7 @@ export default function ApiDocsPage() {
 						{endpoints.map((endpoint, index) => (
 							<div
 								key={index}
-								className="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-800 p-4"
+								className="flex items-center justify-between rounded-lg border border-gray-700 bg-white p-4"
 							>
 								<div className="flex items-center space-x-4">
 									<span
@@ -297,7 +297,7 @@ export default function ApiDocsPage() {
 									<code className="font-mono text-gray-300">
 										{endpoint.path}
 									</code>
-									<span className="text-gray-400 text-sm">
+									<span className="text-gray-600 text-sm">
 										{endpoint.description}
 									</span>
 								</div>
@@ -311,7 +311,7 @@ export default function ApiDocsPage() {
 					<div className="mt-8 text-center">
 						<Button
 							variant="outline"
-							className="border-gray-600 text-gray-300 hover:bg-gray-800"
+							className="border-gray-600 text-gray-300 hover:bg-white"
 						>
 							View All Endpoints
 						</Button>
@@ -320,22 +320,22 @@ export default function ApiDocsPage() {
 			</section>
 
 			{/* SDKs and Libraries */}
-			<section className="bg-gray-800 py-16">
+			<section className="bg-white py-16">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="mb-12 text-center">
 						<h2 className="mb-4 font-bold text-3xl">SDKs & Libraries</h2>
-						<p className="text-gray-400 text-lg">
+						<p className="text-gray-600 text-lg">
 							Official SDKs for popular programming languages
 						</p>
 					</div>
 
 					<div className="grid gap-6 md:grid-cols-3">
-						<div className="rounded-lg border border-gray-700 bg-gray-900 p-6 text-center">
+						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6 text-center">
 							<div className="mx-auto mb-4 h-12 w-12 rounded-lg bg-blue-600 flex items-center justify-center">
-								<Code className="h-6 w-6 text-white" />
+								<Code className="h-6 w-6 text-gray-900" />
 							</div>
 							<h3 className="mb-2 font-semibold">JavaScript/Node.js</h3>
-							<p className="mb-4 text-gray-400 text-sm">
+							<p className="mb-4 text-gray-600 text-sm">
 								Official JavaScript SDK with TypeScript support
 							</p>
 							<Button
@@ -347,12 +347,12 @@ export default function ApiDocsPage() {
 							</Button>
 						</div>
 
-						<div className="rounded-lg border border-gray-700 bg-gray-900 p-6 text-center">
+						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6 text-center">
 							<div className="mx-auto mb-4 h-12 w-12 rounded-lg bg-green-600 flex items-center justify-center">
-								<Code className="h-6 w-6 text-white" />
+								<Code className="h-6 w-6 text-gray-900" />
 							</div>
 							<h3 className="mb-2 font-semibold">Python</h3>
-							<p className="mb-4 text-gray-400 text-sm">
+							<p className="mb-4 text-gray-600 text-sm">
 								Python SDK with async support and type hints
 							</p>
 							<Button
@@ -364,12 +364,12 @@ export default function ApiDocsPage() {
 							</Button>
 						</div>
 
-						<div className="rounded-lg border border-gray-700 bg-gray-900 p-6 text-center">
+						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6 text-center">
 							<div className="mx-auto mb-4 h-12 w-12 rounded-lg bg-purple-600 flex items-center justify-center">
-								<Code className="h-6 w-6 text-white" />
+								<Code className="h-6 w-6 text-gray-900" />
 							</div>
 							<h3 className="mb-2 font-semibold">PHP</h3>
-							<p className="mb-4 text-gray-400 text-sm">
+							<p className="mb-4 text-gray-600 text-sm">
 								PHP SDK compatible with modern frameworks
 							</p>
 							<Button
@@ -388,14 +388,14 @@ export default function ApiDocsPage() {
 			<section className="py-16">
 				<div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
 					<h2 className="mb-6 font-bold text-3xl">Developer Support</h2>
-					<p className="mb-8 text-gray-400 text-lg">
+					<p className="mb-8 text-gray-600 text-lg">
 						Get help from our developer community and support team
 					</p>
 					<div className="grid gap-6 md:grid-cols-3">
-						<div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-							<Globe className="mx-auto mb-4 h-8 w-8 text-blue-400" />
+						<div className="rounded-lg border border-gray-700 bg-white p-6">
+							<Globe className="mx-auto mb-4 h-8 w-8 text-blue-600" />
 							<h3 className="mb-2 font-semibold">Community Forum</h3>
-							<p className="mb-4 text-gray-400 text-sm">
+							<p className="mb-4 text-gray-600 text-sm">
 								Connect with other developers and share solutions
 							</p>
 							<Button
@@ -407,10 +407,10 @@ export default function ApiDocsPage() {
 							</Button>
 						</div>
 
-						<div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-							<BookOpen className="mx-auto mb-4 h-8 w-8 text-blue-400" />
+						<div className="rounded-lg border border-gray-700 bg-white p-6">
+							<BookOpen className="mx-auto mb-4 h-8 w-8 text-blue-600" />
 							<h3 className="mb-2 font-semibold">Documentation</h3>
-							<p className="mb-4 text-gray-400 text-sm">
+							<p className="mb-4 text-gray-600 text-sm">
 								Comprehensive guides and API reference
 							</p>
 							<Button
@@ -422,10 +422,10 @@ export default function ApiDocsPage() {
 							</Button>
 						</div>
 
-						<div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-							<Shield className="mx-auto mb-4 h-8 w-8 text-blue-400" />
+						<div className="rounded-lg border border-gray-700 bg-white p-6">
+							<Shield className="mx-auto mb-4 h-8 w-8 text-blue-600" />
 							<h3 className="mb-2 font-semibold">Support Team</h3>
-							<p className="mb-4 text-gray-400 text-sm">
+							<p className="mb-4 text-gray-600 text-sm">
 								Direct access to our technical support team
 							</p>
 							<Button
@@ -441,26 +441,26 @@ export default function ApiDocsPage() {
 			</section>
 
 			{/* Footer */}
-			<footer className="border-gray-800 border-t bg-gray-900 py-12">
+			<footer className="border-gray-800 border-t bg-gray-50 py-12">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="grid gap-8 md:grid-cols-4">
 						<div>
 							<div className="mb-4 flex items-center">
-								<ToothIcon className="mr-3 h-8 w-8 text-blue-400" />
+								<ToothIcon className="mr-3 h-8 w-8 text-blue-600" />
 								<span className="font-bold text-xl">Cognident</span>
 							</div>
-							<p className="text-gray-400">
+							<p className="text-gray-600">
 								Next-generation dental practice management software designed for
 								modern practices.
 							</p>
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Product</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/#features"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Features
 									</Link>
@@ -468,7 +468,7 @@ export default function ApiDocsPage() {
 								<li>
 									<Link
 										href="/#pricing"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Pricing
 									</Link>
@@ -476,7 +476,7 @@ export default function ApiDocsPage() {
 								<li>
 									<Link
 										href="/api-docs"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										API Docs
 									</Link>
@@ -485,11 +485,11 @@ export default function ApiDocsPage() {
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Company</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/about"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										About
 									</Link>
@@ -497,7 +497,7 @@ export default function ApiDocsPage() {
 								<li>
 									<Link
 										href="/blog"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Blog
 									</Link>
@@ -505,7 +505,7 @@ export default function ApiDocsPage() {
 								<li>
 									<Link
 										href="/contact"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Contact
 									</Link>
@@ -514,11 +514,11 @@ export default function ApiDocsPage() {
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Support</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/help"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Help Center
 									</Link>
@@ -526,7 +526,7 @@ export default function ApiDocsPage() {
 								<li>
 									<Link
 										href="/contact"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Contact
 									</Link>
@@ -534,7 +534,7 @@ export default function ApiDocsPage() {
 								<li>
 									<Link
 										href="/privacy"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Privacy
 									</Link>
@@ -542,7 +542,7 @@ export default function ApiDocsPage() {
 							</ul>
 						</div>
 					</div>
-					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
+					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-600">
 						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>

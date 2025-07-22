@@ -162,7 +162,7 @@ export default function MessagesPage() {
 													<div
 														className={`max-w-xs rounded-lg px-4 py-2 lg:max-w-md ${
 															message.senderType === "patient"
-																? "bg-blue-600 text-white"
+																? "bg-blue-600 text-gray-900"
 																: "bg-gray-100 text-gray-900"
 														}`}
 													>
@@ -189,7 +189,7 @@ export default function MessagesPage() {
 								</div>
 							) : (
 								<div className="flex h-full flex-col items-center justify-center text-center">
-									<MessageSquare className="mb-4 h-12 w-12 text-gray-400" />
+									<MessageSquare className="mb-4 h-12 w-12 text-gray-600" />
 									<h3 className="mb-2 font-medium text-gray-900 text-lg">
 										No messages yet
 									</h3>
@@ -217,7 +217,7 @@ export default function MessagesPage() {
 									type="button"
 									onClick={sendMessage}
 									disabled={!newMessage.trim() || isSending}
-									className="flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+									className="flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-gray-900 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 								>
 									{isSending ? (
 										<div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

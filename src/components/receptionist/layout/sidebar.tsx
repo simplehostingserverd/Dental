@@ -12,18 +12,15 @@ import {
 	FileText,
 	Home,
 	MessageSquare,
-	Moon,
 	Phone,
 	Search,
 	Settings,
 	Share2,
-	Sun,
 	UserPlus,
 	Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 const navigationItems = [
 	{ key: "dashboard", href: "/receptionist", icon: Home, label: "Dashboard" },
@@ -97,17 +94,9 @@ const navigationItems = [
 
 export function ReceptionistSidebar() {
 	const pathname = usePathname();
-	const [isDarkMode, setIsDarkMode] = useState(false);
-
-	const toggleDarkMode = () => {
-		setIsDarkMode(!isDarkMode);
-		// TODO: Implement actual dark mode toggle
-	};
 
 	return (
-		<div
-			className={`flex h-full w-64 flex-col border-r bg-white shadow-lg ${isDarkMode ? "dark" : ""}`}
-		>
+		<div className="flex h-full w-64 flex-col border-r bg-white shadow-lg">
 			{/* Logo */}
 			<div className="flex items-center justify-between border-gray-200 border-b px-6 py-4">
 				<div className="flex items-center">
@@ -118,18 +107,6 @@ export function ReceptionistSidebar() {
 						Reception
 					</span>
 				</div>
-				<Button
-					variant="ghost"
-					size="sm"
-					onClick={toggleDarkMode}
-					className="h-8 w-8 p-0"
-				>
-					{isDarkMode ? (
-						<Sun className="h-4 w-4" />
-					) : (
-						<Moon className="h-4 w-4" />
-					)}
-				</Button>
 			</div>
 
 			{/* Quick Stats */}

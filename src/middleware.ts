@@ -70,7 +70,30 @@ export async function middleware(request: NextRequest) {
 		pathname.startsWith("/receptionist")
 	) {
 		try {
-			// First check for test authentication
+			// Check for practice authentication token
+			const practiceAuthToken = request.cookies.get("practice-auth-token");
+
+			if (practiceAuthToken) {
+				try {
+					// Verify practice token using jose library
+					const { jwtVerify } = await import("jose");
+					const secret = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key");
+					const { payload } = await jwtVerify(practiceAuthToken.value, secret);
+
+					const response = NextResponse.next();
+					response.headers.set("x-user-id", payload.userId as string);
+					response.headers.set("x-user-email", payload.email as string);
+					response.headers.set("x-practice-id", payload.practiceId as string);
+					response.headers.set("x-user-role", payload.role as string);
+
+					return applySecurityMiddleware(request, response);
+				} catch (error) {
+					// Invalid token, continue to other auth methods
+					console.log("Invalid practice token, checking other auth methods");
+				}
+			}
+
+			// Check for test authentication as fallback
 			const testAuthToken = request.cookies.get("test-auth-token");
 			const testUserRole = request.cookies.get("test-user-role");
 

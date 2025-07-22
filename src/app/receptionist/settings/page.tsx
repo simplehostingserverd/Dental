@@ -61,7 +61,6 @@ export default function SettingsPage() {
 	});
 
 	const [preferences, setPreferences] = useState({
-		theme: "light",
 		language: "en",
 		timezone: "America/New_York",
 		dateFormat: "MM/DD/YYYY",
@@ -470,34 +469,6 @@ export default function SettingsPage() {
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
-							<div>
-								<Label>Theme</Label>
-								<Select
-									value={preferences.theme}
-									onValueChange={(value) =>
-										handlePreferenceChange("theme", value)
-									}
-								>
-									<SelectTrigger>
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="light">
-											<div className="flex items-center">
-												<Sun className="mr-2 h-4 w-4" />
-												Light
-											</div>
-										</SelectItem>
-										<SelectItem value="dark">
-											<div className="flex items-center">
-												<Moon className="mr-2 h-4 w-4" />
-												Dark
-											</div>
-										</SelectItem>
-										<SelectItem value="system">System</SelectItem>
-									</SelectContent>
-								</Select>
-							</div>
 							<div className="flex items-center justify-between">
 								<div>
 									<h4 className="font-medium">Compact View</h4>

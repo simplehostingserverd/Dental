@@ -56,6 +56,24 @@ function validateEnv(): Env {
 		return process.env as unknown as Env;
 	}
 
+	// Skip validation on client side (browser) to prevent errors
+	if (typeof window !== "undefined") {
+		// Return minimal client-safe env object
+		return {
+			NODE_ENV: process.env.NODE_ENV || "development",
+			DATABASE_URL: "",
+			JWT_SECRET: "",
+			PATIENT_JWT_SECRET: "",
+			NEXTAUTH_SECRET: "",
+			NEXTAUTH_URL: "",
+			AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
+			AUTH_DISCORD_SECRET: "",
+			OPTIMIZE_API_KEY: "",
+			SKIP_ENV_VALIDATION: process.env.SKIP_ENV_VALIDATION,
+			COOLIFY_DEPLOYMENT: process.env.COOLIFY_DEPLOYMENT,
+		} as Env;
+	}
+
 	// Special handling for Coolify deployments
 	if (process.env.COOLIFY_DEPLOYMENT === "true" || process.env.NODE_ENV === "production") {
 		console.log("🚀 Coolify deployment detected - using relaxed validation");
@@ -117,6 +135,7 @@ function validateEnv(): Env {
 				AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
 				OPTIMIZE_API_KEY: process.env.OPTIMIZE_API_KEY,
 				SKIP_ENV_VALIDATION: process.env.SKIP_ENV_VALIDATION,
+				COOLIFY_DEPLOYMENT: process.env.COOLIFY_DEPLOYMENT,
 			} as Env;
 		}
 

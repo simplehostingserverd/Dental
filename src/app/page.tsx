@@ -75,9 +75,9 @@ export default function LandingPage() {
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
 			/>
-			<div className="min-h-screen bg-gray-900 text-white">
+			<div className="min-h-screen bg-gray-50 text-gray-900">
 				{/* Navigation */}
-				<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-900/95 backdrop-blur-sm">
+				<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-50/95 backdrop-blur-sm">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<div className="flex h-16 items-center justify-between">
 							<div className="flex items-center">
@@ -86,31 +86,31 @@ export default function LandingPage() {
 							<div className="hidden items-center space-x-8 md:flex">
 								<Link
 									href="#features"
-									className="text-gray-300 transition-colors hover:text-white"
+									className="text-gray-300 transition-colors hover:text-gray-900"
 								>
 									Features
 								</Link>
 								<Link
 									href="#pricing"
-									className="text-gray-300 transition-colors hover:text-white"
+									className="text-gray-300 transition-colors hover:text-gray-900"
 								>
 									Pricing
 								</Link>
 								<Link
 									href="/blog"
-									className="text-gray-300 transition-colors hover:text-white"
+									className="text-gray-300 transition-colors hover:text-gray-900"
 								>
 									Blog
 								</Link>
 								<Link
 									href="#contact"
-									className="text-gray-300 transition-colors hover:text-white"
+									className="text-gray-300 transition-colors hover:text-gray-900"
 								>
 									Contact
 								</Link>
 								<Link
 									href="/auth/signin"
-									className="text-gray-300 transition-colors hover:text-white"
+									className="text-gray-300 transition-colors hover:text-gray-900"
 								>
 									Sign In
 								</Link>
@@ -132,7 +132,7 @@ export default function LandingPage() {
 							<div>
 								<h1 className="mb-6 font-bold text-4xl leading-tight lg:text-6xl">
 									Next-Gen Dental Practice
-									<span className="text-blue-400"> Management</span>
+									<span className="text-blue-600"> Management</span>
 								</h1>
 								<p className="mb-8 text-gray-300 text-xl leading-relaxed">
 									HIPAA-compliant cloud platform with AI-powered insights, smart
@@ -155,7 +155,7 @@ export default function LandingPage() {
 										Watch Demo
 									</Link>
 								</div>
-								<div className="mt-8 flex items-center space-x-6 text-gray-400 text-sm">
+								<div className="mt-8 flex items-center space-x-6 text-gray-600 text-sm">
 									<div className="flex items-center">
 										<CheckCircle className="mr-2 h-4 w-4 text-green-400" />
 										14-day free trial
@@ -188,7 +188,7 @@ export default function LandingPage() {
 				</section>
 
 				{/* Features Section */}
-				<section id="features" className="bg-gray-800/50 py-20">
+				<section id="features" className="bg-white/50 py-20">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<div className="mb-16 text-center">
 							<h2 className="mb-4 font-bold text-3xl lg:text-4xl">
@@ -241,9 +241,9 @@ export default function LandingPage() {
 							].map((feature, index) => (
 								<div
 									key={index}
-									className="rounded-lg bg-gray-800 p-6 transition-colors hover:bg-gray-700"
+									className="rounded-lg bg-white p-6 transition-colors hover:bg-gray-700"
 								>
-									<feature.icon className="mb-4 h-12 w-12 text-blue-400" />
+									<feature.icon className="mb-4 h-12 w-12 text-blue-600" />
 									<h3 className="mb-2 font-semibold text-xl">
 										{feature.title}
 									</h3>
@@ -295,13 +295,13 @@ export default function LandingPage() {
 									practice: "Downtown Dental Care",
 								},
 							].map((testimonial, index) => (
-								<div key={index} className="rounded-lg bg-gray-800 p-6">
+								<div key={index} className="rounded-lg bg-white p-6">
 									<p className="mb-4 text-gray-300 italic">
 										"{testimonial.quote}"
 									</p>
 									<div>
 										<p className="font-semibold">{testimonial.author}</p>
-										<p className="text-gray-400 text-sm">
+										<p className="text-gray-600 text-sm">
 											{testimonial.practice}
 										</p>
 									</div>
@@ -332,25 +332,25 @@ export default function LandingPage() {
 				</section>
 
 				{/* Footer */}
-				<footer className="border-gray-800 border-t bg-gray-900 py-12">
+				<footer className="border-gray-800 border-t bg-gray-50 py-12">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<div className="grid gap-8 md:grid-cols-4">
 							<div>
 								<div className="mb-4 flex items-center">
 									<CognidentTextLogo logoSize={32} />
 								</div>
-								<p className="text-gray-400">
+								<p className="text-gray-600">
 									Next-generation dental practice management software designed
 									for modern practices.
 								</p>
 							</div>
 							<div>
 								<h3 className="mb-4 font-semibold">Product</h3>
-								<ul className="space-y-2 text-gray-400">
+								<ul className="space-y-2 text-gray-600">
 									<li>
 										<Link
 											href="#features"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											Features
 										</Link>
@@ -358,7 +358,7 @@ export default function LandingPage() {
 									<li>
 										<Link
 											href="#pricing"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											Pricing
 										</Link>
@@ -366,7 +366,7 @@ export default function LandingPage() {
 									<li>
 										<Link
 											href="/contact"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											Demo
 										</Link>
@@ -375,11 +375,11 @@ export default function LandingPage() {
 							</div>
 							<div>
 								<h3 className="mb-4 font-semibold">Resources</h3>
-								<ul className="space-y-2 text-gray-400">
+								<ul className="space-y-2 text-gray-600">
 									<li>
 										<Link
 											href="/blog"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											Blog
 										</Link>
@@ -387,7 +387,7 @@ export default function LandingPage() {
 									<li>
 										<Link
 											href="/help"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											Help Center
 										</Link>
@@ -395,7 +395,7 @@ export default function LandingPage() {
 									<li>
 										<Link
 											href="/api-docs"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											API Docs
 										</Link>
@@ -404,11 +404,11 @@ export default function LandingPage() {
 							</div>
 							<div>
 								<h3 className="mb-4 font-semibold">Company</h3>
-								<ul className="space-y-2 text-gray-400">
+								<ul className="space-y-2 text-gray-600">
 									<li>
 										<Link
 											href="/about"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											About
 										</Link>
@@ -416,7 +416,7 @@ export default function LandingPage() {
 									<li>
 										<Link
 											href="/contact"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											Contact
 										</Link>
@@ -424,7 +424,7 @@ export default function LandingPage() {
 									<li>
 										<Link
 											href="/privacy"
-											className="transition-colors hover:text-white"
+											className="transition-colors hover:text-gray-900"
 										>
 											Privacy
 										</Link>
@@ -432,7 +432,7 @@ export default function LandingPage() {
 								</ul>
 							</div>
 						</div>
-						<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
+						<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-600">
 							<p>&copy; 2025 Cognident. All rights reserved.</p>
 						</div>
 					</div>

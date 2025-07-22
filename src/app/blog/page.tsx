@@ -99,40 +99,40 @@ const categories = [
 
 export default function BlogPage() {
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
+		<div className="min-h-screen bg-gray-50 text-gray-900">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-900/95 backdrop-blur-sm">
+			<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-50/95 backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<Link href="/" className="flex items-center">
-							<Heart className="mr-3 h-8 w-8 text-blue-400" />
+							<Heart className="mr-3 h-8 w-8 text-blue-600" />
 							<span className="font-bold text-xl">Cognident</span>
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Features
 							</Link>
 							<Link
 								href="/#pricing"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Pricing
 							</Link>
-							<Link href="/blog" className="font-medium text-white">
+							<Link href="/blog" className="font-medium text-gray-900">
 								Blog
 							</Link>
 							<Link
 								href="/#contact"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Contact
 							</Link>
 							<Link
 								href="/auth/signin"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Sign In
 							</Link>
@@ -151,7 +151,7 @@ export default function BlogPage() {
 			<section className="bg-gradient-to-b from-gray-800 to-gray-900 py-20">
 				<div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
 					<h1 className="mb-6 font-bold text-4xl lg:text-5xl">
-						DentalCloud <span className="text-blue-400">Blog</span>
+						DentalCloud <span className="text-blue-600">Blog</span>
 					</h1>
 					<p className="mx-auto mb-8 max-w-3xl text-gray-300 text-xl">
 						Expert insights, tips, and best practices for dental practice
@@ -161,18 +161,18 @@ export default function BlogPage() {
 
 					{/* Search Bar */}
 					<div className="relative mx-auto max-w-md">
-						<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-5 w-5 transform text-gray-400" />
+						<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-5 w-5 transform text-gray-600" />
 						<input
 							type="text"
 							placeholder="Search articles..."
-							className="w-full rounded-lg border border-gray-700 bg-gray-800 py-3 pr-4 pl-10 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="w-full rounded-lg border border-gray-700 bg-white py-3 pr-4 pl-10 text-gray-900 placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
 						/>
 					</div>
 				</div>
 			</section>
 
 			{/* Categories */}
-			<section className="bg-gray-800/50 py-8">
+			<section className="bg-white/50 py-8">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex flex-wrap justify-center gap-4">
 						{categories.map((category) => (
@@ -180,7 +180,7 @@ export default function BlogPage() {
 								key={category}
 								className={`rounded-full px-6 py-2 transition-colors ${
 									category === "All"
-										? "bg-blue-600 text-white"
+										? "bg-blue-600 text-gray-900"
 										: "bg-gray-700 text-gray-300 hover:bg-gray-600"
 								}`}
 							>
@@ -198,7 +198,7 @@ export default function BlogPage() {
 						{blogPosts.map((post) => (
 							<article
 								key={post.id}
-								className="group overflow-hidden rounded-lg bg-gray-800 transition-colors hover:bg-gray-700"
+								className="group overflow-hidden rounded-lg bg-white transition-colors hover:bg-gray-700"
 							>
 								<div className="relative h-48 overflow-hidden">
 									<img
@@ -207,32 +207,32 @@ export default function BlogPage() {
 										className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 									/>
 									<div className="absolute top-4 left-4">
-										<span className="rounded-full bg-blue-600 px-3 py-1 font-medium text-sm text-white">
+										<span className="rounded-full bg-blue-600 px-3 py-1 font-medium text-sm text-gray-900">
 											{post.category}
 										</span>
 									</div>
 								</div>
 								<div className="p-6">
-									<div className="mb-3 flex items-center text-gray-400 text-sm">
+									<div className="mb-3 flex items-center text-gray-600 text-sm">
 										<Calendar className="mr-2 h-4 w-4" />
 										<span>{new Date(post.date).toLocaleDateString()}</span>
 										<span className="mx-2">•</span>
 										<span>{post.readTime}</span>
 									</div>
-									<h3 className="mb-3 font-semibold text-xl transition-colors group-hover:text-blue-400">
+									<h3 className="mb-3 font-semibold text-xl transition-colors group-hover:text-blue-600">
 										<Link href={`/blog/${post.id}`}>{post.title}</Link>
 									</h3>
 									<p className="mb-4 line-clamp-3 text-gray-300">
 										{post.excerpt}
 									</p>
 									<div className="flex items-center justify-between">
-										<div className="flex items-center text-gray-400 text-sm">
+										<div className="flex items-center text-gray-600 text-sm">
 											<User className="mr-2 h-4 w-4" />
 											<span>{post.author}</span>
 										</div>
 										<Link
 											href={`/blog/${post.id}`}
-											className="inline-flex items-center font-medium text-blue-400 text-sm hover:text-blue-300"
+											className="inline-flex items-center font-medium text-blue-600 text-sm hover:text-blue-700"
 										>
 											Read More
 											<ArrowRight className="ml-1 h-4 w-4" />
@@ -268,25 +268,25 @@ export default function BlogPage() {
 			</section>
 
 			{/* Footer */}
-			<footer className="border-gray-800 border-t bg-gray-900 py-12">
+			<footer className="border-gray-800 border-t bg-gray-50 py-12">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="grid gap-8 md:grid-cols-4">
 						<div>
 							<div className="mb-4 flex items-center">
-								<CognidentTextLogo logoSize={32} className="text-white" />
+								<CognidentTextLogo logoSize={32} className="text-gray-900" />
 							</div>
-							<p className="text-gray-400">
+							<p className="text-gray-600">
 								Next-generation dental practice management software designed for
 								modern practices.
 							</p>
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Product</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/#features"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Features
 									</Link>
@@ -294,7 +294,7 @@ export default function BlogPage() {
 								<li>
 									<Link
 										href="/#pricing"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Pricing
 									</Link>
@@ -302,7 +302,7 @@ export default function BlogPage() {
 								<li>
 									<Link
 										href="/contact"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Demo
 									</Link>
@@ -311,11 +311,11 @@ export default function BlogPage() {
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Resources</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/blog"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Blog
 									</Link>
@@ -323,7 +323,7 @@ export default function BlogPage() {
 								<li>
 									<Link
 										href="/help"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Help Center
 									</Link>
@@ -331,7 +331,7 @@ export default function BlogPage() {
 								<li>
 									<Link
 										href="/api"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										API Docs
 									</Link>
@@ -340,11 +340,11 @@ export default function BlogPage() {
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Company</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/about"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										About
 									</Link>
@@ -352,7 +352,7 @@ export default function BlogPage() {
 								<li>
 									<Link
 										href="/contact"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Contact
 									</Link>
@@ -360,7 +360,7 @@ export default function BlogPage() {
 								<li>
 									<Link
 										href="/privacy"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Privacy
 									</Link>
@@ -368,7 +368,7 @@ export default function BlogPage() {
 							</ul>
 						</div>
 					</div>
-					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
+					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-600">
 						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>

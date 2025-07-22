@@ -2,7 +2,6 @@
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
 import { CognidentTextLogo } from "@/components/icons/cognident-logo";
-import { useAppTranslations } from "@/lib/i18n/translation-context";
 import { cn } from "@/lib/utils";
 import {
 	Bot,
@@ -20,26 +19,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navigationItems = [
-	{ key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
-	{ key: "receptionist", href: "/dashboard/receptionist", icon: Calendar },
-	{ key: "appointments", href: "/dashboard/schedule", icon: Calendar },
-	{ key: "patients", href: "/dashboard/patients", icon: Users },
-	{ key: "charting", href: "/dashboard/charting", icon: ToothIcon },
+	{ key: "dashboard", href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+	{ key: "appointments", href: "/dashboard/schedule", icon: Calendar, label: "Appointments" },
+	{ key: "patients", href: "/dashboard/patients", icon: Users, label: "Patients" },
+	{ key: "charting", href: "/dashboard/charting", icon: ToothIcon, label: "Charting" },
 	{
 		key: "treatment_plans",
 		href: "/dashboard/treatment-plans",
 		icon: FileText,
+		label: "Treatment Plans"
 	},
-	{ key: "billing", href: "/dashboard/billing", icon: CreditCard },
-	{ key: "imaging", href: "/dashboard/imaging", icon: Camera },
-	{ key: "prescriptions", href: "/dashboard/prescriptions", icon: Pill },
-	{ key: "messages", href: "/dashboard/messages", icon: MessageSquare },
-	{ key: "settings", href: "/dashboard/settings", icon: Settings },
+	{ key: "billing", href: "/dashboard/billing", icon: CreditCard, label: "Billing" },
+	{ key: "imaging", href: "/dashboard/imaging", icon: Camera, label: "Imaging" },
+	{ key: "prescriptions", href: "/dashboard/prescriptions", icon: Pill, label: "Prescriptions" },
+	{ key: "messages", href: "/dashboard/messages", icon: MessageSquare, label: "Messages" },
+	{ key: "settings", href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
 export function Sidebar() {
 	const pathname = usePathname();
-	const { navigation } = useAppTranslations();
 
 	return (
 		<div className="flex h-full w-64 flex-col border-gray-200 border-r bg-white shadow-sm">
@@ -66,7 +64,7 @@ export function Sidebar() {
 									)}
 								>
 									<IconComponent className="mr-3 h-5 w-5" />
-									{navigation(item.key)}
+									{item.label}
 								</Link>
 							</li>
 						);

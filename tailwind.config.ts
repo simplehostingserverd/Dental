@@ -6,6 +6,7 @@ const config: Config = {
 		"./src/components/**/*.{ts,tsx}",
 		"./src/app/**/*.{ts,tsx}",
 	],
+	darkMode: "class", // Explicitly disable dark mode
 	theme: {
 		extend: {},
 	},

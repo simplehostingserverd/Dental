@@ -136,48 +136,48 @@ export default function HelpPage() {
 	];
 
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
+		<div className="min-h-screen bg-gray-50 text-gray-900">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-900/95 backdrop-blur-sm">
+			<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-50/95 backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<Link href="/" className="flex items-center">
-							<CognidentTextLogo logoSize={32} className="text-white" />
+							<CognidentTextLogo logoSize={32} className="text-gray-900" />
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Features
 							</Link>
 							<Link
 								href="/#pricing"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Pricing
 							</Link>
 							<Link
 								href="/blog"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Blog
 							</Link>
 							<Link
 								href="/about"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								About
 							</Link>
 							<Link
 								href="/contact"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Contact
 							</Link>
 							<Link
 								href="/auth/signin"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-gray-300 transition-colors hover:text-gray-900"
 							>
 								Sign In
 							</Link>
@@ -207,13 +207,13 @@ export default function HelpPage() {
 					{/* Search Bar */}
 					<div className="mx-auto max-w-2xl">
 						<div className="relative">
-							<Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+							<Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-600" />
 							<Input
 								type="text"
 								placeholder="Search for help articles, guides, and FAQs..."
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
-								className="bg-white/10 border-white/20 pl-12 pr-4 py-3 text-white placeholder-gray-300 backdrop-blur-sm"
+								className="bg-white/10 border-white/20 pl-12 pr-4 py-3 text-gray-900 placeholder-gray-300 backdrop-blur-sm"
 							/>
 						</div>
 					</div>
@@ -225,7 +225,7 @@ export default function HelpPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="mb-12 text-center">
 						<h2 className="mb-4 font-bold text-3xl">Browse by Category</h2>
-						<p className="text-gray-400 text-lg">
+						<p className="text-gray-600 text-lg">
 							Find help articles organized by topic
 						</p>
 					</div>
@@ -245,26 +245,26 @@ export default function HelpPage() {
 								<Link
 									key={index}
 									href={`/help/${categoryUrl}`}
-									className="group cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-6 transition-all hover:border-gray-600 hover:bg-gray-750 block"
+									className="group cursor-pointer rounded-lg border border-gray-700 bg-white p-6 transition-all hover:border-gray-600 hover:bg-gray-750 block"
 								>
 									<div className="flex items-start space-x-4">
 										<div
 											className={`rounded-lg p-3 ${category.color} flex-shrink-0`}
 										>
-											<IconComponent className="h-6 w-6 text-white" />
+											<IconComponent className="h-6 w-6 text-gray-900" />
 										</div>
 										<div className="flex-1">
-											<h3 className="mb-2 font-semibold text-lg group-hover:text-blue-400">
+											<h3 className="mb-2 font-semibold text-lg group-hover:text-blue-600">
 												{category.title}
 											</h3>
-											<p className="mb-3 text-gray-400 text-sm">
+											<p className="mb-3 text-gray-600 text-sm">
 												{category.description}
 											</p>
 											<div className="flex items-center justify-between">
-												<span className="text-blue-400 text-sm">
+												<span className="text-blue-600 text-sm">
 													{category.articles} articles
 												</span>
-												<ChevronRight className="h-4 w-4 text-gray-400 transition-transform group-hover:translate-x-1" />
+												<ChevronRight className="h-4 w-4 text-gray-600 transition-transform group-hover:translate-x-1" />
 											</div>
 										</div>
 									</div>
@@ -276,11 +276,11 @@ export default function HelpPage() {
 			</section>
 
 			{/* Popular Articles */}
-			<section className="bg-gray-800 py-16">
+			<section className="bg-white py-16">
 				<div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 					<div className="mb-12 text-center">
 						<h2 className="mb-4 font-bold text-3xl">Popular Articles</h2>
-						<p className="text-gray-400 text-lg">
+						<p className="text-gray-600 text-lg">
 							Most helpful articles from our knowledge base
 						</p>
 					</div>
@@ -289,20 +289,20 @@ export default function HelpPage() {
 						{popularArticles.map((article, index) => (
 							<div
 								key={index}
-								className="group cursor-pointer rounded-lg border border-gray-700 bg-gray-900 p-4 transition-all hover:border-gray-600 hover:bg-gray-800"
+								className="group cursor-pointer rounded-lg border border-gray-700 bg-gray-50 p-4 transition-all hover:border-gray-600 hover:bg-white"
 							>
 								<div className="flex items-center justify-between">
 									<div className="flex-1">
-										<h3 className="mb-1 font-semibold group-hover:text-blue-400">
+										<h3 className="mb-1 font-semibold group-hover:text-blue-600">
 											{article.title}
 										</h3>
-										<div className="flex items-center space-x-4 text-gray-400 text-sm">
+										<div className="flex items-center space-x-4 text-gray-600 text-sm">
 											<span>{article.category}</span>
 											<span>•</span>
 											<span>{article.readTime}</span>
 										</div>
 									</div>
-									<ChevronRight className="h-5 w-5 text-gray-400 transition-transform group-hover:translate-x-1" />
+									<ChevronRight className="h-5 w-5 text-gray-600 transition-transform group-hover:translate-x-1" />
 								</div>
 							</div>
 						))}
@@ -324,7 +324,7 @@ export default function HelpPage() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="mb-12 text-center">
 						<h2 className="mb-4 font-bold text-3xl">Get Personal Support</h2>
-						<p className="text-gray-400 text-lg">
+						<p className="text-gray-600 text-lg">
 							Can't find what you're looking for? Our support team is here to
 							help.
 						</p>
@@ -336,18 +336,18 @@ export default function HelpPage() {
 							return (
 								<div
 									key={index}
-									className="rounded-lg border border-gray-700 bg-gray-800 p-6 text-center"
+									className="rounded-lg border border-gray-700 bg-white p-6 text-center"
 								>
 									<div
 										className={`mx-auto mb-4 h-12 w-12 rounded-lg ${option.color} flex items-center justify-center`}
 									>
-										<IconComponent className="h-6 w-6 text-white" />
+										<IconComponent className="h-6 w-6 text-gray-900" />
 									</div>
 									<h3 className="mb-2 font-semibold text-lg">{option.title}</h3>
-									<p className="mb-3 text-gray-400 text-sm">
+									<p className="mb-3 text-gray-600 text-sm">
 										{option.description}
 									</p>
-									<p className="mb-4 text-blue-400 text-xs">
+									<p className="mb-4 text-blue-600 text-xs">
 										{option.availability}
 									</p>
 									<Button
@@ -373,18 +373,18 @@ export default function HelpPage() {
 			</section>
 
 			{/* Quick Links */}
-			<section className="bg-gray-800 py-16">
+			<section className="bg-white py-16">
 				<div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 					<div className="text-center">
 						<h2 className="mb-6 font-bold text-3xl">Quick Links</h2>
 						<div className="grid gap-4 md:grid-cols-2">
-							<div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+							<div className="rounded-lg border border-gray-700 bg-gray-50 p-6">
 								<h3 className="mb-3 font-semibold text-lg">For New Users</h3>
-								<ul className="space-y-2 text-gray-400 text-sm">
+								<ul className="space-y-2 text-gray-600 text-sm">
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• Quick Start Guide
 										</Link>
@@ -392,7 +392,7 @@ export default function HelpPage() {
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• Setting Up Your Practice
 										</Link>
@@ -400,7 +400,7 @@ export default function HelpPage() {
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• First Appointment Tutorial
 										</Link>
@@ -408,7 +408,7 @@ export default function HelpPage() {
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• User Account Setup
 										</Link>
@@ -416,13 +416,13 @@ export default function HelpPage() {
 								</ul>
 							</div>
 
-							<div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+							<div className="rounded-lg border border-gray-700 bg-gray-50 p-6">
 								<h3 className="mb-3 font-semibold text-lg">Advanced Features</h3>
-								<ul className="space-y-2 text-gray-400 text-sm">
+								<ul className="space-y-2 text-gray-600 text-sm">
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• API Integration Guide
 										</Link>
@@ -430,7 +430,7 @@ export default function HelpPage() {
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• Custom Report Builder
 										</Link>
@@ -438,7 +438,7 @@ export default function HelpPage() {
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• Multi-Location Setup
 										</Link>
@@ -446,7 +446,7 @@ export default function HelpPage() {
 									<li>
 										<Link
 											href="#"
-											className="transition-colors hover:text-blue-400"
+											className="transition-colors hover:text-blue-600"
 										>
 											• Advanced Security Settings
 										</Link>
@@ -462,7 +462,7 @@ export default function HelpPage() {
 			<section className="py-16">
 				<div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
 					<h2 className="mb-4 font-bold text-3xl">Still Need Help?</h2>
-					<p className="mb-8 text-gray-400 text-lg">
+					<p className="mb-8 text-gray-600 text-lg">
 						Our support team is available 24/7 to assist you with any questions
 						or issues.
 					</p>
@@ -476,7 +476,7 @@ export default function HelpPage() {
 						</Button>
 						<Button
 							variant="outline"
-							className="border-gray-600 text-gray-300 hover:bg-gray-800"
+							className="border-gray-600 text-gray-300 hover:bg-white"
 							onClick={() => window.open('tel:+19563575588')}
 						>
 							<Phone className="mr-2 h-4 w-4" />
@@ -487,25 +487,25 @@ export default function HelpPage() {
 			</section>
 
 			{/* Footer */}
-			<footer className="border-gray-800 border-t bg-gray-900 py-12">
+			<footer className="border-gray-800 border-t bg-gray-50 py-12">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="grid gap-8 md:grid-cols-4">
 						<div>
 							<div className="mb-4 flex items-center">
-								<CognidentTextLogo logoSize={32} className="text-white" />
+								<CognidentTextLogo logoSize={32} className="text-gray-900" />
 							</div>
-							<p className="text-gray-400">
+							<p className="text-gray-600">
 								Next-generation dental practice management software designed for
 								modern practices.
 							</p>
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Product</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/#features"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Features
 									</Link>
@@ -513,7 +513,7 @@ export default function HelpPage() {
 								<li>
 									<Link
 										href="/#pricing"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Pricing
 									</Link>
@@ -521,7 +521,7 @@ export default function HelpPage() {
 								<li>
 									<Link
 										href="/api-docs"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										API Docs
 									</Link>
@@ -530,11 +530,11 @@ export default function HelpPage() {
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Company</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/about"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										About
 									</Link>
@@ -542,7 +542,7 @@ export default function HelpPage() {
 								<li>
 									<Link
 										href="/blog"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Blog
 									</Link>
@@ -550,7 +550,7 @@ export default function HelpPage() {
 								<li>
 									<Link
 										href="/contact"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Contact
 									</Link>
@@ -559,11 +559,11 @@ export default function HelpPage() {
 						</div>
 						<div>
 							<h3 className="mb-4 font-semibold">Support</h3>
-							<ul className="space-y-2 text-gray-400">
+							<ul className="space-y-2 text-gray-600">
 								<li>
 									<Link
 										href="/help"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Help Center
 									</Link>
@@ -571,7 +571,7 @@ export default function HelpPage() {
 								<li>
 									<Link
 										href="/contact"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Contact
 									</Link>
@@ -579,7 +579,7 @@ export default function HelpPage() {
 								<li>
 									<Link
 										href="/privacy"
-										className="transition-colors hover:text-white"
+										className="transition-colors hover:text-gray-900"
 									>
 										Privacy
 									</Link>
@@ -587,7 +587,7 @@ export default function HelpPage() {
 							</ul>
 						</div>
 					</div>
-					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-400">
+					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-600">
 						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>

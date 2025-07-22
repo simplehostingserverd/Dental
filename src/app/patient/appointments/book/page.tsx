@@ -150,7 +150,7 @@ export default function BookAppointmentPage() {
 								<div
 									className={`flex h-8 w-8 items-center justify-center rounded-full font-medium text-sm ${
 										step >= stepNumber
-											? "bg-blue-600 text-white"
+											? "bg-blue-600 text-gray-900"
 											: "bg-gray-200 text-gray-600"
 									}`}
 								>
@@ -218,7 +218,7 @@ export default function BookAppointmentPage() {
 									type="button"
 									onClick={() => setStep(2)}
 									disabled={!selectedType}
-									className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+									className="rounded-md bg-blue-600 px-6 py-2 text-gray-900 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 								>
 									Next
 								</button>
@@ -268,10 +268,10 @@ export default function BookAppointmentPage() {
 												disabled={!slot.available}
 												className={`rounded-md px-3 py-2 text-sm ${
 													selectedTime === slot.time
-														? "bg-blue-600 text-white"
+														? "bg-blue-600 text-gray-900"
 														: slot.available
 															? "bg-gray-100 text-gray-900 hover:bg-gray-200"
-															: "cursor-not-allowed bg-gray-50 text-gray-400"
+															: "cursor-not-allowed bg-gray-50 text-gray-600"
 												}`}
 											>
 												{slot.time}
@@ -293,7 +293,7 @@ export default function BookAppointmentPage() {
 									type="button"
 									onClick={() => setStep(3)}
 									disabled={!selectedDate || !selectedTime}
-									className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+									className="rounded-md bg-blue-600 px-6 py-2 text-gray-900 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 								>
 									Next
 								</button>
@@ -312,7 +312,7 @@ export default function BookAppointmentPage() {
 							<div className="mb-6 rounded-lg bg-gray-50 p-4">
 								<div className="space-y-3">
 									<div className="flex items-center">
-										<User className="mr-3 h-5 w-5 text-gray-400" />
+										<User className="mr-3 h-5 w-5 text-gray-600" />
 										<span className="font-medium">
 											{
 												appointmentTypes.find((t) => t.id === selectedType)
@@ -321,11 +321,11 @@ export default function BookAppointmentPage() {
 										</span>
 									</div>
 									<div className="flex items-center">
-										<Calendar className="mr-3 h-5 w-5 text-gray-400" />
+										<Calendar className="mr-3 h-5 w-5 text-gray-600" />
 										<span>{selectedDate?.toLocaleDateString()}</span>
 									</div>
 									<div className="flex items-center">
-										<Clock className="mr-3 h-5 w-5 text-gray-400" />
+										<Clock className="mr-3 h-5 w-5 text-gray-600" />
 										<span>{selectedTime}</span>
 									</div>
 								</div>
@@ -361,7 +361,7 @@ export default function BookAppointmentPage() {
 									type="button"
 									onClick={handleSubmit}
 									disabled={isLoading}
-									className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+									className="rounded-md bg-blue-600 px-6 py-2 text-gray-900 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 								>
 									{isLoading ? "Booking..." : "Book Appointment"}
 								</button>

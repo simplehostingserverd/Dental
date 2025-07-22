@@ -21,7 +21,7 @@ export default function TestPage() {
 									.then((r) => r.json())
 									.then(console.log)
 							}
-							className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+							className="rounded bg-blue-600 px-4 py-2 text-gray-900 hover:bg-blue-700"
 						>
 							Check Environment
 						</button>
@@ -39,7 +39,7 @@ export default function TestPage() {
 									.then((r) => r.json())
 									.then(console.log)
 							}
-							className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+							className="rounded bg-green-600 px-4 py-2 text-gray-900 hover:bg-green-700"
 						>
 							Create Sample Users
 						</button>

@@ -39,8 +39,21 @@ export default function SignInPage() {
 			const data = await response.json();
 
 			if (data.success) {
-				// Redirect based on user type
-				const redirectPath = userType === "practice" ? "/dashboard" : "/patient/dashboard";
+				// Redirect based on user type and role
+				let redirectPath = "/dashboard";
+
+				if (userType === "practice") {
+					// Check user role for practice staff
+					const userRole = data.user?.role?.toLowerCase();
+					if (userRole === "receptionist") {
+						redirectPath = "/receptionist";
+					} else {
+						redirectPath = "/dashboard";
+					}
+				} else {
+					redirectPath = "/patient/dashboard";
+				}
+
 				router.push(redirectPath);
 			} else {
 				setError(data.error || "Login failed");
@@ -53,24 +66,24 @@ export default function SignInPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen bg-gray-900">
+		<div className="flex min-h-screen bg-gray-50">
 			{/* Left Panel - Sign In Form */}
-			<div className="flex flex-1 items-center justify-center bg-gray-900 p-8 lg:w-1/2">
+			<div className="flex flex-1 items-center justify-center bg-white p-8 lg:w-1/2">
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
-							<CognidentLargeLogo className="text-white" />
+							<CognidentLargeLogo className="text-blue-600" />
 						</div>
-						<h2 className="mb-2 font-bold text-2xl text-white">Welcome back</h2>
-						<p className="text-gray-400">
+						<h2 className="mb-2 font-bold text-2xl text-gray-900">Welcome back</h2>
+						<p className="text-gray-600">
 							Sign in to your dental practice account.
 						</p>
 					</div>
 
-					<div className="rounded-lg bg-gray-800 p-6 shadow-xl">
+					<div className="rounded-lg bg-white border border-gray-200 p-6 shadow-lg">
 						{/* User Type Selection */}
 						<div className="mb-6">
-							<label className="mb-3 block font-medium text-gray-300 text-sm">
+							<label className="mb-3 block font-medium text-gray-700 text-sm">
 								I am a:
 							</label>
 							<div className="flex space-x-4">
@@ -79,8 +92,8 @@ export default function SignInPage() {
 									onClick={() => setUserType("practice")}
 									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
 										userType === "practice"
-											? "bg-blue-600 text-white"
-											: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+											? "bg-blue-600 text-gray-900"
+											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
 									}`}
 								>
 									Practice Staff
@@ -90,8 +103,8 @@ export default function SignInPage() {
 									onClick={() => setUserType("patient")}
 									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
 										userType === "patient"
-											? "bg-blue-600 text-white"
-											: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+											? "bg-blue-600 text-gray-900"
+											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
 									}`}
 								>
 									Patient
@@ -100,8 +113,8 @@ export default function SignInPage() {
 						</div>
 
 						{error && (
-							<div className="mb-4 rounded-md bg-red-900/50 border border-red-700 p-3">
-								<p className="text-red-200 text-sm">{error}</p>
+							<div className="mb-4 rounded-md bg-red-50 border border-red-200 p-3">
+								<p className="text-red-800 text-sm">{error}</p>
 							</div>
 						)}
 
@@ -109,7 +122,7 @@ export default function SignInPage() {
 							<div>
 								<label
 									htmlFor="email"
-									className="mb-2 block font-medium text-gray-300 text-sm"
+									className="mb-2 block font-medium text-gray-700 text-sm"
 								>
 									Email
 								</label>
@@ -120,14 +133,14 @@ export default function SignInPage() {
 									onChange={(e) => setEmail(e.target.value)}
 									required
 									disabled={isLoading}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+									className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 									placeholder="Enter your email"
 								/>
 							</div>
 							<div>
 								<label
 									htmlFor="password"
-									className="mb-2 block font-medium text-gray-300 text-sm"
+									className="mb-2 block font-medium text-gray-700 text-sm"
 								>
 									Password
 								</label>
@@ -138,14 +151,14 @@ export default function SignInPage() {
 									onChange={(e) => setPassword(e.target.value)}
 									required
 									disabled={isLoading}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+									className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 									placeholder="Enter your password"
 								/>
 							</div>
 							<button
 								type="submit"
 								disabled={isLoading}
-								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-gray-900 transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								{isLoading ? "Signing In..." : "Sign In"}
 							</button>
@@ -153,11 +166,11 @@ export default function SignInPage() {
 					</div>
 
 					<div className="mt-6 text-center">
-						<p className="text-gray-400 text-sm">
+						<p className="text-gray-600 text-sm">
 							Don't have an account?{" "}
 							<Link
 								href="/auth/signup"
-								className="font-medium text-blue-400 hover:text-blue-300"
+								className="font-medium text-blue-600 hover:text-blue-700"
 							>
 								Sign up here
 							</Link>
@@ -171,10 +184,10 @@ export default function SignInPage() {
 				<div
 					className="absolute inset-0 bg-center bg-cover bg-no-repeat"
 					style={{
-						backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80')`,
+						backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0.9)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80')`,
 					}}
 				/>
-				<div className="relative z-10 flex flex-col justify-center p-12 text-white">
+				<div className="relative z-10 flex flex-col justify-center p-12 text-gray-900">
 					<div className="max-w-md">
 						<h1 className="mb-4 font-bold text-4xl">
 							Next-Gen Dental Practice Management

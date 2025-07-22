@@ -185,7 +185,7 @@ export default async function TreatmentHistoryPage() {
 							))
 						) : (
 							<div className="px-6 py-12 text-center">
-								<FileText className="mx-auto h-12 w-12 text-gray-400" />
+								<FileText className="mx-auto h-12 w-12 text-gray-600" />
 								<h3 className="mt-2 font-medium text-gray-900 text-sm">
 									No treatment history
 								</h3>
@@ -246,7 +246,7 @@ export default async function TreatmentHistoryPage() {
 							))
 						) : (
 							<div className="px-6 py-12 text-center">
-								<Calendar className="mx-auto h-12 w-12 text-gray-400" />
+								<Calendar className="mx-auto h-12 w-12 text-gray-600" />
 								<h3 className="mt-2 font-medium text-gray-900 text-sm">
 									No appointment history
 								</h3>
@@ -256,7 +256,7 @@ export default async function TreatmentHistoryPage() {
 								<Link href="/patient/appointments/book">
 									<button
 										type="button"
-										className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700"
+										className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-gray-900 hover:bg-blue-700"
 									>
 										Book Your First Appointment
 									</button>
