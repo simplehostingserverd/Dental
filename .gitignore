@@ -82,6 +82,22 @@ config.local.*
 
 # Environment variables files with sensitive data
 COOLIFY_ENV_VARIABLES.txt
+PRODUCTION_ENV_VARIABLES.txt
+
+# Deployment guides with sensitive information
+COOLIFY_DEPLOYMENT.md
+CPANEL_DEPLOYMENT_GUIDE.md
+DEPLOYMENT_GUIDE.md
+DEPLOYMENT_README.md
+MULTI_TENANT_SAAS_GUIDE.md
+
+# Test data with credentials
+TEST_USERS.md
+
+# Scripts with sensitive data
+generate-secrets.sh
+init.sql
+install.sh
 
 # Database dumps and exports
 *.sql
