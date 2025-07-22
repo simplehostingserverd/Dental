@@ -23,9 +23,12 @@
 		"health:check": "tsx scripts/health-check.ts",
 		"check-env": "node scripts/check-env.js",
 		"db:reset": "npx prisma migrate reset --force && npm run seed",
-		"test": "jest",
-		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage",
+		"test": "playwright test",
+		"test:ui": "playwright test --ui",
+		"test:headed": "playwright test --headed",
+		"test:debug": "playwright test --debug",
+		"test:report": "playwright show-report",
+		"test:install": "playwright install",
 		"health-check": "tsx scripts/health-check.ts"
 	},
 	"dependencies": {
@@ -132,6 +135,7 @@
 		"@types/speakeasy": "2.0.10",
 		"@types/twilio": "^3.19.3",
 		"@types/uuid": "^10.0.0",
+		"@playwright/test": "^1.48.2",
 		"autoprefixer": "^10.4.21",
 		"chalk": "^4.1.2",
 		"husky": "^8.0.3",
