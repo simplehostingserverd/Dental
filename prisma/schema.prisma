@@ -45,6 +45,7 @@ model Practice {
   socialPosts           SocialPost[]
   marketingCampaigns    MarketingCampaign[]
   automationRules       AutomationRule[]
+  integrationSettings   IntegrationSettings[]
 }
 
 model PracticeUser {
@@ -207,6 +208,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  callLogs      CallLog[]
+  smsLogs       SmsLog[]
 }
 
 model Post {
@@ -262,6 +265,8 @@ model Patient {
   communicationLogs  CommunicationLog[]
   analyticsEvents    AnalyticsEvent[]
   workflowInstances  WorkflowInstance[]
+  callLogs           CallLog[]
+  smsLogs            SmsLog[]
 }
 
 model Appointment {
@@ -289,6 +294,7 @@ model Appointment {
   patient         Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
   practiceUser    PracticeUser?     @relation(fields: [practiceUserId], references: [id], onDelete: Cascade)
   insuranceClaims InsuranceClaim[]
+  reminders       AppointmentReminder[]
 }
 
 model Treatment {
@@ -922,4 +928,82 @@ enum Role {
   ADMIN
   DOCTOR
   STAFF
+}
+
+// Call logging for VoIP integration
+model CallLog {
+  id              String    @id @default(cuid())
+  patientId       String?
+  phoneNumber     String
+  direction       String    // 'inbound' or 'outbound'
+  twilioCallSid   String?   @unique
+  status          String    // 'initiated', 'ringing', 'answered', 'completed', 'failed', etc.
+  duration        Int?      // Duration in seconds
+  recordingUrl    String?   // URL to call recording
+  transcription   String?   // Call transcription if available
+  notes           String?   // Receptionist notes about the call
+  createdAt       DateTime  @default(now())
+  endedAt         DateTime?
+  createdBy       String?   // User ID of who initiated the call
+
+  patient   Patient? @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  creator   User?    @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+
+  @@map("call_logs")
+}
+
+// 3rd Party Integration Settings
+model IntegrationSettings {
+  id          String   @id @default(cuid())
+  practiceId  String
+  provider    String   // 'twilio', 'ringcentral', 'aws_sns', 'sendgrid', etc.
+  service     String   // 'voip', 'sms', 'email', 'translation'
+  isActive    Boolean  @default(false)
+  config      Json     // Encrypted configuration data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  practice Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  @@unique([practiceId, provider, service])
+  @@map("integration_settings")
+}
+
+// SMS and Communication Logs
+model SmsLog {
+  id              String    @id @default(cuid())
+  patientId       String?
+  phoneNumber     String
+  message         String
+  direction       String    // 'inbound' or 'outbound'
+  status          String    // 'sent', 'delivered', 'failed', 'received'
+  provider        String    // 'twilio', 'aws_sns', etc.
+  providerSid     String?   // Provider's message ID
+  cost            Float?    // Cost in cents
+  createdAt       DateTime  @default(now())
+  deliveredAt     DateTime?
+  createdBy       String?   // User ID of who sent the message
+
+  patient   Patient? @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  creator   User?    @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+
+  @@map("sms_logs")
+}
+
+// Automated Appointment Reminders
+model AppointmentReminder {
+  id              String    @id @default(cuid())
+  appointmentId   String
+  reminderType    String    // 'sms', 'email', 'call'
+  scheduledFor    DateTime  // When to send the reminder
+  status          String    // 'pending', 'sent', 'failed', 'cancelled'
+  message         String?   // Custom message content
+  attempts        Int       @default(0)
+  lastAttempt     DateTime?
+  sentAt          DateTime?
+  createdAt       DateTime  @default(now())
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@map("appointment_reminders")
 }

@@ -9,6 +9,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { CallInterface } from "@/components/receptionist/call-interface";
 import {
 	AlertCircle,
 	Bell,
@@ -72,10 +73,13 @@ export function ReceptionistHeader() {
 					</Button>
 
 					{/* Quick Call */}
-					<Button variant="outline" size="sm">
-						<Phone className="mr-2 h-4 w-4" />
-						Call
-					</Button>
+					<CallInterface
+						patients={[]} // TODO: Pass actual patient data
+						onCallInitiated={(callData) => {
+							console.log("Call initiated:", callData);
+							// TODO: Handle call initiated event
+						}}
+					/>
 
 					{/* Notifications */}
 					<DropdownMenu>
