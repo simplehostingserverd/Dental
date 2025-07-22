@@ -16,6 +16,15 @@ const getTwilioClient = () => {
 
 export async function POST(request: NextRequest) {
 	try {
+		// Check if Twilio is configured
+		const twilioClient = getTwilioClient();
+		if (!twilioClient) {
+			return NextResponse.json(
+				{ error: "Twilio not configured" },
+				{ status: 503 }
+			);
+		}
+
 		const body = await request.json();
 		const { to, patientId, callType = "outbound", notes } = body;
 

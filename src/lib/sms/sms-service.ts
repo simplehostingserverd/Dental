@@ -66,6 +66,11 @@ export class SmsService {
 	 */
 	private async sendWithTwilio(smsData: SmsMessage, config: any): Promise<SmsResult> {
 		try {
+			// Validate Twilio configuration
+			if (!config.accountSid || !config.authToken || !config.accountSid.startsWith('AC')) {
+				throw new Error('Invalid Twilio configuration');
+			}
+
 			const client = twilio(config.accountSid, config.authToken);
 
 			// Process message (translate if needed, apply templates)
