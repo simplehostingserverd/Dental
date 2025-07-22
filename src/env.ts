@@ -23,19 +23,13 @@ const envSchema = z.object({
 		.string()
 		.min(32, "PATIENT_JWT_SECRET must be at least 32 characters"),
 
-	// NextAuth.js (optional for development)
-	NEXTAUTH_SECRET: z.string().optional(),
-	NEXTAUTH_URL: z.string().url().optional().or(z.literal("")),
+	// NextAuth.js (required for production)
+	NEXTAUTH_SECRET: z.string().min(32, "NEXTAUTH_SECRET must be at least 32 characters"),
+	NEXTAUTH_URL: z.string().url("NEXTAUTH_URL must be a valid URL"),
 
 	// OAuth providers (optional)
 	AUTH_DISCORD_ID: z.string().optional(),
 	AUTH_DISCORD_SECRET: z.string().optional(),
-
-	// Stack Auth
-	NEXT_PUBLIC_STACK_PROJECT_ID: z.string(),
-	NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: z.string(),
-	STACK_SECRET_SERVER_KEY: z.string(),
-	NEXT_PUBLIC_STACK_URL: z.string().url().optional(),
 
 	// API keys (optional)
 	OPTIMIZE_API_KEY: z.string().optional(),
@@ -71,9 +65,8 @@ function validateEnv(): Env {
 			'DATABASE_URL',
 			'JWT_SECRET',
 			'PATIENT_JWT_SECRET',
-			'NEXT_PUBLIC_STACK_PROJECT_ID',
-			'NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY',
-			'STACK_SECRET_SERVER_KEY'
+			'NEXTAUTH_SECRET',
+			'NEXTAUTH_URL'
 		];
 
 		const missing = criticalVars.filter(varName => !process.env[varName]);
@@ -91,17 +84,6 @@ function validateEnv(): Env {
 
 	try {
 		const parsed = envSchema.parse(process.env);
-
-		// Additional validation for production
-		if (parsed.NODE_ENV === "production") {
-			if (!parsed.NEXTAUTH_SECRET) {
-				throw new Error("NEXTAUTH_SECRET is required in production");
-			}
-			if (!parsed.NEXTAUTH_URL) {
-				throw new Error("NEXTAUTH_URL is required in production");
-			}
-		}
-
 		return parsed;
 	} catch (error) {
 		// In development, be more lenient and provide warnings instead of throwing

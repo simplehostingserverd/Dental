@@ -15,9 +15,7 @@ services:
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - JWT_SECRET=${JWT_SECRET:-changeme_in_production_32_characters}
       - PATIENT_JWT_SECRET=${PATIENT_JWT_SECRET:-changeme_in_production_32_characters}
-      - NEXT_PUBLIC_STACK_PROJECT_ID=${NEXT_PUBLIC_STACK_PROJECT_ID}
-      - NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=${NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY}
-      - STACK_SECRET_SERVER_KEY=${STACK_SECRET_SERVER_KEY}
+      - SKIP_ENV_VALIDATION=${SKIP_ENV_VALIDATION:-true}
     depends_on:
       postgres:
         condition: service_healthy

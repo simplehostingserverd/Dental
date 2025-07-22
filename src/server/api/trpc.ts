@@ -13,7 +13,6 @@ import { ZodError } from "zod";
 
 import { db } from "@/server/db";
 import { setRLSContext } from "@/server/db/rls-context";
-import { stackServerApp } from "@/stack";
 
 /**
  * 1. CONTEXT
@@ -31,16 +30,19 @@ export const createTRPCContext = async (opts: {
 	headers: Headers;
 	request?: Request;
 }) => {
-	// Get Stack Auth user from request
-	let user = null;
-	try {
-		if (opts.request) {
-			user = await stackServerApp.getUser();
-		}
-	} catch (error) {
-		// User not authenticated, which is fine for public procedures
-		console.log("No authenticated user found");
-	}
+	// Authentication is handled by middleware and passed via headers
+	// User info will be available in headers if authenticated
+	const userId = opts.headers.get("x-user-id");
+	const userEmail = opts.headers.get("x-user-email");
+	const practiceId = opts.headers.get("x-practice-id");
+	const userRole = opts.headers.get("x-user-role");
+
+	const user = userId ? {
+		id: userId,
+		email: userEmail,
+		practiceId,
+		role: userRole,
+	} : null;
 
 	return {
 		db,
@@ -141,12 +143,11 @@ export const protectedProcedure = t.procedure
 			throw new TRPCError({ code: "UNAUTHORIZED" });
 		}
 
-		// For now, we'll need to get practice info from the database
-		// In a full implementation, you'd store this in Stack Auth user metadata
+		// Get practice info from the database using the user email
 		let practiceUser = null;
 		try {
 			practiceUser = await ctx.db.practiceUser.findUnique({
-				where: { email: ctx.user.primaryEmail || "" },
+				where: { email: ctx.user.email || "" },
 				include: { practice: true },
 			});
 		} catch (error) {

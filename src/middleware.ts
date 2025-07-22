@@ -1,16 +1,16 @@
-import { stackServerApp } from "@/stack";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { applySecurityMiddleware } from "@/lib/security/security-headers";
 import { logger, LogLevel } from "@/lib/logger";
+import jwt from "jsonwebtoken";
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
-	// Skip middleware for public routes and Stack Auth routes
+	// Skip middleware for public routes and auth routes
 	if (
-		pathname.startsWith("/api/v1/auth") ||
-		pathname.startsWith("/handler") ||
+		pathname.startsWith("/api/auth") ||
+		pathname.startsWith("/auth") ||
 		pathname.startsWith("/_next") ||
 		pathname.startsWith("/favicon") ||
 		pathname.startsWith("/public") ||
@@ -102,27 +102,12 @@ export async function middleware(request: NextRequest) {
 				return applySecurityMiddleware(request, response);
 			}
 
-			// Fallback to Stack Auth
-			const user = await stackServerApp.getUser();
-
-			if (!user) {
-				logger.warn("Authentication failed - redirecting to login", {
-					pathname,
-					ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown",
-				});
-				return NextResponse.redirect(new URL("/test-login", request.url));
-			}
-
-			// Add user info to headers for use in components
-			const response = NextResponse.next();
-			response.headers.set("x-user-id", user.id);
-			response.headers.set("x-user-email", user.primaryEmail || "");
-
-			// For now, we'll need to get practice info from the database
-			// This will be handled in the TRPC context
-
-			// Apply security headers
-			return applySecurityMiddleware(request, response);
+			// No authentication found, redirect to login
+			logger.warn("Authentication failed - redirecting to login", {
+				pathname,
+				ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown",
+			});
+			return NextResponse.redirect(new URL("/auth/signin", request.url));
 		} catch (error) {
 			// Log the error
 			logger.error("Authentication error in middleware", 
@@ -130,8 +115,8 @@ export async function middleware(request: NextRequest) {
 				error
 			);
 			
-			// Invalid token, redirect to test login
-			return NextResponse.redirect(new URL("/test-login", request.url));
+			// Invalid token, redirect to login
+			return NextResponse.redirect(new URL("/auth/signin", request.url));
 		}
 	}
 

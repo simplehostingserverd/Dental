@@ -2,34 +2,113 @@
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
 import { CognidentLargeLogo } from "@/components/icons/cognident-logo";
-// Temporarily disable Stack Auth to debug the error
-// import { SignUp } from "@stackframe/stack";
 import { Calendar, FileText, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
-	const [formData, setFormData] = useState({
+	const [userType, setUserType] = useState<"practice" | "patient">("practice");
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
+	const router = useRouter();
+
+	const [practiceFormData, setPracticeFormData] = useState({
+		firstName: "",
+		lastName: "",
+		practiceName: "",
+		workEmail: "",
+		phoneNumber: "",
+		practiceSize: "",
+		password: "",
+		confirmPassword: "",
+		agreeToTerms: false,
+		receiveUpdates: false,
+	});
+
+	const [patientFormData, setPatientFormData] = useState({
 		firstName: "",
 		lastName: "",
 		email: "",
+		phone: "",
+		dateOfBirth: "",
 		password: "",
 		confirmPassword: "",
-		practiceName: "",
+		agreeToTerms: false,
+		allowMarketing: false,
 	});
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
+	const handlePracticeInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const { name, value, type } = e.target;
+		setPracticeFormData((prev) => ({
 			...prev,
-			[name]: value,
+			[name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
 		}));
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handlePatientInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value, type } = e.target;
+		setPatientFormData((prev) => ({
+			...prev,
+			[name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+		}));
+	};
+
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		// Temporary fallback - just redirect to dashboard
-		window.location.href = "/dashboard";
+		setIsLoading(true);
+		setError("");
+
+		try {
+			const endpoint = userType === "practice"
+				? "/api/auth/practice/signup"
+				: "/api/auth/patient/signup";
+
+			const formData = userType === "practice" ? practiceFormData : patientFormData;
+
+			// Basic validation
+			if (userType === "practice") {
+				if (practiceFormData.password !== practiceFormData.confirmPassword) {
+					setError("Passwords do not match");
+					return;
+				}
+				if (!practiceFormData.agreeToTerms) {
+					setError("You must agree to the Terms of Service");
+					return;
+				}
+			} else {
+				if (patientFormData.password !== patientFormData.confirmPassword) {
+					setError("Passwords do not match");
+					return;
+				}
+				if (!patientFormData.agreeToTerms) {
+					setError("You must agree to the Terms of Service");
+					return;
+				}
+			}
+
+			const response = await fetch(endpoint, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+
+			const data = await response.json();
+
+			if (data.success) {
+				// Redirect based on user type
+				const redirectPath = userType === "practice" ? "/dashboard" : "/patient/dashboard";
+				router.push(redirectPath);
+			} else {
+				setError(data.error || "Signup failed");
+			}
+		} catch (error) {
+			setError("An error occurred during signup");
+		} finally {
+			setIsLoading(false);
+		}
 	};
 	return (
 		<div className="flex min-h-screen bg-gray-900">
@@ -49,6 +128,43 @@ export default function SignUpPage() {
 					</div>
 
 					<div className="rounded-lg bg-gray-800 p-6 shadow-xl">
+						{/* User Type Selection */}
+						<div className="mb-6">
+							<label className="mb-3 block font-medium text-gray-300 text-sm">
+								I want to create a:
+							</label>
+							<div className="flex space-x-4">
+								<button
+									type="button"
+									onClick={() => setUserType("practice")}
+									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+										userType === "practice"
+											? "bg-blue-600 text-white"
+											: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+									}`}
+								>
+									Practice Account
+								</button>
+								<button
+									type="button"
+									onClick={() => setUserType("patient")}
+									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+										userType === "patient"
+											? "bg-blue-600 text-white"
+											: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+									}`}
+								>
+									Patient Account
+								</button>
+							</div>
+						</div>
+
+						{error && (
+							<div className="mb-4 rounded-md bg-red-900/50 border border-red-700 p-3">
+								<p className="text-red-200 text-sm">{error}</p>
+							</div>
+						)}
+
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<div className="grid grid-cols-2 gap-4">
 								<div>
@@ -62,9 +178,10 @@ export default function SignUpPage() {
 										id="firstName"
 										name="firstName"
 										type="text"
-										value={formData.firstName}
-										onChange={handleInputChange}
-										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+										value={userType === "practice" ? practiceFormData.firstName : patientFormData.firstName}
+										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 										placeholder="John"
 										required
 									/>
@@ -80,33 +197,102 @@ export default function SignUpPage() {
 										id="lastName"
 										name="lastName"
 										type="text"
-										value={formData.lastName}
-										onChange={handleInputChange}
-										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+										value={userType === "practice" ? practiceFormData.lastName : patientFormData.lastName}
+										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 										placeholder="Doe"
 										required
 									/>
 								</div>
 							</div>
 
-							<div>
-								<label
-									htmlFor="practiceName"
-									className="mb-2 block font-medium text-gray-300 text-sm"
-								>
-									Practice Name
-								</label>
-								<input
-									id="practiceName"
-									name="practiceName"
-									type="text"
-									value={formData.practiceName}
-									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-									placeholder="Smile Dental Clinic"
-									required
-								/>
-							</div>
+							{userType === "practice" && (
+								<div>
+									<label
+										htmlFor="practiceName"
+										className="mb-2 block font-medium text-gray-300 text-sm"
+									>
+										Practice Name
+									</label>
+									<input
+										id="practiceName"
+										name="practiceName"
+										type="text"
+										value={practiceFormData.practiceName}
+										onChange={handlePracticeInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+										placeholder="Smile Dental Clinic"
+										required
+									/>
+								</div>
+							)}
+
+							{userType === "practice" && (
+								<div>
+									<label
+										htmlFor="phoneNumber"
+										className="mb-2 block font-medium text-gray-300 text-sm"
+									>
+										Phone Number
+									</label>
+									<input
+										id="phoneNumber"
+										name="phoneNumber"
+										type="tel"
+										value={practiceFormData.phoneNumber}
+										onChange={handlePracticeInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+										placeholder="(555) 123-4567"
+										required
+									/>
+								</div>
+							)}
+
+							{userType === "patient" && (
+								<div>
+									<label
+										htmlFor="phone"
+										className="mb-2 block font-medium text-gray-300 text-sm"
+									>
+										Phone Number
+									</label>
+									<input
+										id="phone"
+										name="phone"
+										type="tel"
+										value={patientFormData.phone}
+										onChange={handlePatientInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+										placeholder="(555) 123-4567"
+										required
+									/>
+								</div>
+							)}
+
+							{userType === "patient" && (
+								<div>
+									<label
+										htmlFor="dateOfBirth"
+										className="mb-2 block font-medium text-gray-300 text-sm"
+									>
+										Date of Birth
+									</label>
+									<input
+										id="dateOfBirth"
+										name="dateOfBirth"
+										type="date"
+										value={patientFormData.dateOfBirth}
+										onChange={handlePatientInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+										required
+									/>
+								</div>
+							)}
 
 							<div>
 								<label
@@ -117,59 +303,113 @@ export default function SignUpPage() {
 								</label>
 								<input
 									id="email"
-									name="email"
+									name={userType === "practice" ? "workEmail" : "email"}
 									type="email"
-									value={formData.email}
-									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-									placeholder="john@smiledental.com"
+									value={userType === "practice" ? practiceFormData.workEmail : patientFormData.email}
+									onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+									disabled={isLoading}
+									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+									placeholder={userType === "practice" ? "john@smiledental.com" : "john.doe@email.com"}
 									required
 								/>
 							</div>
 
-							<div>
-								<label
-									htmlFor="password"
-									className="mb-2 block font-medium text-gray-300 text-sm"
-								>
-									Password
-								</label>
-								<input
-									id="password"
-									name="password"
-									type="password"
-									value={formData.password}
-									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-									placeholder="Create a strong password"
-									required
-								/>
+							<div className="grid grid-cols-2 gap-4">
+								<div>
+									<label
+										htmlFor="password"
+										className="mb-2 block font-medium text-gray-300 text-sm"
+									>
+										Password
+									</label>
+									<input
+										id="password"
+										name="password"
+										type="password"
+										value={userType === "practice" ? practiceFormData.password : patientFormData.password}
+										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+										placeholder="Create a strong password"
+										required
+									/>
+								</div>
+								<div>
+									<label
+										htmlFor="confirmPassword"
+										className="mb-2 block font-medium text-gray-300 text-sm"
+									>
+										Confirm Password
+									</label>
+									<input
+										id="confirmPassword"
+										name="confirmPassword"
+										type="password"
+										value={userType === "practice" ? practiceFormData.confirmPassword : patientFormData.confirmPassword}
+										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+										placeholder="Confirm your password"
+										required
+									/>
+								</div>
 							</div>
 
-							<div>
-								<label
-									htmlFor="confirmPassword"
-									className="mb-2 block font-medium text-gray-300 text-sm"
-								>
-									Confirm Password
-								</label>
+							{userType === "practice" && (
+								<div>
+									<label
+										htmlFor="practiceSize"
+										className="mb-2 block font-medium text-gray-300 text-sm"
+									>
+										Practice Size
+									</label>
+									<select
+										id="practiceSize"
+										name="practiceSize"
+										value={practiceFormData.practiceSize}
+										onChange={handlePracticeInputChange}
+										disabled={isLoading}
+										className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+										required
+									>
+										<option value="">Select practice size</option>
+										<option value="1-5">1-5 practitioners</option>
+										<option value="6-15">6-15 practitioners</option>
+										<option value="16-50">16-50 practitioners</option>
+										<option value="50+">50+ practitioners</option>
+									</select>
+								</div>
+							)}
+
+							<div className="flex items-center">
 								<input
-									id="confirmPassword"
-									name="confirmPassword"
-									type="password"
-									value={formData.confirmPassword}
-									onChange={handleInputChange}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-									placeholder="Confirm your password"
+									id="agreeToTerms"
+									name="agreeToTerms"
+									type="checkbox"
+									checked={userType === "practice" ? practiceFormData.agreeToTerms : patientFormData.agreeToTerms}
+									onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+									disabled={isLoading}
+									className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
 									required
 								/>
+								<label htmlFor="agreeToTerms" className="ml-2 text-gray-300 text-sm">
+									I agree to the{" "}
+									<Link href="/terms" className="text-blue-400 hover:text-blue-300">
+										Terms of Service
+									</Link>{" "}
+									and{" "}
+									<Link href="/privacy" className="text-blue-400 hover:text-blue-300">
+										Privacy Policy
+									</Link>
+								</label>
 							</div>
 
 							<button
 								type="submit"
-								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700"
+								disabled={isLoading}
+								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
-								Create Account
+								{isLoading ? "Creating Account..." : "Create Account"}
 							</button>
 						</form>
 					</div>

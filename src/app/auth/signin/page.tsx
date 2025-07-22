@@ -2,20 +2,54 @@
 
 import { ToothIcon } from "@/components/icons/tooth-icon";
 import { CognidentLargeLogo } from "@/components/icons/cognident-logo";
-// Temporarily disable Stack Auth to debug the error
-// import { SignIn } from "@stackframe/stack";
 import { Calendar, FileText, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [userType, setUserType] = useState<"practice" | "patient">("practice");
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
+	const router = useRouter();
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		// Temporary fallback - just redirect to dashboard
-		window.location.href = "/dashboard";
+		setIsLoading(true);
+		setError("");
+
+		try {
+			const endpoint = userType === "practice"
+				? "/api/auth/practice/login"
+				: "/api/auth/patient/login";
+
+			const response = await fetch(endpoint, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email,
+					password,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (data.success) {
+				// Redirect based on user type
+				const redirectPath = userType === "practice" ? "/dashboard" : "/patient/dashboard";
+				router.push(redirectPath);
+			} else {
+				setError(data.error || "Login failed");
+			}
+		} catch (error) {
+			setError("An error occurred during login");
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -34,6 +68,43 @@ export default function SignInPage() {
 					</div>
 
 					<div className="rounded-lg bg-gray-800 p-6 shadow-xl">
+						{/* User Type Selection */}
+						<div className="mb-6">
+							<label className="mb-3 block font-medium text-gray-300 text-sm">
+								I am a:
+							</label>
+							<div className="flex space-x-4">
+								<button
+									type="button"
+									onClick={() => setUserType("practice")}
+									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+										userType === "practice"
+											? "bg-blue-600 text-white"
+											: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+									}`}
+								>
+									Practice Staff
+								</button>
+								<button
+									type="button"
+									onClick={() => setUserType("patient")}
+									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+										userType === "patient"
+											? "bg-blue-600 text-white"
+											: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+									}`}
+								>
+									Patient
+								</button>
+							</div>
+						</div>
+
+						{error && (
+							<div className="mb-4 rounded-md bg-red-900/50 border border-red-700 p-3">
+								<p className="text-red-200 text-sm">{error}</p>
+							</div>
+						)}
+
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<div>
 								<label
@@ -47,9 +118,10 @@ export default function SignInPage() {
 									type="email"
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-									placeholder="Enter your email"
 									required
+									disabled={isLoading}
+									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+									placeholder="Enter your email"
 								/>
 							</div>
 							<div>
@@ -64,16 +136,18 @@ export default function SignInPage() {
 									type="password"
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
-									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-									placeholder="Enter your password"
 									required
+									disabled={isLoading}
+									className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+									placeholder="Enter your password"
 								/>
 							</div>
 							<button
 								type="submit"
-								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700"
+								disabled={isLoading}
+								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
-								Sign In
+								{isLoading ? "Signing In..." : "Sign In"}
 							</button>
 						</form>
 					</div>

@@ -50,8 +50,7 @@
 		"@radix-ui/react-slot": "^1.2.3",
 		"@radix-ui/react-switch": "^1.2.5",
 		"@radix-ui/react-tabs": "^1.1.12",
-		"@stackframe/react": "^2.8.22",
-		"@stackframe/stack": "^2.8.22",
+
 		"@t3-oss/env-nextjs": "^0.12.0",
 		"@tanstack/react-query": "^4.40.1",
 		"@trpc/client": "^10.45.2",
