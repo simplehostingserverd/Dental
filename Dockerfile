@@ -1,5 +1,5 @@
 # Use the official Node.js LTS image
-# Updated for Coolify deployment v0.1.1
+# Updated for Coolify deployment v0.1.2 - tRPC dependencies added
 FROM node:20-alpine AS base
 
 # Install dependencies only when needed
