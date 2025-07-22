@@ -2,11 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import twilio from "twilio";
 import { db } from "@/server/db";
 
-// Initialize Twilio client
-const twilioClient = twilio(
-	process.env.TWILIO_ACCOUNT_SID,
-	process.env.TWILIO_AUTH_TOKEN
-);
+// Initialize Twilio client conditionally
+const getTwilioClient = () => {
+	const accountSid = process.env.TWILIO_ACCOUNT_SID;
+	const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+	if (!accountSid || !authToken || !accountSid.startsWith('AC')) {
+		return null;
+	}
+
+	return twilio(accountSid, authToken);
+};
 
 export async function POST(request: NextRequest) {
 	try {
