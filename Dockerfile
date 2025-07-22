@@ -1,4 +1,5 @@
 # Use the official Node.js LTS image
+# Updated for Coolify deployment v0.1.1
 FROM node:20-alpine AS base
 
 # Install dependencies only when needed
