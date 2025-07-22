@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-RUN npm install --omit=dev --legacy-peer-deps && npm cache clean --force
+RUN npm ci --legacy-peer-deps && npm cache clean --force
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -25,6 +25,12 @@ RUN npx prisma generate
 RUN --mount=type=cache,target=/app/.next/cache \
     npm run build
 
+# Install production dependencies
+FROM base AS prod-deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
+
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -39,6 +45,9 @@ RUN adduser --system --uid 1001 nextjs
 
 # Set up health check dependencies
 RUN apk add --no-cache wget
+
+# Copy production dependencies
+COPY --from=prod-deps /app/node_modules ./node_modules
 
 # Copy necessary files
 COPY --from=builder /app/public ./public
