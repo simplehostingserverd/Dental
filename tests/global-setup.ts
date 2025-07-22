@@ -6,7 +6,7 @@ async function globalSetup(config: FullConfig) {
   console.log('🚀 Starting global test setup...');
 
   // Set test environment variables
-  process.env.NODE_ENV = 'test';
+  (process.env as any).NODE_ENV = 'test';
   process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || process.env.DATABASE_URL;
   process.env.NEXTAUTH_URL = 'http://localhost:3000';
   process.env.NEXTAUTH_SECRET = 'test-secret-key-for-testing-only';
