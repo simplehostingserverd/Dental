@@ -90,7 +90,7 @@ export default function LandingPage() {
 									Features
 								</Link>
 								<Link
-									href="#pricing"
+									href="/pricing"
 									className="text-gray-300 transition-colors hover:text-white"
 								>
 									Pricing
@@ -356,7 +356,7 @@ export default function LandingPage() {
 									</li>
 									<li>
 										<Link
-											href="#pricing"
+											href="/pricing"
 											className="transition-colors hover:text-white"
 										>
 											Pricing
