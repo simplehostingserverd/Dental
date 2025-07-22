@@ -1,0 +1,82 @@
+# =============================================================================
+# COOLIFY ENVIRONMENT VARIABLES FOR COGNIDENT DENTAL APP
+# =============================================================================
+# Copy these EXACT values to your Coolify environment variables
+# DO NOT include quotes around the values in Coolify
+# =============================================================================
+
+# =============================================================================
+# REQUIRED CORE VARIABLES
+# =============================================================================
+
+# Database Connection
+DATABASE_URL=postgresql://neondb_owner:npg_9Dv5eHfjyObE@ep-gentle-queen-a1z8v1iu-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+
+# JWT Secrets (32+ characters each)
+JWT_SECRET=53dd33c3a435ea79838c9ae1ebfd0fdca79934617374be6503d5b4e9934575bea68de91ff92408fa9a6a55e7c4d93e8ef746ffe575da9a77bd6bc94c6a55e7f
+PATIENT_JWT_SECRET=0deac8e071b18813c3b493b5a58bda5cda32db1366970197bf8dec7db10f522a3a57f5f387f694e0122e2980f5dde2f5fcbeebd1c7d90eac54facf27bbd0aa5c
+
+# NextAuth Configuration
+NEXTAUTH_SECRET=edb4d64b241e65a4deda437b1ace54a6e3bb848dff772b8a85086a8f08ee08cfc1a05197b330d0c0163faf10652de44d23b6481b63cedf74f078594e2cd18f9a
+NEXTAUTH_URL=https://cognident.org/api/auth
+
+# Stack Auth Configuration (REQUIRED)
+NEXT_PUBLIC_STACK_PROJECT_ID=619ce39b-12aa-40c3-9a91-19b3e16b53e9
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_cex5dsgzztaj9xgcwbb0nnvdcx9r4sf0s80ysztn5cn38
+STACK_SECRET_SERVER_KEY=ssk_gtd035mjem2zzqg3m2p6k8yskwpyt4cjg7wtf7cynrpng
+
+# =============================================================================
+# APPLICATION CONFIGURATION
+# =============================================================================
+
+# Node Environment
+NODE_ENV=production
+
+# Next.js Configuration
+NEXT_TELEMETRY_DISABLED=1
+
+# =============================================================================
+# API KEYS (OPTIONAL BUT RECOMMENDED)
+# =============================================================================
+
+# AI Services
+TOGETHERAI_API_KEY=03d486a7d98ba99f2dd3e9dd6ec09c9d451721b25229007a7c56c8ee318dc7fa
+MURF_API_KEY=ap2_0a097fea-1198-49a2-91e7-fde910aa2913
+
+# =============================================================================
+# EMAIL CONFIGURATION (OPTIONAL)
+# =============================================================================
+
+# SMTP Settings
+SMTP_HOST=cognident.org
+SMTP_PORT=465
+SMTP_USER=info@cognident.org
+SMTP_PASS=!%h2W?2.4Gqw
+
+# =============================================================================
+# INSTRUCTIONS FOR COOLIFY DEPLOYMENT
+# =============================================================================
+#
+# 1. Go to your Coolify project → Configuration → Environment Variables
+# 2. For each variable above, click "Add Variable"
+# 3. Copy the variable name (e.g., DATABASE_URL) to the "Key" field
+# 4. Copy the variable value (e.g., postgresql://...) to the "Value" field
+# 5. DO NOT include quotes around the values
+# 6. Click "Save" for each variable
+# 7. After adding all variables, redeploy your application
+#
+# =============================================================================
+# VERIFICATION CHECKLIST
+# =============================================================================
+#
+# ✅ DATABASE_URL - Database connection string
+# ✅ JWT_SECRET - General JWT secret (32+ chars)
+# ✅ PATIENT_JWT_SECRET - Patient JWT secret (32+ chars)
+# ✅ NEXTAUTH_SECRET - NextAuth secret (32+ chars)
+# ✅ NEXTAUTH_URL - Production auth URL
+# ✅ NEXT_PUBLIC_STACK_PROJECT_ID - Stack Auth project ID
+# ✅ NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY - Stack Auth public key
+# ✅ STACK_SECRET_SERVER_KEY - Stack Auth secret key
+# ✅ NODE_ENV - Set to "production"
+#
+# =============================================================================
