@@ -7,6 +7,27 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+/**
+ * Get default redirect path based on user type and role
+ */
+function getDefaultRedirectPath(userType: string, role?: string): string {
+	if (userType === "practice") {
+		const userRole = role?.toLowerCase();
+		switch (userRole) {
+			case "dentist":
+				return "/dashboard/dentist";
+			case "receptionist":
+				return "/receptionist";
+			case "admin":
+				return "/dashboard";
+			default:
+				return "/dashboard";
+		}
+	} else {
+		return "/patient/dashboard";
+	}
+}
+
 export default function SignInPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -39,21 +60,8 @@ export default function SignInPage() {
 			const data = await response.json();
 
 			if (data.success) {
-				// Redirect based on user type and role
-				let redirectPath = "/dashboard";
-
-				if (userType === "practice") {
-					// Check user role for practice staff
-					const userRole = data.user?.role?.toLowerCase();
-					if (userRole === "receptionist") {
-						redirectPath = "/receptionist";
-					} else {
-						redirectPath = "/dashboard";
-					}
-				} else {
-					redirectPath = "/patient/dashboard";
-				}
-
+				// Use the redirect URL provided by the API
+				const redirectPath = data.redirectUrl || getDefaultRedirectPath(userType, data.user?.role);
 				router.push(redirectPath);
 			} else {
 				setError(data.error || "Login failed");

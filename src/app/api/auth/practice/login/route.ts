@@ -37,10 +37,27 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
+		// Determine redirect URL based on user role
+		const getRedirectUrl = (role: string): string => {
+			switch (role.toLowerCase()) {
+				case "dentist":
+					return "/dashboard/dentist";
+				case "receptionist":
+					return "/receptionist";
+				case "admin":
+					return "/dashboard";
+				default:
+					return "/dashboard";
+			}
+		};
+
+		const redirectUrl = getRedirectUrl(result.user?.role || "");
+
 		// Set HTTP-only cookie for token
 		const response = NextResponse.json({
 			success: true,
 			user: result.user,
+			redirectUrl,
 		});
 
 		if (result.token) {
