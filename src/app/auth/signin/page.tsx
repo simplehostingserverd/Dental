@@ -1,7 +1,6 @@
 "use client";
 
-import { ToothIcon } from "@/components/icons/tooth-icon";
-import { CognidentLargeLogo } from "@/components/icons/cognident-logo";
+import { LargeLogo } from "@/components/ui/tooth-logo";
 import { Calendar, FileText, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -75,7 +74,7 @@ export default function SignInPage() {
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
-							<CognidentLargeLogo className="text-blue-500" />
+							<LargeLogo className="text-blue-500" />
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-white">Welcome back</h2>
 						<p className="text-gray-300">
