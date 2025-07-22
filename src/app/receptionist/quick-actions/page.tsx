@@ -20,6 +20,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { QuickActionsService } from "@/lib/services/quick-actions";
+import { toast } from "sonner";
 import {
 	AlertTriangle,
 	Bell,
@@ -151,26 +153,41 @@ export default function QuickActionsPage() {
 		setShowActionDialog(true);
 	};
 
-	const handleExecuteAction = () => {
+	const handleExecuteAction = async () => {
 		if (!selectedAction) return;
 
-		// TODO: Implement actual action execution based on action type
-		console.log("Executing action:", selectedAction.name, {
-			selectedPatient,
+		const actionData = {
+			patientId: selectedPatient,
 			appointmentDate,
 			appointmentTime,
 			paymentAmount,
 			paymentMethod,
-		});
+		};
 
-		setShowActionDialog(false);
-		setSelectedAction(null);
-		// Reset form states
-		setSelectedPatient("");
-		setAppointmentDate("");
-		setAppointmentTime("");
-		setPaymentAmount("");
-		setPaymentMethod("");
+		// Map action names to action types
+		const actionTypeMap: Record<string, string> = {
+			"Emergency Appointment": "emergency-appointment",
+			"Payment Collection": "payment-collection",
+			"Insurance Verification": "insurance-verification",
+			"Send Forms": "send-forms",
+			"Print Schedule": "print-schedule",
+			"New Patient Intake": "patient-intake",
+		};
+
+		const actionType = actionTypeMap[selectedAction.name];
+		if (actionType) {
+			const result = await QuickActionsService.executeAction(actionType, actionData);
+			if (result.success) {
+				setShowActionDialog(false);
+				setSelectedAction(null);
+				// Reset form states
+				setSelectedPatient("");
+				setAppointmentDate("");
+				setAppointmentTime("");
+				setPaymentAmount("");
+				setPaymentMethod("");
+			}
+		}
 	};
 
 	const toggleFavorite = (actionId: string) => {

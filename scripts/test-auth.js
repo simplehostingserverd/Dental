@@ -4,25 +4,25 @@
  * Test script to verify authentication endpoints and redirects
  */
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'http://localhost:3000';
 
 // Test users from the test system
 const testUsers = [
   {
     email: 'robert.smith@email.com',
-    password: 'password123',
+    password: 'PatientPass789!',
     expectedRole: 'patient',
     expectedRedirect: '/patient/dashboard'
   },
   {
-    email: 'dr.johnson@email.com', 
-    password: 'password123',
+    email: 'dr.johnson@cognident.org',
+    password: 'DentistPass456!',
     expectedRole: 'dentist',
     expectedRedirect: '/dashboard/dentist'
   },
   {
-    email: 'mary.wilson@email.com',
-    password: 'password123', 
+    email: 'mary.wilson@cognident.org',
+    password: 'ReceptionPass123!',
     expectedRole: 'receptionist',
     expectedRedirect: '/receptionist'
   }
@@ -108,11 +108,11 @@ async function runTests() {
   
   console.log('\n✨ Tests completed!');
   console.log('\n📝 Manual testing steps:');
-  console.log('1. Go to http://localhost:3001/auth/signin');
+  console.log('1. Go to http://localhost:3000/auth/signin');
   console.log('2. Try logging in with:');
-  console.log('   - robert.smith@email.com / password123 (should go to /patient/dashboard)');
-  console.log('   - dr.johnson@email.com / password123 (should go to /dashboard/dentist)');
-  console.log('   - mary.wilson@email.com / password123 (should go to /receptionist)');
+  console.log('   - robert.smith@email.com / PatientPass789! (should go to /patient/dashboard)');
+  console.log('   - dr.johnson@cognident.org / DentistPass456! (should go to /dashboard/dentist)');
+  console.log('   - mary.wilson@cognident.org / ReceptionPass123! (should go to /receptionist)');
   console.log('3. Verify no redirect loops or /api/auth/me issues');
 }
 

@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "@/styles/dark-theme.css";
 
 // Temporarily disable Stack Auth to debug the error
 // import { StackProvider, StackTheme } from "@stackframe/stack";
@@ -8,7 +9,7 @@ import { Geist } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
-import { TranslationProvider } from "@/lib/i18n/translation-context";
+import { TranslationProvider } from "@/components/providers/translation-provider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
@@ -36,7 +37,7 @@ export default async function RootLayout({
 	const messages = await getMessages({ locale });
 
 	return (
-		<html lang={locale} className={`${geist.variable}`} suppressHydrationWarning>
+		<html lang={locale} className={`${geist.variable} dark`} suppressHydrationWarning>
 			<body>
 				{/* Temporarily disable Stack Auth to debug the error */}
 				{/* <StackProvider app={stackClientApp}>
