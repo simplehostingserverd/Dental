@@ -4,14 +4,14 @@
 const { exec } = require('child_process');
 const path = require('path');
 
-// Set environment variables
-process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-process.env.PORT = process.env.PORT || 3000;
+// Set default environment variables
+const nodeEnv = process.env.NODE_ENV || 'production';
+const port = process.env.PORT || '3000';
 
 console.log('🚀 Starting Cognident Application...');
 console.log('📍 Working Directory:', __dirname);
-console.log('🌍 Environment:', process.env.NODE_ENV);
-console.log('🔌 Port:', process.env.PORT);
+console.log('🌍 Environment:', nodeEnv);
+console.log('🔌 Port:', port);
 
 // Change to application directory
 process.chdir(__dirname);
@@ -32,13 +32,17 @@ const child = exec(startCommand, (error, stdout, stderr) => {
 });
 
 // Pipe output to console
-child.stdout.on('data', (data) => {
-  console.log(data.toString());
-});
+if (child.stdout) {
+  child.stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
+}
 
-child.stderr.on('data', (data) => {
-  console.error(data.toString());
-});
+if (child.stderr) {
+  child.stderr.on('data', (data) => {
+    console.error(data.toString());
+  });
+}
 
 child.on('close', (code) => {
   console.log(`🔚 Process exited with code: ${code}`);

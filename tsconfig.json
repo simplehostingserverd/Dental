@@ -47,6 +47,10 @@
 		"**/*.test.ts",
 		"**/*.test.tsx",
 		"**/*.spec.ts",
-		"**/*.spec.tsx"
+		"**/*.spec.tsx",
+		"jest.config.js",
+		"app.js",
+		"server.js",
+		"scripts/**/*"
 	]
 }

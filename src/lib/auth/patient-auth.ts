@@ -235,12 +235,15 @@ export const PatientAuthService = {
 				data: { patientUserId: patientUser.id },
 			});
 
-			// Remove sensitive data
+			// Remove sensitive data and add patientId
 			const { password: _, ...safeUser } = patientUser;
 
 			return {
 				success: true,
-				user: safeUser,
+				user: {
+					...safeUser,
+					patientId,
+				},
 			};
 		} catch (error) {
 			console.error("Patient registration error:", error);

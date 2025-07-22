@@ -224,7 +224,7 @@ export default function TestLoginPage() {
 									onClick={() =>
 										handleQuickLogin({
 											email: "dr.smith@cognident.org",
-											role: "dentist",
+											password: "password123",
 										})
 									}
 									className="w-full rounded-lg border border-gray-200 p-4 text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
@@ -242,7 +242,7 @@ export default function TestLoginPage() {
 									onClick={() =>
 										handleQuickLogin({
 											email: "dr.johnson@cognident.org",
-											role: "dentist",
+											password: "password123",
 										})
 									}
 									className="w-full rounded-lg border border-gray-200 p-4 text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
@@ -269,7 +269,7 @@ export default function TestLoginPage() {
 									onClick={() =>
 										handleQuickLogin({
 											email: "mary.wilson@cognident.org",
-											role: "receptionist",
+											password: "password123",
 										})
 									}
 									className="w-full rounded-lg border border-gray-200 p-4 text-left transition-colors hover:border-green-300 hover:bg-green-50"
@@ -287,7 +287,7 @@ export default function TestLoginPage() {
 									onClick={() =>
 										handleQuickLogin({
 											email: "jennifer.brown@cognident.org",
-											role: "receptionist",
+											password: "password123",
 										})
 									}
 									className="w-full rounded-lg border border-gray-200 p-4 text-left transition-colors hover:border-green-300 hover:bg-green-50"
@@ -314,7 +314,7 @@ export default function TestLoginPage() {
 									onClick={() =>
 										handleQuickLogin({
 											email: "john.doe@email.com",
-											role: "patient",
+											password: "password123",
 										})
 									}
 									className="w-full rounded-lg border border-gray-200 p-4 text-left transition-colors hover:border-purple-300 hover:bg-purple-50"
@@ -332,7 +332,7 @@ export default function TestLoginPage() {
 									onClick={() =>
 										handleQuickLogin({
 											email: "alice.johnson@email.com",
-											role: "patient",
+											password: "password123",
 										})
 									}
 									className="w-full rounded-lg border border-gray-200 p-4 text-left transition-colors hover:border-purple-300 hover:bg-purple-50"
@@ -350,7 +350,7 @@ export default function TestLoginPage() {
 									onClick={() =>
 										handleQuickLogin({
 											email: "robert.smith@email.com",
-											role: "patient",
+											password: "password123",
 										})
 									}
 									className="w-full rounded-lg border border-gray-200 p-4 text-left transition-colors hover:border-purple-300 hover:bg-purple-50"
