@@ -31,7 +31,6 @@ function getDefaultRedirectPath(userType: string, role?: string): string {
 export default function SignInPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [userType, setUserType] = useState<"practice" | "patient">("practice");
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const router = useRouter();
@@ -42,11 +41,7 @@ export default function SignInPage() {
 		setError("");
 
 		try {
-			const endpoint = userType === "practice"
-				? "/api/auth/practice/login"
-				: "/api/auth/patient/login";
-
-			const response = await fetch(endpoint, {
+			const response = await fetch("/api/auth/smart-login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -61,7 +56,7 @@ export default function SignInPage() {
 
 			if (data.success) {
 				// Use the redirect URL provided by the API
-				const redirectPath = data.redirectUrl || getDefaultRedirectPath(userType, data.user?.role);
+				const redirectPath = data.redirectUrl || getDefaultRedirectPath(data.userType, data.user?.role);
 				router.push(redirectPath);
 			} else {
 				setError(data.error || "Login failed");
