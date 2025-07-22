@@ -14,14 +14,14 @@ export function addSecurityHeaders(response: NextResponse): NextResponse {
   const cspDirectives = [
     // Default fallback
     "default-src 'self'",
-    // Scripts
-    "script-src 'self' 'unsafe-inline'",
+    // Scripts - 'unsafe-eval' is required for Next.js in production
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
     // Styles
     "style-src 'self' 'unsafe-inline'",
-    // Images
-    "img-src 'self' data: blob:",
-    // Fonts
-    "font-src 'self'",
+    // Images - allow external images for better compatibility
+    "img-src 'self' data: blob: https:",
+    // Fonts - allow external fonts
+    "font-src 'self' data:",
     // Connect (for API calls, websockets)
     "connect-src 'self'",
     // Forms
@@ -34,14 +34,15 @@ export function addSecurityHeaders(response: NextResponse): NextResponse {
     "object-src 'none'",
   ];
 
-  // Apply stricter CSP in production
+  // Apply CSP in production, report-only in development
   if (isProduction) {
     response.headers.set(
       "Content-Security-Policy",
       cspDirectives.join("; ")
     );
   } else {
-    // In development, use Content-Security-Policy-Report-Only
+    // In development, use Content-Security-Policy-Report-Only for debugging
+    // This allows the app to work while reporting violations
     response.headers.set(
       "Content-Security-Policy-Report-Only",
       cspDirectives.join("; ")
