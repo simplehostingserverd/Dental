@@ -99,6 +99,10 @@ generate-secrets.sh
 init.sql
 install.sh
 
+# Build logs
+verbose-build-log.txt
+*.log
+
 # Database dumps and exports
 *.sql
 *.dump
