@@ -11,7 +11,9 @@ import { useRouter } from "next/navigation";
  * Get default redirect path based on user type and role
  */
 function getDefaultRedirectPath(userType: string, role?: string): string {
-	if (userType === "practice") {
+	if (userType === "patient") {
+		return "/patient/dashboard";
+	} else {
 		const userRole = role?.toLowerCase();
 		switch (userRole) {
 			case "dentist":
@@ -23,8 +25,6 @@ function getDefaultRedirectPath(userType: string, role?: string): string {
 			default:
 				return "/dashboard";
 		}
-	} else {
-		return "/patient/dashboard";
 	}
 }
 
@@ -79,41 +79,11 @@ export default function SignInPage() {
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-gray-900">Welcome back</h2>
 						<p className="text-gray-600">
-							Sign in to your dental practice account.
+							Sign in to your Cognident account.
 						</p>
 					</div>
 
 					<div className="rounded-lg bg-white border border-gray-200 p-6 shadow-lg">
-						{/* User Type Selection */}
-						<div className="mb-6">
-							<label className="mb-3 block font-medium text-gray-700 text-sm">
-								I am a:
-							</label>
-							<div className="flex space-x-4">
-								<button
-									type="button"
-									onClick={() => setUserType("practice")}
-									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-										userType === "practice"
-											? "bg-blue-600 text-gray-900"
-											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-									}`}
-								>
-									Practice Staff
-								</button>
-								<button
-									type="button"
-									onClick={() => setUserType("patient")}
-									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-										userType === "patient"
-											? "bg-blue-600 text-gray-900"
-											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-									}`}
-								>
-									Patient
-								</button>
-							</div>
-						</div>
 
 						{error && (
 							<div className="mb-4 rounded-md bg-red-50 border border-red-200 p-3">

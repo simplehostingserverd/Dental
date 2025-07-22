@@ -145,9 +145,10 @@ function IntegrationForm({ providerId, practiceId, onSave }: IntegrationFormProp
 				<div className="flex items-center justify-between">
 					<div>
 						<CardTitle className="flex items-center gap-2">
-							{SERVICE_ICONS[provider.service] && (
-								<SERVICE_ICONS[provider.service] className="h-5 w-5" />
-							)}
+							{SERVICE_ICONS[provider.service] && (() => {
+								const IconComponent = SERVICE_ICONS[provider.service];
+								return <IconComponent className="h-5 w-5" />;
+							})()}
 							{provider.name}
 						</CardTitle>
 						<CardDescription>{provider.description}</CardDescription>
