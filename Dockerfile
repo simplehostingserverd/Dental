@@ -1,5 +1,5 @@
 # Use the official Node.js LTS image
-# Updated for Coolify deployment v0.1.2 - tRPC dependencies added
+# Updated for Coolify deployment v0.1.3 - Yarn package manager
 FROM node:20-alpine AS base
 
 # Install dependencies only when needed
@@ -8,8 +8,8 @@ RUN apk add --no-cache libc6-compat curl
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json package-lock.json* ./
-RUN npm ci --legacy-peer-deps && npm cache clean --force
+COPY package.json yarn.lock* ./
+RUN yarn install --frozen-lockfile && yarn cache clean
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -21,15 +21,15 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Generate Prisma client and build
-RUN npx prisma generate
+RUN yarn prisma generate
 RUN --mount=type=cache,target=/app/.next/cache \
-    npm run build
+    yarn build
 
 # Install production dependencies
 FROM base AS prod-deps
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
+COPY package.json yarn.lock* ./
+RUN yarn install --frozen-lockfile --production && yarn cache clean
 
 # Production image, copy all the files and run next
 FROM base AS runner
