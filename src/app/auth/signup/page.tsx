@@ -124,26 +124,26 @@ export default function SignUpPage() {
 		}
 	};
 	return (
-		<div className="flex min-h-screen bg-gray-50">
+		<div className="flex min-h-screen bg-gray-900">
 			{/* Left Panel - Sign Up Form */}
-			<div className="flex flex-1 items-center justify-center bg-white p-8 lg:w-1/2">
+			<div className="flex flex-1 items-center justify-center bg-gray-800 p-8 lg:w-1/2">
 				<div className="w-full max-w-md">
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
-							<CognidentLargeLogo className="text-blue-600" />
+							<CognidentLargeLogo className="text-blue-500" />
 						</div>
-						<h2 className="mb-2 font-bold text-2xl text-gray-900">
+						<h2 className="mb-2 font-bold text-2xl text-white">
 							Create your account
 						</h2>
-						<p className="text-gray-600">
+						<p className="text-gray-300">
 							Start your free trial of Cognident today.
 						</p>
 					</div>
 
-					<div className="rounded-lg bg-white border border-gray-200 p-6 shadow-lg">
+					<div className="rounded-lg bg-gray-700 border border-gray-600 p-6 shadow-lg">
 						{/* User Type Selection */}
 						<div className="mb-6">
-							<label className="mb-3 block font-medium text-gray-700 text-sm">
+							<label className="mb-3 block font-medium text-gray-300 text-sm">
 								I want to create a:
 							</label>
 							<div className="flex space-x-4">
@@ -152,8 +152,8 @@ export default function SignUpPage() {
 									onClick={() => setUserType("practice")}
 									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
 										userType === "practice"
-											? "bg-blue-600 text-gray-900"
-											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+											? "bg-blue-600 text-white"
+											: "bg-gray-600 text-gray-300 hover:bg-gray-500"
 									}`}
 								>
 									Practice Account
@@ -163,8 +163,8 @@ export default function SignUpPage() {
 									onClick={() => setUserType("patient")}
 									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
 										userType === "patient"
-											? "bg-blue-600 text-gray-900"
-											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+											? "bg-blue-600 text-white"
+											: "bg-gray-600 text-gray-300 hover:bg-gray-500"
 									}`}
 								>
 									Patient Account
@@ -173,8 +173,8 @@ export default function SignUpPage() {
 						</div>
 
 						{error && (
-							<div className="mb-4 rounded-md bg-red-50 border border-red-200 p-3">
-								<p className="text-red-800 text-sm">{error}</p>
+							<div className="mb-4 rounded-md bg-red-900/50 border border-red-700 p-3">
+								<p className="text-red-200 text-sm">{error}</p>
 							</div>
 						)}
 

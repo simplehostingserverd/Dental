@@ -75,7 +75,10 @@ export function useAutoTranslation(options: UseAutoTranslationOptions) {
 			const newCache: TranslationCache = {};
 			texts.forEach((text, index) => {
 				const cacheKey = `${text}-${targetLanguage}`;
-				newCache[cacheKey] = results[index];
+				const result = results[index];
+				if (result) {
+					newCache[cacheKey] = result;
+				}
 			});
 			
 			setCache(prev => ({ ...prev, ...newCache }));
