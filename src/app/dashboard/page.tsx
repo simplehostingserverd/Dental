@@ -1,57 +1,72 @@
-"use client";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth/get-user";
 
-import { PendingTreatments } from "@/components/dashboard/pending-treatments";
-import { RecentPatients } from "@/components/dashboard/recent-patients";
-import { StatsCards } from "@/components/dashboard/stats-cards";
-import { TodaysSchedule } from "@/components/dashboard/todays-schedule";
-import { useAppTranslations } from "@/lib/i18n/translation-context";
-import { Calendar, Plus } from "lucide-react";
-import Link from "next/link";
+export default async function DashboardPage() {
+	const user = await getCurrentUser();
 
-export default function DashboardPage() {
-	const { dashboard, common } = useAppTranslations();
+	if (!user) {
+		redirect("/auth/signin");
+	}
+
+	// Redirect to role-specific dashboard
+	switch (user.role?.toLowerCase()) {
+		case "dentist":
+			redirect("/dashboard/dentist");
+		case "receptionist":
+			redirect("/receptionist");
+		case "patient":
+			redirect("/dashboard/patient");
+		case "admin":
+			// Admin can stay on main dashboard
+			break;
+		default:
+			// Default to dentist dashboard for practice users
+			if (user.type === "practice") {
+				redirect("/dashboard/dentist");
+			} else {
+				redirect("/patient/dashboard");
+			}
+	}
+
+	// This will only be reached by admin users
+	// You can create an admin dashboard component here
 	return (
 		<div className="space-y-6">
-			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
 					<h1 className="font-semibold text-2xl text-gray-900">
-						{dashboard("title")}
+						Admin Dashboard
 					</h1>
-					<p className="text-gray-600">{dashboard("subtitle")}</p>
-				</div>
-				<div className="flex space-x-3">
-					<Link
-						href="/dashboard/patients/new"
-						className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 text-sm shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-					>
-						<Plus className="mr-2 h-4 w-4" />
-						{common("add")} Patient
-					</Link>
-					<Link
-						href="/dashboard/appointments/new"
-						className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 font-medium text-sm text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-					>
-						<Calendar className="mr-2 h-4 w-4" />
-						New Appointment
-					</Link>
+					<p className="text-gray-600">
+						Manage your dental practice
+					</p>
 				</div>
 			</div>
 
-			{/* Stats Cards */}
-			<StatsCards />
-
-			{/* Main Content Grid */}
-			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-				{/* Today's Schedule - Takes 2 columns */}
-				<div className="lg:col-span-2">
-					<TodaysSchedule />
-				</div>
-
-				{/* Side Panel */}
-				<div className="space-y-6">
-					<RecentPatients />
-					<PendingTreatments />
+			<div className="bg-white p-6 rounded-lg shadow">
+				<h2 className="text-lg font-medium mb-4">Quick Actions</h2>
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<a
+						href="/dashboard/dentist"
+						className="p-4 border rounded-lg hover:bg-gray-50"
+					>
+						<h3 className="font-medium">Dentist View</h3>
+						<p className="text-sm text-gray-600">Access dentist dashboard</p>
+					</a>
+					<a
+						href="/receptionist"
+						className="p-4 border rounded-lg hover:bg-gray-50"
+					>
+						<h3 className="font-medium">Receptionist View</h3>
+						<p className="text-sm text-gray-600">Access receptionist dashboard</p>
+					</a>
+					<a
+						href="/dashboard/settings"
+						className="p-4 border rounded-lg hover:bg-gray-50"
+					>
+						<h3 className="font-medium">Settings</h3>
+						<p className="text-sm text-gray-600">Manage practice settings</p>
+					</a>
 				</div>
 			</div>
 		</div>

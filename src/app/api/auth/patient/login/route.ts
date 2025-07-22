@@ -50,6 +50,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 		const response = NextResponse.json({
 			success: true,
 			user: result.user,
+			redirectUrl: "/patient/dashboard",
 		});
 
 		if (result.token) {
