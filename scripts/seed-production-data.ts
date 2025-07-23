@@ -205,39 +205,90 @@ async function seedProductionData() {
         firstName: 'John',
         lastName: 'Doe',
         dateOfBirth: new Date('1985-06-15'),
+        gender: 'Male',
         phone: '(512) 555-0101',
         email: 'john.doe@email.com',
-        address: '456 Oak Avenue',
-        city: 'Austin',
-        state: 'TX',
-        zipCode: '78702',
+        address: {
+          street: '456 Oak Avenue',
+          city: 'Austin',
+          state: 'TX',
+          zipCode: '78702',
+          country: 'USA'
+        },
+        emergencyContact: {
+          name: 'Sarah Doe',
+          relationship: 'Spouse',
+          phone: '(512) 555-0201',
+          email: 'sarah.doe@email.com'
+        },
+        medicalHistory: {
+          allergies: ['Penicillin'],
+          medications: [],
+          conditions: [],
+          notes: 'No significant medical history'
+        },
         outstandingBalance: 1250.00,
+        practiceId: 'prod-practice-1',
       },
       {
         id: 'patient-jane-smith',
         firstName: 'Jane',
         lastName: 'Smith',
         dateOfBirth: new Date('1990-03-22'),
+        gender: 'Female',
         phone: '(512) 555-0102',
         email: 'jane.smith@email.com',
-        address: '789 Pine Street',
-        city: 'Austin',
-        state: 'TX',
-        zipCode: '78703',
+        address: {
+          street: '789 Pine Street',
+          city: 'Austin',
+          state: 'TX',
+          zipCode: '78703',
+          country: 'USA'
+        },
+        emergencyContact: {
+          name: 'Robert Smith',
+          relationship: 'Father',
+          phone: '(512) 555-0202',
+          email: 'robert.smith@email.com'
+        },
+        medicalHistory: {
+          allergies: [],
+          medications: ['Multivitamin'],
+          conditions: [],
+          notes: 'Regular dental cleanings'
+        },
         outstandingBalance: 850.00,
+        practiceId: 'prod-practice-1',
       },
       {
         id: 'patient-mike-johnson',
         firstName: 'Mike',
         lastName: 'Johnson',
         dateOfBirth: new Date('1978-11-08'),
+        gender: 'Male',
         phone: '(512) 555-0103',
         email: 'mike.johnson@email.com',
-        address: '321 Elm Drive',
-        city: 'Austin',
-        state: 'TX',
-        zipCode: '78704',
+        address: {
+          street: '321 Elm Drive',
+          city: 'Austin',
+          state: 'TX',
+          zipCode: '78704',
+          country: 'USA'
+        },
+        emergencyContact: {
+          name: 'Lisa Johnson',
+          relationship: 'Wife',
+          phone: '(512) 555-0203',
+          email: 'lisa.johnson@email.com'
+        },
+        medicalHistory: {
+          allergies: ['Latex'],
+          medications: ['Blood pressure medication'],
+          conditions: ['Hypertension'],
+          notes: 'Requires antibiotic premedication'
+        },
         outstandingBalance: 2100.00,
+        practiceId: 'prod-practice-1',
       },
     ];
 
@@ -310,6 +361,211 @@ async function seedProductionData() {
 
     console.log('✅ Patient insurance records created');
 
+    // Create sample ledger entries
+    const ledgerEntries = [
+      {
+        id: 'ledger-john-cleaning',
+        patientId: 'patient-john-doe',
+        practiceId: practice.id,
+        transactionDate: new Date('2024-01-15'),
+        type: 'CHARGE' as const,
+        description: 'Routine Cleaning and Exam',
+        procedureCode: 'D1110',
+        amount: 250.00,
+        balance: 250.00,
+        status: 'POSTED' as const,
+        createdBy: 'system',
+      },
+      {
+        id: 'ledger-john-payment',
+        patientId: 'patient-john-doe',
+        practiceId: practice.id,
+        transactionDate: new Date('2024-01-15'),
+        type: 'PAYMENT' as const,
+        description: 'Patient Payment - Cash',
+        amount: -50.00,
+        balance: 200.00,
+        status: 'POSTED' as const,
+        createdBy: 'system',
+      },
+      {
+        id: 'ledger-jane-filling',
+        patientId: 'patient-jane-smith',
+        practiceId: practice.id,
+        transactionDate: new Date('2024-02-10'),
+        type: 'CHARGE' as const,
+        description: 'Composite Filling - Tooth #14',
+        procedureCode: 'D2391',
+        amount: 350.00,
+        balance: 350.00,
+        status: 'POSTED' as const,
+        createdBy: 'system',
+      },
+      {
+        id: 'ledger-mike-crown',
+        patientId: 'patient-mike-johnson',
+        practiceId: practice.id,
+        transactionDate: new Date('2024-03-05'),
+        type: 'CHARGE' as const,
+        description: 'Porcelain Crown - Tooth #19',
+        procedureCode: 'D2740',
+        amount: 1200.00,
+        balance: 1200.00,
+        status: 'POSTED' as const,
+        createdBy: 'system',
+      },
+    ];
+
+    for (const entry of ledgerEntries) {
+      await prisma.ledgerEntry.upsert({
+        where: { id: entry.id },
+        update: {},
+        create: entry,
+      });
+    }
+
+    console.log('✅ Sample ledger entries created');
+
+    // Create sample claims
+    const claims = [
+      {
+        id: 'claim-john-cleaning',
+        claimNumber: 'CLM-2024-001',
+        patientId: 'patient-john-doe',
+        payerId: 'payer-delta-dental',
+        patientInsuranceId: 'ins-john-delta',
+        clearinghouseId: 'ch-dentalxchange',
+        serviceDate: new Date('2024-01-15'),
+        submissionDate: new Date('2024-01-16'),
+        totalAmount: 250.00,
+        paidAmount: 200.00,
+        patientResponsibility: 50.00,
+        status: 'PAID' as const,
+        eobReceived: true,
+        eobDate: new Date('2024-01-25'),
+        practiceId: practice.id,
+      },
+      {
+        id: 'claim-jane-filling',
+        claimNumber: 'CLM-2024-002',
+        patientId: 'patient-jane-smith',
+        payerId: 'payer-metlife',
+        patientInsuranceId: 'ins-jane-metlife',
+        clearinghouseId: 'ch-dentalxchange',
+        serviceDate: new Date('2024-02-10'),
+        submissionDate: new Date('2024-02-11'),
+        totalAmount: 350.00,
+        paidAmount: 280.00,
+        patientResponsibility: 70.00,
+        status: 'PAID' as const,
+        eobReceived: true,
+        eobDate: new Date('2024-02-20'),
+        practiceId: practice.id,
+      },
+    ];
+
+    for (const claim of claims) {
+      await prisma.claim.upsert({
+        where: { id: claim.id },
+        update: {},
+        create: claim,
+      });
+    }
+
+    console.log('✅ Sample claims created');
+
+    // Create sample patient invoices
+    const patientInvoices = [
+      {
+        id: 'invoice-mike-crown',
+        invoiceNumber: 'INV-2024-001',
+        patientId: 'patient-mike-johnson',
+        practiceId: practice.id,
+        serviceDate: new Date('2024-03-05'),
+        dueDate: new Date('2024-04-05'),
+        totalAmount: 1200.00,
+        paidAmount: 0.00,
+        remainingBalance: 1200.00,
+        status: 'SENT' as const,
+        sentDate: new Date('2024-03-06'),
+        paymentLink: 'https://cognident.org/pay/invoice-mike-crown',
+        notes: 'Porcelain crown treatment completed',
+      },
+    ];
+
+    for (const invoice of patientInvoices) {
+      await prisma.patientInvoice.upsert({
+        where: { id: invoice.id },
+        update: {},
+        create: invoice,
+      });
+    }
+
+    console.log('✅ Sample patient invoices created');
+
+    // Create accounts receivable records
+    const arRecords = [
+      {
+        patientId: 'patient-john-doe',
+        practiceId: practice.id,
+        totalBalance: 1250.00,
+        insuranceBalance: 875.00,
+        patientBalance: 375.00,
+        currentBalance: 1000.00,
+        days30Balance: 250.00,
+        days60Balance: 0.00,
+        days90Balance: 0.00,
+        days120PlusBalance: 0.00,
+        lastPaymentDate: new Date('2024-01-15'),
+        lastPaymentAmount: 50.00,
+        collectionStatus: 'CURRENT' as const,
+        paymentPlan: false,
+      },
+      {
+        patientId: 'patient-jane-smith',
+        practiceId: practice.id,
+        totalBalance: 850.00,
+        insuranceBalance: 595.00,
+        patientBalance: 255.00,
+        currentBalance: 850.00,
+        days30Balance: 0.00,
+        days60Balance: 0.00,
+        days90Balance: 0.00,
+        days120PlusBalance: 0.00,
+        collectionStatus: 'CURRENT' as const,
+        paymentPlan: false,
+      },
+      {
+        patientId: 'patient-mike-johnson',
+        practiceId: practice.id,
+        totalBalance: 2100.00,
+        insuranceBalance: 0.00,
+        patientBalance: 2100.00,
+        currentBalance: 1200.00,
+        days30Balance: 900.00,
+        days60Balance: 0.00,
+        days90Balance: 0.00,
+        days120PlusBalance: 0.00,
+        collectionStatus: 'PAST_DUE' as const,
+        paymentPlan: true,
+      },
+    ];
+
+    for (const ar of arRecords) {
+      await prisma.accountsReceivable.upsert({
+        where: {
+          patientId_practiceId: {
+            patientId: ar.patientId,
+            practiceId: ar.practiceId,
+          },
+        },
+        update: {},
+        create: ar,
+      });
+    }
+
+    console.log('✅ Accounts receivable records created');
+
     console.log('🎉 Production data seeding completed successfully!');
     console.log('\n📊 Summary:');
     console.log(`- Practice: ${practice.name}`);
@@ -318,6 +574,10 @@ async function seedProductionData() {
     console.log(`- Financing Options: ${financingOptions.length}`);
     console.log(`- Sample Patients: ${patients.length}`);
     console.log(`- Insurance Records: ${patientInsurances.length}`);
+    console.log(`- Ledger Entries: ${ledgerEntries.length}`);
+    console.log(`- Claims: ${claims.length}`);
+    console.log(`- Patient Invoices: ${patientInvoices.length}`);
+    console.log(`- A/R Records: ${arRecords.length}`);
 
   } catch (error) {
     console.error('❌ Error seeding production data:', error);
