@@ -36,7 +36,7 @@ body {
 	animation: gradientShift 15s ease infinite;
 	min-height: 100vh;
 	color: #ffffff;
-	font-family: 'Inter', var(--font-sans);
+	font-family: var(--font-inter), var(--font-sans);
 	font-weight: 400;
 	line-height: 1.6;
 	overflow-x: hidden;
