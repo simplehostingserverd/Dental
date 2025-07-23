@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import "@/styles/dark-theme.css";
 
 // Temporarily disable Stack Auth to debug the error
 // import { StackProvider, StackTheme } from "@stackframe/stack";
@@ -37,7 +36,7 @@ export default async function RootLayout({
 	const messages = await getMessages({ locale });
 
 	return (
-		<html lang={locale} className={`${geist.variable} dark`} suppressHydrationWarning>
+		<html lang={locale} className={`${geist.variable}`} suppressHydrationWarning>
 			<body>
 				{/* Temporarily disable Stack Auth to debug the error */}
 				{/* <StackProvider app={stackClientApp}>
