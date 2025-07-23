@@ -21,6 +21,7 @@
 		"cpanel:migrate": "npm run db:migrate",
 		"cpanel:deploy": "npm run cpanel:install && npm run cpanel:migrate",
 		"health:check": "tsx scripts/health-check.ts",
+		"create-sample-users": "tsx scripts/create-sample-users.ts",
 		"check-env": "node scripts/check-env.js",
 		"db:reset": "npx prisma migrate reset --force && npm run seed",
 		"test": "playwright test",
