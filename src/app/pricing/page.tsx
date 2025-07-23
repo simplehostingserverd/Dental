@@ -89,35 +89,36 @@ const allPlansFeatures = [
 
 export default function PricingPage() {
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
+		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 border-gray-700 border-b bg-gray-900/95 backdrop-blur-sm">
+			<nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="flex h-16 items-center justify-between">
+					<div className="flex h-20 items-center justify-between">
 						<Link href="/" className="flex items-center">
-							<HeaderLogo className="text-white" />
+							<HeaderLogo className="text-indigo-600" />
+							<span className="font-bold text-xl text-slate-800 ml-2">Cognident</span>
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
 							>
 								Features
 							</Link>
 							<Link
 								href="/pricing"
-								className="text-white font-medium"
+								className="text-indigo-600 font-semibold transition-all duration-300 hover:text-indigo-700 hover:scale-105"
 							>
 								Pricing
 							</Link>
 							<Link
 								href="/blog"
-								className="text-gray-300 transition-colors hover:text-white"
+								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
 							>
 								Blog
 							</Link>
 							<Link
-								href="#contact"
+								href="/contact"
 								className="text-gray-300 transition-colors hover:text-white"
 							>
 								Contact

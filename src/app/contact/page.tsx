@@ -125,15 +125,26 @@ export default function ContactPage() {
 			</nav>
 
 			{/* Hero Section */}
-			<section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 py-20">
-				<div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-					<h1 className="mb-6 font-bold text-4xl lg:text-5xl">
+			<section className="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 overflow-hidden">
+				<div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20"></div>
+				<div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+					<h1 className="mb-6 font-bold text-5xl lg:text-6xl text-white">
 						Get in Touch with Cognident
 					</h1>
-					<p className="mb-8 text-blue-100 text-xl">
+					<p className="mb-8 text-indigo-100 text-xl leading-relaxed">
 						Have questions about our dental practice management software? We're
 						here to help you transform your practice.
 					</p>
+					<div className="flex justify-center space-x-6">
+						<div className="flex items-center space-x-2 text-indigo-200">
+							<Clock className="h-5 w-5" />
+							<span>24/7 Support</span>
+						</div>
+						<div className="flex items-center space-x-2 text-indigo-200">
+							<Users className="h-5 w-5" />
+							<span>Expert Team</span>
+						</div>
+					</div>
 				</div>
 			</section>
 
