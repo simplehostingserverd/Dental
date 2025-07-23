@@ -289,7 +289,7 @@ export class SmartTranslationService {
 
 		// Fallback to static dictionary if enabled
 		if (this.options.fallbackToStatic) {
-			const fallbackTranslation = this.getFallbackTranslation(text);
+			const fallbackTranslation = await this.getFallbackTranslation(text);
 			if (fallbackTranslation) {
 				this.cacheTranslation(text, fallbackTranslation, "fallback");
 				return fallbackTranslation;
@@ -359,7 +359,7 @@ export class SmartTranslationService {
 				// Fallback for failed API translations
 				for (const { text, index } of uncachedTexts) {
 					if (this.options.fallbackToStatic) {
-						const fallbackTranslation = this.getFallbackTranslation(text);
+						const fallbackTranslation = await this.getFallbackTranslation(text);
 						results[index] = fallbackTranslation || text;
 						if (fallbackTranslation) {
 							this.cacheTranslation(text, fallbackTranslation, "fallback");
@@ -402,10 +402,10 @@ export class SmartTranslationService {
 	/**
 	 * Get fallback translation using basic dictionary
 	 */
-	private getFallbackTranslation(text: string): string | null {
-		// This would use the fallback dictionary from AutoTranslator
+	private async getFallbackTranslation(text: string): Promise<string | null> {
+		// Use the public translate method from AutoTranslator
 		try {
-			const fallback = this.autoTranslator.translateWithFallback(
+			const fallback = await this.autoTranslator.translate(
 				text,
 				this.options.targetLanguage,
 			);
