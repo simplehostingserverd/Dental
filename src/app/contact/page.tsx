@@ -73,49 +73,49 @@ export default function ContactPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-50 text-gray-900">
+		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 border-gray-800 border-b bg-gray-50/95 backdrop-blur-sm">
+			<nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="flex h-16 items-center justify-between">
+					<div className="flex h-20 items-center justify-between">
 						<Link href="/" className="flex items-center">
-							<HeaderLogo className="text-blue-600" />
-							<span className="font-bold text-xl">Cognident</span>
+							<HeaderLogo className="text-indigo-600" />
+							<span className="font-bold text-xl text-slate-800">Cognident</span>
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-gray-300 transition-colors hover:text-gray-900"
+								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
 							>
 								Features
 							</Link>
 							<Link
 								href="/#pricing"
-								className="text-gray-300 transition-colors hover:text-gray-900"
+								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
 							>
 								Pricing
 							</Link>
 							<Link
 								href="/blog"
-								className="text-gray-300 transition-colors hover:text-gray-900"
+								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
 							>
 								Blog
 							</Link>
 							<Link
 								href="/contact"
-								className="text-blue-600 transition-colors hover:text-blue-700"
+								className="text-indigo-600 font-semibold transition-all duration-300 hover:text-indigo-700 hover:scale-105"
 							>
 								Contact
 							</Link>
 							<Link
 								href="/auth/signin"
-								className="text-gray-300 transition-colors hover:text-gray-900"
+								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
 							>
 								Sign In
 							</Link>
 							<Link
 								href="/auth/signup"
-								className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition-colors hover:bg-blue-700"
+								className="dashboard-button"
 							>
 								Get Started
 							</Link>

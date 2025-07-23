@@ -74,7 +74,7 @@ export default function LandingPage() {
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
 			/>
-			<div className="min-h-screen text-white">
+			<div className="min-h-screen text-white landing-page">
 				{/* Navigation */}
 				<nav className="sticky top-0 z-50">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
