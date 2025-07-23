@@ -96,14 +96,14 @@ export function ReceptionistSidebar() {
 	const pathname = usePathname();
 
 	return (
-		<div className="flex h-full w-64 flex-col border-r bg-white shadow-lg">
+		<div className="flex h-full w-64 flex-col dashboard-sidebar">
 			{/* Logo */}
-			<div className="flex items-center justify-between border-gray-200 border-b px-6 py-4">
+			<div className="flex items-center justify-between border-slate-700 border-b px-6 py-6">
 				<div className="flex items-center">
-					<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
-						<Calendar className="h-5 w-5 text-white" />
+					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg">
+						<Calendar className="h-6 w-6 text-white" />
 					</div>
-					<span className="ml-2 font-semibold text-gray-900 text-xl">
+					<span className="ml-3 font-bold text-white text-xl">
 						Reception
 					</span>
 				</div>
