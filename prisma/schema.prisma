@@ -47,6 +47,18 @@ model Practice {
   automationRules       AutomationRule[]
   integrationSettings   IntegrationSettings[]
   communicationSettings CommunicationSettings?
+
+  // Billing & Insurance Relations
+  insurancePayers       InsurancePayer[]
+  clearinghouses        Clearinghouse[]
+  eligibilityChecks     EligibilityCheck[]
+  claims                Claim[]
+  ledgerEntries         LedgerEntry[]
+  accountsReceivable    AccountsReceivable[]
+  patientInvoices       PatientInvoice[]
+  financingOptions      FinancingOption[]
+  patientFinancing      PatientFinancing[]
+  paymentPlans          PaymentPlan[]
 }
 
 model PracticeUser {
@@ -268,6 +280,16 @@ model Patient {
   workflowInstances  WorkflowInstance[]
   callLogs           CallLog[]
   smsLogs            SmsLog[]
+
+  // Billing & Insurance Relations
+  patientInsurances  PatientInsurance[]
+  eligibilityChecks  EligibilityCheck[]
+  claims             Claim[]
+  ledgerEntries      LedgerEntry[]
+  accountsReceivable AccountsReceivable[]
+  patientInvoices    PatientInvoice[]
+  patientFinancing   PatientFinancing[]
+  paymentPlans       PaymentPlan[]
 }
 
 model Appointment {
@@ -716,11 +738,13 @@ enum AppointmentStatus {
 }
 
 enum InvoiceStatus {
-  UNPAID
+  DRAFT
+  SENT
+  VIEWED
   PAID
   PARTIAL
   OVERDUE
-  CANCELED
+  CANCELLED
 }
 
 enum TreatmentStatus {
@@ -773,11 +797,16 @@ enum PaymentStatus {
 }
 
 enum ClaimStatus {
+  DRAFT
   SUBMITTED
   PROCESSING
   APPROVED
   DENIED
   PARTIAL
+  PAID
+  APPEALED
+  REJECTED
+  UNDER_REVIEW
   RESUBMITTED
 }
 
@@ -931,6 +960,126 @@ enum Role {
   STAFF
 }
 
+// ============================================================================
+// BILLING & INSURANCE ENUMS
+// ============================================================================
+
+enum PayerType {
+  PRIMARY
+  SECONDARY
+  TERTIARY
+}
+
+enum ClearinghouseType {
+  DENTAL
+  MEDICAL
+  BOTH
+}
+
+enum ConnectionStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  TESTING
+}
+
+enum InsuranceRelationship {
+  SELF
+  SPOUSE
+  CHILD
+  OTHER
+}
+
+enum EligibilityStatus {
+  PENDING
+  VERIFIED
+  FAILED
+  EXPIRED
+}
+
+
+
+enum ClaimProcedureStatus {
+  PENDING
+  APPROVED
+  DENIED
+  REDUCED
+  UNDER_REVIEW
+}
+
+enum PaymentType {
+  PATIENT_PAYMENT
+  INSURANCE_PAYMENT
+  ADJUSTMENT
+  REFUND
+  WRITEOFF
+  TRANSFER
+}
+
+enum LedgerEntryType {
+  CHARGE
+  PAYMENT
+  ADJUSTMENT
+  REFUND
+  INSURANCE_PAYMENT
+  WRITEOFF
+  TRANSFER
+}
+
+enum LedgerEntryStatus {
+  PENDING
+  POSTED
+  REVERSED
+  VOIDED
+}
+
+
+
+enum FinancingProvider {
+  CARECREDIT
+  LENDING_CLUB
+  ALPHAEON
+  INTERNAL
+}
+
+enum FinancingType {
+  PROMOTIONAL
+  STANDARD
+  PAYMENT_PLAN
+}
+
+enum FinancingStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  ACTIVE
+  COMPLETED
+  DEFAULTED
+}
+
+enum PaymentPlanStatus {
+  ACTIVE
+  COMPLETED
+  DEFAULTED
+  CANCELLED
+}
+
+enum PaymentScheduleStatus {
+  SCHEDULED
+  PAID
+  LATE
+  MISSED
+  WAIVED
+}
+
+enum CollectionStatus {
+  CURRENT
+  PAST_DUE
+  COLLECTIONS
+  BAD_DEBT
+  WRITTEN_OFF
+}
+
 // Call logging for VoIP integration
 model CallLog {
   id              String    @id @default(cuid())
@@ -1020,4 +1169,465 @@ model CommunicationSettings {
   practice Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
 
   @@map("communication_settings")
+}
+
+// ============================================================================
+// COMPREHENSIVE BILLING & INSURANCE SYSTEM
+// ============================================================================
+
+// Insurance Management
+model InsurancePayer {
+  id                    String   @id @default(cuid())
+  name                  String
+  type                  PayerType @default(PRIMARY)
+  payerCode             String   @unique
+  address               String?
+  city                  String?
+  state                 String?
+  zipCode               String?
+  phone                 String?
+  email                 String?
+  website               String?
+  isActive              Boolean  @default(true)
+  clearinghouseId       String?
+  eligibilityEndpoint   String?
+  claimsEndpoint        String?
+  remittanceEndpoint    String?
+  contractedRates       Json?    // JSON object with coverage rates
+  practiceId            String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  clearinghouse         Clearinghouse? @relation(fields: [clearinghouseId], references: [id])
+  claims                Claim[]
+  eligibilityChecks     EligibilityCheck[]
+  patientInsurances     PatientInsurance[]
+
+  @@map("insurance_payers")
+}
+
+model Clearinghouse {
+  id                    String   @id @default(cuid())
+  name                  String
+  type                  ClearinghouseType @default(DENTAL)
+  apiEndpoint           String
+  username              String
+  password              String   // Encrypted
+  submitterId           String
+  receiverId            String
+  isActive              Boolean  @default(true)
+  supportedTransactions Json     // Array of supported transaction types
+  testMode              Boolean  @default(false)
+  lastSync              DateTime?
+  status                ConnectionStatus @default(DISCONNECTED)
+  practiceId            String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  payers                InsurancePayer[]
+  claims                Claim[]
+
+  @@map("clearinghouses")
+}
+
+model PatientInsurance {
+  id                    String   @id @default(cuid())
+  patientId             String
+  payerId               String
+  policyNumber          String
+  groupNumber           String?
+  subscriberId          String
+  subscriberName        String?
+  relationship          InsuranceRelationship @default(SELF)
+  coverageType          PayerType @default(PRIMARY)
+  effectiveDate         DateTime?
+  expirationDate        DateTime?
+  isActive              Boolean  @default(true)
+  eligibilityVerified   Boolean  @default(false)
+  lastVerified          DateTime?
+  copay                 Float?
+  deductible            Float?
+  annualMaximum         Float?
+  deductibleMet         Float    @default(0)
+  benefitsUsed          Float    @default(0)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  payer                 InsurancePayer @relation(fields: [payerId], references: [id])
+  claims                Claim[]
+  eligibilityChecks     EligibilityCheck[]
+
+  @@map("patient_insurances")
+}
+
+model EligibilityCheck {
+  id                    String   @id @default(cuid())
+  patientId             String
+  payerId               String
+  patientInsuranceId    String?
+  serviceDate           DateTime
+  status                EligibilityStatus @default(PENDING)
+  response              Json?    // Full eligibility response
+  benefits              Json?    // Parsed benefits information
+  copay                 Float?
+  deductible            Float?
+  deductibleRemaining   Float?
+  annualMaximum         Float?
+  benefitsRemaining     Float?
+  coveragePercentages   Json?    // Coverage by service category
+  limitations           Json?    // Coverage limitations
+  exclusions            Json?    // Coverage exclusions
+  errorMessage          String?
+  requestedAt           DateTime @default(now())
+  respondedAt           DateTime?
+  practiceId            String
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  payer                 InsurancePayer @relation(fields: [payerId], references: [id])
+  patientInsurance      PatientInsurance? @relation(fields: [patientInsuranceId], references: [id])
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  @@map("eligibility_checks")
+}
+
+// Claims Management
+model Claim {
+  id                    String   @id @default(cuid())
+  claimNumber           String   @unique
+  patientId             String
+  payerId               String
+  patientInsuranceId    String?
+  clearinghouseId       String?
+  serviceDate           DateTime
+  submissionDate        DateTime?
+  totalAmount           Float
+  paidAmount            Float    @default(0)
+  patientResponsibility Float    @default(0)
+  status                ClaimStatus @default(DRAFT)
+  batchId               String?
+  controlNumber         String?
+  eobReceived           Boolean  @default(false)
+  eobDate               DateTime?
+  remittanceAdvice      String?
+  denialReason          String?
+  denialCodes           Json?    // Array of denial codes
+  appealDeadline        DateTime?
+  isAppeal              Boolean  @default(false)
+  originalClaimId       String?
+  practiceId            String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  payer                 InsurancePayer @relation(fields: [payerId], references: [id])
+  patientInsurance      PatientInsurance? @relation(fields: [patientInsuranceId], references: [id])
+  clearinghouse         Clearinghouse? @relation(fields: [clearinghouseId], references: [id])
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  procedures            ClaimProcedure[]
+  payments              ClaimPayment[]
+  adjustments           ClaimAdjustment[]
+  appeals               Claim[] @relation("ClaimAppeals")
+  originalClaim         Claim? @relation("ClaimAppeals", fields: [originalClaimId], references: [id])
+
+  @@map("claims")
+}
+
+model ClaimProcedure {
+  id                    String   @id @default(cuid())
+  claimId               String
+  procedureCode         String
+  description           String
+  tooth                 String?
+  surface               String?
+  quantity              Int      @default(1)
+  chargedAmount         Float
+  allowedAmount         Float    @default(0)
+  paidAmount            Float    @default(0)
+  deductible            Float    @default(0)
+  copay                 Float    @default(0)
+  coinsurance           Float    @default(0)
+  status                ClaimProcedureStatus @default(PENDING)
+  denialCodes           Json?    // Array of denial codes
+  remarkCodes           Json?    // Array of remark codes
+  lineNumber            Int?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  claim                 Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@map("claim_procedures")
+}
+
+model ClaimPayment {
+  id                    String   @id @default(cuid())
+  claimId               String
+  paymentDate           DateTime
+  amount                Float
+  checkNumber           String?
+  eobNumber             String?
+  paymentMethod         String?
+  transactionId         String?
+  adjustmentAmount      Float    @default(0)
+  interestAmount        Float    @default(0)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  claim                 Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@map("claim_payments")
+}
+
+model ClaimAdjustment {
+  id                    String   @id @default(cuid())
+  claimId               String
+  adjustmentCode        String
+  adjustmentReason      String?
+  amount                Float
+  adjustmentDate        DateTime
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  claim                 Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@map("claim_adjustments")
+}
+
+// Billing and Ledger Management
+model LedgerEntry {
+  id                    String   @id @default(cuid())
+  patientId             String
+  practiceId            String
+  transactionDate       DateTime
+  type                  LedgerEntryType
+  description           String
+  procedureCode         String?
+  amount                Float
+  balance               Float
+  status                LedgerEntryStatus @default(PENDING)
+  invoiceId             String?
+  claimId               String?
+  paymentId             String?
+  notes                 String?
+  createdBy             String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  @@map("ledger_entries")
+}
+
+model AccountsReceivable {
+  id                    String   @id @default(cuid())
+  patientId             String
+  practiceId            String
+  totalBalance          Float
+  insuranceBalance      Float    @default(0)
+  patientBalance        Float    @default(0)
+  currentBalance        Float    @default(0)
+  days30Balance         Float    @default(0)
+  days60Balance         Float    @default(0)
+  days90Balance         Float    @default(0)
+  days120PlusBalance    Float    @default(0)
+  lastPaymentDate       DateTime?
+  lastPaymentAmount     Float?
+  collectionStatus      CollectionStatus @default(CURRENT)
+  paymentPlan           Boolean  @default(false)
+  lastStatementDate     DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+
+  @@map("accounts_receivable")
+}
+
+model PatientInvoice {
+  id                    String   @id @default(cuid())
+  invoiceNumber         String   @unique
+  patientId             String
+  practiceId            String
+  serviceDate           DateTime
+  dueDate               DateTime
+  totalAmount           Float
+  paidAmount            Float    @default(0)
+  remainingBalance      Float
+  status                InvoiceStatus @default(DRAFT)
+  paymentLink           String?
+  sentDate              DateTime?
+  viewedDate            DateTime?
+  notes                 String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  procedures            InvoiceProcedure[]
+  payments              InvoicePayment[]
+
+  @@map("patient_invoices")
+}
+
+model InvoiceProcedure {
+  id                    String   @id @default(cuid())
+  invoiceId             String
+  procedureCode         String
+  description           String
+  tooth                 String?
+  quantity              Int      @default(1)
+  unitPrice             Float
+  totalPrice            Float
+  createdAt             DateTime @default(now())
+
+  // Relations
+  invoice               PatientInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("invoice_procedures")
+}
+
+model InvoicePayment {
+  id                    String   @id @default(cuid())
+  invoiceId             String
+  amount                Float
+  paymentDate           DateTime
+  paymentMethod         String
+  transactionId         String?
+  notes                 String?
+  createdAt             DateTime @default(now())
+
+  // Relations
+  invoice               PatientInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("invoice_payments")
+}
+
+// Patient Financing System
+model FinancingOption {
+  id                    String   @id @default(cuid())
+  practiceId            String
+  provider              FinancingProvider
+  name                  String
+  type                  FinancingType
+  minAmount             Float
+  maxAmount             Float
+  termMonths            Int
+  interestRate          Float
+  promotionalRate       Float?
+  promotionalMonths     Int?
+  isActive              Boolean  @default(true)
+  applicationUrl        String?
+  apiEndpoint           String?
+  apiKey                String?  // Encrypted
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  applications          PatientFinancing[]
+
+  @@map("financing_options")
+}
+
+model PatientFinancing {
+  id                    String   @id @default(cuid())
+  patientId             String
+  practiceId            String
+  financingOptionId     String
+  applicationId         String?
+  amount                Float
+  termMonths            Int
+  interestRate          Float
+  monthlyPayment        Float
+  status                FinancingStatus @default(PENDING)
+  approvedAmount        Float?
+  approvedDate          DateTime?
+  declinedReason        String?
+  firstPaymentDate      DateTime?
+  lastPaymentDate       DateTime?
+  remainingBalance      Float?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  financingOption       FinancingOption @relation(fields: [financingOptionId], references: [id])
+  payments              FinancingPayment[]
+
+  @@map("patient_financing")
+}
+
+model FinancingPayment {
+  id                    String   @id @default(cuid())
+  patientFinancingId    String
+  amount                Float
+  paymentDate           DateTime
+  dueDate               DateTime
+  status                PaymentScheduleStatus @default(SCHEDULED)
+  transactionId         String?
+  notes                 String?
+  createdAt             DateTime @default(now())
+
+  // Relations
+  patientFinancing      PatientFinancing @relation(fields: [patientFinancingId], references: [id], onDelete: Cascade)
+
+  @@map("financing_payments")
+}
+
+model PaymentPlan {
+  id                    String   @id @default(cuid())
+  patientId             String
+  practiceId            String
+  totalAmount           Float
+  downPayment           Float    @default(0)
+  monthlyPayment        Float
+  numberOfPayments      Int
+  interestRate          Float    @default(0)
+  startDate             DateTime
+  status                PaymentPlanStatus @default(ACTIVE)
+  notes                 String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  schedules             PaymentSchedule[]
+
+  @@map("payment_plans")
+}
+
+model PaymentSchedule {
+  id                    String   @id @default(cuid())
+  paymentPlanId         String
+  paymentNumber         Int
+  dueDate               DateTime
+  amount                Float
+  status                PaymentScheduleStatus @default(SCHEDULED)
+  paidDate              DateTime?
+  paidAmount            Float?
+  transactionId         String?
+  notes                 String?
+  createdAt             DateTime @default(now())
+
+  // Relations
+  paymentPlan           PaymentPlan @relation(fields: [paymentPlanId], references: [id], onDelete: Cascade)
+
+  @@map("payment_schedules")
 }
