@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { z } from "zod";
 
-const createFinancingOptionSchema = z.object({
+const baseFinancingOptionSchema = z.object({
   provider: z.enum(["CARECREDIT", "LENDING_CLUB", "ALPHAEON", "INTERNAL"]),
   name: z.string().min(1, "Name is required"),
   type: z.enum(["PROMOTIONAL", "STANDARD", "PAYMENT_PLAN"]),
@@ -16,12 +16,14 @@ const createFinancingOptionSchema = z.object({
   applicationUrl: z.string().url().optional(),
   apiEndpoint: z.string().url().optional(),
   apiKey: z.string().optional(),
-}).refine((data) => data.maxAmount >= data.minAmount, {
+});
+
+const createFinancingOptionSchema = baseFinancingOptionSchema.refine((data) => data.maxAmount >= data.minAmount, {
   message: "Maximum amount must be greater than or equal to minimum amount",
   path: ["maxAmount"],
 });
 
-const updateFinancingOptionSchema = createFinancingOptionSchema.partial();
+const updateFinancingOptionSchema = baseFinancingOptionSchema.partial();
 
 // GET /api/dashboard/financing/options - Get all financing options
 export async function GET(request: NextRequest) {
