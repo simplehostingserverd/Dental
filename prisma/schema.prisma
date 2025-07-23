@@ -1454,6 +1454,7 @@ model AccountsReceivable {
   patient               Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
   practice              Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
 
+  @@unique([patientId, practiceId])
   @@map("accounts_receivable")
 }
 
