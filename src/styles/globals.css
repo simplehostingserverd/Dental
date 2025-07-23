@@ -5,34 +5,41 @@
 		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-/* CSS Variables for shadcn/ui components */
+/* CSS Variables for shadcn/ui components - Dark Theme */
 :root {
-	--background: 255 255 255; /* white */
-	--foreground: 17 24 39; /* gray-900 */
-	--card: 255 255 255; /* white */
-	--card-foreground: 17 24 39; /* gray-900 */
-	--popover: 255 255 255; /* white */
-	--popover-foreground: 17 24 39; /* gray-900 */
+	--background: 15 23 42; /* slate-900 */
+	--foreground: 248 250 252; /* slate-50 */
+	--card: 30 41 59; /* slate-800 */
+	--card-foreground: 248 250 252; /* slate-50 */
+	--popover: 30 41 59; /* slate-800 */
+	--popover-foreground: 248 250 252; /* slate-50 */
 	--primary: 59 130 246; /* blue-500 */
 	--primary-foreground: 255 255 255; /* white */
-	--secondary: 243 244 246; /* gray-100 */
-	--secondary-foreground: 17 24 39; /* gray-900 */
-	--muted: 243 244 246; /* gray-100 */
-	--muted-foreground: 107 114 128; /* gray-500 */
-	--accent: 243 244 246; /* gray-100 */
-	--accent-foreground: 17 24 39; /* gray-900 */
+	--secondary: 51 65 85; /* slate-700 */
+	--secondary-foreground: 248 250 252; /* slate-50 */
+	--muted: 51 65 85; /* slate-700 */
+	--muted-foreground: 148 163 184; /* slate-400 */
+	--accent: 51 65 85; /* slate-700 */
+	--accent-foreground: 248 250 252; /* slate-50 */
 	--destructive: 239 68 68; /* red-500 */
 	--destructive-foreground: 255 255 255; /* white */
-	--border: 209 213 219; /* gray-300 */
-	--input: 209 213 219; /* gray-300 */
+	--border: 51 65 85; /* slate-700 */
+	--input: 51 65 85; /* slate-700 */
 	--ring: 59 130 246; /* blue-500 */
 	--radius: 0.5rem;
 }
 
+/* Modern gradient background */
+body {
+	background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+	min-height: 100vh;
+	color: #f8fafc;
+	font-family: var(--font-sans);
+}
+
 /* Smooth transitions */
 * {
-	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s
-		ease;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Prevent transition on page load */
@@ -40,50 +47,75 @@
 	transition: none !important;
 }
 
-/* Ensure proper text visibility and contrast */
-body {
-	background-color: #f9fafb; /* gray-50 */
-	color: #111827; /* gray-900 */
-}
-
-/* Override any dark mode text colors */
-* {
-	color: inherit;
-}
-
-/* Ensure proper contrast for text elements */
-h1, h2, h3, h4, h5, h6 {
-	color: #111827 !important; /* gray-900 */
-}
-
-p, span, div {
-	color: #374151; /* gray-700 */
-}
-
-/* Muted text should still be visible */
-.text-muted-foreground {
-	color: #6b7280 !important; /* gray-500 */
-}
-
-/* Ensure input fields are visible */
-input, textarea, select {
-	background-color: white !important;
-	color: #111827 !important; /* gray-900 */
-	border-color: #d1d5db !important; /* gray-300 */
-}
-
-/* Ensure buttons have proper contrast */
-button {
-	color: inherit;
-}
-
-/* Card backgrounds */
+/* Modern glass morphism effect for cards */
 .card, [class*="card"] {
-	background-color: white !important;
-	color: #111827 !important;
+	background: rgba(30, 41, 59, 0.8);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(59, 130, 246, 0.2);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Badge text visibility */
-.badge, [class*="badge"] {
-	color: inherit !important;
+/* Enhanced button styles */
+.btn-primary, button[class*="primary"] {
+	background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+	border: none;
+	box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+	transform: translateY(0);
+}
+
+.btn-primary:hover, button[class*="primary"]:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+}
+
+/* Text styling */
+h1, h2, h3, h4, h5, h6 {
+	color: #f8fafc;
+	font-weight: 700;
+	letter-spacing: -0.025em;
+}
+
+p, span {
+	color: #cbd5e1;
+	line-height: 1.7;
+}
+
+/* Muted text */
+.text-muted-foreground {
+	color: #94a3b8;
+}
+
+/* Input styling */
+input, textarea, select {
+	background: rgba(30, 41, 59, 0.6);
+	border: 1px solid rgba(59, 130, 246, 0.3);
+	color: #f8fafc;
+	backdrop-filter: blur(5px);
+}
+
+input:focus, textarea:focus, select:focus {
+	border-color: #3b82f6;
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Navigation styling */
+nav {
+	background: rgba(15, 23, 42, 0.9);
+	backdrop-filter: blur(10px);
+	border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Feature cards with hover effects */
+.feature-card {
+	background: rgba(30, 41, 59, 0.6);
+	border: 1px solid rgba(59, 130, 246, 0.2);
+	border-radius: 12px;
+	padding: 2rem;
+	transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+	transform: translateY(-5px);
+	border-color: rgba(59, 130, 246, 0.5);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }

@@ -30,26 +30,30 @@ import {
 	BarChart3,
 	Calendar,
 	Camera,
+	Cloud,
 	Eye,
 	Facebook,
 	Heart,
+	Image,
 	Instagram,
 	MessageCircle,
 	Plus,
+	Refresh,
 	Send,
 	Share2,
 	Star,
 	TrendingUp,
 	Twitter,
 	Users,
+	Video,
 	Youtube,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // TypeScript interfaces
 interface SocialPost {
 	id: string;
-	platform: "facebook" | "instagram" | "twitter" | "linkedin" | "youtube";
+	platform: "facebook" | "instagram" | "tiktok" | "x" | "linkedin" | "youtube" | "bluesky" | "reddit" | "pinterest";
 	content: string;
 	imageUrl?: string;
 	scheduledFor?: Date;
@@ -60,6 +64,8 @@ interface SocialPost {
 		comments: number;
 		shares: number;
 		views?: number;
+		reposts?: number;
+		saves?: number;
 	};
 	hashtags: string[];
 }
@@ -93,6 +99,9 @@ export default function MarketingPage() {
 	const [showCreatePostDialog, setShowCreatePostDialog] = useState(false);
 	const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
 	const [isPosting, setIsPosting] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [posts, setPosts] = useState<SocialPost[]>([]);
+	const [analytics, setAnalytics] = useState<any>(null);
 
 	// Form state
 	const [postForm, setPostForm] = useState({
@@ -102,6 +111,123 @@ export default function MarketingPage() {
 		imageUrl: "",
 		hashtags: "",
 	});
+
+	// API Functions
+	const fetchPosts = async () => {
+		try {
+			setIsLoading(true);
+			const response = await fetch("/api/receptionist/marketing/posts");
+			const data = await response.json();
+
+			if (data.success) {
+				setPosts(data.data);
+			} else {
+				showToast("Error fetching posts", "error");
+			}
+		} catch (error) {
+			console.error("Error fetching posts:", error);
+			showToast("Failed to fetch posts", "error");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const fetchAnalytics = async () => {
+		try {
+			const response = await fetch("/api/receptionist/marketing/analytics");
+			const data = await response.json();
+
+			if (data.success) {
+				setAnalytics(data.data);
+			} else {
+				showToast("Error fetching analytics", "error");
+			}
+		} catch (error) {
+			console.error("Error fetching analytics:", error);
+			showToast("Failed to fetch analytics", "error");
+		}
+	};
+
+	const createPost = async () => {
+		try {
+			setIsPosting(true);
+			const postData = {
+				content: postForm.content,
+				platforms: selectedPlatforms,
+				scheduledFor: postForm.scheduledFor || undefined,
+				hashtags: postForm.hashtags.split(" ").filter(tag => tag.startsWith("#")),
+				imageUrl: postForm.imageUrl || undefined,
+			};
+
+			const response = await fetch("/api/receptionist/marketing/posts", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(postData),
+			});
+
+			const data = await response.json();
+
+			if (data.success) {
+				showToast(data.message || "Post created successfully", "success");
+				await fetchPosts(); // Refresh posts
+				setShowCreatePostDialog(false);
+				resetForm();
+			} else {
+				showToast(data.error || "Failed to create post", "error");
+			}
+		} catch (error) {
+			console.error("Error creating post:", error);
+			showToast("Failed to create post", "error");
+		} finally {
+			setIsPosting(false);
+		}
+	};
+
+	const refreshAnalytics = async () => {
+		try {
+			setIsLoading(true);
+			const response = await fetch("/api/receptionist/marketing/analytics", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ platforms: ["all"] }),
+			});
+
+			const data = await response.json();
+
+			if (data.success) {
+				setAnalytics(data.data);
+				showToast("Analytics refreshed successfully", "success");
+			} else {
+				showToast("Failed to refresh analytics", "error");
+			}
+		} catch (error) {
+			console.error("Error refreshing analytics:", error);
+			showToast("Failed to refresh analytics", "error");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const resetForm = () => {
+		setPostForm({
+			content: "",
+			platforms: [],
+			scheduledFor: "",
+			imageUrl: "",
+			hashtags: "",
+		});
+		setSelectedPlatforms([]);
+	};
+
+	// Load data on component mount
+	useEffect(() => {
+		fetchPosts();
+		fetchAnalytics();
+	}, []);
 
 	// Mock data
 	const socialMetrics: SocialMetrics[] = [
@@ -122,7 +248,15 @@ export default function MarketingPage() {
 			growth: 18.3,
 		},
 		{
-			platform: "Twitter",
+			platform: "TikTok",
+			followers: 2150,
+			engagement: 12.4,
+			reach: 8500,
+			impressions: 15200,
+			growth: 45.8,
+		},
+		{
+			platform: "X (Twitter)",
 			followers: 420,
 			engagement: 3.1,
 			reach: 1200,
@@ -136,6 +270,30 @@ export default function MarketingPage() {
 			reach: 650,
 			impressions: 1300,
 			growth: 15.2,
+		},
+		{
+			platform: "BlueSky",
+			followers: 95,
+			engagement: 8.9,
+			reach: 320,
+			impressions: 680,
+			growth: 28.4,
+		},
+		{
+			platform: "Reddit",
+			followers: 340,
+			engagement: 7.2,
+			reach: 1100,
+			impressions: 2200,
+			growth: 22.1,
+		},
+		{
+			platform: "Pinterest",
+			followers: 560,
+			engagement: 5.8,
+			reach: 1800,
+			impressions: 3600,
+			growth: 16.7,
 		},
 	];
 
@@ -282,10 +440,20 @@ export default function MarketingPage() {
 				return <Facebook className="h-5 w-5 text-blue-600" />;
 			case "instagram":
 				return <Instagram className="h-5 w-5 text-pink-600" />;
+			case "tiktok":
+				return <Video className="h-5 w-5 text-black" />;
+			case "x":
+			case "x (twitter)":
 			case "twitter":
-				return <Twitter className="h-5 w-5 text-blue-400" />;
+				return <Twitter className="h-5 w-5 text-black" />;
 			case "linkedin":
-				return <div className="h-5 w-5 rounded bg-blue-700" />;
+				return <Users className="h-5 w-5 text-blue-700" />;
+			case "bluesky":
+				return <Cloud className="h-5 w-5 text-sky-500" />;
+			case "reddit":
+				return <MessageCircle className="h-5 w-5 text-orange-600" />;
+			case "pinterest":
+				return <Image className="h-5 w-5 text-red-600" />;
 			case "youtube":
 				return <Youtube className="h-5 w-5 text-red-600" />;
 			default:
@@ -508,6 +676,18 @@ export default function MarketingPage() {
 
 				{/* Analytics Tab */}
 				<TabsContent value="analytics">
+					<div className="mb-6 flex items-center justify-between">
+						<h2 className="text-2xl font-bold">Social Media Analytics</h2>
+						<Button
+							onClick={refreshAnalytics}
+							disabled={isLoading}
+							variant="outline"
+							size="sm"
+						>
+							<Refresh className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+							Refresh Data
+						</Button>
+					</div>
 					<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 						<Card>
 							<CardHeader>
@@ -624,7 +804,7 @@ export default function MarketingPage() {
 						{/* Platform Selection */}
 						<div>
 							<Label>Select Platforms *</Label>
-							<div className="mt-2 grid grid-cols-2 gap-3">
+							<div className="mt-2 grid grid-cols-3 gap-3">
 								{[
 									{
 										id: "facebook",
@@ -639,16 +819,40 @@ export default function MarketingPage() {
 										color: "text-pink-600",
 									},
 									{
-										id: "twitter",
-										name: "Twitter",
+										id: "tiktok",
+										name: "TikTok",
+										icon: Video,
+										color: "text-black",
+									},
+									{
+										id: "x",
+										name: "X",
 										icon: Twitter,
-										color: "text-blue-400",
+										color: "text-black",
 									},
 									{
 										id: "linkedin",
 										name: "LinkedIn",
 										icon: Users,
 										color: "text-blue-700",
+									},
+									{
+										id: "bluesky",
+										name: "BlueSky",
+										icon: Cloud,
+										color: "text-sky-500",
+									},
+									{
+										id: "reddit",
+										name: "Reddit",
+										icon: MessageCircle,
+										color: "text-orange-600",
+									},
+									{
+										id: "pinterest",
+										name: "Pinterest",
+										icon: Image,
+										color: "text-red-600",
 									},
 								].map((platform) => (
 									<div

@@ -1,272 +1,257 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Eye, EyeOff, Mail, Lock, LogIn, Flag, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
+import { Badge } from "@/components/ui/badge";
+import {
+	Eye,
+	EyeOff,
+	Heart,
+	MapPin,
+	Building2,
+	Stethoscope,
+	Shield,
+	ArrowLeft,
+} from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
-export default function MexicanSignInPage() {
-	const router = useRouter();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+export default function MexicoSignInPage() {
 	const [showPassword, setShowPassword] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState("");
+	const [formData, setFormData] = useState({
+		email: "",
+		password: "",
+	});
+
+	const majorCities = [
+		{ name: "CDMX", x: 400, y: 350, size: "large" },
+		{ name: "Guadalajara", x: 300, y: 320, size: "medium" },
+		{ name: "Monterrey", x: 450, y: 280, size: "medium" },
+		{ name: "Puebla", x: 420, y: 330, size: "small" },
+		{ name: "Tijuana", x: 150, y: 250, size: "small" },
+		{ name: "León", x: 350, y: 310, size: "small" },
+		{ name: "Juárez", x: 380, y: 220, size: "small" },
+		{ name: "Mérida", x: 550, y: 380, size: "small" },
+		{ name: "Cancún", x: 600, y: 360, size: "small" },
+		{ name: "Acapulco", x: 350, y: 400, size: "small" },
+	];
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setIsLoading(true);
-		setError("");
-
-		try {
-			const response = await fetch("/api/auth/practice/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ email, password }),
-			});
-
-			if (response.ok) {
-				// Redirect to Spanish dashboard
-				router.push("/es/receptionist");
-			} else {
-				const errorData = await response.json();
-				setError(errorData.error || "Error al iniciar sesión");
-			}
-		} catch (error) {
-			console.error("Login error:", error);
-			setError("Error de conexión. Por favor intenta de nuevo.");
-		} finally {
-			setIsLoading(false);
-		}
+		// Handle Mexican clinic login
+		console.log("Mexican clinic login:", formData);
 	};
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-red-50 flex items-center justify-center p-4">
-			{/* Mexican Flag Pattern Background */}
-			<div className="absolute inset-0 opacity-5">
-				<div className="h-full w-full bg-gradient-to-r from-green-600 via-white to-red-600"></div>
-			</div>
-			
-			{/* Dental Pattern Overlay */}
-			<div className="absolute inset-0 opacity-3">
-				<div className="h-full w-full" style={{
-					backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23059669' fill-opacity='0.05'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-				}}></div>
+			{/* Mexico Map Background */}
+			<div className="absolute inset-0 overflow-hidden opacity-5">
+				<svg viewBox="0 0 1000 600" className="h-full w-full">
+					{/* Detailed Mexico Map Outline */}
+					<path
+						d="M80 320 L120 280 L180 250 L250 220 L320 200 L400 180 L480 170 L560 180 L640 200 L720 230 L780 260 L820 300 L850 340 L830 380 L800 420 L750 450 L700 470 L650 485 L600 500 L550 510 L500 515 L450 510 L400 500 L350 485 L300 470 L250 450 L200 420 L150 380 L120 350 Z"
+						fill="url(#mexicoMapGradient)"
+						stroke="#059669"
+						strokeWidth="3"
+					/>
+					
+					{/* Baja California Peninsula */}
+					<path
+						d="M80 250 L100 200 L120 180 L140 200 L160 240 L150 280 L130 300 L110 290 L90 270 Z"
+						fill="url(#mexicoMapGradient)"
+						stroke="#059669"
+						strokeWidth="2"
+					/>
+					
+					{/* Yucatan Peninsula */}
+					<path
+						d="M550 380 L600 360 L650 370 L680 390 L670 420 L640 430 L600 425 L570 410 Z"
+						fill="url(#mexicoMapGradient)"
+						stroke="#059669"
+						strokeWidth="2"
+					/>
+
+					<defs>
+						<linearGradient id="mexicoMapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" stopColor="#059669" stopOpacity="0.3" />
+							<stop offset="33%" stopColor="#ffffff" stopOpacity="0.5" />
+							<stop offset="66%" stopColor="#dc2626" stopOpacity="0.3" />
+							<stop offset="100%" stopColor="#059669" stopOpacity="0.2" />
+						</linearGradient>
+						<radialGradient id="cityGlow">
+							<stop offset="0%" stopColor="#dc2626" stopOpacity="0.8" />
+							<stop offset="100%" stopColor="#dc2626" stopOpacity="0.2" />
+						</radialGradient>
+					</defs>
+
+					{/* Major Cities with Glow Effect */}
+					{majorCities.map((city, index) => (
+						<g key={index}>
+							<circle
+								cx={city.x}
+								cy={city.y}
+								r={city.size === "large" ? 12 : city.size === "medium" ? 8 : 6}
+								fill="url(#cityGlow)"
+							/>
+							<circle
+								cx={city.x}
+								cy={city.y}
+								r={city.size === "large" ? 8 : city.size === "medium" ? 5 : 3}
+								fill="#dc2626"
+							/>
+							<text
+								x={city.x + 15}
+								y={city.y + 5}
+								className="text-xs font-medium fill-gray-600"
+							>
+								{city.name}
+							</text>
+						</g>
+					))}
+
+					{/* Decorative Elements */}
+					<circle cx="100" cy="150" r="3" fill="#fbbf24" opacity="0.6" />
+					<circle cx="850" cy="200" r="4" fill="#fbbf24" opacity="0.6" />
+					<circle cx="200" cy="500" r="2" fill="#fbbf24" opacity="0.6" />
+				</svg>
 			</div>
 
 			<div className="relative z-10 w-full max-w-md">
-				{/* Header with Mexican Flag */}
-				<div className="text-center mb-8">
-					<div className="flex items-center justify-center mb-4">
-						<div className="flex items-center space-x-3">
-							{/* Mexican Flag */}
-							<div className="flex h-8 w-12 overflow-hidden rounded border border-gray-300 shadow-sm">
-								<div className="w-1/3 bg-green-600"></div>
-								<div className="w-1/3 bg-white flex items-center justify-center">
-									<div className="h-4 w-4 rounded-full bg-red-600 opacity-60"></div>
-								</div>
-								<div className="w-1/3 bg-red-600"></div>
-							</div>
-							<HeaderLogo className="text-green-600" />
-						</div>
-					</div>
-					<h1 className="text-3xl font-bold text-gray-900">Cognident México</h1>
-					<p className="text-gray-600 mt-2">Sistema de Gestión Dental Profesional</p>
+				{/* Back to Landing */}
+				<div className="mb-6">
+					<Link href="/es" className="flex items-center text-gray-600 hover:text-gray-900">
+						<ArrowLeft className="mr-2 h-4 w-4" />
+						Volver al inicio
+					</Link>
 				</div>
 
-				{/* Login Card */}
 				<Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
-					<CardHeader className="space-y-1 pb-6">
-						<div className="flex items-center justify-center space-x-2 mb-4">
-							<div className="p-3 bg-green-100 rounded-full">
-								<LogIn className="h-6 w-6 text-green-600" />
+					<CardHeader className="text-center pb-6">
+						{/* Logo and Branding */}
+						<div className="flex items-center justify-center mb-4">
+							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-green-600 to-red-600 shadow-lg">
+								<Heart className="h-7 w-7 text-white" />
 							</div>
 						</div>
-						<CardTitle className="text-2xl text-center text-gray-900">
-							Iniciar Sesión
+						
+						<CardTitle className="text-2xl font-bold text-gray-900">
+							Cognident México
 						</CardTitle>
-						<CardDescription className="text-center text-gray-600">
-							Accede a tu panel de administración dental
-						</CardDescription>
+						<p className="text-gray-600 mt-2">
+							Acceso para Clínicas Dentales Mexicanas
+						</p>
+						
+						{/* Mexican Flag Badge */}
+						<div className="flex justify-center mt-4">
+							<Badge className="bg-gradient-to-r from-green-600 via-white to-red-600 text-gray-900 border-0 px-4 py-1">
+								🇲🇽 Sistema Mexicano
+							</Badge>
+						</div>
 					</CardHeader>
-					<CardContent>
-						<form onSubmit={handleSubmit} className="space-y-4">
-							{error && (
-								<div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
-									{error}
-								</div>
-							)}
 
+					<CardContent className="space-y-6">
+						<form onSubmit={handleSubmit} className="space-y-4">
+							{/* Email Field */}
 							<div className="space-y-2">
-								<Label htmlFor="email" className="text-gray-700">
-									Correo Electrónico
+								<Label htmlFor="email" className="text-gray-700 font-medium">
+									Correo Electrónico de la Clínica
 								</Label>
-								<div className="relative">
-									<Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-									<Input
-										id="email"
-										type="email"
-										placeholder="tu@clinica.com"
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										className="pl-10 border-gray-300 focus:border-green-500 focus:ring-green-500"
-										required
-									/>
-								</div>
+								<Input
+									id="email"
+									type="email"
+									placeholder="clinica@ejemplo.com.mx"
+									value={formData.email}
+									onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+									className="h-12 border-gray-300 focus:border-green-500 focus:ring-green-500"
+									required
+								/>
 							</div>
 
+							{/* Password Field */}
 							<div className="space-y-2">
-								<Label htmlFor="password" className="text-gray-700">
+								<Label htmlFor="password" className="text-gray-700 font-medium">
 									Contraseña
 								</Label>
 								<div className="relative">
-									<Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 									<Input
 										id="password"
 										type={showPassword ? "text" : "password"}
-										placeholder="••••••••"
-										value={password}
-										onChange={(e) => setPassword(e.target.value)}
-										className="pl-10 pr-10 border-gray-300 focus:border-green-500 focus:ring-green-500"
+										placeholder="Ingresa tu contraseña"
+										value={formData.password}
+										onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+										className="h-12 pr-12 border-gray-300 focus:border-green-500 focus:ring-green-500"
 										required
 									/>
 									<button
 										type="button"
 										onClick={() => setShowPassword(!showPassword)}
-										className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+										className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
 									>
-										{showPassword ? (
-											<EyeOff className="h-4 w-4" />
-										) : (
-											<Eye className="h-4 w-4" />
-										)}
+										{showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
 									</button>
 								</div>
 							</div>
 
-							<div className="flex items-center justify-between">
-								<div className="flex items-center space-x-2">
-									<input
-										type="checkbox"
-										id="remember"
-										className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-									/>
-									<Label htmlFor="remember" className="text-sm text-gray-600">
-										Recordarme
-									</Label>
-								</div>
-								<Link
-									href="/es/auth/forgot-password"
-									className="text-sm text-green-600 hover:text-green-500"
-								>
-									¿Olvidaste tu contraseña?
-								</Link>
-							</div>
-
+							{/* Login Button */}
 							<Button
 								type="submit"
-								className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium py-2.5"
-								disabled={isLoading}
+								className="w-full h-12 bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white font-semibold shadow-lg"
 							>
-								{isLoading ? (
-									<div className="flex items-center space-x-2">
-										<div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-										<span>Iniciando sesión...</span>
-									</div>
-								) : (
-									<div className="flex items-center space-x-2">
-										<LogIn className="h-4 w-4" />
-										<span>Iniciar Sesión</span>
-									</div>
-								)}
+								<Building2 className="mr-2 h-5 w-5" />
+								Acceder a Mi Clínica
 							</Button>
 						</form>
 
 						{/* Divider */}
-						<div className="relative my-6">
+						<div className="relative">
 							<div className="absolute inset-0 flex items-center">
-								<div className="w-full border-t border-gray-300"></div>
+								<div className="w-full border-t border-gray-300" />
 							</div>
 							<div className="relative flex justify-center text-sm">
-								<span className="bg-white px-2 text-gray-500">o</span>
+								<span className="bg-white px-4 text-gray-500">o</span>
 							</div>
 						</div>
 
-						{/* Quick Access for Demo */}
+						{/* Quick Access Options */}
 						<div className="space-y-3">
-							<p className="text-center text-sm text-gray-600">Acceso rápido para demostración:</p>
-							<div className="grid grid-cols-1 gap-2">
-								<Button
-									type="button"
-									variant="outline"
-									className="w-full border-green-200 text-green-700 hover:bg-green-50"
-									onClick={() => {
-										setEmail("recepcionista@clinica.mx");
-										setPassword("demo123");
-									}}
-								>
-									👩‍💼 Recepcionista Demo
-								</Button>
-								<Button
-									type="button"
-									variant="outline"
-									className="w-full border-blue-200 text-blue-700 hover:bg-blue-50"
-									onClick={() => {
-										setEmail("doctor@clinica.mx");
-										setPassword("demo123");
-									}}
-								>
-									🦷 Doctor Demo
-								</Button>
+							<Button variant="outline" className="w-full h-12 border-green-200 hover:bg-green-50">
+								<Stethoscope className="mr-2 h-5 w-5 text-green-600" />
+								Acceso para Dentistas
+							</Button>
+							<Button variant="outline" className="w-full h-12 border-blue-200 hover:bg-blue-50">
+								<MapPin className="mr-2 h-5 w-5 text-blue-600" />
+								Acceso para Recepcionistas
+							</Button>
+						</div>
+
+						{/* Links */}
+						<div className="text-center space-y-2">
+							<Link href="/es/auth/forgot-password" className="text-sm text-green-600 hover:text-green-700">
+								¿Olvidaste tu contraseña?
+							</Link>
+							<div className="text-sm text-gray-600">
+								¿No tienes cuenta?{" "}
+								<Link href="/es/auth/signup" className="text-green-600 hover:text-green-700 font-medium">
+									Registrar Clínica
+								</Link>
 							</div>
+						</div>
+
+						{/* Security Badge */}
+						<div className="flex items-center justify-center space-x-2 text-xs text-gray-500 bg-gray-50 rounded-lg p-3">
+							<Shield className="h-4 w-4" />
+							<span>Conexión segura • Datos protegidos • Cumplimiento HIPAA</span>
 						</div>
 					</CardContent>
 				</Card>
 
-				{/* Footer */}
-				<div className="mt-8 text-center">
-					<div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-						<Heart className="h-4 w-4 text-red-500" />
-						<span>Hecho con amor para las clínicas dentales mexicanas</span>
-						<div className="flex h-4 w-6 overflow-hidden rounded border border-gray-300">
-							<div className="w-1/3 bg-green-600"></div>
-							<div className="w-1/3 bg-white"></div>
-							<div className="w-1/3 bg-red-600"></div>
-						</div>
-					</div>
-					<div className="mt-2 text-xs text-gray-500">
-						¿Necesitas ayuda? Contacta a soporte: 
-						<a href="tel:+525512345678" className="text-green-600 hover:text-green-500 ml-1">
-							+52 55 1234 5678
-						</a>
-					</div>
-					<div className="mt-4">
-						<Link
-							href="/auth/signin"
-							className="text-sm text-gray-500 hover:text-gray-700"
-						>
-							🇺🇸 Switch to English / Cambiar a Inglés
-						</Link>
-					</div>
+				{/* Footer Info */}
+				<div className="mt-6 text-center text-sm text-gray-600">
+					<p>Soporte técnico: +52 55 1234-5678</p>
+					<p>mexico@cognident.org</p>
 				</div>
-			</div>
-
-			{/* Decorative Elements */}
-			<div className="absolute top-10 left-10 opacity-10">
-				<div className="h-20 w-20 rounded-full bg-green-600"></div>
-			</div>
-			<div className="absolute bottom-10 right-10 opacity-10">
-				<div className="h-16 w-16 rounded-full bg-red-600"></div>
-			</div>
-			<div className="absolute top-1/2 left-5 opacity-10">
-				<div className="h-12 w-12 rounded-full bg-white border-2 border-green-600"></div>
 			</div>
 		</div>
 	);
