@@ -12,14 +12,15 @@ export default function ErrorPage({
 }) {
 	useEffect(() => {
 		// Log the error to our centralized logger
-		logger.error("Client-side error occurred", 
-			{ 
+		logger.error(
+			"Client-side error occurred",
+			{
 				name: error.name,
 				message: error.message,
 				stack: error.stack,
-				digest: error.digest
+				digest: error.digest,
 			},
-			error
+			error,
 		);
 	}, [error]);
 
@@ -34,7 +35,7 @@ export default function ErrorPage({
 						An unexpected error occurred. Please try again.
 					</p>
 					{error.digest && (
-						<p className="mb-4 text-sm text-gray-500">
+						<p className="mb-4 text-gray-500 text-sm">
 							Error ID: {error.digest}
 						</p>
 					)}

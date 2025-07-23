@@ -4,231 +4,248 @@ import { useEffect, useRef, useState } from "react";
 
 // Optimized cursor component - disabled for better performance
 export function PremiumCursor() {
-  // Disabled for performance - return null
-  return null;
+	// Disabled for performance - return null
+	return null;
 }
 
 // Parallax container component
-export function ParallaxContainer({ children, intensity = 0.5 }: { children: React.ReactNode; intensity?: number }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export function ParallaxContainer({
+	children,
+	intensity = 0.5,
+}: { children: React.ReactNode; intensity?: number }) {
+	const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+	useEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = (e.clientX - rect.left - rect.width / 2) * intensity;
-      const y = (e.clientY - rect.top - rect.height / 2) * intensity;
-      
-      container.style.transform = `translate3d(${x}px, ${y}px, 0) rotateX(${y * 0.1}deg) rotateY(${x * 0.1}deg)`;
-    };
+		const handleMouseMove = (e: MouseEvent) => {
+			const rect = container.getBoundingClientRect();
+			const x = (e.clientX - rect.left - rect.width / 2) * intensity;
+			const y = (e.clientY - rect.top - rect.height / 2) * intensity;
 
-    const handleMouseLeave = () => {
-      container.style.transform = "translate3d(0, 0, 0) rotateX(0) rotateY(0)";
-    };
+			container.style.transform = `translate3d(${x}px, ${y}px, 0) rotateX(${y * 0.1}deg) rotateY(${x * 0.1}deg)`;
+		};
 
-    container.addEventListener("mousemove", handleMouseMove);
-    container.addEventListener("mouseleave", handleMouseLeave);
+		const handleMouseLeave = () => {
+			container.style.transform = "translate3d(0, 0, 0) rotateX(0) rotateY(0)";
+		};
 
-    return () => {
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [intensity]);
+		container.addEventListener("mousemove", handleMouseMove);
+		container.addEventListener("mouseleave", handleMouseLeave);
 
-  return (
-    <div ref={containerRef} className="parallax-element">
-      {children}
-    </div>
-  );
+		return () => {
+			container.removeEventListener("mousemove", handleMouseMove);
+			container.removeEventListener("mouseleave", handleMouseLeave);
+		};
+	}, [intensity]);
+
+	return (
+		<div ref={containerRef} className="parallax-element">
+			{children}
+		</div>
+	);
 }
 
 // Magnetic button component
 export function MagneticButton({ children, className = "", ...props }: any) {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+	const buttonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    const button = buttonRef.current;
-    if (!button) return;
+	useEffect(() => {
+		const button = buttonRef.current;
+		if (!button) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = button.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      
-      button.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-    };
+		const handleMouseMove = (e: MouseEvent) => {
+			const rect = button.getBoundingClientRect();
+			const x = e.clientX - rect.left - rect.width / 2;
+			const y = e.clientY - rect.top - rect.height / 2;
 
-    const handleMouseLeave = () => {
-      button.style.transform = "translate(0, 0)";
-    };
+			button.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+		};
 
-    button.addEventListener("mousemove", handleMouseMove);
-    button.addEventListener("mouseleave", handleMouseLeave);
+		const handleMouseLeave = () => {
+			button.style.transform = "translate(0, 0)";
+		};
 
-    return () => {
-      button.removeEventListener("mousemove", handleMouseMove);
-      button.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
+		button.addEventListener("mousemove", handleMouseMove);
+		button.addEventListener("mouseleave", handleMouseLeave);
 
-  return (
-    <button
-      ref={buttonRef}
-      className={`magnetic transition-transform duration-300 ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
+		return () => {
+			button.removeEventListener("mousemove", handleMouseMove);
+			button.removeEventListener("mouseleave", handleMouseLeave);
+		};
+	}, []);
+
+	return (
+		<button
+			ref={buttonRef}
+			className={`magnetic transition-transform duration-300 ${className}`}
+			{...props}
+		>
+			{children}
+		</button>
+	);
 }
 
 // Floating elements component
 export function FloatingElements() {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-0">
-      {[...Array(20)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-2 h-2 bg-white/10 rounded-full animate-pulse"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 5}s`,
-            animationDuration: `${3 + Math.random() * 4}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
+	return (
+		<div className="pointer-events-none fixed inset-0 z-0">
+			{[...Array(20)].map((_, i) => (
+				<div
+					key={i}
+					className="absolute h-2 w-2 animate-pulse rounded-full bg-white/10"
+					style={{
+						left: `${Math.random() * 100}%`,
+						top: `${Math.random() * 100}%`,
+						animationDelay: `${Math.random() * 5}s`,
+						animationDuration: `${3 + Math.random() * 4}s`,
+					}}
+				/>
+			))}
+		</div>
+	);
 }
 
 // Text reveal animation component
-export function TextReveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const elementRef = useRef<HTMLDivElement>(null);
+export function TextReveal({
+	children,
+	delay = 0,
+}: { children: React.ReactNode; delay?: number }) {
+	const [isVisible, setIsVisible] = useState(false);
+	const elementRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry && entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay);
-        }
-      },
-      { threshold: 0.1 }
-    );
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const entry = entries[0];
+				if (entry?.isIntersecting) {
+					setTimeout(() => setIsVisible(true), delay);
+				}
+			},
+			{ threshold: 0.1 },
+		);
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
-    }
+		if (elementRef.current) {
+			observer.observe(elementRef.current);
+		}
 
-    return () => observer.disconnect();
-  }, [delay]);
+		return () => observer.disconnect();
+	}, [delay]);
 
-  return (
-    <div
-      ref={elementRef}
-      className={`${isVisible ? "text-reveal" : "opacity-0"}`}
-    >
-      {children}
-    </div>
-  );
+	return (
+		<div
+			ref={elementRef}
+			className={`${isVisible ? "text-reveal" : "opacity-0"}`}
+		>
+			{children}
+		</div>
+	);
 }
 
 // Premium loading animation
 export function PremiumLoader() {
-  return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-xl flex items-center justify-center z-50">
-      <div className="relative">
-        <div className="w-20 h-20 border-4 border-white/20 border-t-purple-500 rounded-full animate-spin"></div>
-        <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-blue-500 rounded-full animate-spin" style={{ animationDirection: "reverse", animationDuration: "1.5s" }}></div>
-        <div className="absolute inset-2 w-16 h-16 border-4 border-transparent border-b-pink-500 rounded-full animate-spin" style={{ animationDuration: "2s" }}></div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl">
+			<div className="relative">
+				<div className="h-20 w-20 animate-spin rounded-full border-4 border-white/20 border-t-purple-500" />
+				<div
+					className="absolute inset-0 h-20 w-20 animate-spin rounded-full border-4 border-transparent border-r-blue-500"
+					style={{ animationDirection: "reverse", animationDuration: "1.5s" }}
+				/>
+				<div
+					className="absolute inset-2 h-16 w-16 animate-spin rounded-full border-4 border-transparent border-b-pink-500"
+					style={{ animationDuration: "2s" }}
+				/>
+			</div>
+		</div>
+	);
 }
 
 // Scroll progress indicator
 export function ScrollProgress() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+	const [scrollProgress, setScrollProgress] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
-    };
+	useEffect(() => {
+		const handleScroll = () => {
+			const totalHeight =
+				document.documentElement.scrollHeight - window.innerHeight;
+			const progress = (window.scrollY / totalHeight) * 100;
+			setScrollProgress(progress);
+		};
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+		window.addEventListener("scroll", handleScroll);
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
 
-  return (
-    <div className="fixed top-0 left-0 w-full h-1 bg-black/20 z-50">
-      <div
-        className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 transition-all duration-300"
-        style={{ width: `${scrollProgress}%` }}
-      />
-    </div>
-  );
+	return (
+		<div className="fixed top-0 left-0 z-50 h-1 w-full bg-black/20">
+			<div
+				className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 transition-all duration-300"
+				style={{ width: `${scrollProgress}%` }}
+			/>
+		</div>
+	);
 }
 
 // Premium card with 3D effect
-export function Premium3DCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const cardRef = useRef<HTMLDivElement>(null);
+export function Premium3DCard({
+	children,
+	className = "",
+}: { children: React.ReactNode; className?: string }) {
+	const cardRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
+	useEffect(() => {
+		const card = cardRef.current;
+		if (!card) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-      const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-      
-      card.style.transform = `perspective(1000px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) translateZ(20px)`;
-    };
+		const handleMouseMove = (e: MouseEvent) => {
+			const rect = card.getBoundingClientRect();
+			const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+			const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
 
-    const handleMouseLeave = () => {
-      card.style.transform = "perspective(1000px) rotateY(0) rotateX(0) translateZ(0)";
-    };
+			card.style.transform = `perspective(1000px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) translateZ(20px)`;
+		};
 
-    card.addEventListener("mousemove", handleMouseMove);
-    card.addEventListener("mouseleave", handleMouseLeave);
+		const handleMouseLeave = () => {
+			card.style.transform =
+				"perspective(1000px) rotateY(0) rotateX(0) translateZ(0)";
+		};
 
-    return () => {
-      card.removeEventListener("mousemove", handleMouseMove);
-      card.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
+		card.addEventListener("mousemove", handleMouseMove);
+		card.addEventListener("mouseleave", handleMouseLeave);
 
-  return (
-    <div
-      ref={cardRef}
-      className={`card-3d ${className}`}
-    >
-      {children}
-    </div>
-  );
+		return () => {
+			card.removeEventListener("mousemove", handleMouseMove);
+			card.removeEventListener("mouseleave", handleMouseLeave);
+		};
+	}, []);
+
+	return (
+		<div ref={cardRef} className={`card-3d ${className}`}>
+			{children}
+		</div>
+	);
 }
 
 // Ripple effect component
-export function RippleEffect({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const rippleRef = useRef<HTMLDivElement>(null);
+export function RippleEffect({
+	children,
+	className = "",
+}: { children: React.ReactNode; className?: string }) {
+	const rippleRef = useRef<HTMLDivElement>(null);
 
-  const createRipple = (e: React.MouseEvent) => {
-    const button = rippleRef.current;
-    if (!button) return;
+	const createRipple = (e: React.MouseEvent) => {
+		const button = rippleRef.current;
+		if (!button) return;
 
-    const rect = button.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = e.clientX - rect.left - size / 2;
-    const y = e.clientY - rect.top - size / 2;
+		const rect = button.getBoundingClientRect();
+		const size = Math.max(rect.width, rect.height);
+		const x = e.clientX - rect.left - size / 2;
+		const y = e.clientY - rect.top - size / 2;
 
-    const ripple = document.createElement("span");
-    ripple.style.cssText = `
+		const ripple = document.createElement("span");
+		ripple.style.cssText = `
       position: absolute;
       width: ${size}px;
       height: ${size}px;
@@ -241,18 +258,18 @@ export function RippleEffect({ children, className = "" }: { children: React.Rea
       pointer-events: none;
     `;
 
-    button.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
-  };
+		button.appendChild(ripple);
+		setTimeout(() => ripple.remove(), 600);
+	};
 
-  return (
-    <div
-      ref={rippleRef}
-      className={`relative overflow-hidden ${className}`}
-      onMouseDown={createRipple}
-    >
-      {children}
-      <style jsx>{`
+	return (
+		<div
+			ref={rippleRef}
+			className={`relative overflow-hidden ${className}`}
+			onMouseDown={createRipple}
+		>
+			{children}
+			<style jsx>{`
         @keyframes ripple {
           to {
             transform: scale(2);
@@ -260,6 +277,6 @@ export function RippleEffect({ children, className = "" }: { children: React.Rea
           }
         }
       `}</style>
-    </div>
-  );
+		</div>
+	);
 }

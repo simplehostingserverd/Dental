@@ -188,7 +188,7 @@ export default function AppointmentsPage() {
 		const timeParts = time.split(":").map(Number);
 		const hours = timeParts[0] || 0;
 		const minutes = timeParts[1] || 0;
-		if (isNaN(hours) || isNaN(minutes)) return [0, 0];
+		if (Number.isNaN(hours) || Number.isNaN(minutes)) return [0, 0];
 
 		let hour24 = hours;
 

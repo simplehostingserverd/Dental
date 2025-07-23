@@ -1,17 +1,17 @@
 "use client";
 
-import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Button } from "@/components/ui/button";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
+	BookOpen,
 	Code,
+	Database,
+	Download,
+	ExternalLink,
+	Globe,
 	Key,
 	Shield,
 	Zap,
-	Database,
-	Globe,
-	BookOpen,
-	Download,
-	ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -85,35 +85,37 @@ export default function ApiDocsPage() {
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+			<nav className="sticky top-0 z-50 border-slate-200 border-b bg-white/95 shadow-sm backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-20 items-center justify-between">
 						<Link href="/" className="flex items-center">
 							<HeaderLogo className="text-indigo-600" />
-							<span className="font-bold text-xl text-slate-800 ml-2">Cognident</span>
+							<span className="ml-2 font-bold text-slate-800 text-xl">
+								Cognident
+							</span>
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Features
 							</Link>
 							<Link
 								href="/#pricing"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Pricing
 							</Link>
 							<Link
 								href="/blog"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Blog
 							</Link>
 							<Link
 								href="/about"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								About
 							</Link>
@@ -185,7 +187,9 @@ export default function ApiDocsPage() {
 									className="rounded-lg border border-gray-700 bg-white p-6 text-center"
 								>
 									<IconComponent className="mx-auto mb-4 h-12 w-12 text-blue-600" />
-									<h3 className="mb-3 font-semibold text-xl">{feature.title}</h3>
+									<h3 className="mb-3 font-semibold text-xl">
+										{feature.title}
+									</h3>
 									<p className="text-gray-600 text-sm">{feature.description}</p>
 								</div>
 							);
@@ -254,7 +258,9 @@ export default function ApiDocsPage() {
 
 						{/* Step 3 */}
 						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6">
-							<h3 className="mb-4 font-semibold text-xl">3. Explore Endpoints</h3>
+							<h3 className="mb-4 font-semibold text-xl">
+								3. Explore Endpoints
+							</h3>
 							<p className="mb-4 text-gray-600">
 								Browse our comprehensive API reference to discover all available
 								endpoints and capabilities.
@@ -286,7 +292,7 @@ export default function ApiDocsPage() {
 							>
 								<div className="flex items-center space-x-4">
 									<span
-										className={`rounded px-2 py-1 font-mono text-xs font-semibold ${
+										className={`rounded px-2 py-1 font-mono font-semibold text-xs ${
 											endpoint.method === "GET"
 												? "bg-green-900 text-green-300"
 												: "bg-blue-900 text-blue-300"
@@ -301,7 +307,7 @@ export default function ApiDocsPage() {
 										{endpoint.description}
 									</span>
 								</div>
-								<span className="rounded bg-yellow-900 px-2 py-1 text-yellow-300 text-xs">
+								<span className="rounded bg-yellow-900 px-2 py-1 text-xs text-yellow-300">
 									{endpoint.auth}
 								</span>
 							</div>
@@ -331,7 +337,7 @@ export default function ApiDocsPage() {
 
 					<div className="grid gap-6 md:grid-cols-3">
 						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6 text-center">
-							<div className="mx-auto mb-4 h-12 w-12 rounded-lg bg-blue-600 flex items-center justify-center">
+							<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
 								<Code className="h-6 w-6 text-gray-900" />
 							</div>
 							<h3 className="mb-2 font-semibold">JavaScript/Node.js</h3>
@@ -348,7 +354,7 @@ export default function ApiDocsPage() {
 						</div>
 
 						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6 text-center">
-							<div className="mx-auto mb-4 h-12 w-12 rounded-lg bg-green-600 flex items-center justify-center">
+							<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-600">
 								<Code className="h-6 w-6 text-gray-900" />
 							</div>
 							<h3 className="mb-2 font-semibold">Python</h3>
@@ -365,7 +371,7 @@ export default function ApiDocsPage() {
 						</div>
 
 						<div className="rounded-lg border border-gray-700 bg-gray-50 p-6 text-center">
-							<div className="mx-auto mb-4 h-12 w-12 rounded-lg bg-purple-600 flex items-center justify-center">
+							<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-600">
 								<Code className="h-6 w-6 text-gray-900" />
 							</div>
 							<h3 className="mb-2 font-semibold">PHP</h3>

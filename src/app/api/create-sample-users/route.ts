@@ -1,5 +1,5 @@
-import { db } from "@/server/db";
 import { hashPassword } from "@/lib/auth/password";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
 export async function POST() {
@@ -8,7 +8,7 @@ export async function POST() {
 		if (process.env.NODE_ENV !== "development") {
 			return NextResponse.json(
 				{ error: "This endpoint is only available in development" },
-				{ status: 403 }
+				{ status: 403 },
 			);
 		}
 
@@ -121,7 +121,7 @@ export async function POST() {
 				error: "Failed to create sample users",
 				details: error instanceof Error ? error.message : "Unknown error",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

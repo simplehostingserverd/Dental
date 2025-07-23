@@ -12,27 +12,28 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 const languages = [
-	{ code: 'en', name: 'English', flag: '🇺🇸' },
-	{ code: 'es', name: 'Español', flag: '🇪🇸' },
+	{ code: "en", name: "English", flag: "🇺🇸" },
+	{ code: "es", name: "Español", flag: "🇪🇸" },
 ];
 
 export function LanguageSwitcherIntl() {
 	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
-	const [currentLocale, setCurrentLocale] = useState('en');
+	const [currentLocale, setCurrentLocale] = useState("en");
 
 	const handleLanguageChange = (locale: string) => {
 		startTransition(() => {
 			// Set locale in localStorage for persistence
-			localStorage.setItem('preferred-locale', locale);
+			localStorage.setItem("preferred-locale", locale);
 			setCurrentLocale(locale);
-			
+
 			// Force page reload to apply new locale
 			window.location.reload();
 		});
 	};
 
-	const currentLanguage = languages.find(lang => lang.code === currentLocale) || languages[0];
+	const currentLanguage =
+		languages.find((lang) => lang.code === currentLocale) || languages[0];
 
 	return (
 		<DropdownMenu>
@@ -57,7 +58,7 @@ export function LanguageSwitcherIntl() {
 						<span>{language.flag}</span>
 						<span>{language.name}</span>
 						{currentLocale === language.code && (
-							<span className="ml-auto text-xs text-muted-foreground">✓</span>
+							<span className="ml-auto text-muted-foreground text-xs">✓</span>
 						)}
 					</DropdownMenuItem>
 				))}

@@ -1,23 +1,23 @@
 "use client";
 
-import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { HelpChatbot } from "@/components/chat/help-chatbot";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
-	Search,
 	BookOpen,
+	Calendar,
+	ChevronRight,
+	CreditCard,
+	FileText,
+	Mail,
 	MessageCircle,
 	Phone,
-	Mail,
-	Video,
-	FileText,
-	Users,
+	Search,
 	Settings,
-	Calendar,
-	CreditCard,
 	Shield,
-	ChevronRight,
+	Users,
+	Video,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -206,13 +206,13 @@ export default function HelpPage() {
 					{/* Search Bar */}
 					<div className="mx-auto max-w-2xl">
 						<div className="relative">
-							<Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-600" />
+							<Search className="-translate-y-1/2 absolute top-1/2 left-4 h-5 w-5 text-gray-600" />
 							<Input
 								type="text"
 								placeholder="Search for help articles, guides, and FAQs..."
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
-								className="bg-white/10 border-white/20 pl-12 pr-4 py-3 text-gray-900 placeholder-gray-300 backdrop-blur-sm"
+								className="border-white/20 bg-white/10 py-3 pr-4 pl-12 text-gray-900 placeholder-gray-300 backdrop-blur-sm"
 							/>
 						</div>
 					</div>
@@ -232,19 +232,30 @@ export default function HelpPage() {
 					<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 						{categories.map((category, index) => {
 							const IconComponent = category.icon;
-							const categorySlug = category.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-							const categoryUrl = categorySlug === 'getting-started' ? 'getting-started' :
-								categorySlug === 'scheduling-appointments' ? 'scheduling' :
-								categorySlug === 'patient-records' ? 'patient-records' :
-								categorySlug === 'billing-payments' ? 'billing' :
-								categorySlug === 'practice-settings' ? 'settings' :
-								categorySlug === 'security-privacy' ? 'security' : categorySlug;
+							const categorySlug = category.title
+								.toLowerCase()
+								.replace(/[^a-z0-9]+/g, "-")
+								.replace(/(^-|-$)/g, "");
+							const categoryUrl =
+								categorySlug === "getting-started"
+									? "getting-started"
+									: categorySlug === "scheduling-appointments"
+										? "scheduling"
+										: categorySlug === "patient-records"
+											? "patient-records"
+											: categorySlug === "billing-payments"
+												? "billing"
+												: categorySlug === "practice-settings"
+													? "settings"
+													: categorySlug === "security-privacy"
+														? "security"
+														: categorySlug;
 
 							return (
 								<Link
 									key={index}
 									href={`/help/${categoryUrl}`}
-									className="group cursor-pointer rounded-lg border border-gray-700 bg-white p-6 transition-all hover:border-gray-600 hover:bg-gray-750 block"
+									className="group block cursor-pointer rounded-lg border border-gray-700 bg-white p-6 transition-all hover:border-gray-600 hover:bg-gray-750"
 								>
 									<div className="flex items-start space-x-4">
 										<div
@@ -353,12 +364,12 @@ export default function HelpPage() {
 										size="sm"
 										className="w-full bg-blue-600 hover:bg-blue-700"
 										onClick={() => {
-											if (option.title === 'Live Chat') {
+											if (option.title === "Live Chat") {
 												setIsChatbotOpen(true);
-											} else if (option.title === 'Phone Support') {
-												window.open('tel:+19563575588');
-											} else if (option.title === 'Email Support') {
-												window.location.href = '/contact';
+											} else if (option.title === "Phone Support") {
+												window.open("tel:+19563575588");
+											} else if (option.title === "Email Support") {
+												window.location.href = "/contact";
 											}
 										}}
 									>
@@ -416,7 +427,9 @@ export default function HelpPage() {
 							</div>
 
 							<div className="rounded-lg border border-gray-700 bg-gray-50 p-6">
-								<h3 className="mb-3 font-semibold text-lg">Advanced Features</h3>
+								<h3 className="mb-3 font-semibold text-lg">
+									Advanced Features
+								</h3>
 								<ul className="space-y-2 text-gray-600 text-sm">
 									<li>
 										<Link
@@ -476,7 +489,7 @@ export default function HelpPage() {
 						<Button
 							variant="outline"
 							className="border-gray-600 text-gray-300 hover:bg-white"
-							onClick={() => window.open('tel:+19563575588')}
+							onClick={() => window.open("tel:+19563575588")}
 						>
 							<Phone className="mr-2 h-4 w-4" />
 							Call Support

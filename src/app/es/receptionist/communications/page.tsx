@@ -1,28 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { 
-	MessageSquare, 
-	Send, 
-	Phone, 
-	Mail,
-	Users,
-	Clock,
-	CheckCircle,
-	AlertCircle,
-	Plus,
-	Search,
-	Filter,
-	Settings
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
 	Select,
 	SelectContent,
@@ -30,6 +11,25 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
+import {
+	AlertCircle,
+	CheckCircle,
+	Clock,
+	Filter,
+	Mail,
+	MessageSquare,
+	Phone,
+	Plus,
+	Search,
+	Send,
+	Settings,
+	Users,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 // Spanish translations
 const translations = {
@@ -44,7 +44,7 @@ const translations = {
 		telegram: "Telegram",
 		signal: "Signal",
 		sms: "SMS",
-		email: "Email"
+		email: "Email",
 	},
 	messageTypes: {
 		appointment: "Recordatorio de Cita",
@@ -52,14 +52,14 @@ const translations = {
 		payment: "Recordatorio de Pago",
 		followUp: "Seguimiento",
 		promotion: "Promoción",
-		general: "General"
+		general: "General",
 	},
 	stats: {
 		totalMessages: "Mensajes Totales",
 		sentToday: "Enviados Hoy",
 		pendingResponses: "Respuestas Pendientes",
-		activeChats: "Chats Activos"
-	}
+		activeChats: "Chats Activos",
+	},
 };
 
 export default function SpanishCommunicationsPage() {
@@ -76,29 +76,29 @@ export default function SpanishCommunicationsPage() {
 			value: "1,247",
 			change: "+23",
 			icon: MessageSquare,
-			color: "text-blue-600"
+			color: "text-blue-600",
 		},
 		{
 			title: translations.stats.sentToday,
 			value: "89",
 			change: "+12",
 			icon: Send,
-			color: "text-green-600"
+			color: "text-green-600",
 		},
 		{
 			title: translations.stats.pendingResponses,
 			value: "15",
 			change: "-3",
 			icon: AlertCircle,
-			color: "text-orange-600"
+			color: "text-orange-600",
 		},
 		{
 			title: translations.stats.activeChats,
 			value: "42",
 			change: "+5",
 			icon: Users,
-			color: "text-purple-600"
-		}
+			color: "text-purple-600",
+		},
 	];
 
 	const recentMessages = [
@@ -110,7 +110,7 @@ export default function SpanishCommunicationsPage() {
 			message: "Recordatorio de cita para mañana a las 10:00 AM",
 			timestamp: "2024-01-15 14:30",
 			status: "delivered",
-			response: "Confirmado, ahí estaré. Gracias!"
+			response: "Confirmado, ahí estaré. Gracias!",
 		},
 		{
 			id: 2,
@@ -120,7 +120,7 @@ export default function SpanishCommunicationsPage() {
 			message: "Recordatorio de pago pendiente por $1,500 MXN",
 			timestamp: "2024-01-15 13:15",
 			status: "read",
-			response: null
+			response: null,
 		},
 		{
 			id: 3,
@@ -130,7 +130,7 @@ export default function SpanishCommunicationsPage() {
 			message: "Instrucciones de cuidado post-endodoncia",
 			timestamp: "2024-01-15 12:00",
 			status: "delivered",
-			response: "Muchas gracias por las instrucciones"
+			response: "Muchas gracias por las instrucciones",
 		},
 		{
 			id: 4,
@@ -140,8 +140,8 @@ export default function SpanishCommunicationsPage() {
 			message: "Confirmación de cita reprogramada",
 			timestamp: "2024-01-15 11:45",
 			status: "delivered",
-			response: "Perfecto, nos vemos el viernes"
-		}
+			response: "Perfecto, nos vemos el viernes",
+		},
 	];
 
 	const messageTemplates = [
@@ -149,63 +149,83 @@ export default function SpanishCommunicationsPage() {
 			id: 1,
 			name: "Recordatorio de Cita",
 			type: "appointment",
-			content: "Hola {nombre}, te recordamos tu cita el {fecha} a las {hora} con {doctor}. Por favor confirma tu asistencia."
+			content:
+				"Hola {nombre}, te recordamos tu cita el {fecha} a las {hora} con {doctor}. Por favor confirma tu asistencia.",
 		},
 		{
 			id: 2,
 			name: "Confirmación de Cita",
 			type: "confirmation",
-			content: "Tu cita ha sido confirmada para el {fecha} a las {hora}. Te esperamos en nuestra clínica."
+			content:
+				"Tu cita ha sido confirmada para el {fecha} a las {hora}. Te esperamos en nuestra clínica.",
 		},
 		{
 			id: 3,
 			name: "Recordatorio de Pago",
 			type: "payment",
-			content: "Estimado/a {nombre}, tienes un pago pendiente de ${monto} con vencimiento el {fecha}."
+			content:
+				"Estimado/a {nombre}, tienes un pago pendiente de ${monto} con vencimiento el {fecha}.",
 		},
 		{
 			id: 4,
 			name: "Cuidados Post-Tratamiento",
 			type: "followUp",
-			content: "Hola {nombre}, aquí tienes las instrucciones de cuidado después de tu {tratamiento}: {instrucciones}"
-		}
+			content:
+				"Hola {nombre}, aquí tienes las instrucciones de cuidado después de tu {tratamiento}: {instrucciones}",
+		},
 	];
 
 	const patients = [
 		{ id: 1, name: "María González", phone: "+52 55 1234 5678" },
 		{ id: 2, name: "Carlos Hernández", phone: "+52 55 2345 6789" },
 		{ id: 3, name: "Ana López", phone: "+52 55 3456 7890" },
-		{ id: 4, name: "Luis Morales", phone: "+52 55 4567 8901" }
+		{ id: 4, name: "Luis Morales", phone: "+52 55 4567 8901" },
 	];
 
 	const getPlatformIcon = (platform: string) => {
 		switch (platform) {
-			case "whatsapp": return "💬";
-			case "telegram": return "✈️";
-			case "signal": return "🔒";
-			case "sms": return "📱";
-			case "email": return "📧";
-			default: return "💬";
+			case "whatsapp":
+				return "💬";
+			case "telegram":
+				return "✈️";
+			case "signal":
+				return "🔒";
+			case "sms":
+				return "📱";
+			case "email":
+				return "📧";
+			default:
+				return "💬";
 		}
 	};
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "delivered": return "bg-green-100 text-green-800";
-			case "read": return "bg-blue-100 text-blue-800";
-			case "sent": return "bg-gray-100 text-gray-800";
-			case "failed": return "bg-red-100 text-red-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "delivered":
+				return "bg-green-100 text-green-800";
+			case "read":
+				return "bg-blue-100 text-blue-800";
+			case "sent":
+				return "bg-gray-100 text-gray-800";
+			case "failed":
+				return "bg-red-100 text-red-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const getStatusText = (status: string) => {
 		switch (status) {
-			case "delivered": return "Entregado";
-			case "read": return "Leído";
-			case "sent": return "Enviado";
-			case "failed": return "Fallido";
-			default: return status;
+			case "delivered":
+				return "Entregado";
+			case "read":
+				return "Leído";
+			case "sent":
+				return "Enviado";
+			case "failed":
+				return "Fallido";
+			default:
+				return status;
 		}
 	};
 
@@ -217,7 +237,7 @@ export default function SpanishCommunicationsPage() {
 			platform: selectedPlatform,
 			patient: selectedPatient,
 			type: messageType,
-			message: messageText
+			message: messageText,
 		});
 
 		// Reset form
@@ -239,19 +259,19 @@ export default function SpanishCommunicationsPage() {
 								<div className="flex items-baseline space-x-4">
 									<Link
 										href="/es/receptionist"
-										className="rounded-md px-3 py-2 text-gray-300 text-sm font-medium hover:bg-gray-700 hover:text-white"
+										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
 									>
 										Panel Principal
 									</Link>
 									<Link
 										href="/es/receptionist/appointments"
-										className="rounded-md px-3 py-2 text-gray-300 text-sm font-medium hover:bg-gray-700 hover:text-white"
+										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
 									>
 										Citas
 									</Link>
 									<Link
 										href="/es/receptionist/communications"
-										className="rounded-md bg-gray-900 px-3 py-2 text-white text-sm font-medium"
+										className="rounded-md bg-gray-900 px-3 py-2 font-medium text-sm text-white"
 									>
 										Comunicaciones
 									</Link>
@@ -270,7 +290,9 @@ export default function SpanishCommunicationsPage() {
 			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="font-bold text-3xl text-white">{translations.title}</h1>
+					<h1 className="font-bold text-3xl text-white">
+						{translations.title}
+					</h1>
 					<p className="mt-2 text-gray-400">{translations.subtitle}</p>
 				</div>
 
@@ -283,8 +305,12 @@ export default function SpanishCommunicationsPage() {
 								<CardContent className="p-6">
 									<div className="flex items-center justify-between">
 										<div>
-											<p className="text-gray-400 text-sm font-medium">{stat.title}</p>
-											<p className="font-bold text-2xl text-white">{stat.value}</p>
+											<p className="font-medium text-gray-400 text-sm">
+												{stat.title}
+											</p>
+											<p className="font-bold text-2xl text-white">
+												{stat.value}
+											</p>
 											<p className="text-green-400 text-sm">{stat.change}</p>
 										</div>
 										<IconComponent className={`h-8 w-8 ${stat.color}`} />
@@ -301,15 +327,20 @@ export default function SpanishCommunicationsPage() {
 					<div className="lg:col-span-1">
 						<Card className="border-gray-700 bg-gray-800">
 							<CardHeader>
-								<CardTitle className="text-white">{translations.newMessage}</CardTitle>
+								<CardTitle className="text-white">
+									{translations.newMessage}
+								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								{/* Platform Selection */}
 								<div>
-									<label className="mb-2 block text-gray-300 text-sm font-medium">
+									<label className="mb-2 block font-medium text-gray-300 text-sm">
 										Plataforma
 									</label>
-									<Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+									<Select
+										value={selectedPlatform}
+										onValueChange={setSelectedPlatform}
+									>
 										<SelectTrigger className="border-gray-600 bg-gray-700 text-white">
 											<SelectValue />
 										</SelectTrigger>
@@ -335,16 +366,22 @@ export default function SpanishCommunicationsPage() {
 
 								{/* Patient Selection */}
 								<div>
-									<label className="mb-2 block text-gray-300 text-sm font-medium">
+									<label className="mb-2 block font-medium text-gray-300 text-sm">
 										Paciente
 									</label>
-									<Select value={selectedPatient} onValueChange={setSelectedPatient}>
+									<Select
+										value={selectedPatient}
+										onValueChange={setSelectedPatient}
+									>
 										<SelectTrigger className="border-gray-600 bg-gray-700 text-white">
 											<SelectValue placeholder="Seleccionar paciente" />
 										</SelectTrigger>
 										<SelectContent className="border-gray-600 bg-gray-700">
 											{patients.map((patient) => (
-												<SelectItem key={patient.id} value={patient.id.toString()}>
+												<SelectItem
+													key={patient.id}
+													value={patient.id.toString()}
+												>
 													{patient.name} - {patient.phone}
 												</SelectItem>
 											))}
@@ -354,7 +391,7 @@ export default function SpanishCommunicationsPage() {
 
 								{/* Message Type */}
 								<div>
-									<label className="mb-2 block text-gray-300 text-sm font-medium">
+									<label className="mb-2 block font-medium text-gray-300 text-sm">
 										Tipo de Mensaje
 									</label>
 									<Select value={messageType} onValueChange={setMessageType}>
@@ -386,7 +423,7 @@ export default function SpanishCommunicationsPage() {
 
 								{/* Message Text */}
 								<div>
-									<label className="mb-2 block text-gray-300 text-sm font-medium">
+									<label className="mb-2 block font-medium text-gray-300 text-sm">
 										Mensaje
 									</label>
 									<Textarea
@@ -399,7 +436,7 @@ export default function SpanishCommunicationsPage() {
 								</div>
 
 								{/* Send Button */}
-								<Button 
+								<Button
 									onClick={handleSendMessage}
 									className="w-full bg-blue-600 hover:bg-blue-700"
 									disabled={!selectedPatient || !messageText.trim()}
@@ -427,10 +464,12 @@ export default function SpanishCommunicationsPage() {
 								<Card className="border-gray-700 bg-gray-800">
 									<CardHeader>
 										<div className="flex items-center justify-between">
-											<CardTitle className="text-white">Mensajes Recientes</CardTitle>
+											<CardTitle className="text-white">
+												Mensajes Recientes
+											</CardTitle>
 											<div className="flex items-center space-x-2">
 												<div className="relative">
-													<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+													<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 													<Input
 														placeholder="Buscar mensajes..."
 														value={searchTerm}
@@ -438,7 +477,11 @@ export default function SpanishCommunicationsPage() {
 														className="border-gray-600 bg-gray-700 pl-10 text-white placeholder-gray-400"
 													/>
 												</div>
-												<Button variant="outline" size="sm" className="border-gray-600 bg-gray-700 text-white">
+												<Button
+													variant="outline"
+													size="sm"
+													className="border-gray-600 bg-gray-700 text-white"
+												>
 													<Filter className="h-4 w-4" />
 												</Button>
 											</div>
@@ -447,20 +490,33 @@ export default function SpanishCommunicationsPage() {
 									<CardContent>
 										<div className="space-y-4">
 											{recentMessages.map((message) => (
-												<div key={message.id} className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+												<div
+													key={message.id}
+													className="rounded-lg border border-gray-700 bg-gray-900 p-4"
+												>
 													<div className="flex items-start justify-between">
 														<div className="flex-1">
 															<div className="flex items-center space-x-2">
-																<span className="text-lg">{getPlatformIcon(message.platform)}</span>
-																<span className="font-medium text-white">{message.patient}</span>
-																<Badge className={getStatusColor(message.status)}>
+																<span className="text-lg">
+																	{getPlatformIcon(message.platform)}
+																</span>
+																<span className="font-medium text-white">
+																	{message.patient}
+																</span>
+																<Badge
+																	className={getStatusColor(message.status)}
+																>
 																	{getStatusText(message.status)}
 																</Badge>
 															</div>
-															<p className="mt-2 text-gray-300">{message.message}</p>
+															<p className="mt-2 text-gray-300">
+																{message.message}
+															</p>
 															{message.response && (
 																<div className="mt-2 rounded bg-gray-800 p-2">
-																	<p className="text-blue-400 text-sm">Respuesta: {message.response}</p>
+																	<p className="text-blue-400 text-sm">
+																		Respuesta: {message.response}
+																	</p>
 																</div>
 															)}
 														</div>
@@ -478,16 +534,23 @@ export default function SpanishCommunicationsPage() {
 							<TabsContent value="templates">
 								<Card className="border-gray-700 bg-gray-800">
 									<CardHeader>
-										<CardTitle className="text-white">Plantillas de Mensajes</CardTitle>
+										<CardTitle className="text-white">
+											Plantillas de Mensajes
+										</CardTitle>
 									</CardHeader>
 									<CardContent>
 										<div className="grid gap-4 md:grid-cols-2">
 											{messageTemplates.map((template) => (
-												<div key={template.id} className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+												<div
+													key={template.id}
+													className="rounded-lg border border-gray-700 bg-gray-900 p-4"
+												>
 													<div className="flex items-center justify-between">
-														<h3 className="font-medium text-white">{template.name}</h3>
-														<Button 
-															size="sm" 
+														<h3 className="font-medium text-white">
+															{template.name}
+														</h3>
+														<Button
+															size="sm"
 															variant="outline"
 															className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
 															onClick={() => setMessageText(template.content)}
@@ -495,7 +558,9 @@ export default function SpanishCommunicationsPage() {
 															Usar
 														</Button>
 													</div>
-													<p className="mt-2 text-gray-400 text-sm">{template.content}</p>
+													<p className="mt-2 text-gray-400 text-sm">
+														{template.content}
+													</p>
 												</div>
 											))}
 										</div>

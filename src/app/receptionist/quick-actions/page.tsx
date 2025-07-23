@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuickActionsService } from "@/lib/services/quick-actions";
-import { toast } from "sonner";
 import {
 	AlertTriangle,
 	Bell,
@@ -49,6 +48,7 @@ import {
 	Zap,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 // Mock data for recent actions
 const recentActions = [
@@ -176,7 +176,10 @@ export default function QuickActionsPage() {
 
 		const actionType = actionTypeMap[selectedAction.name];
 		if (actionType) {
-			const result = await QuickActionsService.executeAction(actionType, actionData);
+			const result = await QuickActionsService.executeAction(
+				actionType,
+				actionData,
+			);
 			if (result.success) {
 				setShowActionDialog(false);
 				setSelectedAction(null);

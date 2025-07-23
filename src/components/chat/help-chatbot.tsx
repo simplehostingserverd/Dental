@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bot, Send, User, X, Phone, Mail } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { Bot, Mail, Phone, Send, User, X } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 interface Message {
 	id: string;
 	content: string;
-	sender: 'user' | 'bot';
+	sender: "user" | "bot";
 	timestamp: Date;
 }
 
@@ -23,13 +23,14 @@ interface HelpChatbotProps {
 export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 	const [messages, setMessages] = useState<Message[]>([
 		{
-			id: '1',
-			content: 'Hello! I\'m here to help you with Cognident. How can I assist you today?',
-			sender: 'bot',
+			id: "1",
+			content:
+				"Hello! I'm here to help you with Cognident. How can I assist you today?",
+			sender: "bot",
 			timestamp: new Date(),
 		},
 	]);
-	const [inputMessage, setInputMessage] = useState('');
+	const [inputMessage, setInputMessage] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -45,23 +46,23 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 		const userMessage: Message = {
 			id: Date.now().toString(),
 			content: inputMessage,
-			sender: 'user',
+			sender: "user",
 			timestamp: new Date(),
 		};
 
-		setMessages(prev => [...prev, userMessage]);
-		setInputMessage('');
+		setMessages((prev) => [...prev, userMessage]);
+		setInputMessage("");
 		setIsLoading(true);
 
 		try {
-			const response = await fetch('/api/chat/help', {
-				method: 'POST',
+			const response = await fetch("/api/chat/help", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
 					message: inputMessage,
-					context: 'Help Center Chat',
+					context: "Help Center Chat",
 				}),
 			});
 
@@ -70,29 +71,30 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 				const botMessage: Message = {
 					id: (Date.now() + 1).toString(),
 					content: data.response,
-					sender: 'bot',
+					sender: "bot",
 					timestamp: new Date(),
 				};
-				setMessages(prev => [...prev, botMessage]);
+				setMessages((prev) => [...prev, botMessage]);
 			} else {
-				throw new Error('Failed to get response');
+				throw new Error("Failed to get response");
 			}
 		} catch (error) {
-			console.error('Chat error:', error);
+			console.error("Chat error:", error);
 			const errorMessage: Message = {
 				id: (Date.now() + 1).toString(),
-				content: 'I apologize, but I\'m having trouble responding right now. Please try again or contact our support team.',
-				sender: 'bot',
+				content:
+					"I apologize, but I'm having trouble responding right now. Please try again or contact our support team.",
+				sender: "bot",
 				timestamp: new Date(),
 			};
-			setMessages(prev => [...prev, errorMessage]);
+			setMessages((prev) => [...prev, errorMessage]);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
 	const handleKeyPress = (e: React.KeyboardEvent) => {
-		if (e.key === 'Enter' && !e.shiftKey) {
+		if (e.key === "Enter" && !e.shiftKey) {
 			e.preventDefault();
 			sendMessage();
 		}
@@ -101,8 +103,8 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-			<Card className="w-full max-w-md h-[600px] flex flex-col">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+			<Card className="flex h-[600px] w-full max-w-md flex-col">
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<CardTitle className="flex items-center gap-2">
 						<Bot className="h-5 w-5 text-blue-600" />
@@ -112,29 +114,31 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 						<X className="h-4 w-4" />
 					</Button>
 				</CardHeader>
-				<CardContent className="flex-1 flex flex-col p-4">
+				<CardContent className="flex flex-1 flex-col p-4">
 					<ScrollArea className="flex-1 pr-4" ref={scrollAreaRef}>
 						<div className="space-y-4">
 							{messages.map((message) => (
 								<div
 									key={message.id}
 									className={`flex ${
-										message.sender === 'user' ? 'justify-end' : 'justify-start'
+										message.sender === "user" ? "justify-end" : "justify-start"
 									}`}
 								>
 									<div
-										className={`flex items-start gap-2 max-w-[80%] ${
-											message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
+										className={`flex max-w-[80%] items-start gap-2 ${
+											message.sender === "user"
+												? "flex-row-reverse"
+												: "flex-row"
 										}`}
 									>
 										<div
-											className={`w-8 h-8 rounded-full flex items-center justify-center ${
-												message.sender === 'user'
-													? 'bg-blue-600 text-white'
-													: 'bg-gray-200 text-gray-600'
+											className={`flex h-8 w-8 items-center justify-center rounded-full ${
+												message.sender === "user"
+													? "bg-blue-600 text-white"
+													: "bg-gray-200 text-gray-600"
 											}`}
 										>
-											{message.sender === 'user' ? (
+											{message.sender === "user" ? (
 												<User className="h-4 w-4" />
 											) : (
 												<Bot className="h-4 w-4" />
@@ -142,16 +146,16 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 										</div>
 										<div
 											className={`rounded-lg px-3 py-2 ${
-												message.sender === 'user'
-													? 'bg-blue-600 text-white'
-													: 'bg-gray-100 text-gray-900'
+												message.sender === "user"
+													? "bg-blue-600 text-white"
+													: "bg-gray-100 text-gray-900"
 											}`}
 										>
 											<p className="text-sm">{message.content}</p>
-											<p className="text-xs opacity-70 mt-1">
+											<p className="mt-1 text-xs opacity-70">
 												{message.timestamp.toLocaleTimeString([], {
-													hour: '2-digit',
-													minute: '2-digit',
+													hour: "2-digit",
+													minute: "2-digit",
 												})}
 											</p>
 										</div>
@@ -161,14 +165,20 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 							{isLoading && (
 								<div className="flex justify-start">
 									<div className="flex items-start gap-2">
-										<div className="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center">
+										<div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-600">
 											<Bot className="h-4 w-4" />
 										</div>
-										<div className="bg-gray-100 rounded-lg px-3 py-2">
+										<div className="rounded-lg bg-gray-100 px-3 py-2">
 											<div className="flex space-x-1">
-												<div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-												<div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-												<div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+												<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
+												<div
+													className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+													style={{ animationDelay: "0.1s" }}
+												/>
+												<div
+													className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+													style={{ animationDelay: "0.2s" }}
+												/>
 											</div>
 										</div>
 									</div>
@@ -176,14 +186,14 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 							)}
 						</div>
 					</ScrollArea>
-					
+
 					{/* Quick Actions */}
-					<div className="flex gap-2 my-3">
+					<div className="my-3 flex gap-2">
 						<Button
 							variant="outline"
 							size="sm"
 							className="flex items-center gap-1"
-							onClick={() => window.open('tel:+19563575588')}
+							onClick={() => window.open("tel:+19563575588")}
 						>
 							<Phone className="h-3 w-3" />
 							Call
@@ -211,7 +221,10 @@ export function HelpChatbot({ isOpen, onClose }: HelpChatbotProps) {
 							disabled={isLoading}
 							className="flex-1"
 						/>
-						<Button onClick={sendMessage} disabled={isLoading || !inputMessage.trim()}>
+						<Button
+							onClick={sendMessage}
+							disabled={isLoading || !inputMessage.trim()}
+						>
 							<Send className="h-4 w-4" />
 						</Button>
 					</div>

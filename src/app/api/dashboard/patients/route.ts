@@ -5,32 +5,40 @@ import { z } from "zod";
 
 // Patient validation schema
 const PatientSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Valid email is required"),
-  phone: z.string().min(10, "Valid phone number is required"),
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
-  address: z.object({
-    street: z.string().min(1, "Street address is required"),
-    city: z.string().min(1, "City is required"),
-    state: z.string().min(2, "State is required"),
-    zipCode: z.string().min(5, "ZIP code is required"),
-  }).optional(),
-  emergencyContact: z.object({
-    name: z.string().min(1, "Emergency contact name is required"),
-    relationship: z.string().min(1, "Relationship is required"),
-    phone: z.string().min(10, "Emergency contact phone is required"),
-  }).optional(),
-  insurance: z.object({
-    provider: z.string().optional(),
-    policyNumber: z.string().optional(),
-    groupNumber: z.string().optional(),
-  }).optional(),
-  medicalHistory: z.object({
-    allergies: z.array(z.string()).default([]),
-    medications: z.array(z.string()).default([]),
-    conditions: z.array(z.string()).default([]),
-  }).optional(),
+	firstName: z.string().min(1, "First name is required"),
+	lastName: z.string().min(1, "Last name is required"),
+	email: z.string().email("Valid email is required"),
+	phone: z.string().min(10, "Valid phone number is required"),
+	dateOfBirth: z.string().min(1, "Date of birth is required"),
+	address: z
+		.object({
+			street: z.string().min(1, "Street address is required"),
+			city: z.string().min(1, "City is required"),
+			state: z.string().min(2, "State is required"),
+			zipCode: z.string().min(5, "ZIP code is required"),
+		})
+		.optional(),
+	emergencyContact: z
+		.object({
+			name: z.string().min(1, "Emergency contact name is required"),
+			relationship: z.string().min(1, "Relationship is required"),
+			phone: z.string().min(10, "Emergency contact phone is required"),
+		})
+		.optional(),
+	insurance: z
+		.object({
+			provider: z.string().optional(),
+			policyNumber: z.string().optional(),
+			groupNumber: z.string().optional(),
+		})
+		.optional(),
+	medicalHistory: z
+		.object({
+			allergies: z.array(z.string()).default([]),
+			medications: z.array(z.string()).default([]),
+			conditions: z.array(z.string()).default([]),
+		})
+		.optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -143,14 +151,14 @@ export async function POST(request: NextRequest) {
 		const existingPatient = await db.patient.findFirst({
 			where: {
 				email: validatedData.email,
-				practiceId: practiceUser.practiceId
+				practiceId: practiceUser.practiceId,
 			},
 		});
 
 		if (existingPatient) {
 			return NextResponse.json(
 				{ error: "Patient with this email already exists" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -165,9 +173,9 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json(
 			{
 				message: "Patient created successfully",
-				patient: newPatient
+				patient: newPatient,
 			},
-			{ status: 201 }
+			{ status: 201 },
 		);
 	} catch (error) {
 		console.error("Error creating patient:", error);
@@ -176,15 +184,15 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json(
 				{
 					error: "Validation failed",
-					details: error.errors
+					details: error.errors,
 				},
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		return NextResponse.json(
 			{ error: "Failed to create patient" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -216,7 +224,7 @@ export async function PUT(request: NextRequest) {
 		if (!patientIds || !Array.isArray(patientIds)) {
 			return NextResponse.json(
 				{ error: "Patient IDs array is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -237,7 +245,7 @@ export async function PUT(request: NextRequest) {
 		console.error("Error updating patients:", error);
 		return NextResponse.json(
 			{ error: "Failed to update patients" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -269,7 +277,7 @@ export async function DELETE(request: NextRequest) {
 		if (!patientIds || !Array.isArray(patientIds)) {
 			return NextResponse.json(
 				{ error: "Patient IDs array is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -289,7 +297,7 @@ export async function DELETE(request: NextRequest) {
 		console.error("Error deleting patients:", error);
 		return NextResponse.json(
 			{ error: "Failed to delete patients" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

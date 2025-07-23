@@ -3,9 +3,9 @@
  * Provides system status information for monitoring
  */
 
-import { db } from "@/server/db";
 import { env, isProduction } from "@/env";
 import { logger } from "@/lib/logger";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
 interface HealthStatus {
@@ -41,7 +41,7 @@ export async function GET(): Promise<NextResponse> {
 	}
 
 	// Determine overall status
-	const overallStatus: "ok" | "degraded" | "error" = 
+	const overallStatus: "ok" | "degraded" | "error" =
 		dbStatus === "ok" ? "ok" : "error";
 
 	// Build response
@@ -66,18 +66,18 @@ export async function GET(): Promise<NextResponse> {
 	if (isProduction && overallStatus !== "ok") {
 		return NextResponse.json(
 			{ status: overallStatus },
-			{ status: overallStatus === "error" ? 500 : 200 }
+			{ status: overallStatus === "error" ? 500 : 200 },
 		);
 	}
 
 	const responseTime = Math.round(performance.now() - startTime);
-	
+
 	// Add response time header
-	const response = NextResponse.json(health, { 
-		status: overallStatus === "error" ? 500 : 200 
+	const response = NextResponse.json(health, {
+		status: overallStatus === "error" ? 500 : 200,
 	});
-	
+
 	response.headers.set("X-Response-Time", `${responseTime}ms`);
-	
+
 	return response;
 }

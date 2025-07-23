@@ -10,7 +10,7 @@ interface LoginRequestBody {
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
 	try {
-		const body = await request.json() as LoginRequestBody;
+		const body = (await request.json()) as LoginRequestBody;
 		const { email, password, twoFactorToken, rememberMe } = body;
 
 		// Validate required fields

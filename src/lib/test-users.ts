@@ -189,22 +189,22 @@ export const testUsersClient = [
 // Placeholder hashes for client-side testing
 const receptionist2Hash = {
 	hash: "placeholder-hash-for-client-testing",
-	salt: "placeholder-salt-for-client-testing"
+	salt: "placeholder-salt-for-client-testing",
 };
 
 const patient1Hash = {
 	hash: "placeholder-hash-for-client-testing",
-	salt: "placeholder-salt-for-client-testing"
+	salt: "placeholder-salt-for-client-testing",
 };
 
 const patient2Hash = {
 	hash: "placeholder-hash-for-client-testing",
-	salt: "placeholder-salt-for-client-testing"
+	salt: "placeholder-salt-for-client-testing",
 };
 
 const patient3Hash = {
 	hash: "placeholder-hash-for-client-testing",
-	salt: "placeholder-salt-for-client-testing"
+	salt: "placeholder-salt-for-client-testing",
 };
 
 export const clientTestUsers: TestUser[] = [

@@ -127,7 +127,8 @@ export default function ReceptionistDashboard() {
 		email: "",
 		provider: "",
 		treatment: "",
-		date: new Date().toISOString().split("T")[0] || new Date().toLocaleDateString(),
+		date:
+			new Date().toISOString().split("T")[0] || new Date().toLocaleDateString(),
 		time: "",
 		notes: "",
 	});
@@ -257,7 +258,9 @@ export default function ReceptionistDashboard() {
 				email: "",
 				provider: "",
 				treatment: "",
-				date: new Date().toISOString().split("T")[0] || new Date().toLocaleDateString(),
+				date:
+					new Date().toISOString().split("T")[0] ||
+					new Date().toLocaleDateString(),
 				time: "",
 				notes: "",
 			});

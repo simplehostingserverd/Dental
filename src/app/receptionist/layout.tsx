@@ -9,11 +9,13 @@ export default function ReceptionistLayout({
 }) {
 	return (
 		<ToastProvider>
-			<div className="flex h-screen dashboard-layout">
+			<div className="dashboard-layout flex h-screen">
 				<ReceptionistSidebar />
 				<div className="flex flex-1 flex-col overflow-hidden">
 					<ReceptionistHeader />
-					<main className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-slate-50 to-blue-50">{children}</main>
+					<main className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+						{children}
+					</main>
 				</div>
 			</div>
 		</ToastProvider>

@@ -1,3 +1,4 @@
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
 	ArrowLeft,
 	BookOpen,
@@ -6,7 +7,6 @@ import {
 	Share2,
 	User,
 } from "lucide-react";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -216,7 +216,7 @@ const blogPosts = [
 		image:
 			"https://images.unsplash.com/photo-1609840114035-3c981b782dfe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
 		readTime: "6 min read",
-	}
+	},
 ];
 
 interface BlogPostPageProps {
@@ -321,7 +321,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 			<article className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
 				<header className="mb-8">
 					<div className="mb-4">
-						<span className="rounded-full bg-blue-600 px-3 py-1 font-medium text-sm text-gray-900">
+						<span className="rounded-full bg-blue-600 px-3 py-1 font-medium text-gray-900 text-sm">
 							{post.category}
 						</span>
 					</div>

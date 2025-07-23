@@ -1,7 +1,7 @@
 "use client";
 
 import { HeaderLogo } from "@/components/ui/tooth-logo";
-import { Shield, Lock, Eye, FileText, Users, Globe } from "lucide-react";
+import { Eye, FileText, Globe, Lock, Shield, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function PrivacyPage() {
@@ -166,10 +166,12 @@ export default function PrivacyPage() {
 								Information We Collect
 							</h2>
 							<div className="space-y-4 text-gray-300">
-								<h3 className="font-semibold text-lg text-blue-600">
+								<h3 className="font-semibold text-blue-600 text-lg">
 									Personal Information
 								</h3>
-								<p>We may collect the following types of personal information:</p>
+								<p>
+									We may collect the following types of personal information:
+								</p>
 								<ul className="ml-6 list-disc space-y-2">
 									<li>
 										Contact information (name, email address, phone number,
@@ -184,7 +186,7 @@ export default function PrivacyPage() {
 									<li>Communication preferences and history</li>
 								</ul>
 
-								<h3 className="font-semibold text-lg text-blue-600">
+								<h3 className="font-semibold text-blue-600 text-lg">
 									Protected Health Information (PHI)
 								</h3>
 								<p>
@@ -201,7 +203,7 @@ export default function PrivacyPage() {
 									<li>Digital images and radiographs</li>
 								</ul>
 
-								<h3 className="font-semibold text-lg text-blue-600">
+								<h3 className="font-semibold text-blue-600 text-lg">
 									Technical Information
 								</h3>
 								<ul className="ml-6 list-disc space-y-2">
@@ -220,7 +222,9 @@ export default function PrivacyPage() {
 								How We Use Your Information
 							</h2>
 							<div className="space-y-4 text-gray-300">
-								<p>We use the information we collect for the following purposes:</p>
+								<p>
+									We use the information we collect for the following purposes:
+								</p>
 								<ul className="ml-6 list-disc space-y-2">
 									<li>Providing and maintaining our software services</li>
 									<li>Processing payments and managing accounts</li>
@@ -366,8 +370,8 @@ export default function PrivacyPage() {
 										information (subject to legal requirements)
 									</li>
 									<li>
-										<strong>Portability:</strong> Request a copy of your data
-										in a portable format
+										<strong>Portability:</strong> Request a copy of your data in
+										a portable format
 									</li>
 									<li>
 										<strong>Opt-out:</strong> Unsubscribe from marketing
@@ -405,7 +409,7 @@ export default function PrivacyPage() {
 									<br />
 									222 E Van Buren St.
 									<br />
-									Harlingen, TX  78550
+									Harlingen, TX 78550
 								</p>
 							</div>
 						</div>

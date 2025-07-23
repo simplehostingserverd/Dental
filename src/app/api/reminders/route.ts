@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { ReminderService } from "@/lib/reminders/reminder-service";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -9,43 +9,53 @@ export async function POST(request: NextRequest) {
 		if (!practiceId || !appointmentId) {
 			return NextResponse.json(
 				{ error: "Practice ID and appointment ID are required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		const reminderService = new ReminderService(practiceId);
 
 		switch (action) {
-			case 'schedule':
+			case "schedule":
 				await reminderService.scheduleReminders(appointmentId);
-				return NextResponse.json({ success: true, message: "Reminders scheduled" });
+				return NextResponse.json({
+					success: true,
+					message: "Reminders scheduled",
+				});
 
-			case 'cancel':
+			case "cancel":
 				await reminderService.cancelReminders(appointmentId);
-				return NextResponse.json({ success: true, message: "Reminders cancelled" });
+				return NextResponse.json({
+					success: true,
+					message: "Reminders cancelled",
+				});
 
-			case 'reschedule':
+			case "reschedule": {
 				const { newDate } = body;
 				if (!newDate) {
 					return NextResponse.json(
 						{ error: "New date is required for rescheduling" },
-						{ status: 400 }
+						{ status: 400 },
 					);
 				}
-				await reminderService.rescheduleReminders(appointmentId, new Date(newDate));
-				return NextResponse.json({ success: true, message: "Reminders rescheduled" });
+				await reminderService.rescheduleReminders(
+					appointmentId,
+					new Date(newDate),
+				);
+				return NextResponse.json({
+					success: true,
+					message: "Reminders rescheduled",
+				});
+			}
 
 			default:
-				return NextResponse.json(
-					{ error: "Invalid action" },
-					{ status: 400 }
-				);
+				return NextResponse.json({ error: "Invalid action" }, { status: 400 });
 		}
 	} catch (error) {
 		console.error("Reminder API error:", error);
 		return NextResponse.json(
 			{ error: "Failed to process reminder request" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -54,12 +64,12 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
 	try {
 		const { searchParams } = new URL(request.url);
-		const practiceId = searchParams.get('practiceId');
+		const practiceId = searchParams.get("practiceId");
 
 		if (!practiceId) {
 			return NextResponse.json(
 				{ error: "Practice ID is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -71,7 +81,7 @@ export async function GET(request: NextRequest) {
 		console.error("Reminder templates error:", error);
 		return NextResponse.json(
 			{ error: "Failed to fetch reminder templates" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

@@ -3,15 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-	MessageCircle,
-	Send,
-	X,
-	User,
 	Bot,
-	Minimize2,
 	Maximize2,
+	MessageCircle,
+	Minimize2,
+	Send,
+	User,
+	X,
 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Message {
 	id: string;
@@ -64,27 +64,32 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 		setIsTyping(true);
 
 		// Simulate bot/agent response
-		setTimeout(() => {
-			const responses = [
-				"Thank you for your question! Let me help you with that.",
-				"I understand your concern. Here's what I can tell you about Cognident...",
-				"That's a great question! Our dental practice management system offers...",
-				"I'd be happy to connect you with a live agent for more detailed assistance. Would you like me to do that?",
-				"Based on your question, I think our scheduling features would be perfect for your practice.",
-			];
+		setTimeout(
+			() => {
+				const responses = [
+					"Thank you for your question! Let me help you with that.",
+					"I understand your concern. Here's what I can tell you about Cognident...",
+					"That's a great question! Our dental practice management system offers...",
+					"I'd be happy to connect you with a live agent for more detailed assistance. Would you like me to do that?",
+					"Based on your question, I think our scheduling features would be perfect for your practice.",
+				];
 
-			const randomIndex = Math.floor(Math.random() * responses.length);
-			const botResponse: Message = {
-				id: (Date.now() + 1).toString(),
-				text: responses[randomIndex] || "I'm here to help you with any questions.",
-				sender: isConnectedToAgent ? "agent" : "bot",
-				timestamp: new Date(),
-				senderName: isConnectedToAgent ? "Sarah (Support Agent)" : undefined,
-			};
+				const randomIndex = Math.floor(Math.random() * responses.length);
+				const botResponse: Message = {
+					id: (Date.now() + 1).toString(),
+					text:
+						responses[randomIndex] ||
+						"I'm here to help you with any questions.",
+					sender: isConnectedToAgent ? "agent" : "bot",
+					timestamp: new Date(),
+					senderName: isConnectedToAgent ? "Sarah (Support Agent)" : undefined,
+				};
 
-			setMessages((prev) => [...prev, botResponse]);
-			setIsTyping(false);
-		}, 1000 + Math.random() * 2000);
+				setMessages((prev) => [...prev, botResponse]);
+				setIsTyping(false);
+			},
+			1000 + Math.random() * 2000,
+		);
 	};
 
 	const connectToAgent = () => {
@@ -108,10 +113,10 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 
 	if (!isOpen) {
 		return (
-			<div className={`fixed bottom-6 right-6 z-50 ${className}`}>
+			<div className={`fixed right-6 bottom-6 z-50 ${className}`}>
 				<Button
 					onClick={() => setIsOpen(true)}
-					className="h-14 w-14 rounded-full bg-blue-600 shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-200"
+					className="h-14 w-14 rounded-full bg-blue-600 shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl"
 					size="icon"
 				>
 					<MessageCircle className="h-6 w-6" />
@@ -121,16 +126,16 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 	}
 
 	return (
-		<div className={`fixed bottom-6 right-6 z-50 ${className}`}>
+		<div className={`fixed right-6 bottom-6 z-50 ${className}`}>
 			<div
-				className={`bg-white rounded-lg shadow-2xl border transition-all duration-200 ${
-					isMinimized ? "w-80 h-16" : "w-80 h-96"
+				className={`rounded-lg border bg-white shadow-2xl transition-all duration-200 ${
+					isMinimized ? "h-16 w-80" : "h-96 w-80"
 				}`}
 			>
 				{/* Header */}
-				<div className="flex items-center justify-between p-4 bg-blue-600 text-white rounded-t-lg">
+				<div className="flex items-center justify-between rounded-t-lg bg-blue-600 p-4 text-white">
 					<div className="flex items-center space-x-2">
-						<div className="w-3 h-3 bg-green-400 rounded-full"></div>
+						<div className="h-3 w-3 rounded-full bg-green-400" />
 						<span className="font-medium">
 							{isConnectedToAgent ? "Live Agent" : "Cognident Support"}
 						</span>
@@ -140,7 +145,7 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 							variant="ghost"
 							size="sm"
 							onClick={() => setIsMinimized(!isMinimized)}
-							className="text-white hover:bg-blue-700 h-8 w-8 p-0"
+							className="h-8 w-8 p-0 text-white hover:bg-blue-700"
 						>
 							{isMinimized ? (
 								<Maximize2 className="h-4 w-4" />
@@ -152,7 +157,7 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 							variant="ghost"
 							size="sm"
 							onClick={() => setIsOpen(false)}
-							className="text-white hover:bg-blue-700 h-8 w-8 p-0"
+							className="h-8 w-8 p-0 text-white hover:bg-blue-700"
 						>
 							<X className="h-4 w-4" />
 						</Button>
@@ -162,7 +167,7 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 				{!isMinimized && (
 					<>
 						{/* Messages */}
-						<div className="h-64 overflow-y-auto p-4 space-y-3">
+						<div className="h-64 space-y-3 overflow-y-auto p-4">
 							{messages.map((message) => (
 								<div
 									key={message.id}
@@ -171,20 +176,20 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 									}`}
 								>
 									<div
-										className={`max-w-xs px-3 py-2 rounded-lg ${
+										className={`max-w-xs rounded-lg px-3 py-2 ${
 											message.sender === "user"
 												? "bg-blue-600 text-white"
 												: "bg-gray-100 text-gray-800"
 										}`}
 									>
 										{message.senderName && (
-											<div className="text-xs font-medium mb-1 text-blue-600">
+											<div className="mb-1 font-medium text-blue-600 text-xs">
 												{message.senderName}
 											</div>
 										)}
 										<div className="text-sm">{message.text}</div>
 										<div
-											className={`text-xs mt-1 ${
+											className={`mt-1 text-xs ${
 												message.sender === "user"
 													? "text-blue-100"
 													: "text-gray-500"
@@ -200,11 +205,11 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 							))}
 							{isTyping && (
 								<div className="flex justify-start">
-									<div className="bg-gray-100 text-gray-800 px-3 py-2 rounded-lg">
+									<div className="rounded-lg bg-gray-100 px-3 py-2 text-gray-800">
 										<div className="flex space-x-1">
-											<div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-											<div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-											<div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+											<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
+											<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 delay-100" />
+											<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 delay-200" />
 										</div>
 									</div>
 								</div>
@@ -213,13 +218,13 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 						</div>
 
 						{/* Input */}
-						<div className="p-4 border-t">
+						<div className="border-t p-4">
 							{!isConnectedToAgent && (
 								<Button
 									onClick={connectToAgent}
 									variant="outline"
 									size="sm"
-									className="w-full mb-2 text-blue-600 border-blue-600 hover:bg-blue-50"
+									className="mb-2 w-full border-blue-600 text-blue-600 hover:bg-blue-50"
 								>
 									Connect to Live Agent
 								</Button>
@@ -232,7 +237,11 @@ export function LiveAgentChatbot({ className }: LiveAgentChatbotProps) {
 									placeholder="Type your message..."
 									className="flex-1 text-purple-800 placeholder:text-purple-400"
 								/>
-								<Button onClick={sendMessage} size="sm" className="bg-blue-600 hover:bg-blue-700">
+								<Button
+									onClick={sendMessage}
+									size="sm"
+									className="bg-blue-600 hover:bg-blue-700"
+								>
 									<Send className="h-4 w-4" />
 								</Button>
 							</div>

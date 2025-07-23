@@ -3,8 +3,8 @@
 import { LargeLogo } from "@/components/ui/tooth-logo";
 import { Calendar, FileText, Shield } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 /**
  * Get default redirect path based on user type and role
@@ -55,7 +55,9 @@ export default function SignInPage() {
 
 			if (data.success) {
 				// Use the redirect URL provided by the API
-				const redirectPath = data.redirectUrl || getDefaultRedirectPath(data.userType, data.user?.role);
+				const redirectPath =
+					data.redirectUrl ||
+					getDefaultRedirectPath(data.userType, data.user?.role);
 				router.push(redirectPath);
 			} else {
 				setError(data.error || "Login failed");
@@ -77,15 +79,12 @@ export default function SignInPage() {
 							<LargeLogo className="text-blue-500" />
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-white">Welcome back</h2>
-						<p className="text-gray-300">
-							Sign in to your Cognident account.
-						</p>
+						<p className="text-gray-300">Sign in to your Cognident account.</p>
 					</div>
 
-					<div className="rounded-lg bg-gray-700 border border-gray-600 p-6 shadow-lg">
-
+					<div className="rounded-lg border border-gray-600 bg-gray-700 p-6 shadow-lg">
 						{error && (
-							<div className="mb-4 rounded-md bg-red-900/50 border border-red-700 p-3">
+							<div className="mb-4 rounded-md border border-red-700 bg-red-900/50 p-3">
 								<p className="text-red-200 text-sm">{error}</p>
 							</div>
 						)}
@@ -130,7 +129,7 @@ export default function SignInPage() {
 							<button
 								type="submit"
 								disabled={isLoading}
-								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 							>
 								{isLoading ? "Signing In..." : "Sign In"}
 							</button>

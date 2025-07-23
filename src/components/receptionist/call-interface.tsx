@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
 	Dialog,
 	DialogContent,
@@ -11,6 +9,8 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -19,16 +19,16 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import {
+	Clock,
+	Mic,
+	MicOff,
 	Phone,
 	PhoneCall,
 	PhoneOff,
 	User,
-	Clock,
-	Mic,
-	MicOff,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface Patient {
@@ -44,7 +44,10 @@ interface CallInterfaceProps {
 	onCallInitiated?: (callData: any) => void;
 }
 
-export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceProps) {
+export function CallInterface({
+	patients = [],
+	onCallInitiated,
+}: CallInterfaceProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 	const [phoneNumber, setPhoneNumber] = useState("");
@@ -57,9 +60,9 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 	// Timer for call duration
 	useEffect(() => {
 		let interval: NodeJS.Timeout;
-		if (currentCall && currentCall.status === 'connected') {
+		if (currentCall && currentCall.status === "connected") {
 			interval = setInterval(() => {
-				setCallDuration(prev => prev + 1);
+				setCallDuration((prev) => prev + 1);
 			}, 1000);
 		}
 		return () => clearInterval(interval);
@@ -68,11 +71,11 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 	const formatDuration = (seconds: number) => {
 		const mins = Math.floor(seconds / 60);
 		const secs = seconds % 60;
-		return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+		return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 	};
 
 	const handlePatientSelect = (patientId: string) => {
-		const patient = patients.find(p => p.id === patientId);
+		const patient = patients.find((p) => p.id === patientId);
 		if (patient) {
 			setSelectedPatient(patient);
 			setPhoneNumber(patient.phone || "");
@@ -81,8 +84,8 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 
 	const formatPhoneNumber = (value: string) => {
 		// Remove all non-digits
-		const digits = value.replace(/\D/g, '');
-		
+		const digits = value.replace(/\D/g, "");
+
 		// Format as (XXX) XXX-XXXX
 		if (digits.length >= 10) {
 			return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
@@ -107,15 +110,15 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 
 		setIsLoading(true);
 		try {
-			const response = await fetch('/api/voice/call', {
-				method: 'POST',
+			const response = await fetch("/api/voice/call", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					to: phoneNumber.replace(/\D/g, ''), // Send only digits
+					to: phoneNumber.replace(/\D/g, ""), // Send only digits
 					patientId: selectedPatient?.id,
-					callType: 'outbound',
+					callType: "outbound",
 					notes: notes.trim(),
 				}),
 			});
@@ -125,14 +128,14 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 			if (data.success) {
 				setCurrentCall({
 					sid: data.callSid,
-					status: 'initiated',
+					status: "initiated",
 					to: data.to,
 					from: data.from,
 				});
-				
+
 				toast.success("Call initiated successfully!");
 				onCallInitiated?.(data);
-				
+
 				// Reset form but keep dialog open to show call status
 				setNotes("");
 			} else {
@@ -187,23 +190,26 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 					// Active call interface
 					<div className="space-y-4">
 						<div className="text-center">
-							<div className="flex items-center justify-center gap-2 mb-2">
+							<div className="mb-2 flex items-center justify-center gap-2">
 								<User className="h-5 w-5 text-gray-500" />
 								<span className="font-medium">
-									{selectedPatient 
+									{selectedPatient
 										? `${selectedPatient.firstName} ${selectedPatient.lastName}`
-										: phoneNumber
-									}
+										: phoneNumber}
 								</span>
 							</div>
-							<Badge variant={currentCall.status === 'connected' ? 'default' : 'secondary'}>
+							<Badge
+								variant={
+									currentCall.status === "connected" ? "default" : "secondary"
+								}
+							>
 								{currentCall.status}
 							</Badge>
 						</div>
 
-						{currentCall.status === 'connected' && (
+						{currentCall.status === "connected" && (
 							<div className="text-center">
-								<div className="flex items-center justify-center gap-2 text-lg font-mono">
+								<div className="flex items-center justify-center gap-2 font-mono text-lg">
 									<Clock className="h-4 w-4" />
 									{formatDuration(callDuration)}
 								</div>
@@ -217,10 +223,14 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 								onClick={toggleMute}
 								className="gap-2"
 							>
-								{isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+								{isMuted ? (
+									<MicOff className="h-4 w-4" />
+								) : (
+									<Mic className="h-4 w-4" />
+								)}
 								{isMuted ? "Unmute" : "Mute"}
 							</Button>
-							
+
 							<Button
 								variant="destructive"
 								size="sm"
@@ -283,10 +293,7 @@ export function CallInterface({ patients = [], onCallInitiated }: CallInterfaceP
 								<PhoneCall className="h-4 w-4" />
 								{isLoading ? "Calling..." : "Start Call"}
 							</Button>
-							<Button
-								variant="outline"
-								onClick={() => setIsOpen(false)}
-							>
+							<Button variant="outline" onClick={() => setIsOpen(false)}>
 								Cancel
 							</Button>
 						</div>

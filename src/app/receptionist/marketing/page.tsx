@@ -48,12 +48,21 @@ import {
 	Video,
 	Youtube,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // TypeScript interfaces
 interface SocialPost {
 	id: string;
-	platform: "facebook" | "instagram" | "tiktok" | "x" | "linkedin" | "youtube" | "bluesky" | "reddit" | "pinterest";
+	platform:
+		| "facebook"
+		| "instagram"
+		| "tiktok"
+		| "x"
+		| "linkedin"
+		| "youtube"
+		| "bluesky"
+		| "reddit"
+		| "pinterest";
 	content: string;
 	imageUrl?: string;
 	scheduledFor?: Date;
@@ -124,14 +133,14 @@ export default function MarketingPage() {
 			} else {
 				showToast({
 					type: "error",
-					title: "Error fetching posts"
+					title: "Error fetching posts",
 				});
 			}
 		} catch (error) {
 			console.error("Error fetching posts:", error);
 			showToast({
 				type: "error",
-				title: "Failed to fetch posts"
+				title: "Failed to fetch posts",
 			});
 		} finally {
 			setIsLoading(false);
@@ -148,14 +157,14 @@ export default function MarketingPage() {
 			} else {
 				showToast({
 					type: "error",
-					title: "Error fetching analytics"
+					title: "Error fetching analytics",
 				});
 			}
 		} catch (error) {
 			console.error("Error fetching analytics:", error);
 			showToast({
 				type: "error",
-				title: "Failed to fetch analytics"
+				title: "Failed to fetch analytics",
 			});
 		}
 	};
@@ -167,7 +176,9 @@ export default function MarketingPage() {
 				content: postForm.content,
 				platforms: selectedPlatforms,
 				scheduledFor: postForm.scheduledFor || undefined,
-				hashtags: postForm.hashtags.split(" ").filter(tag => tag.startsWith("#")),
+				hashtags: postForm.hashtags
+					.split(" ")
+					.filter((tag) => tag.startsWith("#")),
 				imageUrl: postForm.imageUrl || undefined,
 			};
 
@@ -184,7 +195,7 @@ export default function MarketingPage() {
 			if (data.success) {
 				showToast({
 					type: "success",
-					title: data.message || "Post created successfully"
+					title: data.message || "Post created successfully",
 				});
 				await fetchPosts(); // Refresh posts
 				setShowCreatePostDialog(false);
@@ -192,14 +203,14 @@ export default function MarketingPage() {
 			} else {
 				showToast({
 					type: "error",
-					title: data.error || "Failed to create post"
+					title: data.error || "Failed to create post",
 				});
 			}
 		} catch (error) {
 			console.error("Error creating post:", error);
 			showToast({
 				type: "error",
-				title: "Failed to create post"
+				title: "Failed to create post",
 			});
 		} finally {
 			setIsPosting(false);
@@ -223,19 +234,19 @@ export default function MarketingPage() {
 				setAnalytics(data.data);
 				showToast({
 					type: "success",
-					title: "Analytics refreshed successfully"
+					title: "Analytics refreshed successfully",
 				});
 			} else {
 				showToast({
 					type: "error",
-					title: "Failed to refresh analytics"
+					title: "Failed to refresh analytics",
 				});
 			}
 		} catch (error) {
 			console.error("Error refreshing analytics:", error);
 			showToast({
 				type: "error",
-				title: "Failed to refresh analytics"
+				title: "Failed to refresh analytics",
 			});
 		} finally {
 			setIsLoading(false);
@@ -707,14 +718,16 @@ export default function MarketingPage() {
 				{/* Analytics Tab */}
 				<TabsContent value="analytics">
 					<div className="mb-6 flex items-center justify-between">
-						<h2 className="text-2xl font-bold">Social Media Analytics</h2>
+						<h2 className="font-bold text-2xl">Social Media Analytics</h2>
 						<Button
 							onClick={refreshAnalytics}
 							disabled={isLoading}
 							variant="outline"
 							size="sm"
 						>
-							<RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+							<RefreshCw
+								className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+							/>
 							Refresh Data
 						</Button>
 					</div>

@@ -259,7 +259,7 @@ export default function BillingPage() {
 							lastPayment: balance.lastPayment,
 							daysPastDue: balance.daysPastDue,
 							phone: balance.phone,
-							email: `${balance.patient.toLowerCase().replace(' ', '.')}@email.com`,
+							email: `${balance.patient.toLowerCase().replace(" ", ".")}@email.com`,
 						})),
 					};
 					break;

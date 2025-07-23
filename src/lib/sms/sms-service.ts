@@ -35,14 +35,14 @@ export class SmsService {
 		// Get active SMS integration
 		const twilioSms = await IntegrationManager.getIntegration(
 			this.practiceId,
-			'twilio_sms',
-			'sms'
+			"twilio_sms",
+			"sms",
 		);
 
 		const awsSns = await IntegrationManager.getIntegration(
 			this.practiceId,
-			'aws_sns',
-			'sms'
+			"aws_sns",
+			"sms",
 		);
 
 		// Use Twilio SMS if available
@@ -57,18 +57,25 @@ export class SmsService {
 
 		return {
 			success: false,
-			error: 'No SMS provider configured'
+			error: "No SMS provider configured",
 		};
 	}
 
 	/**
 	 * Send SMS with Twilio
 	 */
-	private async sendWithTwilio(smsData: SmsMessage, config: any): Promise<SmsResult> {
+	private async sendWithTwilio(
+		smsData: SmsMessage,
+		config: any,
+	): Promise<SmsResult> {
 		try {
 			// Validate Twilio configuration
-			if (!config.accountSid || !config.authToken || !config.accountSid.startsWith('AC')) {
-				throw new Error('Invalid Twilio configuration');
+			if (
+				!config.accountSid ||
+				!config.authToken ||
+				!config.accountSid.startsWith("AC")
+			) {
+				throw new Error("Invalid Twilio configuration");
 			}
 
 			const client = twilio(config.accountSid, config.authToken);
@@ -79,38 +86,38 @@ export class SmsService {
 			const message = await client.messages.create({
 				body: processedMessage,
 				from: config.phoneNumber,
-				to: this.formatPhoneNumber(smsData.to)
+				to: this.formatPhoneNumber(smsData.to),
 			});
 
 			// Log the SMS
 			await this.logSms({
 				...smsData,
 				message: processedMessage,
-				provider: 'twilio',
+				provider: "twilio",
 				providerSid: message.sid,
-				status: 'sent',
-				direction: 'outbound'
+				status: "sent",
+				direction: "outbound",
 			});
 
 			return {
 				success: true,
 				messageId: message.sid,
-				cost: parseFloat(message.price || '0') * 100 // Convert to cents
+				cost: Number.parseFloat(message.price || "0") * 100, // Convert to cents
 			};
 		} catch (error: any) {
-			console.error('Twilio SMS error:', error);
-			
+			console.error("Twilio SMS error:", error);
+
 			// Log failed SMS
 			await this.logSms({
 				...smsData,
-				provider: 'twilio',
-				status: 'failed',
-				direction: 'outbound'
+				provider: "twilio",
+				status: "failed",
+				direction: "outbound",
 			});
 
 			return {
 				success: false,
-				error: error.message
+				error: error.message,
 			};
 		}
 	}
@@ -118,7 +125,10 @@ export class SmsService {
 	/**
 	 * Send SMS with AWS SNS
 	 */
-	private async sendWithAwsSns(smsData: SmsMessage, config: any): Promise<SmsResult> {
+	private async sendWithAwsSns(
+		smsData: SmsMessage,
+		config: any,
+	): Promise<SmsResult> {
 		try {
 			// AWS SNS implementation would go here
 			// For now, return a placeholder
@@ -128,29 +138,29 @@ export class SmsService {
 			await this.logSms({
 				...smsData,
 				message: processedMessage,
-				provider: 'aws_sns',
-				status: 'sent',
-				direction: 'outbound'
+				provider: "aws_sns",
+				status: "sent",
+				direction: "outbound",
 			});
 
 			return {
 				success: true,
 				messageId: `aws-${Date.now()}`,
-				cost: 0.75 // Estimated cost in cents
+				cost: 0.75, // Estimated cost in cents
 			};
 		} catch (error: any) {
-			console.error('AWS SNS error:', error);
-			
+			console.error("AWS SNS error:", error);
+
 			await this.logSms({
 				...smsData,
-				provider: 'aws_sns',
-				status: 'failed',
-				direction: 'outbound'
+				provider: "aws_sns",
+				status: "failed",
+				direction: "outbound",
 			});
 
 			return {
 				success: false,
-				error: error.message
+				error: error.message,
 			};
 		}
 	}
@@ -164,19 +174,19 @@ export class SmsService {
 		// Apply template variables if provided
 		if (smsData.variables) {
 			for (const [key, value] of Object.entries(smsData.variables)) {
-				message = message.replace(new RegExp(`{${key}}`, 'g'), value);
+				message = message.replace(new RegExp(`{${key}}`, "g"), value);
 			}
 		}
 
 		// Auto-translate if patient prefers Spanish
 		if (smsData.patientId) {
 			const patient = await db.patient.findUnique({
-				where: { id: smsData.patientId }
+				where: { id: smsData.patientId },
 			});
 
 			// Check if patient prefers Spanish (you'd store this in patient preferences)
 			const patientPreferences = patient?.medicalHistory as any;
-			if (patientPreferences?.preferredLanguage === 'es') {
+			if (patientPreferences?.preferredLanguage === "es") {
 				const translation = await this.translator.translateToSpanish(message);
 				message = translation.translatedText;
 			}
@@ -209,11 +219,11 @@ export class SmsService {
 					status: data.status,
 					direction: data.direction,
 					cost: data.cost,
-					createdAt: new Date()
-				}
+					createdAt: new Date(),
+				},
 			});
 		} catch (error) {
-			console.error('Failed to log SMS:', error);
+			console.error("Failed to log SMS:", error);
 		}
 	}
 
@@ -222,15 +232,15 @@ export class SmsService {
 	 */
 	private formatPhoneNumber(phoneNumber: string): string {
 		// Remove all non-digits
-		const digits = phoneNumber.replace(/\D/g, '');
-		
+		const digits = phoneNumber.replace(/\D/g, "");
+
 		// Add +1 for US numbers if not present
 		if (digits.length === 10) {
 			return `+1${digits}`;
-		} else if (digits.length === 11 && digits.startsWith('1')) {
+		} else if (digits.length === 11 && digits.startsWith("1")) {
 			return `+${digits}`;
 		}
-		
+
 		return phoneNumber; // Return as-is if already formatted
 	}
 
@@ -244,13 +254,13 @@ export class SmsService {
 			try {
 				const result = await this.sendSms(message);
 				results.push(result);
-				
+
 				// Add delay between messages to avoid rate limiting
-				await new Promise(resolve => setTimeout(resolve, 100));
+				await new Promise((resolve) => setTimeout(resolve, 100));
 			} catch (error) {
 				results.push({
 					success: false,
-					error: 'Failed to send message'
+					error: "Failed to send message",
 				});
 			}
 		}
@@ -264,29 +274,38 @@ export class SmsService {
 	async getSmsTemplates() {
 		return [
 			{
-				id: 'appointment_reminder',
-				name: 'Appointment Reminder',
-				message: 'Hi {patientName}, this is a reminder that you have an appointment tomorrow at {appointmentTime} with {providerName}. Please reply CONFIRM or call us at {practicePhone}.',
-				variables: ['patientName', 'appointmentTime', 'providerName', 'practicePhone']
+				id: "appointment_reminder",
+				name: "Appointment Reminder",
+				message:
+					"Hi {patientName}, this is a reminder that you have an appointment tomorrow at {appointmentTime} with {providerName}. Please reply CONFIRM or call us at {practicePhone}.",
+				variables: [
+					"patientName",
+					"appointmentTime",
+					"providerName",
+					"practicePhone",
+				],
 			},
 			{
-				id: 'appointment_confirmation',
-				name: 'Appointment Confirmation',
-				message: 'Your appointment has been confirmed for {appointmentDate} at {appointmentTime}. Please arrive 15 minutes early. Reply STOP to opt out.',
-				variables: ['appointmentDate', 'appointmentTime']
+				id: "appointment_confirmation",
+				name: "Appointment Confirmation",
+				message:
+					"Your appointment has been confirmed for {appointmentDate} at {appointmentTime}. Please arrive 15 minutes early. Reply STOP to opt out.",
+				variables: ["appointmentDate", "appointmentTime"],
 			},
 			{
-				id: 'payment_reminder',
-				name: 'Payment Reminder',
-				message: 'Hi {patientName}, you have an outstanding balance of ${amount}. Please call us at {practicePhone} to make a payment.',
-				variables: ['patientName', 'amount', 'practicePhone']
+				id: "payment_reminder",
+				name: "Payment Reminder",
+				message:
+					"Hi {patientName}, you have an outstanding balance of ${amount}. Please call us at {practicePhone} to make a payment.",
+				variables: ["patientName", "amount", "practicePhone"],
 			},
 			{
-				id: 'follow_up',
-				name: 'Follow-up Care',
-				message: 'Hi {patientName}, how are you feeling after your {procedure}? Please call us at {practicePhone} if you have any concerns.',
-				variables: ['patientName', 'procedure', 'practicePhone']
-			}
+				id: "follow_up",
+				name: "Follow-up Care",
+				message:
+					"Hi {patientName}, how are you feeling after your {procedure}? Please call us at {practicePhone} if you have any concerns.",
+				variables: ["patientName", "procedure", "practicePhone"],
+			},
 		];
 	}
 
@@ -296,8 +315,8 @@ export class SmsService {
 	async getPatientSmsHistory(patientId: string) {
 		return await db.smsLog.findMany({
 			where: { patientId },
-			orderBy: { createdAt: 'desc' },
-			take: 50
+			orderBy: { createdAt: "desc" },
+			take: 50,
 		});
 	}
 
@@ -309,30 +328,30 @@ export class SmsService {
 			where: {
 				createdAt: {
 					gte: startDate,
-					lte: endDate
-				}
-			}
+					lte: endDate,
+				},
+			},
 		});
 
-		const totalSent = logs.filter(log => log.status === 'sent').length;
-		const totalFailed = logs.filter(log => log.status === 'failed').length;
+		const totalSent = logs.filter((log) => log.status === "sent").length;
+		const totalFailed = logs.filter((log) => log.status === "failed").length;
 		const totalCost = logs.reduce((sum, log) => sum + (log.cost || 0), 0);
 
 		return {
 			totalSent,
 			totalFailed,
-			successRate: totalSent / (totalSent + totalFailed) * 100,
+			successRate: (totalSent / (totalSent + totalFailed)) * 100,
 			totalCost: totalCost / 100, // Convert back to dollars
 			messagesByDay: this.groupMessagesByDay(logs),
-			messagesByProvider: this.groupMessagesByProvider(logs)
+			messagesByProvider: this.groupMessagesByProvider(logs),
 		};
 	}
 
 	private groupMessagesByDay(logs: any[]) {
 		const groups: Record<string, number> = {};
-		
-		logs.forEach(log => {
-			const day = log.createdAt.toISOString().split('T')[0];
+
+		logs.forEach((log) => {
+			const day = log.createdAt.toISOString().split("T")[0];
 			groups[day] = (groups[day] || 0) + 1;
 		});
 
@@ -341,8 +360,8 @@ export class SmsService {
 
 	private groupMessagesByProvider(logs: any[]) {
 		const groups: Record<string, number> = {};
-		
-		logs.forEach(log => {
+
+		logs.forEach((log) => {
 			groups[log.provider] = (groups[log.provider] || 0) + 1;
 		});
 

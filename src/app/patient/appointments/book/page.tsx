@@ -110,11 +110,15 @@ export default function BookAppointmentPage() {
 				router.push("/patient/dashboard?success=appointment-booked");
 			} else {
 				const errorData = await response.json();
-				alert(errorData.error || errorData.message || "Failed to book appointment");
+				alert(
+					errorData.error || errorData.message || "Failed to book appointment",
+				);
 			}
 		} catch (error) {
 			console.error("Booking error:", error);
-			alert("An error occurred while booking the appointment. Please try again.");
+			alert(
+				"An error occurred while booking the appointment. Please try again.",
+			);
 		} finally {
 			setIsLoading(false);
 		}

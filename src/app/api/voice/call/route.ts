@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import twilio from "twilio";
 import { db } from "@/server/db";
+import { type NextRequest, NextResponse } from "next/server";
+import twilio from "twilio";
 
 // Initialize Twilio client conditionally
 const getTwilioClient = () => {
 	const accountSid = process.env.TWILIO_ACCOUNT_SID;
 	const authToken = process.env.TWILIO_AUTH_TOKEN;
 
-	if (!accountSid || !authToken || !accountSid.startsWith('AC')) {
+	if (!accountSid || !authToken || !accountSid.startsWith("AC")) {
 		return null;
 	}
 
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 		if (!twilioClient) {
 			return NextResponse.json(
 				{ error: "Twilio not configured" },
-				{ status: 503 }
+				{ status: 503 },
 			);
 		}
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 		if (!to) {
 			return NextResponse.json(
 				{ error: "Phone number is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -41,12 +41,12 @@ export async function POST(request: NextRequest) {
 		if (!fromNumber) {
 			return NextResponse.json(
 				{ error: "Practice phone number not configured" },
-				{ status: 500 }
+				{ status: 500 },
 			);
 		}
 
 		// Format phone number (ensure it starts with +1 for US numbers)
-		const formattedTo = to.startsWith('+') ? to : `+1${to.replace(/\D/g, '')}`;
+		const formattedTo = to.startsWith("+") ? to : `+1${to.replace(/\D/g, "")}`;
 
 		// Create TwiML for the call
 		const twimlUrl = `${process.env.NEXTAUTH_URL}/api/voice/twiml`;
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 			from: fromNumber,
 			url: twimlUrl,
 			statusCallback: `${process.env.NEXTAUTH_URL}/api/voice/status`,
-			statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
+			statusCallbackEvent: ["initiated", "ringing", "answered", "completed"],
 			record: true, // Record calls for quality assurance
 			recordingStatusCallback: `${process.env.NEXTAUTH_URL}/api/voice/recording`,
 		});
@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
 					phoneNumber: formattedTo,
 					direction: callType,
 					twilioCallSid: call.sid,
-					status: 'initiated',
-					notes: notes || '',
+					status: "initiated",
+					notes: notes || "",
 					createdAt: new Date(),
 				},
 			});
@@ -84,29 +84,28 @@ export async function POST(request: NextRequest) {
 			to: formattedTo,
 			from: fromNumber,
 		});
-
 	} catch (error) {
 		console.error("Voice call error:", error);
-		
+
 		if (error instanceof Error) {
 			// Handle specific Twilio errors
-			if (error.message.includes('not a valid phone number')) {
+			if (error.message.includes("not a valid phone number")) {
 				return NextResponse.json(
 					{ error: "Invalid phone number format" },
-					{ status: 400 }
+					{ status: 400 },
 				);
 			}
-			if (error.message.includes('insufficient funds')) {
+			if (error.message.includes("insufficient funds")) {
 				return NextResponse.json(
 					{ error: "Insufficient Twilio account balance" },
-					{ status: 402 }
+					{ status: 402 },
 				);
 			}
 		}
 
 		return NextResponse.json(
 			{ error: "Failed to initiate call" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -122,8 +121,8 @@ export async function PUT(request: NextRequest) {
 			where: { twilioCallSid: callSid },
 			data: {
 				status,
-				duration: duration ? parseInt(duration) : null,
-				endedAt: status === 'completed' ? new Date() : null,
+				duration: duration ? Number.parseInt(duration) : null,
+				endedAt: status === "completed" ? new Date() : null,
 			},
 		});
 
@@ -132,7 +131,7 @@ export async function PUT(request: NextRequest) {
 		console.error("Call status update error:", error);
 		return NextResponse.json(
 			{ error: "Failed to update call status" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

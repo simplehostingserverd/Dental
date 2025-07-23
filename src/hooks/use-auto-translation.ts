@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { AutoTranslator, type TranslationResult } from '@/lib/translation/auto-translator';
+import {
+	AutoTranslator,
+	type TranslationResult,
+} from "@/lib/translation/auto-translator";
+import { useCallback, useEffect, useState } from "react";
 
 interface UseAutoTranslationOptions {
 	practiceId: string;
@@ -17,9 +20,9 @@ interface TranslationCache {
 export function useAutoTranslation(options: UseAutoTranslationOptions) {
 	const {
 		practiceId,
-		targetLanguage = 'es',
+		targetLanguage = "es",
 		enabled = true,
-		fallbackToOriginal = true
+		fallbackToOriginal = true,
 	} = options;
 
 	const [cache, setCache] = useState<TranslationCache>({});
@@ -29,80 +32,89 @@ export function useAutoTranslation(options: UseAutoTranslationOptions) {
 	/**
 	 * Translate a single text
 	 */
-	const translate = useCallback(async (text: string): Promise<string> => {
-		if (!enabled || !text.trim()) {
-			return text;
-		}
+	const translate = useCallback(
+		async (text: string): Promise<string> => {
+			if (!enabled || !text.trim()) {
+				return text;
+			}
 
-		// Check cache first
-		const cacheKey = `${text}-${targetLanguage}`;
-		if (cache[cacheKey]) {
-			return cache[cacheKey].translatedText;
-		}
+			// Check cache first
+			const cacheKey = `${text}-${targetLanguage}`;
+			if (cache[cacheKey]) {
+				return cache[cacheKey].translatedText;
+			}
 
-		try {
-			setIsTranslating(true);
-			const result = await translator.translate(text, targetLanguage);
-			
-			// Update cache
-			setCache(prev => ({
-				...prev,
-				[cacheKey]: result
-			}));
+			try {
+				setIsTranslating(true);
+				const result = await translator.translate(text, targetLanguage);
 
-			return result.translatedText;
-		} catch (error) {
-			console.error('Translation error:', error);
-			return fallbackToOriginal ? text : '';
-		} finally {
-			setIsTranslating(false);
-		}
-	}, [enabled, targetLanguage, cache, translator, fallbackToOriginal]);
+				// Update cache
+				setCache((prev) => ({
+					...prev,
+					[cacheKey]: result,
+				}));
+
+				return result.translatedText;
+			} catch (error) {
+				console.error("Translation error:", error);
+				return fallbackToOriginal ? text : "";
+			} finally {
+				setIsTranslating(false);
+			}
+		},
+		[enabled, targetLanguage, cache, translator, fallbackToOriginal],
+	);
 
 	/**
 	 * Translate multiple texts
 	 */
-	const batchTranslate = useCallback(async (texts: string[]): Promise<string[]> => {
-		if (!enabled || texts.length === 0) {
-			return texts;
-		}
+	const batchTranslate = useCallback(
+		async (texts: string[]): Promise<string[]> => {
+			if (!enabled || texts.length === 0) {
+				return texts;
+			}
 
-		try {
-			setIsTranslating(true);
-			const results = await translator.batchTranslate(texts, targetLanguage);
-			
-			// Update cache
-			const newCache: TranslationCache = {};
-			texts.forEach((text, index) => {
-				const cacheKey = `${text}-${targetLanguage}`;
-				const result = results[index];
-				if (result) {
-					newCache[cacheKey] = result;
-				}
-			});
-			
-			setCache(prev => ({ ...prev, ...newCache }));
+			try {
+				setIsTranslating(true);
+				const results = await translator.batchTranslate(texts, targetLanguage);
 
-			return results.map(result => result.translatedText);
-		} catch (error) {
-			console.error('Batch translation error:', error);
-			return fallbackToOriginal ? texts : texts.map(() => '');
-		} finally {
-			setIsTranslating(false);
-		}
-	}, [enabled, targetLanguage, translator, fallbackToOriginal]);
+				// Update cache
+				const newCache: TranslationCache = {};
+				texts.forEach((text, index) => {
+					const cacheKey = `${text}-${targetLanguage}`;
+					const result = results[index];
+					if (result) {
+						newCache[cacheKey] = result;
+					}
+				});
+
+				setCache((prev) => ({ ...prev, ...newCache }));
+
+				return results.map((result) => result.translatedText);
+			} catch (error) {
+				console.error("Batch translation error:", error);
+				return fallbackToOriginal ? texts : texts.map(() => "");
+			} finally {
+				setIsTranslating(false);
+			}
+		},
+		[enabled, targetLanguage, translator, fallbackToOriginal],
+	);
 
 	/**
 	 * Get cached translation or return original text
 	 */
-	const getCachedTranslation = useCallback((text: string): string => {
-		if (!enabled || !text.trim()) {
-			return text;
-		}
+	const getCachedTranslation = useCallback(
+		(text: string): string => {
+			if (!enabled || !text.trim()) {
+				return text;
+			}
 
-		const cacheKey = `${text}-${targetLanguage}`;
-		return cache[cacheKey]?.translatedText || text;
-	}, [enabled, targetLanguage, cache]);
+			const cacheKey = `${text}-${targetLanguage}`;
+			return cache[cacheKey]?.translatedText || text;
+		},
+		[enabled, targetLanguage, cache],
+	);
 
 	/**
 	 * Clear translation cache
@@ -114,18 +126,21 @@ export function useAutoTranslation(options: UseAutoTranslationOptions) {
 	/**
 	 * Preload translations for common texts
 	 */
-	const preloadTranslations = useCallback(async (texts: string[]) => {
-		if (!enabled) return;
+	const preloadTranslations = useCallback(
+		async (texts: string[]) => {
+			if (!enabled) return;
 
-		const uncachedTexts = texts.filter(text => {
-			const cacheKey = `${text}-${targetLanguage}`;
-			return !cache[cacheKey];
-		});
+			const uncachedTexts = texts.filter((text) => {
+				const cacheKey = `${text}-${targetLanguage}`;
+				return !cache[cacheKey];
+			});
 
-		if (uncachedTexts.length > 0) {
-			await batchTranslate(uncachedTexts);
-		}
-	}, [enabled, targetLanguage, cache, batchTranslate]);
+			if (uncachedTexts.length > 0) {
+				await batchTranslate(uncachedTexts);
+			}
+		},
+		[enabled, targetLanguage, cache, batchTranslate],
+	);
 
 	return {
 		translate,
@@ -134,14 +149,17 @@ export function useAutoTranslation(options: UseAutoTranslationOptions) {
 		clearCache,
 		preloadTranslations,
 		isTranslating,
-		cacheSize: Object.keys(cache).length
+		cacheSize: Object.keys(cache).length,
 	};
 }
 
 /**
  * Hook for translating component text automatically
  */
-export function useTranslatedText(text: string, options: UseAutoTranslationOptions) {
+export function useTranslatedText(
+	text: string,
+	options: UseAutoTranslationOptions,
+) {
 	const [translatedText, setTranslatedText] = useState(text);
 	const { translate, getCachedTranslation } = useAutoTranslation(options);
 
@@ -166,13 +184,14 @@ export function useTranslatedText(text: string, options: UseAutoTranslationOptio
  * Hook for managing language preference
  */
 export function useLanguagePreference() {
-	const [language, setLanguage] = useState<string>('en');
+	const [language, setLanguage] = useState<string>("en");
 	const [autoTranslate, setAutoTranslate] = useState<boolean>(false);
 
 	useEffect(() => {
 		// Load from localStorage
-		const savedLanguage = localStorage.getItem('preferred-language');
-		const savedAutoTranslate = localStorage.getItem('auto-translate') === 'true';
+		const savedLanguage = localStorage.getItem("preferred-language");
+		const savedAutoTranslate =
+			localStorage.getItem("auto-translate") === "true";
 
 		if (savedLanguage) {
 			setLanguage(savedLanguage);
@@ -182,13 +201,13 @@ export function useLanguagePreference() {
 
 	const updateLanguage = useCallback((newLanguage: string) => {
 		setLanguage(newLanguage);
-		localStorage.setItem('preferred-language', newLanguage);
+		localStorage.setItem("preferred-language", newLanguage);
 	}, []);
 
 	const toggleAutoTranslate = useCallback(() => {
 		const newValue = !autoTranslate;
 		setAutoTranslate(newValue);
-		localStorage.setItem('auto-translate', newValue.toString());
+		localStorage.setItem("auto-translate", newValue.toString());
 	}, [autoTranslate]);
 
 	return {
@@ -196,6 +215,6 @@ export function useLanguagePreference() {
 		autoTranslate,
 		updateLanguage,
 		toggleAutoTranslate,
-		isSpanish: language === 'es'
+		isSpanish: language === "es",
 	};
 }

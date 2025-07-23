@@ -1,7 +1,7 @@
 "use client";
 
-import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { AppointmentActions } from "@/components/patient/appointment-actions";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
 	Calendar,
 	Clock,

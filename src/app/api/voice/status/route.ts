@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/server/db";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
 		const formData = await request.formData();
-		
-		const callSid = formData.get('CallSid') as string;
-		const callStatus = formData.get('CallStatus') as string;
-		const callDuration = formData.get('CallDuration') as string;
-		const from = formData.get('From') as string;
-		const to = formData.get('To') as string;
+
+		const callSid = formData.get("CallSid") as string;
+		const callStatus = formData.get("CallStatus") as string;
+		const callDuration = formData.get("CallDuration") as string;
+		const from = formData.get("From") as string;
+		const to = formData.get("To") as string;
 
 		console.log(`Call ${callSid} status update: ${callStatus}`);
 
@@ -18,9 +18,11 @@ export async function POST(request: NextRequest) {
 			where: { twilioCallSid: callSid },
 			data: {
 				status: callStatus,
-				duration: callDuration ? parseInt(callDuration) : null,
-				endedAt: ['completed', 'failed', 'busy', 'no-answer'].includes(callStatus) 
-					? new Date() 
+				duration: callDuration ? Number.parseInt(callDuration) : null,
+				endedAt: ["completed", "failed", "busy", "no-answer"].includes(
+					callStatus,
+				)
+					? new Date()
 					: null,
 			},
 		});
@@ -33,7 +35,7 @@ export async function POST(request: NextRequest) {
 		console.error("Call status webhook error:", error);
 		return NextResponse.json(
 			{ error: "Failed to process status update" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

@@ -3,13 +3,13 @@
 import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
 	Award,
+	CheckCircle,
 	Globe,
 	Heart,
 	Shield,
 	Target,
 	Users,
 	Zap,
-	CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -228,8 +228,8 @@ export default function AboutPage() {
 								Starting with a small team of dental professionals and software
 								engineers, we set out to build something different – a platform
 								that would actually make dentists' lives easier while improving
-								patient outcomes. Today, we're proud to serve over 10,000
-								dental practices worldwide, from solo practitioners to large
+								patient outcomes. Today, we're proud to serve over 10,000 dental
+								practices worldwide, from solo practitioners to large
 								multi-location groups.
 							</p>
 							<p>
@@ -295,7 +295,9 @@ export default function AboutPage() {
 							<div className="flex items-center space-x-4 rounded-lg border border-gray-700 bg-white p-4">
 								<CheckCircle className="h-8 w-8 text-green-400" />
 								<div className="text-left">
-									<h3 className="font-semibold">Best Practice Management Software</h3>
+									<h3 className="font-semibold">
+										Best Practice Management Software
+									</h3>
 									<p className="text-gray-600 text-sm">
 										Dental Industry Awards 2023
 									</p>

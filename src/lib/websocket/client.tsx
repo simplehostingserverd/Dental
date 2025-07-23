@@ -95,7 +95,8 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 				}
 			} catch (error) {
 				console.error("Polling error:", error);
-				const errorObj = error instanceof Error ? error : new Error("Polling failed");
+				const errorObj =
+					error instanceof Error ? error : new Error("Polling failed");
 				setState((prev) => ({
 					...prev,
 					connected: false,
@@ -245,7 +246,8 @@ export function useRealtime(options: UseRealtimeOptions = {}) {
 				}
 			} catch (error) {
 				console.error("Failed to emit update:", error);
-				const errorObj = error instanceof Error ? error : new Error("Failed to emit update");
+				const errorObj =
+					error instanceof Error ? error : new Error("Failed to emit update");
 				options.onError?.(errorObj);
 			}
 		},

@@ -46,10 +46,20 @@ export default function SettingsPage() {
 				<div className="lg:col-span-1">
 					<nav className="space-y-1">
 						{[
-							{ name: "Practice Info", icon: Building, active: true, href: null },
+							{
+								name: "Practice Info",
+								icon: Building,
+								active: true,
+								href: null,
+							},
 							{ name: "User Profile", icon: User, active: false, href: null },
 							{ name: "Team Members", icon: Users, active: false, href: null },
-							{ name: "Communications", icon: MessageSquare, active: false, href: "/dashboard/settings/communications" },
+							{
+								name: "Communications",
+								icon: MessageSquare,
+								active: false,
+								href: "/dashboard/settings/communications",
+							},
 							{ name: "Notifications", icon: Bell, active: false, href: null },
 							{ name: "Security", icon: Shield, active: false, href: null },
 							{ name: "Billing", icon: CreditCard, active: false, href: null },

@@ -5,98 +5,104 @@
  */
 
 interface SignalMessage {
-  number: string;
-  recipients: string[];
-  message?: string;
-  attachments?: string[];
-  base64_attachments?: string[];
+	number: string;
+	recipients: string[];
+	message?: string;
+	attachments?: string[];
+	base64_attachments?: string[];
 }
 
 interface SignalResponse {
-  timestamp: number;
-  success: boolean;
-  error?: string;
+	timestamp: number;
+	success: boolean;
+	error?: string;
 }
 
 interface SignalIncomingMessage {
-  envelope: {
-    source: string;
-    sourceNumber: string;
-    sourceUuid: string;
-    sourceName: string;
-    sourceDevice: number;
-    timestamp: number;
-    dataMessage?: {
-      timestamp: number;
-      message: string;
-      expiresInSeconds: number;
-      viewOnce: boolean;
-      attachments?: Array<{
-        contentType: string;
-        filename: string;
-        id: string;
-        size: number;
-      }>;
-    };
-  };
-  account: string;
+	envelope: {
+		source: string;
+		sourceNumber: string;
+		sourceUuid: string;
+		sourceName: string;
+		sourceDevice: number;
+		timestamp: number;
+		dataMessage?: {
+			timestamp: number;
+			message: string;
+			expiresInSeconds: number;
+			viewOnce: boolean;
+			attachments?: Array<{
+				contentType: string;
+				filename: string;
+				id: string;
+				size: number;
+			}>;
+		};
+	};
+	account: string;
 }
 
 export class SignalService {
-  private signalNumber: string;
-  private baseUrl: string;
+	private signalNumber: string;
+	private baseUrl: string;
 
-  constructor() {
-    this.signalNumber = process.env.SIGNAL_NUMBER || '';
-    this.baseUrl = process.env.SIGNAL_CLI_REST_API_URL || 'http://localhost:8080';
-    
-    if (!this.signalNumber) {
-      console.warn('Signal number not configured. Signal features will be disabled.');
-    }
-  }
+	constructor() {
+		this.signalNumber = process.env.SIGNAL_NUMBER || "";
+		this.baseUrl =
+			process.env.SIGNAL_CLI_REST_API_URL || "http://localhost:8080";
 
-  /**
-   * Check if Signal is available
-   */
-  isAvailable(): boolean {
-    return !!this.signalNumber;
-  }
+		if (!this.signalNumber) {
+			console.warn(
+				"Signal number not configured. Signal features will be disabled.",
+			);
+		}
+	}
 
-  /**
-   * Send a text message
-   */
-  async sendTextMessage(to: string, message: string): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+	/**
+	 * Check if Signal is available
+	 */
+	isAvailable(): boolean {
+		return !!this.signalNumber;
+	}
 
-    const payload: SignalMessage = {
-      number: this.signalNumber,
-      recipients: [this.formatPhoneNumber(to)],
-      message: message
-    };
+	/**
+	 * Send a text message
+	 */
+	async sendTextMessage(
+		to: string,
+		message: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
 
-    return this.sendMessage(payload);
-  }
+		const payload: SignalMessage = {
+			number: this.signalNumber,
+			recipients: [this.formatPhoneNumber(to)],
+			message: message,
+		};
 
-  /**
-   * Send appointment reminder
-   */
-  async sendAppointmentReminder(
-    to: string,
-    patientName: string,
-    appointmentDate: string,
-    appointmentTime: string,
-    doctorName: string,
-    clinicAddress: string
-  ): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+		return this.sendMessage(payload);
+	}
 
-    const message = `🦷 RECORDATORIO DE CITA DENTAL
+	/**
+	 * Send appointment reminder
+	 */
+	async sendAppointmentReminder(
+		to: string,
+		patientName: string,
+		appointmentDate: string,
+		appointmentTime: string,
+		doctorName: string,
+		clinicAddress: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
+
+		const message = `🦷 RECORDATORIO DE CITA DENTAL
 
 ¡Hola ${patientName}!
 
@@ -119,25 +125,25 @@ Para reprogramar, contáctanos lo antes posible.
 Clínica Dental Cognident
 📞 (55) 1234-5678`;
 
-    return this.sendTextMessage(to, message);
-  }
+		return this.sendTextMessage(to, message);
+	}
 
-  /**
-   * Send appointment confirmation
-   */
-  async sendAppointmentConfirmation(
-    to: string,
-    patientName: string,
-    appointmentDate: string,
-    appointmentTime: string,
-    treatmentType: string
-  ): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+	/**
+	 * Send appointment confirmation
+	 */
+	async sendAppointmentConfirmation(
+		to: string,
+		patientName: string,
+		appointmentDate: string,
+		appointmentTime: string,
+		treatmentType: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
 
-    const message = `✅ CITA CONFIRMADA
+		const message = `✅ CITA CONFIRMADA
 
 ¡Hola ${patientName}!
 
@@ -158,25 +164,25 @@ INSTRUCCIONES IMPORTANTES:
 Clínica Dental Cognident
 📞 (55) 1234-5678`;
 
-    return this.sendTextMessage(to, message);
-  }
+		return this.sendTextMessage(to, message);
+	}
 
-  /**
-   * Send payment reminder
-   */
-  async sendPaymentReminder(
-    to: string,
-    patientName: string,
-    amount: string,
-    dueDate: string,
-    invoiceNumber: string
-  ): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+	/**
+	 * Send payment reminder
+	 */
+	async sendPaymentReminder(
+		to: string,
+		patientName: string,
+		amount: string,
+		dueDate: string,
+		invoiceNumber: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
 
-    const message = `💳 RECORDATORIO DE PAGO
+		const message = `💳 RECORDATORIO DE PAGO
 
 Estimado/a ${patientName},
 
@@ -204,24 +210,24 @@ Para cualquier duda, no dudes en contactarnos.
 Clínica Dental Cognident
 📞 (55) 1234-5678`;
 
-    return this.sendTextMessage(to, message);
-  }
+		return this.sendTextMessage(to, message);
+	}
 
-  /**
-   * Send post-treatment care instructions
-   */
-  async sendPostTreatmentCare(
-    to: string,
-    patientName: string,
-    treatmentType: string,
-    instructions: string
-  ): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+	/**
+	 * Send post-treatment care instructions
+	 */
+	async sendPostTreatmentCare(
+		to: string,
+		patientName: string,
+		treatmentType: string,
+		instructions: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
 
-    const message = `🩺 CUIDADOS POST-TRATAMIENTO
+		const message = `🩺 CUIDADOS POST-TRATAMIENTO
 
 Hola ${patientName},
 
@@ -248,25 +254,25 @@ EMERGENCIAS 24/7: (55) 1234-5678
 
 Clínica Dental Cognident`;
 
-    return this.sendTextMessage(to, message);
-  }
+		return this.sendTextMessage(to, message);
+	}
 
-  /**
-   * Send promotional message
-   */
-  async sendPromotion(
-    to: string,
-    patientName: string,
-    promotionTitle: string,
-    promotionDetails: string,
-    validUntil: string
-  ): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+	/**
+	 * Send promotional message
+	 */
+	async sendPromotion(
+		to: string,
+		patientName: string,
+		promotionTitle: string,
+		promotionDetails: string,
+		validUntil: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
 
-    const message = `🎉 ${promotionTitle}
+		const message = `🎉 ${promotionTitle}
 
 ¡Hola ${patientName}!
 
@@ -285,79 +291,84 @@ Para agendar tu cita:
 Clínica Dental Cognident
 Tu sonrisa es nuestra prioridad ✨`;
 
-    return this.sendTextMessage(to, message);
-  }
+		return this.sendTextMessage(to, message);
+	}
 
-  /**
-   * Send secure document (treatment plans, X-rays, etc.)
-   */
-  async sendDocument(
-    to: string,
-    documentPath: string,
-    caption?: string
-  ): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+	/**
+	 * Send secure document (treatment plans, X-rays, etc.)
+	 */
+	async sendDocument(
+		to: string,
+		documentPath: string,
+		caption?: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
 
-    const payload: SignalMessage = {
-      number: this.signalNumber,
-      recipients: [this.formatPhoneNumber(to)],
-      message: caption || 'Documento adjunto',
-      attachments: [documentPath]
-    };
+		const payload: SignalMessage = {
+			number: this.signalNumber,
+			recipients: [this.formatPhoneNumber(to)],
+			message: caption || "Documento adjunto",
+			attachments: [documentPath],
+		};
 
-    return this.sendMessage(payload);
-  }
+		return this.sendMessage(payload);
+	}
 
-  /**
-   * Send secure image (X-rays, treatment photos, etc.)
-   */
-  async sendImage(
-    to: string,
-    imagePath: string,
-    caption?: string
-  ): Promise<SignalResponse | null> {
-    if (!this.isAvailable()) {
-      console.warn('Signal not available');
-      return null;
-    }
+	/**
+	 * Send secure image (X-rays, treatment photos, etc.)
+	 */
+	async sendImage(
+		to: string,
+		imagePath: string,
+		caption?: string,
+	): Promise<SignalResponse | null> {
+		if (!this.isAvailable()) {
+			console.warn("Signal not available");
+			return null;
+		}
 
-    const payload: SignalMessage = {
-      number: this.signalNumber,
-      recipients: [this.formatPhoneNumber(to)],
-      message: caption || 'Imagen adjunta',
-      attachments: [imagePath]
-    };
+		const payload: SignalMessage = {
+			number: this.signalNumber,
+			recipients: [this.formatPhoneNumber(to)],
+			message: caption || "Imagen adjunta",
+			attachments: [imagePath],
+		};
 
-    return this.sendMessage(payload);
-  }
+		return this.sendMessage(payload);
+	}
 
-  /**
-   * Process incoming Signal message
-   */
-  async processIncomingMessage(messageData: SignalIncomingMessage): Promise<void> {
-    try {
-      const envelope = messageData.envelope;
-      const dataMessage = envelope.dataMessage;
-      
-      if (!dataMessage) return;
+	/**
+	 * Process incoming Signal message
+	 */
+	async processIncomingMessage(
+		messageData: SignalIncomingMessage,
+	): Promise<void> {
+		try {
+			const envelope = messageData.envelope;
+			const dataMessage = envelope.dataMessage;
 
-      const from = envelope.sourceNumber;
-      const message = dataMessage.message;
-      const senderName = envelope.sourceName || 'Usuario';
+			if (!dataMessage) return;
 
-      console.log(`Signal message from ${senderName} (${from}): ${message}`);
+			const from = envelope.sourceNumber;
+			const message = dataMessage.message;
+			const senderName = envelope.sourceName || "Usuario";
 
-      // Auto-reply for common queries
-      if (message) {
-        const messageText = message.toLowerCase();
-        
-        if (messageText.includes('cita') || messageText.includes('appointment')) {
-          await this.sendTextMessage(
-            from,
-            `Gracias por contactarnos, ${senderName}.
+			console.log(`Signal message from ${senderName} (${from}): ${message}`);
+
+			// Auto-reply for common queries
+			if (message) {
+				const messageText = message.toLowerCase();
+
+				if (
+					messageText.includes("cita") ||
+					messageText.includes("appointment")
+				) {
+					await this.sendTextMessage(
+						from,
+						`Gracias por contactarnos, ${senderName}.
 
 Para agendar una cita puedes:
 📞 Llamar al (55) 1234-5678
@@ -367,12 +378,15 @@ Horarios de atención:
 Lunes a Viernes: 8:00 AM - 7:00 PM
 Sábados: 9:00 AM - 3:00 PM
 
-¡Estaremos encantados de atenderte!`
-          );
-        } else if (messageText.includes('horario') || messageText.includes('hours')) {
-          await this.sendTextMessage(
-            from,
-            `🕐 HORARIOS DE ATENCIÓN
+¡Estaremos encantados de atenderte!`,
+					);
+				} else if (
+					messageText.includes("horario") ||
+					messageText.includes("hours")
+				) {
+					await this.sendTextMessage(
+						from,
+						`🕐 HORARIOS DE ATENCIÓN
 
 Lunes a Viernes: 8:00 AM - 7:00 PM
 Sábados: 9:00 AM - 3:00 PM
@@ -380,12 +394,15 @@ Domingos: Cerrado
 
 Emergencias 24/7: (55) 1234-5678
 
-¿En qué más podemos ayudarte?`
-          );
-        } else if (messageText.includes('ubicación') || messageText.includes('location')) {
-          await this.sendTextMessage(
-            from,
-            `📍 NUESTRA UBICACIÓN
+¿En qué más podemos ayudarte?`,
+					);
+				} else if (
+					messageText.includes("ubicación") ||
+					messageText.includes("location")
+				) {
+					await this.sendTextMessage(
+						from,
+						`📍 NUESTRA UBICACIÓN
 
 Av. Reforma 123, Col. Centro
 Ciudad de México, CDMX
@@ -395,12 +412,15 @@ Referencias:
 • Frente al Metro Bellas Artes
 • A 2 cuadras del Palacio de Bellas Artes
 
-¿Necesitas indicaciones específicas?`
-          );
-        } else if (messageText.includes('emergencia') || messageText.includes('emergency')) {
-          await this.sendTextMessage(
-            from,
-            `🚨 EMERGENCIA DENTAL
+¿Necesitas indicaciones específicas?`,
+					);
+				} else if (
+					messageText.includes("emergencia") ||
+					messageText.includes("emergency")
+				) {
+					await this.sendTextMessage(
+						from,
+						`🚨 EMERGENCIA DENTAL
 
 Para emergencias inmediatas:
 📞 Llama AHORA al (55) 1234-5678
@@ -409,12 +429,12 @@ Estamos disponibles 24/7 para emergencias.
 
 Si es una emergencia médica grave, llama al 911.
 
-¡Tu salud es nuestra prioridad!`
-          );
-        } else {
-          await this.sendTextMessage(
-            from,
-            `Gracias por tu mensaje, ${senderName}.
+¡Tu salud es nuestra prioridad!`,
+					);
+				} else {
+					await this.sendTextMessage(
+						from,
+						`Gracias por tu mensaje, ${senderName}.
 
 Un miembro de nuestro equipo te responderá pronto.
 
@@ -423,74 +443,76 @@ Para atención inmediata:
 
 ¡Que tengas un excelente día! 😊
 
-Clínica Dental Cognident`
-          );
-        }
-      }
-    } catch (error) {
-      console.error('Error processing Signal message:', error);
-    }
-  }
+Clínica Dental Cognident`,
+					);
+				}
+			}
+		} catch (error) {
+			console.error("Error processing Signal message:", error);
+		}
+	}
 
-  /**
-   * Send message to Signal API
-   */
-  private async sendMessage(payload: SignalMessage): Promise<SignalResponse | null> {
-    try {
-      const response = await fetch(`${this.baseUrl}/v2/send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+	/**
+	 * Send message to Signal API
+	 */
+	private async sendMessage(
+		payload: SignalMessage,
+	): Promise<SignalResponse | null> {
+		try {
+			const response = await fetch(`${this.baseUrl}/v2/send`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(payload),
+			});
 
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(`Signal API error: ${response.status} ${errorData}`);
-      }
+			if (!response.ok) {
+				const errorData = await response.text();
+				throw new Error(`Signal API error: ${response.status} ${errorData}`);
+			}
 
-      const result = await response.json();
-      console.log('Signal message sent successfully');
-      return {
-        timestamp: Date.now(),
-        success: true
-      };
-    } catch (error) {
-      console.error('Error sending Signal message:', error);
-      return {
-        timestamp: Date.now(),
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
-    }
-  }
+			const result = await response.json();
+			console.log("Signal message sent successfully");
+			return {
+				timestamp: Date.now(),
+				success: true,
+			};
+		} catch (error) {
+			console.error("Error sending Signal message:", error);
+			return {
+				timestamp: Date.now(),
+				success: false,
+				error: error instanceof Error ? error.message : "Unknown error",
+			};
+		}
+	}
 
-  /**
-   * Format phone number for Signal (with country code)
-   */
-  private formatPhoneNumber(phoneNumber: string): string {
-    // Remove all non-numeric characters
-    let cleaned = phoneNumber.replace(/\D/g, '');
-    
-    // If it starts with +52 or 52 (Mexico), format correctly
-    if (cleaned.startsWith('52')) {
-      return `+${cleaned}`;
-    }
-    
-    // If it's a 10-digit Mexican number, add country code
-    if (cleaned.length === 10) {
-      return `+52${cleaned}`;
-    }
-    
-    // If it starts with + already, use as is
-    if (phoneNumber.startsWith('+')) {
-      return phoneNumber;
-    }
-    
-    // Default: assume it's a Mexican number and add country code
-    return `+52${cleaned}`;
-  }
+	/**
+	 * Format phone number for Signal (with country code)
+	 */
+	private formatPhoneNumber(phoneNumber: string): string {
+		// Remove all non-numeric characters
+		const cleaned = phoneNumber.replace(/\D/g, "");
+
+		// If it starts with +52 or 52 (Mexico), format correctly
+		if (cleaned.startsWith("52")) {
+			return `+${cleaned}`;
+		}
+
+		// If it's a 10-digit Mexican number, add country code
+		if (cleaned.length === 10) {
+			return `+52${cleaned}`;
+		}
+
+		// If it starts with + already, use as is
+		if (phoneNumber.startsWith("+")) {
+			return phoneNumber;
+		}
+
+		// Default: assume it's a Mexican number and add country code
+		return `+52${cleaned}`;
+	}
 }
 
 // Singleton instance

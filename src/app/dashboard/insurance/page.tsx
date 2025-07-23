@@ -1,38 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { 
-	Shield, 
-	Plus, 
-	Edit, 
-	Trash2, 
-	Search, 
-	Filter,
-	Building2,
-	Phone,
-	Mail,
-	Globe,
-	CheckCircle,
-	AlertCircle,
-	Settings,
-	Download,
-	Upload,
-	RefreshCw
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import {
 	Dialog,
 	DialogContent,
@@ -42,8 +12,38 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
+import {
+	AlertCircle,
+	Building2,
+	CheckCircle,
+	Download,
+	Edit,
+	Filter,
+	Globe,
+	Mail,
+	Phone,
+	Plus,
+	RefreshCw,
+	Search,
+	Settings,
+	Shield,
+	Trash2,
+	Upload,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface InsurancePayer {
 	id: string;
@@ -88,10 +88,14 @@ interface Clearinghouse {
 export default function InsuranceManagementPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterType, setFilterType] = useState("all");
-	const [selectedPayer, setSelectedPayer] = useState<InsurancePayer | null>(null);
-	const [selectedClearinghouse, setSelectedClearinghouse] = useState<Clearinghouse | null>(null);
+	const [selectedPayer, setSelectedPayer] = useState<InsurancePayer | null>(
+		null,
+	);
+	const [selectedClearinghouse, setSelectedClearinghouse] =
+		useState<Clearinghouse | null>(null);
 	const [isPayerDialogOpen, setIsPayerDialogOpen] = useState(false);
-	const [isClearinghouseDialogOpen, setIsClearinghouseDialogOpen] = useState(false);
+	const [isClearinghouseDialogOpen, setIsClearinghouseDialogOpen] =
+		useState(false);
 
 	// Mock data for insurance payers
 	const insurancePayers: InsurancePayer[] = [
@@ -113,10 +117,10 @@ export default function InsuranceManagementPage() {
 				preventive: 100,
 				basic: 80,
 				major: 50,
-				orthodontic: 50
+				orthodontic: 50,
 			},
 			createdAt: "2024-01-01",
-			updatedAt: "2024-01-15"
+			updatedAt: "2024-01-15",
 		},
 		{
 			id: "2",
@@ -133,10 +137,10 @@ export default function InsuranceManagementPage() {
 				preventive: 100,
 				basic: 80,
 				major: 60,
-				orthodontic: 50
+				orthodontic: 50,
 			},
 			createdAt: "2024-01-02",
-			updatedAt: "2024-01-14"
+			updatedAt: "2024-01-14",
 		},
 		{
 			id: "3",
@@ -153,11 +157,11 @@ export default function InsuranceManagementPage() {
 				preventive: 100,
 				basic: 70,
 				major: 50,
-				orthodontic: 50
+				orthodontic: 50,
 			},
 			createdAt: "2024-01-03",
-			updatedAt: "2024-01-13"
-		}
+			updatedAt: "2024-01-13",
+		},
 	];
 
 	// Mock data for clearinghouses
@@ -175,7 +179,7 @@ export default function InsuranceManagementPage() {
 			supportedTransactions: ["270", "271", "837", "835", "276", "277"],
 			testMode: false,
 			lastSync: "2024-01-15 14:30:00",
-			status: "connected"
+			status: "connected",
 		},
 		{
 			id: "2",
@@ -190,7 +194,7 @@ export default function InsuranceManagementPage() {
 			supportedTransactions: ["270", "271", "837", "835"],
 			testMode: false,
 			lastSync: "2024-01-15 13:45:00",
-			status: "connected"
+			status: "connected",
 		},
 		{
 			id: "3",
@@ -205,12 +209,13 @@ export default function InsuranceManagementPage() {
 			supportedTransactions: ["270", "271", "837", "835", "276", "277", "278"],
 			testMode: true,
 			lastSync: "2024-01-10 09:15:00",
-			status: "disconnected"
-		}
+			status: "disconnected",
+		},
 	];
 
-	const filteredPayers = insurancePayers.filter(payer => {
-		const matchesSearch = payer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	const filteredPayers = insurancePayers.filter((payer) => {
+		const matchesSearch =
+			payer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			payer.payerCode.toLowerCase().includes(searchTerm.toLowerCase());
 		const matchesFilter = filterType === "all" || payer.type === filterType;
 		return matchesSearch && matchesFilter;
@@ -218,28 +223,39 @@ export default function InsuranceManagementPage() {
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "connected": return "bg-green-100 text-green-800";
-			case "disconnected": return "bg-red-100 text-red-800";
-			case "error": return "bg-orange-100 text-orange-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "connected":
+				return "bg-green-100 text-green-800";
+			case "disconnected":
+				return "bg-red-100 text-red-800";
+			case "error":
+				return "bg-orange-100 text-orange-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const getTypeColor = (type: string) => {
 		switch (type) {
-			case "primary": return "bg-blue-100 text-blue-800";
-			case "secondary": return "bg-purple-100 text-purple-800";
-			case "tertiary": return "bg-gray-100 text-gray-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "primary":
+				return "bg-blue-100 text-blue-800";
+			case "secondary":
+				return "bg-purple-100 text-purple-800";
+			case "tertiary":
+				return "bg-gray-100 text-gray-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const handleTestConnection = async (clearinghouseId: string) => {
 		// Test clearinghouse connection
 		try {
-			const response = await fetch(`/api/clearinghouse/${clearinghouseId}/test`, {
-				method: "POST"
-			});
+			const response = await fetch(
+				`/api/clearinghouse/${clearinghouseId}/test`,
+				{
+					method: "POST",
+				},
+			);
 			if (response.ok) {
 				alert("Connection test successful!");
 			} else {
@@ -255,7 +271,7 @@ export default function InsuranceManagementPage() {
 		// Sync eligibility data
 		try {
 			const response = await fetch(`/api/insurance/${payerId}/eligibility`, {
-				method: "POST"
+				method: "POST",
 			});
 			if (response.ok) {
 				alert("Eligibility sync completed!");
@@ -282,17 +298,17 @@ export default function InsuranceManagementPage() {
 								<div className="flex items-baseline space-x-4">
 									<Link
 										href="/dashboard"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Dashboard
 									</Link>
 									<Link
 										href="/dashboard/billing"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Billing
 									</Link>
-									<span className="rounded-md bg-gray-900 px-3 py-2 text-white text-sm font-medium">
+									<span className="rounded-md bg-gray-900 px-3 py-2 font-medium text-sm text-white">
 										Insurance
 									</span>
 								</div>
@@ -314,11 +330,18 @@ export default function InsuranceManagementPage() {
 				<div className="mb-8">
 					<div className="flex items-center justify-between">
 						<div>
-							<h1 className="font-bold text-3xl text-gray-900">Insurance Management</h1>
-							<p className="mt-2 text-gray-600">Manage insurance payers and clearinghouse connections</p>
+							<h1 className="font-bold text-3xl text-gray-900">
+								Insurance Management
+							</h1>
+							<p className="mt-2 text-gray-600">
+								Manage insurance payers and clearinghouse connections
+							</p>
 						</div>
 						<div className="flex space-x-3">
-							<Button variant="outline" onClick={() => setIsClearinghouseDialogOpen(true)}>
+							<Button
+								variant="outline"
+								onClick={() => setIsClearinghouseDialogOpen(true)}
+							>
 								<Plus className="mr-2 h-4 w-4" />
 								Add Clearinghouse
 							</Button>
@@ -336,9 +359,11 @@ export default function InsuranceManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Active Payers</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Active Payers
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
-										{insurancePayers.filter(p => p.isActive).length}
+										{insurancePayers.filter((p) => p.isActive).length}
 									</p>
 								</div>
 								<Shield className="h-8 w-8 text-blue-600" />
@@ -349,9 +374,14 @@ export default function InsuranceManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Connected Clearinghouses</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Connected Clearinghouses
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
-										{clearinghouses.filter(c => c.status === "connected").length}
+										{
+											clearinghouses.filter((c) => c.status === "connected")
+												.length
+										}
 									</p>
 								</div>
 								<Globe className="h-8 w-8 text-green-600" />
@@ -362,9 +392,11 @@ export default function InsuranceManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Primary Payers</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Primary Payers
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
-										{insurancePayers.filter(p => p.type === "primary").length}
+										{insurancePayers.filter((p) => p.type === "primary").length}
 									</p>
 								</div>
 								<Building2 className="h-8 w-8 text-purple-600" />
@@ -375,7 +407,9 @@ export default function InsuranceManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Avg Coverage Rate</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Avg Coverage Rate
+									</p>
 									<p className="font-bold text-2xl text-gray-900">75%</p>
 								</div>
 								<CheckCircle className="h-8 w-8 text-orange-600" />
@@ -398,12 +432,12 @@ export default function InsuranceManagementPage() {
 									<CardTitle>Insurance Payers</CardTitle>
 									<div className="flex space-x-4">
 										<div className="relative">
-											<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+											<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 											<Input
 												placeholder="Search payers..."
 												value={searchTerm}
 												onChange={(e) => setSearchTerm(e.target.value)}
-												className="pl-10 w-64"
+												className="w-64 pl-10"
 											/>
 										</div>
 										<Select value={filterType} onValueChange={setFilterType}>
@@ -423,41 +457,65 @@ export default function InsuranceManagementPage() {
 							<CardContent>
 								<div className="space-y-4">
 									{filteredPayers.map((payer) => (
-										<div key={payer.id} className="rounded-lg border border-gray-200 bg-white p-4">
+										<div
+											key={payer.id}
+											className="rounded-lg border border-gray-200 bg-white p-4"
+										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<h3 className="font-medium text-gray-900">{payer.name}</h3>
+														<h3 className="font-medium text-gray-900">
+															{payer.name}
+														</h3>
 														<Badge className={getTypeColor(payer.type)}>
 															{payer.type}
 														</Badge>
-														<Badge className={payer.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
+														<Badge
+															className={
+																payer.isActive
+																	? "bg-green-100 text-green-800"
+																	: "bg-red-100 text-red-800"
+															}
+														>
 															{payer.isActive ? "Active" : "Inactive"}
 														</Badge>
 													</div>
-													<div className="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-600">
+													<div className="mt-2 grid grid-cols-2 gap-4 text-gray-600 text-sm">
 														<div>
-															<span className="font-medium">Payer Code:</span> {payer.payerCode}
+															<span className="font-medium">Payer Code:</span>{" "}
+															{payer.payerCode}
 														</div>
 														<div>
-															<span className="font-medium">Phone:</span> {payer.phone}
+															<span className="font-medium">Phone:</span>{" "}
+															{payer.phone}
 														</div>
 														<div>
-															<span className="font-medium">Email:</span> {payer.email}
+															<span className="font-medium">Email:</span>{" "}
+															{payer.email}
 														</div>
 														<div>
-															<span className="font-medium">Clearinghouse:</span> {
-																clearinghouses.find(c => c.id === payer.clearinghouseId)?.name || "Not assigned"
-															}
+															<span className="font-medium">
+																Clearinghouse:
+															</span>{" "}
+															{clearinghouses.find(
+																(c) => c.id === payer.clearinghouseId,
+															)?.name || "Not assigned"}
 														</div>
 													</div>
 													<div className="mt-3">
-														<h4 className="font-medium text-gray-900 text-sm">Coverage Rates:</h4>
-														<div className="mt-1 grid grid-cols-4 gap-4 text-sm text-gray-600">
-															<div>Preventive: {payer.contractedRates.preventive}%</div>
+														<h4 className="font-medium text-gray-900 text-sm">
+															Coverage Rates:
+														</h4>
+														<div className="mt-1 grid grid-cols-4 gap-4 text-gray-600 text-sm">
+															<div>
+																Preventive: {payer.contractedRates.preventive}%
+															</div>
 															<div>Basic: {payer.contractedRates.basic}%</div>
 															<div>Major: {payer.contractedRates.major}%</div>
-															<div>Orthodontic: {payer.contractedRates.orthodontic}%</div>
+															<div>
+																Orthodontic: {payer.contractedRates.orthodontic}
+																%
+															</div>
 														</div>
 													</div>
 												</div>
@@ -500,12 +558,19 @@ export default function InsuranceManagementPage() {
 							<CardContent>
 								<div className="space-y-4">
 									{clearinghouses.map((clearinghouse) => (
-										<div key={clearinghouse.id} className="rounded-lg border border-gray-200 bg-white p-4">
+										<div
+											key={clearinghouse.id}
+											className="rounded-lg border border-gray-200 bg-white p-4"
+										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<h3 className="font-medium text-gray-900">{clearinghouse.name}</h3>
-														<Badge className={getStatusColor(clearinghouse.status)}>
+														<h3 className="font-medium text-gray-900">
+															{clearinghouse.name}
+														</h3>
+														<Badge
+															className={getStatusColor(clearinghouse.status)}
+														>
 															{clearinghouse.status}
 														</Badge>
 														<Badge variant="outline">
@@ -517,18 +582,22 @@ export default function InsuranceManagementPage() {
 															</Badge>
 														)}
 													</div>
-													<div className="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-600">
+													<div className="mt-2 grid grid-cols-2 gap-4 text-gray-600 text-sm">
 														<div>
-															<span className="font-medium">Submitter ID:</span> {clearinghouse.submitterId}
+															<span className="font-medium">Submitter ID:</span>{" "}
+															{clearinghouse.submitterId}
 														</div>
 														<div>
-															<span className="font-medium">Receiver ID:</span> {clearinghouse.receiverId}
+															<span className="font-medium">Receiver ID:</span>{" "}
+															{clearinghouse.receiverId}
 														</div>
 														<div>
-															<span className="font-medium">Last Sync:</span> {clearinghouse.lastSync}
+															<span className="font-medium">Last Sync:</span>{" "}
+															{clearinghouse.lastSync}
 														</div>
 														<div>
-															<span className="font-medium">Transactions:</span> {clearinghouse.supportedTransactions.join(", ")}
+															<span className="font-medium">Transactions:</span>{" "}
+															{clearinghouse.supportedTransactions.join(", ")}
 														</div>
 													</div>
 												</div>
@@ -536,14 +605,18 @@ export default function InsuranceManagementPage() {
 													<Button
 														variant="outline"
 														size="sm"
-														onClick={() => handleTestConnection(clearinghouse.id)}
+														onClick={() =>
+															handleTestConnection(clearinghouse.id)
+														}
 													>
 														Test Connection
 													</Button>
 													<Button
 														variant="outline"
 														size="sm"
-														onClick={() => setSelectedClearinghouse(clearinghouse)}
+														onClick={() =>
+															setSelectedClearinghouse(clearinghouse)
+														}
 													>
 														<Settings className="h-4 w-4" />
 													</Button>

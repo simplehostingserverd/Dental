@@ -24,7 +24,9 @@ const envSchema = z.object({
 		.min(32, "PATIENT_JWT_SECRET must be at least 32 characters"),
 
 	// NextAuth.js (required for production)
-	NEXTAUTH_SECRET: z.string().min(32, "NEXTAUTH_SECRET must be at least 32 characters"),
+	NEXTAUTH_SECRET: z
+		.string()
+		.min(32, "NEXTAUTH_SECRET must be at least 32 characters"),
 	NEXTAUTH_URL: z.string().url("NEXTAUTH_URL must be a valid URL"),
 
 	// OAuth providers (optional)
@@ -75,25 +77,32 @@ function validateEnv(): Env {
 	}
 
 	// Special handling for Coolify deployments
-	if (process.env.COOLIFY_DEPLOYMENT === "true" || process.env.NODE_ENV === "production") {
+	if (
+		process.env.COOLIFY_DEPLOYMENT === "true" ||
+		process.env.NODE_ENV === "production"
+	) {
 		console.log("🚀 Coolify deployment detected - using relaxed validation");
 
 		// Check for critical variables only
 		const criticalVars = [
-			'DATABASE_URL',
-			'JWT_SECRET',
-			'PATIENT_JWT_SECRET',
-			'NEXTAUTH_SECRET',
-			'NEXTAUTH_URL'
+			"DATABASE_URL",
+			"JWT_SECRET",
+			"PATIENT_JWT_SECRET",
+			"NEXTAUTH_SECRET",
+			"NEXTAUTH_URL",
 		];
 
-		const missing = criticalVars.filter(varName => !process.env[varName]);
+		const missing = criticalVars.filter((varName) => !process.env[varName]);
 
 		if (missing.length > 0) {
 			console.error("❌ Critical environment variables missing:");
-			missing.forEach(varName => console.error(`  - ${varName}`));
-			console.error("\n💡 Make sure these are set in your Coolify environment variables");
-			throw new Error(`Missing critical environment variables: ${missing.join(', ')}`);
+			missing.forEach((varName) => console.error(`  - ${varName}`));
+			console.error(
+				"\n💡 Make sure these are set in your Coolify environment variables",
+			);
+			throw new Error(
+				`Missing critical environment variables: ${missing.join(", ")}`,
+			);
 		}
 
 		console.log("✅ All critical environment variables found");

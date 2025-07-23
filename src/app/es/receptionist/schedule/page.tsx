@@ -1,29 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { 
-	Calendar, 
-	Clock, 
-	User, 
-	Phone, 
-	ChevronLeft,
-	ChevronRight,
-	Plus,
-	Filter,
-	Search,
-	Eye,
-	Edit,
-	Trash2,
-	CheckCircle,
-	XCircle,
-	AlertCircle
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
 	Select,
 	SelectContent,
@@ -31,6 +11,26 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
+import {
+	AlertCircle,
+	Calendar,
+	CheckCircle,
+	ChevronLeft,
+	ChevronRight,
+	Clock,
+	Edit,
+	Eye,
+	Filter,
+	Phone,
+	Plus,
+	Search,
+	Trash2,
+	User,
+	XCircle,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 // Spanish translations
 const translations = {
@@ -50,7 +50,7 @@ const translations = {
 		dashboard: "Panel Principal",
 		appointments: "Citas",
 		patients: "Pacientes",
-		communications: "Comunicaciones"
+		communications: "Comunicaciones",
 	},
 	appointmentStatus: {
 		scheduled: "Programada",
@@ -58,15 +58,15 @@ const translations = {
 		inProgress: "En Progreso",
 		completed: "Completada",
 		cancelled: "Cancelada",
-		noShow: "No Asistió"
+		noShow: "No Asistió",
 	},
 	actions: {
 		view: "Ver",
 		edit: "Editar",
 		cancel: "Cancelar",
 		complete: "Completar",
-		confirm: "Confirmar"
-	}
+		confirm: "Confirmar",
+	},
 };
 
 interface Appointment {
@@ -80,7 +80,13 @@ interface Appointment {
 	};
 	dentist: string;
 	treatment: string;
-	status: "scheduled" | "confirmed" | "inProgress" | "completed" | "cancelled" | "noShow";
+	status:
+		| "scheduled"
+		| "confirmed"
+		| "inProgress"
+		| "completed"
+		| "cancelled"
+		| "noShow";
 	notes?: string;
 }
 
@@ -100,11 +106,11 @@ export default function SpanishSchedulePage() {
 			patient: {
 				name: "María González",
 				phone: "+52 55 1234 5678",
-				email: "maria@email.com"
+				email: "maria@email.com",
 			},
 			dentist: "Dr. Roberto Sánchez",
 			treatment: "Limpieza Dental",
-			status: "confirmed"
+			status: "confirmed",
 		},
 		{
 			id: "2",
@@ -113,11 +119,11 @@ export default function SpanishSchedulePage() {
 			patient: {
 				name: "Carlos Hernández",
 				phone: "+52 55 2345 6789",
-				email: "carlos@email.com"
+				email: "carlos@email.com",
 			},
 			dentist: "Dra. Patricia Mendoza",
 			treatment: "Endodoncia",
-			status: "scheduled"
+			status: "scheduled",
 		},
 		{
 			id: "3",
@@ -126,11 +132,11 @@ export default function SpanishSchedulePage() {
 			patient: {
 				name: "Ana López",
 				phone: "+52 55 3456 7890",
-				email: "ana@email.com"
+				email: "ana@email.com",
 			},
 			dentist: "Dr. Roberto Sánchez",
 			treatment: "Empaste",
-			status: "inProgress"
+			status: "inProgress",
 		},
 		{
 			id: "4",
@@ -139,11 +145,11 @@ export default function SpanishSchedulePage() {
 			patient: {
 				name: "Luis Morales",
 				phone: "+52 55 4567 8901",
-				email: "luis@email.com"
+				email: "luis@email.com",
 			},
 			dentist: "Dr. Miguel Torres",
 			treatment: "Revisión General",
-			status: "completed"
+			status: "completed",
 		},
 		{
 			id: "5",
@@ -152,11 +158,11 @@ export default function SpanishSchedulePage() {
 			patient: {
 				name: "Carmen Ruiz",
 				phone: "+52 55 5678 9012",
-				email: "carmen@email.com"
+				email: "carmen@email.com",
 			},
 			dentist: "Dra. Laura Jiménez",
 			treatment: "Implante",
-			status: "scheduled"
+			status: "scheduled",
 		},
 		{
 			id: "6",
@@ -165,12 +171,12 @@ export default function SpanishSchedulePage() {
 			patient: {
 				name: "Roberto Silva",
 				phone: "+52 55 6789 0123",
-				email: "roberto@email.com"
+				email: "roberto@email.com",
 			},
 			dentist: "Dr. Roberto Sánchez",
 			treatment: "Blanqueamiento",
-			status: "cancelled"
-		}
+			status: "cancelled",
+		},
 	];
 
 	const dentists = [
@@ -178,7 +184,7 @@ export default function SpanishSchedulePage() {
 		{ id: "1", name: "Dr. Roberto Sánchez" },
 		{ id: "2", name: "Dra. Patricia Mendoza" },
 		{ id: "3", name: "Dr. Miguel Torres" },
-		{ id: "4", name: "Dra. Laura Jiménez" }
+		{ id: "4", name: "Dra. Laura Jiménez" },
 	];
 
 	const statusOptions = [
@@ -188,49 +194,68 @@ export default function SpanishSchedulePage() {
 		{ id: "inProgress", name: translations.appointmentStatus.inProgress },
 		{ id: "completed", name: translations.appointmentStatus.completed },
 		{ id: "cancelled", name: translations.appointmentStatus.cancelled },
-		{ id: "noShow", name: translations.appointmentStatus.noShow }
+		{ id: "noShow", name: translations.appointmentStatus.noShow },
 	];
 
 	// Filter appointments
-	const filteredAppointments = appointments.filter(appointment => {
-		const matchesSearch = appointment.patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	const filteredAppointments = appointments.filter((appointment) => {
+		const matchesSearch =
+			appointment.patient.name
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase()) ||
 			appointment.patient.phone.includes(searchTerm) ||
 			appointment.treatment.toLowerCase().includes(searchTerm.toLowerCase());
-		
-		const matchesDentist = selectedDentist === "all" || appointment.dentist === dentists.find(d => d.id === selectedDentist)?.name;
-		const matchesStatus = selectedStatus === "all" || appointment.status === selectedStatus;
+
+		const matchesDentist =
+			selectedDentist === "all" ||
+			appointment.dentist ===
+				dentists.find((d) => d.id === selectedDentist)?.name;
+		const matchesStatus =
+			selectedStatus === "all" || appointment.status === selectedStatus;
 
 		return matchesSearch && matchesDentist && matchesStatus;
 	});
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "scheduled": return "bg-blue-100 text-blue-800";
-			case "confirmed": return "bg-green-100 text-green-800";
-			case "inProgress": return "bg-yellow-100 text-yellow-800";
-			case "completed": return "bg-gray-100 text-gray-800";
-			case "cancelled": return "bg-red-100 text-red-800";
-			case "noShow": return "bg-orange-100 text-orange-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "scheduled":
+				return "bg-blue-100 text-blue-800";
+			case "confirmed":
+				return "bg-green-100 text-green-800";
+			case "inProgress":
+				return "bg-yellow-100 text-yellow-800";
+			case "completed":
+				return "bg-gray-100 text-gray-800";
+			case "cancelled":
+				return "bg-red-100 text-red-800";
+			case "noShow":
+				return "bg-orange-100 text-orange-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const getStatusIcon = (status: string) => {
 		switch (status) {
-			case "confirmed": return <CheckCircle className="h-3 w-3" />;
-			case "cancelled": return <XCircle className="h-3 w-3" />;
-			case "inProgress": return <Clock className="h-3 w-3" />;
-			case "noShow": return <AlertCircle className="h-3 w-3" />;
-			default: return null;
+			case "confirmed":
+				return <CheckCircle className="h-3 w-3" />;
+			case "cancelled":
+				return <XCircle className="h-3 w-3" />;
+			case "inProgress":
+				return <Clock className="h-3 w-3" />;
+			case "noShow":
+				return <AlertCircle className="h-3 w-3" />;
+			default:
+				return null;
 		}
 	};
 
 	const formatDate = (date: Date) => {
-		return date.toLocaleDateString('es-MX', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
+		return date.toLocaleDateString("es-MX", {
+			weekday: "long",
+			year: "numeric",
+			month: "long",
+			day: "numeric",
 		});
 	};
 
@@ -264,25 +289,25 @@ export default function SpanishSchedulePage() {
 								<div className="flex items-baseline space-x-4">
 									<Link
 										href="/es/receptionist"
-										className="rounded-md px-3 py-2 text-gray-300 text-sm font-medium hover:bg-gray-700 hover:text-white"
+										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
 									>
 										{translations.navigation.dashboard}
 									</Link>
 									<Link
 										href="/es/receptionist/appointments"
-										className="rounded-md px-3 py-2 text-gray-300 text-sm font-medium hover:bg-gray-700 hover:text-white"
+										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
 									>
 										{translations.navigation.appointments}
 									</Link>
 									<Link
 										href="/es/receptionist/patients"
-										className="rounded-md px-3 py-2 text-gray-300 text-sm font-medium hover:bg-gray-700 hover:text-white"
+										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
 									>
 										{translations.navigation.patients}
 									</Link>
 									<Link
 										href="/es/receptionist/communications"
-										className="rounded-md px-3 py-2 text-gray-300 text-sm font-medium hover:bg-gray-700 hover:text-white"
+										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
 									>
 										{translations.navigation.communications}
 									</Link>
@@ -291,7 +316,7 @@ export default function SpanishSchedulePage() {
 						</div>
 						<Link
 							href="/es/receptionist/appointments/new"
-							className="flex items-center rounded-md bg-blue-600 px-4 py-2 text-white text-sm font-medium hover:bg-blue-700"
+							className="flex items-center rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700"
 						>
 							<Plus className="mr-2 h-4 w-4" />
 							{translations.newAppointment}
@@ -304,7 +329,9 @@ export default function SpanishSchedulePage() {
 			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="font-bold text-3xl text-white">{translations.title}</h1>
+					<h1 className="font-bold text-3xl text-white">
+						{translations.title}
+					</h1>
 					<p className="mt-2 text-gray-400">{translations.subtitle}</p>
 				</div>
 
@@ -322,7 +349,9 @@ export default function SpanishSchedulePage() {
 								<ChevronLeft className="h-4 w-4" />
 							</Button>
 							<div className="min-w-[200px] text-center">
-								<h2 className="font-medium text-white">{formatDate(currentDate)}</h2>
+								<h2 className="font-medium text-white">
+									{formatDate(currentDate)}
+								</h2>
 							</div>
 							<Button
 								variant="outline"
@@ -349,7 +378,11 @@ export default function SpanishSchedulePage() {
 							variant={viewMode === "day" ? "default" : "outline"}
 							size="sm"
 							onClick={() => setViewMode("day")}
-							className={viewMode === "day" ? "" : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"}
+							className={
+								viewMode === "day"
+									? ""
+									: "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
+							}
 						>
 							Día
 						</Button>
@@ -357,7 +390,11 @@ export default function SpanishSchedulePage() {
 							variant={viewMode === "week" ? "default" : "outline"}
 							size="sm"
 							onClick={() => setViewMode("week")}
-							className={viewMode === "week" ? "" : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"}
+							className={
+								viewMode === "week"
+									? ""
+									: "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
+							}
 						>
 							Semana
 						</Button>
@@ -365,7 +402,11 @@ export default function SpanishSchedulePage() {
 							variant={viewMode === "month" ? "default" : "outline"}
 							size="sm"
 							onClick={() => setViewMode("month")}
-							className={viewMode === "month" ? "" : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"}
+							className={
+								viewMode === "month"
+									? ""
+									: "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
+							}
 						>
 							Mes
 						</Button>
@@ -375,7 +416,7 @@ export default function SpanishSchedulePage() {
 				{/* Filters */}
 				<div className="mb-6 grid gap-4 md:grid-cols-4">
 					<div className="relative">
-						<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+						<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 						<Input
 							placeholder={translations.searchPatient}
 							value={searchTerm}
@@ -428,7 +469,9 @@ export default function SpanishSchedulePage() {
 							{filteredAppointments.length === 0 ? (
 								<div className="py-8 text-center">
 									<Calendar className="mx-auto h-12 w-12 text-gray-400" />
-									<p className="mt-4 text-gray-400">No hay citas programadas para este período</p>
+									<p className="mt-4 text-gray-400">
+										No hay citas programadas para este período
+									</p>
 								</div>
 							) : (
 								filteredAppointments.map((appointment) => (
@@ -448,39 +491,67 @@ export default function SpanishSchedulePage() {
 													<Badge className={getStatusColor(appointment.status)}>
 														{getStatusIcon(appointment.status)}
 														<span className="ml-1">
-															{translations.appointmentStatus[appointment.status]}
+															{
+																translations.appointmentStatus[
+																	appointment.status
+																]
+															}
 														</span>
 													</Badge>
 												</div>
 												<div className="mt-2">
 													<div className="flex items-center space-x-2">
 														<User className="h-4 w-4 text-gray-400" />
-														<span className="font-medium text-white">{appointment.patient.name}</span>
+														<span className="font-medium text-white">
+															{appointment.patient.name}
+														</span>
 														<span className="text-gray-400">•</span>
-														<span className="text-gray-400">{appointment.patient.phone}</span>
+														<span className="text-gray-400">
+															{appointment.patient.phone}
+														</span>
 													</div>
 													<div className="mt-1 text-gray-300 text-sm">
-														<span className="font-medium">{appointment.dentist}</span> • {appointment.treatment}
+														<span className="font-medium">
+															{appointment.dentist}
+														</span>{" "}
+														• {appointment.treatment}
 													</div>
 												</div>
 											</div>
 											<div className="flex items-center space-x-2">
-												<Button variant="outline" size="sm" className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600">
+												<Button
+													variant="outline"
+													size="sm"
+													className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
+												>
 													<Eye className="h-4 w-4" />
 												</Button>
-												<Button variant="outline" size="sm" className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600">
+												<Button
+													variant="outline"
+													size="sm"
+													className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
+												>
 													<Edit className="h-4 w-4" />
 												</Button>
 												{appointment.status === "scheduled" && (
-													<Button variant="outline" size="sm" className="border-green-600 bg-green-700 text-white hover:bg-green-600">
+													<Button
+														variant="outline"
+														size="sm"
+														className="border-green-600 bg-green-700 text-white hover:bg-green-600"
+													>
 														<CheckCircle className="h-4 w-4" />
 													</Button>
 												)}
-												{appointment.status !== "completed" && appointment.status !== "cancelled" && (
-													<Button variant="outline" size="sm" className="border-red-600 bg-red-700 text-white hover:bg-red-600">
-														<XCircle className="h-4 w-4" />
-													</Button>
-												)}
+												{appointment.status !== "completed" &&
+													appointment.status !== "cancelled" && (
+														<Button
+															variant="outline"
+															size="sm"
+															className="border-red-600 bg-red-700 text-white hover:bg-red-600"
+														>
+															<XCircle className="h-4 w-4" />
+														</Button>
+													)}
 											</div>
 										</div>
 									</div>

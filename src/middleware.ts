@@ -1,9 +1,14 @@
+import {
+	defaultLocale,
+	getLocaleFromPathname,
+	locales,
+	removeLocaleFromPathname,
+} from "@/lib/i18n/config";
+import { LogLevel, logger } from "@/lib/logger";
+import { applySecurityMiddleware } from "@/lib/security/security-headers";
+import jwt from "jsonwebtoken";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { applySecurityMiddleware } from "@/lib/security/security-headers";
-import { logger, LogLevel } from "@/lib/logger";
-import { locales, defaultLocale, getLocaleFromPathname, removeLocaleFromPathname } from "@/lib/i18n/config";
-import jwt from "jsonwebtoken";
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
@@ -31,7 +36,7 @@ export async function middleware(request: NextRequest) {
 	) {
 		// Apply security headers even for public routes
 		const response = NextResponse.next();
-		response.headers.set('x-current-locale', locale);
+		response.headers.set("x-current-locale", locale);
 		return applySecurityMiddleware(request, response);
 	}
 
@@ -43,7 +48,7 @@ export async function middleware(request: NextRequest) {
 			pathnameWithoutLocale.startsWith("/patient/appointments/book")
 		) {
 			const response = NextResponse.next();
-			response.headers.set('x-current-locale', locale);
+			response.headers.set("x-current-locale", locale);
 			return applySecurityMiddleware(request, response);
 		}
 
@@ -51,13 +56,17 @@ export async function middleware(request: NextRequest) {
 		const patientAuthToken = request.cookies.get("patient-auth-token");
 
 		if (!patientAuthToken) {
-			return NextResponse.redirect(new URL("/patient/auth/signin", request.url));
+			return NextResponse.redirect(
+				new URL("/patient/auth/signin", request.url),
+			);
 		}
 
 		try {
 			// Verify patient token and set headers using jose library
 			const { jwtVerify } = await import("jose");
-			const secret = new TextEncoder().encode(process.env.PATIENT_JWT_SECRET || "patient-secret-key");
+			const secret = new TextEncoder().encode(
+				process.env.PATIENT_JWT_SECRET || "patient-secret-key",
+			);
 			const { payload } = await jwtVerify(patientAuthToken.value, secret);
 
 			const response = NextResponse.next();
@@ -65,12 +74,14 @@ export async function middleware(request: NextRequest) {
 			response.headers.set("x-user-email", payload.email as string);
 			response.headers.set("x-patient-id", payload.patientId as string);
 			response.headers.set("x-practice-id", payload.practiceId as string);
-			response.headers.set('x-current-locale', locale);
+			response.headers.set("x-current-locale", locale);
 
 			return applySecurityMiddleware(request, response);
 		} catch (error) {
 			// Invalid token, redirect to login
-			return NextResponse.redirect(new URL("/patient/auth/signin", request.url));
+			return NextResponse.redirect(
+				new URL("/patient/auth/signin", request.url),
+			);
 		}
 	}
 
@@ -89,7 +100,9 @@ export async function middleware(request: NextRequest) {
 				try {
 					// Verify practice token using jose library
 					const { jwtVerify } = await import("jose");
-					const secret = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key");
+					const secret = new TextEncoder().encode(
+						process.env.JWT_SECRET || "your-secret-key",
+					);
 					const { payload } = await jwtVerify(practiceAuthToken.value, secret);
 
 					const response = NextResponse.next();
@@ -140,21 +153,35 @@ export async function middleware(request: NextRequest) {
 			// No authentication found, redirect to appropriate login
 			logger.warn("Authentication failed - redirecting to login", {
 				pathname,
-				ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown",
+				ip:
+					request.headers.get("x-forwarded-for") ||
+					request.headers.get("x-real-ip") ||
+					"unknown",
 			});
 
 			// Redirect to Spanish login for Spanish routes
-			const loginUrl = pathname.startsWith("/es/") ? "/es/auth/signin" : "/auth/signin";
+			const loginUrl = pathname.startsWith("/es/")
+				? "/es/auth/signin"
+				: "/auth/signin";
 			return NextResponse.redirect(new URL(loginUrl, request.url));
 		} catch (error) {
 			// Log the error
-			logger.error("Authentication error in middleware", 
-				{ pathname, ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown" },
-				error
+			logger.error(
+				"Authentication error in middleware",
+				{
+					pathname,
+					ip:
+						request.headers.get("x-forwarded-for") ||
+						request.headers.get("x-real-ip") ||
+						"unknown",
+				},
+				error,
 			);
-			
+
 			// Invalid token, redirect to appropriate login
-			const loginUrl = pathname.startsWith("/es/") ? "/es/auth/signin" : "/auth/signin";
+			const loginUrl = pathname.startsWith("/es/")
+				? "/es/auth/signin"
+				: "/auth/signin";
 			return NextResponse.redirect(new URL(loginUrl, request.url));
 		}
 	}
@@ -174,8 +201,8 @@ export const config = {
 		 * - api/v1/auth (Stack Auth routes)
 		 * Include locale-prefixed routes
 		 */
-		'/',
-		'/(es|en)/:path*',
+		"/",
+		"/(es|en)/:path*",
 		"/((?!_next/static|_next/image|favicon.ico|api/v1/auth|.*\\..*).*)",
 	],
 };

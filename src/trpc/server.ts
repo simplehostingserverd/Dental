@@ -28,5 +28,5 @@ export const createServerApi = async () => {
 export const api = {
 	async getCaller() {
 		return createServerApi();
-	}
+	},
 };

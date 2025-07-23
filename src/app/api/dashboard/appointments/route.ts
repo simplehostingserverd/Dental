@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { db } from "@/server/db";
-import { AppointmentStatus } from "@prisma/client";
+import type { AppointmentStatus } from "@prisma/client";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

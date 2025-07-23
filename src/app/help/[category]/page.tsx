@@ -1,14 +1,8 @@
 "use client";
 
-import { HeaderLogo } from "@/components/ui/tooth-logo";
 import { Button } from "@/components/ui/button";
-import {
-	ArrowLeft,
-	BookOpen,
-	Clock,
-	Search,
-	ChevronRight,
-} from "lucide-react";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
+import { ArrowLeft, BookOpen, ChevronRight, Clock, Search } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -140,7 +134,7 @@ const helpArticles = {
 			},
 		],
 	},
-	"scheduling": {
+	scheduling: {
 		title: "Scheduling & Appointments",
 		description: "Manage appointments, calendar, and patient scheduling",
 		articles: [
@@ -306,7 +300,7 @@ const helpArticles = {
 			},
 		],
 	},
-	"billing": {
+	billing: {
 		title: "Billing & Payments",
 		description: "Handle invoicing, payments, and insurance claims",
 		articles: [
@@ -409,7 +403,7 @@ const helpArticles = {
 			},
 		],
 	},
-	"settings": {
+	settings: {
 		title: "Practice Settings",
 		description: "Configure your practice preferences and settings",
 		articles: [
@@ -466,7 +460,7 @@ const helpArticles = {
 			},
 		],
 	},
-	"security": {
+	security: {
 		title: "Security & Privacy",
 		description: "Data security, HIPAA compliance, and privacy settings",
 		articles: [
@@ -533,7 +527,9 @@ interface HelpCategoryPageProps {
 	}>;
 }
 
-export default async function HelpCategoryPage({ params }: HelpCategoryPageProps) {
+export default async function HelpCategoryPage({
+	params,
+}: HelpCategoryPageProps) {
 	const { category } = await params;
 	const categoryData = helpArticles[category as keyof typeof helpArticles];
 
@@ -544,7 +540,7 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 	return (
 		<div className="min-h-screen bg-gray-50 text-gray-900">
 			{/* Header */}
-			<header className="border-b border-gray-800 bg-gray-50/50 backdrop-blur-sm">
+			<header className="border-gray-800 border-b bg-gray-50/50 backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 items-center justify-between">
 						<div className="flex items-center space-x-4">
@@ -552,14 +548,23 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 								<HeaderLogo className="text-gray-900" />
 							</Link>
 						</div>
-						<nav className="hidden md:flex items-center space-x-8">
-							<Link href="/blog" className="hover:text-blue-600 transition-colors">
+						<nav className="hidden items-center space-x-8 md:flex">
+							<Link
+								href="/blog"
+								className="transition-colors hover:text-blue-600"
+							>
 								Blog
 							</Link>
-							<Link href="/help" className="hover:text-blue-600 transition-colors">
+							<Link
+								href="/help"
+								className="transition-colors hover:text-blue-600"
+							>
 								Help Center
 							</Link>
-							<Link href="/contact" className="hover:text-blue-600 transition-colors">
+							<Link
+								href="/contact"
+								className="transition-colors hover:text-blue-600"
+							>
 								Contact
 							</Link>
 						</nav>
@@ -585,13 +590,13 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 				<div className="mb-8">
 					<Link
 						href="/help"
-						className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
+						className="mb-4 inline-flex items-center text-blue-600 hover:text-blue-700"
 					>
 						<ArrowLeft className="mr-2 h-4 w-4" />
 						Back to Help Center
 					</Link>
-					<h1 className="text-4xl font-bold mb-4">{categoryData.title}</h1>
-					<p className="text-xl text-gray-300">{categoryData.description}</p>
+					<h1 className="mb-4 font-bold text-4xl">{categoryData.title}</h1>
+					<p className="text-gray-300 text-xl">{categoryData.description}</p>
 				</div>
 
 				{/* Articles List */}
@@ -599,13 +604,13 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 					{categoryData.articles.map((article) => (
 						<div
 							key={article.id}
-							className="bg-white rounded-lg p-6 hover:bg-gray-700 transition-colors"
+							className="rounded-lg bg-white p-6 transition-colors hover:bg-gray-700"
 						>
-							<div className="flex items-start justify-between mb-4">
-								<h2 className="text-2xl font-semibold text-gray-900">
+							<div className="mb-4 flex items-start justify-between">
+								<h2 className="font-semibold text-2xl text-gray-900">
 									{article.title}
 								</h2>
-								<div className="flex items-center text-sm text-gray-600">
+								<div className="flex items-center text-gray-600 text-sm">
 									<Clock className="mr-1 h-4 w-4" />
 									{article.readTime}
 								</div>
@@ -620,46 +625,56 @@ export default async function HelpCategoryPage({ params }: HelpCategoryPageProps
 			</div>
 
 			{/* Footer */}
-			<footer className="border-t border-gray-800 bg-gray-50 py-12">
+			<footer className="border-gray-800 border-t bg-gray-50 py-12">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-4">
 						<div className="md:col-span-2">
-							<div className="flex items-center space-x-2 mb-4">
+							<div className="mb-4 flex items-center space-x-2">
 								<HeaderLogo className="text-gray-900" />
 							</div>
-							<p className="text-gray-600 mb-4">
-								The complete dental practice management solution designed for modern dental professionals.
+							<p className="mb-4 text-gray-600">
+								The complete dental practice management solution designed for
+								modern dental professionals.
 							</p>
 						</div>
 						<div>
-							<h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+							<h3 className="mb-4 font-semibold text-lg">Quick Links</h3>
 							<ul className="space-y-2">
 								<li>
-									<Link href="/help" className="text-gray-600 hover:text-gray-900 transition-colors">
+									<Link
+										href="/help"
+										className="text-gray-600 transition-colors hover:text-gray-900"
+									>
 										Help Center
 									</Link>
 								</li>
 								<li>
-									<Link href="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">
+									<Link
+										href="/contact"
+										className="text-gray-600 transition-colors hover:text-gray-900"
+									>
 										Contact Support
 									</Link>
 								</li>
 								<li>
-									<Link href="/blog" className="text-gray-600 hover:text-gray-900 transition-colors">
+									<Link
+										href="/blog"
+										className="text-gray-600 transition-colors hover:text-gray-900"
+									>
 										Blog
 									</Link>
 								</li>
 							</ul>
 						</div>
 						<div>
-							<h3 className="text-lg font-semibold mb-4">Support</h3>
+							<h3 className="mb-4 font-semibold text-lg">Support</h3>
 							<ul className="space-y-2">
 								<li className="text-gray-600">Email: support@cognident.org</li>
 								<li className="text-gray-600">Phone: 1-800-COGNIDENT</li>
 							</ul>
 						</div>
 					</div>
-					<div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-600">
+					<div className="mt-8 border-gray-800 border-t pt-8 text-center text-gray-600">
 						<p>&copy; 2025 Cognident. All rights reserved.</p>
 					</div>
 				</div>

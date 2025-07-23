@@ -1,5 +1,5 @@
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
 interface CognidentLogoProps {
 	className?: string;
@@ -7,7 +7,11 @@ interface CognidentLogoProps {
 	height?: number;
 }
 
-export function CognidentLogo({ className = "", width = 32, height = 32 }: CognidentLogoProps) {
+export function CognidentLogo({
+	className = "",
+	width = 32,
+	height = 32,
+}: CognidentLogoProps) {
 	return (
 		<Image
 			src="/Logos/CognidentOrgLogo.png"
@@ -21,7 +25,10 @@ export function CognidentLogo({ className = "", width = 32, height = 32 }: Cogni
 }
 
 // Logo with text for headers and navigation
-export function CognidentTextLogo({ className = "", logoSize = 32 }: { className?: string; logoSize?: number }) {
+export function CognidentTextLogo({
+	className = "",
+	logoSize = 32,
+}: { className?: string; logoSize?: number }) {
 	return (
 		<div className={`flex items-center space-x-2 ${className}`}>
 			<CognidentLogo width={logoSize} height={logoSize} />

@@ -240,7 +240,9 @@ export class EmailValidationService {
 		];
 		const localPart = email.split("@")[0];
 
-		return localPart ? businessKeywords.some((keyword) => localPart.includes(keyword)) : false;
+		return localPart
+			? businessKeywords.some((keyword) => localPart.includes(keyword))
+			: false;
 	}
 
 	/**

@@ -145,7 +145,7 @@ export default function MessagesPage() {
 											index === 0 ||
 											(previousMessage &&
 												formatDate(previousMessage.timestamp) !==
-												formatDate(message.timestamp));
+													formatDate(message.timestamp));
 
 										return (
 											<div key={message.id}>

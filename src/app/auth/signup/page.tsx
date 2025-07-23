@@ -3,8 +3,8 @@
 import { LargeLogo } from "@/components/ui/tooth-logo";
 import { Calendar, FileText, Shield } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignUpPage() {
 	const [userType, setUserType] = useState<"practice" | "patient">("practice");
@@ -37,11 +37,14 @@ export default function SignUpPage() {
 		allowMarketing: false,
 	});
 
-	const handlePracticeInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+	const handlePracticeInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+	) => {
 		const { name, value, type } = e.target;
 		setPracticeFormData((prev) => ({
 			...prev,
-			[name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+			[name]:
+				type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
 		}));
 	};
 
@@ -49,7 +52,8 @@ export default function SignUpPage() {
 		const { name, value, type } = e.target;
 		setPatientFormData((prev) => ({
 			...prev,
-			[name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+			[name]:
+				type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
 		}));
 	};
 
@@ -59,11 +63,13 @@ export default function SignUpPage() {
 		setError("");
 
 		try {
-			const endpoint = userType === "practice"
-				? "/api/auth/practice/signup"
-				: "/api/auth/patient/signup";
+			const endpoint =
+				userType === "practice"
+					? "/api/auth/practice/signup"
+					: "/api/auth/patient/signup";
 
-			const formData = userType === "practice" ? practiceFormData : patientFormData;
+			const formData =
+				userType === "practice" ? practiceFormData : patientFormData;
 
 			// Basic validation
 			if (userType === "practice") {
@@ -139,7 +145,7 @@ export default function SignUpPage() {
 						</p>
 					</div>
 
-					<div className="rounded-lg bg-gray-700 border border-gray-600 p-6 shadow-lg">
+					<div className="rounded-lg border border-gray-600 bg-gray-700 p-6 shadow-lg">
 						{/* User Type Selection */}
 						<div className="mb-6">
 							<label className="mb-3 block font-medium text-gray-300 text-sm">
@@ -149,7 +155,7 @@ export default function SignUpPage() {
 								<button
 									type="button"
 									onClick={() => setUserType("practice")}
-									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+									className={`flex-1 rounded-md px-4 py-2 font-medium text-sm transition-colors ${
 										userType === "practice"
 											? "bg-blue-600 text-white"
 											: "bg-gray-600 text-gray-300 hover:bg-gray-500"
@@ -160,7 +166,7 @@ export default function SignUpPage() {
 								<button
 									type="button"
 									onClick={() => setUserType("patient")}
-									className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+									className={`flex-1 rounded-md px-4 py-2 font-medium text-sm transition-colors ${
 										userType === "patient"
 											? "bg-blue-600 text-white"
 											: "bg-gray-600 text-gray-300 hover:bg-gray-500"
@@ -172,7 +178,7 @@ export default function SignUpPage() {
 						</div>
 
 						{error && (
-							<div className="mb-4 rounded-md bg-red-900/50 border border-red-700 p-3">
+							<div className="mb-4 rounded-md border border-red-700 bg-red-900/50 p-3">
 								<p className="text-red-200 text-sm">{error}</p>
 							</div>
 						)}
@@ -190,8 +196,16 @@ export default function SignUpPage() {
 										id="firstName"
 										name="firstName"
 										type="text"
-										value={userType === "practice" ? practiceFormData.firstName : patientFormData.firstName}
-										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										value={
+											userType === "practice"
+												? practiceFormData.firstName
+												: patientFormData.firstName
+										}
+										onChange={
+											userType === "practice"
+												? handlePracticeInputChange
+												: handlePatientInputChange
+										}
 										disabled={isLoading}
 										className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 										placeholder="John"
@@ -209,8 +223,16 @@ export default function SignUpPage() {
 										id="lastName"
 										name="lastName"
 										type="text"
-										value={userType === "practice" ? practiceFormData.lastName : patientFormData.lastName}
-										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										value={
+											userType === "practice"
+												? practiceFormData.lastName
+												: patientFormData.lastName
+										}
+										onChange={
+											userType === "practice"
+												? handlePracticeInputChange
+												: handlePatientInputChange
+										}
 										disabled={isLoading}
 										className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 										placeholder="Doe"
@@ -317,11 +339,23 @@ export default function SignUpPage() {
 									id="email"
 									name={userType === "practice" ? "workEmail" : "email"}
 									type="email"
-									value={userType === "practice" ? practiceFormData.workEmail : patientFormData.email}
-									onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+									value={
+										userType === "practice"
+											? practiceFormData.workEmail
+											: patientFormData.email
+									}
+									onChange={
+										userType === "practice"
+											? handlePracticeInputChange
+											: handlePatientInputChange
+									}
 									disabled={isLoading}
 									className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-									placeholder={userType === "practice" ? "john@smiledental.com" : "john.doe@email.com"}
+									placeholder={
+										userType === "practice"
+											? "john@smiledental.com"
+											: "john.doe@email.com"
+									}
 									required
 								/>
 							</div>
@@ -338,8 +372,16 @@ export default function SignUpPage() {
 										id="password"
 										name="password"
 										type="password"
-										value={userType === "practice" ? practiceFormData.password : patientFormData.password}
-										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										value={
+											userType === "practice"
+												? practiceFormData.password
+												: patientFormData.password
+										}
+										onChange={
+											userType === "practice"
+												? handlePracticeInputChange
+												: handlePatientInputChange
+										}
 										disabled={isLoading}
 										className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 										placeholder="Create a strong password"
@@ -357,8 +399,16 @@ export default function SignUpPage() {
 										id="confirmPassword"
 										name="confirmPassword"
 										type="password"
-										value={userType === "practice" ? practiceFormData.confirmPassword : patientFormData.confirmPassword}
-										onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+										value={
+											userType === "practice"
+												? practiceFormData.confirmPassword
+												: patientFormData.confirmPassword
+										}
+										onChange={
+											userType === "practice"
+												? handlePracticeInputChange
+												: handlePatientInputChange
+										}
 										disabled={isLoading}
 										className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 										placeholder="Confirm your password"
@@ -398,19 +448,36 @@ export default function SignUpPage() {
 									id="agreeToTerms"
 									name="agreeToTerms"
 									type="checkbox"
-									checked={userType === "practice" ? practiceFormData.agreeToTerms : patientFormData.agreeToTerms}
-									onChange={userType === "practice" ? handlePracticeInputChange : handlePatientInputChange}
+									checked={
+										userType === "practice"
+											? practiceFormData.agreeToTerms
+											: patientFormData.agreeToTerms
+									}
+									onChange={
+										userType === "practice"
+											? handlePracticeInputChange
+											: handlePatientInputChange
+									}
 									disabled={isLoading}
 									className="h-4 w-4 rounded border-gray-300 bg-white text-blue-600 focus:ring-blue-500 disabled:opacity-50"
 									required
 								/>
-								<label htmlFor="agreeToTerms" className="ml-2 text-gray-700 text-sm">
+								<label
+									htmlFor="agreeToTerms"
+									className="ml-2 text-gray-700 text-sm"
+								>
 									I agree to the{" "}
-									<Link href="/terms" className="text-blue-600 hover:text-blue-700">
+									<Link
+										href="/terms"
+										className="text-blue-600 hover:text-blue-700"
+									>
 										Terms of Service
 									</Link>{" "}
 									and{" "}
-									<Link href="/privacy" className="text-blue-600 hover:text-blue-700">
+									<Link
+										href="/privacy"
+										className="text-blue-600 hover:text-blue-700"
+									>
 										Privacy Policy
 									</Link>
 								</label>
@@ -419,7 +486,7 @@ export default function SignUpPage() {
 							<button
 								type="submit"
 								disabled={isLoading}
-								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-gray-900 transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+								className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-gray-900 transition duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 							>
 								{isLoading ? "Creating Account..." : "Create Account"}
 							</button>

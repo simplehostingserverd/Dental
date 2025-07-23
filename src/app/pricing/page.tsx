@@ -1,27 +1,28 @@
 "use client";
 
-import Link from "next/link";
-import { Check, Star, Users, Shield, Zap, Building2 } from "lucide-react";
 import { HeaderLogo } from "@/components/ui/tooth-logo";
+import { Building2, Check, Shield, Star, Users, Zap } from "lucide-react";
+import Link from "next/link";
 
 const plans = [
 	{
 		name: "Starter",
 		price: "$99",
 		period: "/month",
-		description: "Perfect for solo practitioners or small clinics just getting started.",
+		description:
+			"Perfect for solo practitioners or small clinics just getting started.",
 		features: [
 			"Up to 2 users",
 			"Appointment scheduling",
 			"Patient charting & notes",
 			"Email reminders",
-			"Basic performance reports"
+			"Basic performance reports",
 		],
 		highlights: ["✅ HIPAA-compliant", "🔐 Secure cloud hosting"],
 		cta: "Start your free 14-day trial",
 		popular: false,
 		icon: Users,
-		color: "blue"
+		color: "blue",
 	},
 	{
 		name: "Growth",
@@ -33,14 +34,14 @@ const plans = [
 			"Up to 5 users",
 			"Insurance claims & billing integration",
 			"Secure intra-office messaging",
-			"Advanced reporting & insights"
+			"Advanced reporting & insights",
 		],
 		highlights: ["📈 Built for busy practices"],
 		cta: "Start your free 14-day trial",
 		popular: true,
 		badge: "Most popular",
 		icon: Zap,
-		color: "green"
+		color: "green",
 	},
 	{
 		name: "Pro",
@@ -52,13 +53,13 @@ const plans = [
 			"Up to 10 users",
 			"Automated SMS reminders",
 			"Custom branding options",
-			"Priority customer support"
+			"Priority customer support",
 		],
 		highlights: ["⚙️ More automation, less admin"],
 		cta: "Start your free 14-day trial",
 		popular: false,
 		icon: Star,
-		color: "purple"
+		color: "purple",
 	},
 	{
 		name: "Enterprise",
@@ -70,50 +71,52 @@ const plans = [
 			"Unlimited users",
 			"Multi-location support",
 			"API access & integrations",
-			"Dedicated account manager"
+			"Dedicated account manager",
 		],
 		highlights: ["🏢 Built for scale, secured for compliance"],
 		cta: "Contact our sales team to get started",
 		popular: false,
 		icon: Building2,
-		color: "gray"
-	}
+		color: "gray",
+	},
 ];
 
 const allPlansFeatures = [
 	"HIPAA compliance",
 	"Secure cloud hosting",
 	"Daily encrypted backups",
-	"99.99% uptime SLA"
+	"99.99% uptime SLA",
 ];
 
 export default function PricingPage() {
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+			<nav className="sticky top-0 z-50 border-slate-200 border-b bg-white/95 shadow-sm backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-20 items-center justify-between">
 						<Link href="/" className="flex items-center">
 							<HeaderLogo className="text-indigo-600" />
-							<span className="font-bold text-xl text-slate-800 ml-2">Cognident</span>
+							<span className="ml-2 font-bold text-slate-800 text-xl">
+								Cognident
+							</span>
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Features
 							</Link>
 							<Link
 								href="/pricing"
-								className="text-indigo-600 font-semibold transition-all duration-300 hover:text-indigo-700 hover:scale-105"
+								className="font-semibold text-indigo-600 transition-all duration-300 hover:scale-105 hover:text-indigo-700"
 							>
 								Pricing
 							</Link>
 							<Link
 								href="/blog"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Blog
 							</Link>
@@ -148,7 +151,8 @@ export default function PricingPage() {
 							Simple, transparent pricing
 						</h1>
 						<p className="mx-auto max-w-3xl text-gray-300 text-xl">
-							Choose the perfect plan for your practice. All plans include a 14-day free trial with no setup fees.
+							Choose the perfect plan for your practice. All plans include a
+							14-day free trial with no setup fees.
 						</p>
 					</div>
 				</div>
@@ -165,18 +169,18 @@ export default function PricingPage() {
 									key={index}
 									className={`relative rounded-2xl border p-8 transition-all hover:scale-105 ${
 										plan.popular
-											? "border-green-500 bg-green-900/20 shadow-lg shadow-green-500/20"
+											? "border-green-500 bg-green-900/20 shadow-green-500/20 shadow-lg"
 											: "border-gray-700 bg-gray-800/50"
 									}`}
 								>
 									{plan.popular && (
-										<div className="absolute -top-4 left-1/2 -translate-x-1/2">
-											<span className="rounded-full bg-green-500 px-4 py-1 text-white text-sm font-medium">
+										<div className="-top-4 -translate-x-1/2 absolute left-1/2">
+											<span className="rounded-full bg-green-500 px-4 py-1 font-medium text-sm text-white">
 												{plan.badge}
 											</span>
 										</div>
 									)}
-									
+
 									<div className="mb-6">
 										<div className="mb-4 flex items-center">
 											<IconComponent className="mr-3 h-8 w-8 text-blue-500" />
@@ -194,7 +198,7 @@ export default function PricingPage() {
 										<ul className="space-y-3">
 											{plan.features.map((feature, featureIndex) => (
 												<li key={featureIndex} className="flex items-start">
-													<Check className="mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
+													<Check className="mt-0.5 mr-3 h-5 w-5 flex-shrink-0 text-green-500" />
 													<span className="text-gray-300">{feature}</span>
 												</li>
 											))}
@@ -203,7 +207,10 @@ export default function PricingPage() {
 
 									<div className="mb-6">
 										{plan.highlights.map((highlight, highlightIndex) => (
-											<p key={highlightIndex} className="text-blue-400 text-sm font-medium">
+											<p
+												key={highlightIndex}
+												className="font-medium text-blue-400 text-sm"
+											>
 												{highlight}
 											</p>
 										))}
@@ -214,8 +221,8 @@ export default function PricingPage() {
 											plan.popular
 												? "bg-green-600 text-white hover:bg-green-700"
 												: plan.name === "Enterprise"
-												? "bg-gray-700 text-white hover:bg-gray-600"
-												: "bg-blue-600 text-white hover:bg-blue-700"
+													? "bg-gray-700 text-white hover:bg-gray-600"
+													: "bg-blue-600 text-white hover:bg-blue-700"
 										}`}
 									>
 										{plan.cta}
@@ -246,8 +253,10 @@ export default function PricingPage() {
 
 			{/* Support CTA */}
 			<section className="py-16">
-				<div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-					<h2 className="mb-4 font-bold text-2xl">Need help choosing a plan?</h2>
+				<div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+					<h2 className="mb-4 font-bold text-2xl">
+						Need help choosing a plan?
+					</h2>
 					<p className="mb-6 text-gray-300 text-lg">
 						Our team is happy to guide you.
 					</p>
@@ -269,8 +278,8 @@ export default function PricingPage() {
 								<HeaderLogo className="text-white" />
 							</div>
 							<p className="text-gray-400">
-								Next-generation dental practice management software designed
-								for modern practices.
+								Next-generation dental practice management software designed for
+								modern practices.
 							</p>
 						</div>
 						<div>

@@ -24,9 +24,15 @@ export async function GET(request: NextRequest) {
 
 		// Parse JSON fields safely
 		const address = patient.address as Record<string, unknown> | null;
-		const emergencyContact = patient.emergencyContact as Record<string, unknown> | null;
+		const emergencyContact = patient.emergencyContact as Record<
+			string,
+			unknown
+		> | null;
 		const insurance = patient.insurance as Record<string, unknown> | null;
-		const medicalHistory = patient.medicalHistory as Record<string, unknown> | null;
+		const medicalHistory = patient.medicalHistory as Record<
+			string,
+			unknown
+		> | null;
 
 		// Format the profile data
 		const profile = {
@@ -107,22 +113,28 @@ export async function PUT(request: NextRequest) {
 
 		// Update the patient record
 		// Prepare JSON fields
-		const addressData = address ? {
-			street: address,
-			city: city || "",
-			state: state || "",
-			zipCode: zipCode || "",
-		} : null;
+		const addressData = address
+			? {
+					street: address,
+					city: city || "",
+					state: state || "",
+					zipCode: zipCode || "",
+				}
+			: null;
 
-		const emergencyContactData = emergencyContact ? {
-			name: emergencyContact,
-			phone: emergencyPhone || "",
-		} : null;
+		const emergencyContactData = emergencyContact
+			? {
+					name: emergencyContact,
+					phone: emergencyPhone || "",
+				}
+			: null;
 
-		const insuranceData = insurance ? {
-			provider: insurance,
-			policyNumber: insurancePolicyNumber || "",
-		} : null;
+		const insuranceData = insurance
+			? {
+					provider: insurance,
+					policyNumber: insurancePolicyNumber || "",
+				}
+			: null;
 
 		const updatedPatient = await db.patient.update({
 			where: { id: patient.id },

@@ -1,39 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { 
-	CreditCard, 
-	Plus, 
-	Edit, 
-	Eye, 
-	Search, 
-	Filter,
-	DollarSign,
-	Calendar,
-	User,
-	Building2,
-	CheckCircle,
-	Clock,
-	AlertTriangle,
-	TrendingUp,
-	FileText,
-	Calculator,
-	Percent
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import {
 	Dialog,
 	DialogContent,
@@ -43,8 +12,39 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
+import {
+	AlertTriangle,
+	Building2,
+	Calculator,
+	Calendar,
+	CheckCircle,
+	Clock,
+	CreditCard,
+	DollarSign,
+	Edit,
+	Eye,
+	FileText,
+	Filter,
+	Percent,
+	Plus,
+	Search,
+	TrendingUp,
+	User,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface FinancingOption {
 	id: string;
@@ -68,7 +68,13 @@ interface PatientFinancing {
 	applicationId?: string;
 	amount: number;
 	approvedAmount?: number;
-	status: "pending" | "approved" | "declined" | "active" | "completed" | "defaulted";
+	status:
+		| "pending"
+		| "approved"
+		| "declined"
+		| "active"
+		| "completed"
+		| "defaulted";
 	applicationDate: string;
 	approvalDate?: string;
 	startDate?: string;
@@ -124,7 +130,8 @@ export default function PatientFinancingPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [statusFilter, setStatusFilter] = useState("all");
 	const [providerFilter, setProviderFilter] = useState("all");
-	const [selectedFinancing, setSelectedFinancing] = useState<PatientFinancing | null>(null);
+	const [selectedFinancing, setSelectedFinancing] =
+		useState<PatientFinancing | null>(null);
 	const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
 
 	// Mock data for financing options
@@ -140,7 +147,7 @@ export default function PatientFinancingPage() {
 			promotionalPeriod: 6,
 			promotionalRate: 0,
 			isActive: true,
-			description: "No interest if paid in full within 6 months"
+			description: "No interest if paid in full within 6 months",
 		},
 		{
 			id: "2",
@@ -153,7 +160,7 @@ export default function PatientFinancingPage() {
 			promotionalPeriod: 12,
 			promotionalRate: 0,
 			isActive: true,
-			description: "No interest if paid in full within 12 months"
+			description: "No interest if paid in full within 12 months",
 		},
 		{
 			id: "3",
@@ -162,9 +169,9 @@ export default function PatientFinancingPage() {
 			type: "standard",
 			minAmount: 2500,
 			maxAmount: 25000,
-			interestRate: 14.90,
+			interestRate: 14.9,
 			isActive: true,
-			description: "Fixed monthly payments for 24 months"
+			description: "Fixed monthly payments for 24 months",
 		},
 		{
 			id: "4",
@@ -175,8 +182,8 @@ export default function PatientFinancingPage() {
 			maxAmount: 10000,
 			interestRate: 0,
 			isActive: true,
-			description: "Interest-free payment plan managed internally"
-		}
+			description: "Interest-free payment plan managed internally",
+		},
 	];
 
 	// Mock data for patient financing
@@ -209,7 +216,7 @@ export default function PatientFinancingPage() {
 					remainingBalance: 2916.67,
 					status: "paid",
 					paymentMethod: "Credit Card",
-					transactionId: "TXN-001"
+					transactionId: "TXN-001",
 				},
 				{
 					id: "2",
@@ -220,9 +227,9 @@ export default function PatientFinancingPage() {
 					remainingBalance: 2333.33,
 					status: "paid",
 					paymentMethod: "Credit Card",
-					transactionId: "TXN-002"
-				}
-			]
+					transactionId: "TXN-002",
+				},
+			],
 		},
 		{
 			id: "2",
@@ -238,23 +245,23 @@ export default function PatientFinancingPage() {
 			startDate: "2024-01-10",
 			endDate: "2026-01-10",
 			monthlyPayment: 283.45,
-			remainingBalance: 5433.10,
+			remainingBalance: 5433.1,
 			nextPaymentDate: "2024-02-10",
-			interestRate: 14.90,
-			totalInterest: 801.80,
+			interestRate: 14.9,
+			totalInterest: 801.8,
 			payments: [
 				{
 					id: "3",
 					paymentDate: "2024-01-10",
 					amount: 283.45,
 					principal: 208.95,
-					interest: 74.50,
+					interest: 74.5,
 					remainingBalance: 5716.55,
 					status: "paid",
 					paymentMethod: "Bank Transfer",
-					transactionId: "TXN-003"
-				}
-			]
+					transactionId: "TXN-003",
+				},
+			],
 		},
 		{
 			id: "3",
@@ -266,8 +273,8 @@ export default function PatientFinancingPage() {
 			status: "declined",
 			applicationDate: "2024-01-12",
 			interestRate: 0,
-			payments: []
-		}
+			payments: [],
+		},
 	];
 
 	// Mock data for payment plans
@@ -293,55 +300,76 @@ export default function PatientFinancingPage() {
 					amount: 200,
 					paidDate: "2024-01-01",
 					paidAmount: 200,
-					status: "paid"
+					status: "paid",
 				},
 				{
 					id: "2",
 					dueDate: "2024-02-01",
 					amount: 200,
-					status: "scheduled"
-				}
-			]
-		}
+					status: "scheduled",
+				},
+			],
+		},
 	];
 
-	const filteredFinancing = patientFinancing.filter(financing => {
-		const matchesSearch = financing.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	const filteredFinancing = patientFinancing.filter((financing) => {
+		const matchesSearch =
+			financing.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			financing.applicationId?.toLowerCase().includes(searchTerm.toLowerCase());
-		
-		const matchesStatus = statusFilter === "all" || financing.status === statusFilter;
-		
-		const option = financingOptions.find(opt => opt.id === financing.financingOptionId);
-		const matchesProvider = providerFilter === "all" || option?.provider === providerFilter;
-		
+
+		const matchesStatus =
+			statusFilter === "all" || financing.status === statusFilter;
+
+		const option = financingOptions.find(
+			(opt) => opt.id === financing.financingOptionId,
+		);
+		const matchesProvider =
+			providerFilter === "all" || option?.provider === providerFilter;
+
 		return matchesSearch && matchesStatus && matchesProvider;
 	});
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "pending": return "bg-yellow-100 text-yellow-800";
-			case "approved": return "bg-green-100 text-green-800";
-			case "declined": return "bg-red-100 text-red-800";
-			case "active": return "bg-blue-100 text-blue-800";
-			case "completed": return "bg-gray-100 text-gray-800";
-			case "defaulted": return "bg-red-100 text-red-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "pending":
+				return "bg-yellow-100 text-yellow-800";
+			case "approved":
+				return "bg-green-100 text-green-800";
+			case "declined":
+				return "bg-red-100 text-red-800";
+			case "active":
+				return "bg-blue-100 text-blue-800";
+			case "completed":
+				return "bg-gray-100 text-gray-800";
+			case "defaulted":
+				return "bg-red-100 text-red-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const getStatusIcon = (status: string) => {
 		switch (status) {
-			case "pending": return <Clock className="h-3 w-3" />;
-			case "approved": 
-			case "completed": return <CheckCircle className="h-3 w-3" />;
-			case "declined": 
-			case "defaulted": return <AlertTriangle className="h-3 w-3" />;
-			case "active": return <TrendingUp className="h-3 w-3" />;
-			default: return <FileText className="h-3 w-3" />;
+			case "pending":
+				return <Clock className="h-3 w-3" />;
+			case "approved":
+			case "completed":
+				return <CheckCircle className="h-3 w-3" />;
+			case "declined":
+			case "defaulted":
+				return <AlertTriangle className="h-3 w-3" />;
+			case "active":
+				return <TrendingUp className="h-3 w-3" />;
+			default:
+				return <FileText className="h-3 w-3" />;
 		}
 	};
 
-	const handleCareCreditApplication = async (patientId: string, amount: number, optionId: string) => {
+	const handleCareCreditApplication = async (
+		patientId: string,
+		amount: number,
+		optionId: string,
+	) => {
 		try {
 			const response = await fetch("/api/financing/carecredit/apply", {
 				method: "POST",
@@ -351,13 +379,15 @@ export default function PatientFinancingPage() {
 				body: JSON.stringify({
 					patientId,
 					amount,
-					financingOptionId: optionId
+					financingOptionId: optionId,
 				}),
 			});
 
 			if (response.ok) {
 				const data = await response.json();
-				alert(`CareCredit application submitted! Application ID: ${data.applicationId}`);
+				alert(
+					`CareCredit application submitted! Application ID: ${data.applicationId}`,
+				);
 			} else {
 				alert("Failed to submit CareCredit application!");
 			}
@@ -367,7 +397,11 @@ export default function PatientFinancingPage() {
 		}
 	};
 
-	const handlePaymentPlanCreation = async (patientId: string, totalAmount: number, terms: any) => {
+	const handlePaymentPlanCreation = async (
+		patientId: string,
+		totalAmount: number,
+		terms: any,
+	) => {
 		try {
 			const response = await fetch("/api/financing/payment-plans", {
 				method: "POST",
@@ -377,7 +411,7 @@ export default function PatientFinancingPage() {
 				body: JSON.stringify({
 					patientId,
 					totalAmount,
-					...terms
+					...terms,
 				}),
 			});
 
@@ -394,11 +428,23 @@ export default function PatientFinancingPage() {
 
 	const financingStats = {
 		totalApplications: patientFinancing.length,
-		approvedApplications: patientFinancing.filter(f => f.status === "approved" || f.status === "active").length,
-		activeFinancing: patientFinancing.filter(f => f.status === "active").length,
-		totalFinanced: patientFinancing.reduce((sum, f) => sum + (f.approvedAmount || 0), 0),
-		totalOutstanding: patientFinancing.filter(f => f.status === "active").reduce((sum, f) => sum + (f.remainingBalance || 0), 0),
-		averageAmount: patientFinancing.length > 0 ? patientFinancing.reduce((sum, f) => sum + f.amount, 0) / patientFinancing.length : 0
+		approvedApplications: patientFinancing.filter(
+			(f) => f.status === "approved" || f.status === "active",
+		).length,
+		activeFinancing: patientFinancing.filter((f) => f.status === "active")
+			.length,
+		totalFinanced: patientFinancing.reduce(
+			(sum, f) => sum + (f.approvedAmount || 0),
+			0,
+		),
+		totalOutstanding: patientFinancing
+			.filter((f) => f.status === "active")
+			.reduce((sum, f) => sum + (f.remainingBalance || 0), 0),
+		averageAmount:
+			patientFinancing.length > 0
+				? patientFinancing.reduce((sum, f) => sum + f.amount, 0) /
+					patientFinancing.length
+				: 0,
 	};
 
 	return (
@@ -415,17 +461,17 @@ export default function PatientFinancingPage() {
 								<div className="flex items-baseline space-x-4">
 									<Link
 										href="/dashboard"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Dashboard
 									</Link>
 									<Link
 										href="/dashboard/billing"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Billing
 									</Link>
-									<span className="rounded-md bg-gray-900 px-3 py-2 text-white text-sm font-medium">
+									<span className="rounded-md bg-gray-900 px-3 py-2 font-medium text-sm text-white">
 										Financing
 									</span>
 								</div>
@@ -449,8 +495,12 @@ export default function PatientFinancingPage() {
 			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="font-bold text-3xl text-gray-900">Patient Financing</h1>
-					<p className="mt-2 text-gray-600">Manage CareCredit applications and payment plans</p>
+					<h1 className="font-bold text-3xl text-gray-900">
+						Patient Financing
+					</h1>
+					<p className="mt-2 text-gray-600">
+						Manage CareCredit applications and payment plans
+					</p>
 				</div>
 
 				{/* Stats Cards */}
@@ -459,9 +509,15 @@ export default function PatientFinancingPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Total Applications</p>
-									<p className="font-bold text-2xl text-gray-900">{financingStats.totalApplications}</p>
-									<p className="text-green-600 text-sm">{financingStats.approvedApplications} approved</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Total Applications
+									</p>
+									<p className="font-bold text-2xl text-gray-900">
+										{financingStats.totalApplications}
+									</p>
+									<p className="text-green-600 text-sm">
+										{financingStats.approvedApplications} approved
+									</p>
 								</div>
 								<FileText className="h-8 w-8 text-blue-600" />
 							</div>
@@ -471,7 +527,9 @@ export default function PatientFinancingPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Total Financed</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Total Financed
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
 										${financingStats.totalFinanced.toLocaleString()}
 									</p>
@@ -487,11 +545,15 @@ export default function PatientFinancingPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Outstanding Balance</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Outstanding Balance
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
 										${financingStats.totalOutstanding.toLocaleString()}
 									</p>
-									<p className="text-orange-600 text-sm">{financingStats.activeFinancing} active</p>
+									<p className="text-orange-600 text-sm">
+										{financingStats.activeFinancing} active
+									</p>
 								</div>
 								<CreditCard className="h-8 w-8 text-orange-600" />
 							</div>
@@ -501,10 +563,18 @@ export default function PatientFinancingPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Approval Rate</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Approval Rate
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
-										{financingStats.totalApplications > 0 ? 
-											((financingStats.approvedApplications / financingStats.totalApplications) * 100).toFixed(1) : 0}%
+										{financingStats.totalApplications > 0
+											? (
+													(financingStats.approvedApplications /
+														financingStats.totalApplications) *
+													100
+												).toFixed(1)
+											: 0}
+										%
 									</p>
 									<p className="text-green-600 text-sm">Above industry avg</p>
 								</div>
@@ -517,7 +587,9 @@ export default function PatientFinancingPage() {
 				{/* Main Content Tabs */}
 				<Tabs defaultValue="applications" className="w-full">
 					<TabsList className="grid w-full grid-cols-3">
-						<TabsTrigger value="applications">Financing Applications</TabsTrigger>
+						<TabsTrigger value="applications">
+							Financing Applications
+						</TabsTrigger>
 						<TabsTrigger value="payment-plans">Payment Plans</TabsTrigger>
 						<TabsTrigger value="options">Financing Options</TabsTrigger>
 					</TabsList>
@@ -527,12 +599,12 @@ export default function PatientFinancingPage() {
 						<div className="mb-6 flex flex-wrap items-center justify-between gap-4">
 							<div className="flex space-x-4">
 								<div className="relative">
-									<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+									<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 									<Input
 										placeholder="Search applications..."
 										value={searchTerm}
 										onChange={(e) => setSearchTerm(e.target.value)}
-										className="pl-10 w-64"
+										className="w-64 pl-10"
 									/>
 								</div>
 								<Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -548,7 +620,10 @@ export default function PatientFinancingPage() {
 										<SelectItem value="completed">Completed</SelectItem>
 									</SelectContent>
 								</Select>
-								<Select value={providerFilter} onValueChange={setProviderFilter}>
+								<Select
+									value={providerFilter}
+									onValueChange={setProviderFilter}
+								>
 									<SelectTrigger className="w-40">
 										<SelectValue placeholder="Provider" />
 									</SelectTrigger>
@@ -565,19 +640,30 @@ export default function PatientFinancingPage() {
 
 						<Card>
 							<CardHeader>
-								<CardTitle>Financing Applications ({filteredFinancing.length})</CardTitle>
+								<CardTitle>
+									Financing Applications ({filteredFinancing.length})
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<div className="space-y-4">
 									{filteredFinancing.map((financing) => {
-										const option = financingOptions.find(opt => opt.id === financing.financingOptionId);
+										const option = financingOptions.find(
+											(opt) => opt.id === financing.financingOptionId,
+										);
 										return (
-											<div key={financing.id} className="rounded-lg border border-gray-200 bg-white p-4">
+											<div
+												key={financing.id}
+												className="rounded-lg border border-gray-200 bg-white p-4"
+											>
 												<div className="flex items-start justify-between">
 													<div className="flex-1">
 														<div className="flex items-center space-x-3">
-															<h3 className="font-medium text-gray-900">{financing.patientName}</h3>
-															<Badge className={getStatusColor(financing.status)}>
+															<h3 className="font-medium text-gray-900">
+																{financing.patientName}
+															</h3>
+															<Badge
+																className={getStatusColor(financing.status)}
+															>
 																{getStatusIcon(financing.status)}
 																<span className="ml-1">{financing.status}</span>
 															</Badge>
@@ -587,30 +673,56 @@ export default function PatientFinancingPage() {
 																</Badge>
 															)}
 														</div>
-														<div className="mt-2 grid grid-cols-3 gap-4 text-sm text-gray-600">
+														<div className="mt-2 grid grid-cols-3 gap-4 text-gray-600 text-sm">
 															<div>
-																<span className="font-medium">Application ID:</span> {financing.applicationId || "N/A"}
+																<span className="font-medium">
+																	Application ID:
+																</span>{" "}
+																{financing.applicationId || "N/A"}
 															</div>
 															<div>
-																<span className="font-medium">Requested Amount:</span> ${financing.amount.toLocaleString()}
+																<span className="font-medium">
+																	Requested Amount:
+																</span>{" "}
+																${financing.amount.toLocaleString()}
 															</div>
 															<div>
-																<span className="font-medium">Approved Amount:</span> ${(financing.approvedAmount || 0).toLocaleString()}
+																<span className="font-medium">
+																	Approved Amount:
+																</span>{" "}
+																$
+																{(
+																	financing.approvedAmount || 0
+																).toLocaleString()}
 															</div>
 															<div>
-																<span className="font-medium">Application Date:</span> {financing.applicationDate}
+																<span className="font-medium">
+																	Application Date:
+																</span>{" "}
+																{financing.applicationDate}
 															</div>
 															<div>
-																<span className="font-medium">Monthly Payment:</span> ${(financing.monthlyPayment || 0).toFixed(2)}
+																<span className="font-medium">
+																	Monthly Payment:
+																</span>{" "}
+																${(financing.monthlyPayment || 0).toFixed(2)}
 															</div>
 															<div>
-																<span className="font-medium">Remaining Balance:</span> ${(financing.remainingBalance || 0).toLocaleString()}
+																<span className="font-medium">
+																	Remaining Balance:
+																</span>{" "}
+																$
+																{(
+																	financing.remainingBalance || 0
+																).toLocaleString()}
 															</div>
 														</div>
 														{financing.nextPaymentDate && (
 															<div className="mt-2 rounded bg-blue-50 p-2">
 																<p className="text-blue-800 text-sm">
-																	<strong>Next Payment:</strong> {financing.nextPaymentDate} - ${(financing.monthlyPayment || 0).toFixed(2)}
+																	<strong>Next Payment:</strong>{" "}
+																	{financing.nextPaymentDate} - $
+																	{(financing.monthlyPayment || 0).toFixed(2)}
 																</p>
 															</div>
 														)}
@@ -644,16 +756,23 @@ export default function PatientFinancingPage() {
 					<TabsContent value="payment-plans">
 						<Card>
 							<CardHeader>
-								<CardTitle>Internal Payment Plans ({paymentPlans.length})</CardTitle>
+								<CardTitle>
+									Internal Payment Plans ({paymentPlans.length})
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<div className="space-y-4">
 									{paymentPlans.map((plan) => (
-										<div key={plan.id} className="rounded-lg border border-gray-200 bg-white p-4">
+										<div
+											key={plan.id}
+											className="rounded-lg border border-gray-200 bg-white p-4"
+										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<h3 className="font-medium text-gray-900">{plan.patientName}</h3>
+														<h3 className="font-medium text-gray-900">
+															{plan.patientName}
+														</h3>
 														<Badge className={getStatusColor(plan.status)}>
 															{getStatusIcon(plan.status)}
 															<span className="ml-1">{plan.status}</span>
@@ -664,32 +783,43 @@ export default function PatientFinancingPage() {
 															</Badge>
 														)}
 													</div>
-													<div className="mt-2 grid grid-cols-3 gap-4 text-sm text-gray-600">
+													<div className="mt-2 grid grid-cols-3 gap-4 text-gray-600 text-sm">
 														<div>
-															<span className="font-medium">Total Amount:</span> ${plan.totalAmount.toLocaleString()}
+															<span className="font-medium">Total Amount:</span>{" "}
+															${plan.totalAmount.toLocaleString()}
 														</div>
 														<div>
-															<span className="font-medium">Down Payment:</span> ${plan.downPayment.toLocaleString()}
+															<span className="font-medium">Down Payment:</span>{" "}
+															${plan.downPayment.toLocaleString()}
 														</div>
 														<div>
-															<span className="font-medium">Monthly Payment:</span> ${plan.monthlyPayment.toFixed(2)}
+															<span className="font-medium">
+																Monthly Payment:
+															</span>{" "}
+															${plan.monthlyPayment.toFixed(2)}
 														</div>
 														<div>
-															<span className="font-medium">Remaining Amount:</span> ${plan.remainingAmount.toLocaleString()}
+															<span className="font-medium">
+																Remaining Amount:
+															</span>{" "}
+															${plan.remainingAmount.toLocaleString()}
 														</div>
 														<div>
-															<span className="font-medium">Payments Left:</span> {plan.numberOfPayments - plan.payments.filter(p => p.status === "paid").length}
+															<span className="font-medium">
+																Payments Left:
+															</span>{" "}
+															{plan.numberOfPayments -
+																plan.payments.filter((p) => p.status === "paid")
+																	.length}
 														</div>
 														<div>
-															<span className="font-medium">End Date:</span> {plan.endDate}
+															<span className="font-medium">End Date:</span>{" "}
+															{plan.endDate}
 														</div>
 													</div>
 												</div>
 												<div className="flex space-x-2">
-													<Button
-														variant="outline"
-														size="sm"
-													>
+													<Button variant="outline" size="sm">
 														<Eye className="h-4 w-4" />
 													</Button>
 													<Button
@@ -715,37 +845,57 @@ export default function PatientFinancingPage() {
 							<CardContent>
 								<div className="grid gap-4 md:grid-cols-2">
 									{financingOptions.map((option) => (
-										<div key={option.id} className="rounded-lg border border-gray-200 bg-white p-4">
+										<div
+											key={option.id}
+											className="rounded-lg border border-gray-200 bg-white p-4"
+										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<h3 className="font-medium text-gray-900">{option.name}</h3>
-														<Badge className={option.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
+														<h3 className="font-medium text-gray-900">
+															{option.name}
+														</h3>
+														<Badge
+															className={
+																option.isActive
+																	? "bg-green-100 text-green-800"
+																	: "bg-red-100 text-red-800"
+															}
+														>
 															{option.isActive ? "Active" : "Inactive"}
 														</Badge>
 													</div>
-													<p className="mt-1 text-gray-600 text-sm">{option.description}</p>
-													<div className="mt-3 space-y-1 text-sm text-gray-600">
+													<p className="mt-1 text-gray-600 text-sm">
+														{option.description}
+													</p>
+													<div className="mt-3 space-y-1 text-gray-600 text-sm">
 														<div>
-															<span className="font-medium">Provider:</span> {option.provider}
+															<span className="font-medium">Provider:</span>{" "}
+															{option.provider}
 														</div>
 														<div>
-															<span className="font-medium">Amount Range:</span> ${option.minAmount.toLocaleString()} - ${option.maxAmount.toLocaleString()}
+															<span className="font-medium">Amount Range:</span>{" "}
+															${option.minAmount.toLocaleString()} - $
+															{option.maxAmount.toLocaleString()}
 														</div>
 														<div>
-															<span className="font-medium">Interest Rate:</span> {option.interestRate}%
+															<span className="font-medium">
+																Interest Rate:
+															</span>{" "}
+															{option.interestRate}%
 														</div>
 														{option.promotionalPeriod && (
 															<div>
-																<span className="font-medium">Promotional Period:</span> {option.promotionalPeriod} months at {option.promotionalRate}%
+																<span className="font-medium">
+																	Promotional Period:
+																</span>{" "}
+																{option.promotionalPeriod} months at{" "}
+																{option.promotionalRate}%
 															</div>
 														)}
 													</div>
 												</div>
-												<Button
-													variant="outline"
-													size="sm"
-												>
+												<Button variant="outline" size="sm">
 													<Edit className="h-4 w-4" />
 												</Button>
 											</div>

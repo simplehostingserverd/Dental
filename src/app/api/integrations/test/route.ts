@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { IntegrationManager } from "@/lib/integrations/integration-manager";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -9,21 +9,26 @@ export async function POST(request: NextRequest) {
 		if (!providerId || !config) {
 			return NextResponse.json(
 				{ error: "Provider ID and config are required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
-		const success = await IntegrationManager.testIntegration(providerId, config);
+		const success = await IntegrationManager.testIntegration(
+			providerId,
+			config,
+		);
 
-		return NextResponse.json({ 
+		return NextResponse.json({
 			success,
-			message: success ? "Connection test successful" : "Connection test failed"
+			message: success
+				? "Connection test successful"
+				: "Connection test failed",
 		});
 	} catch (error) {
 		console.error("Integration test error:", error);
 		return NextResponse.json(
 			{ error: "Failed to test integration" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

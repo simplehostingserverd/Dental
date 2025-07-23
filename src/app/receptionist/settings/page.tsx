@@ -1,5 +1,6 @@
 "use client";
 
+import { IntegrationSettings } from "@/components/settings/integration-settings";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +23,6 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { IntegrationSettings } from "@/components/settings/integration-settings";
 import {
 	Bell,
 	Calendar,
@@ -32,10 +32,12 @@ import {
 	Eye,
 	EyeOff,
 	FileText,
+	Globe,
 	Mail,
 	MessageSquare,
 	Moon,
 	Palette,
+	Phone,
 	RotateCcw,
 	Save,
 	Settings,
@@ -46,8 +48,6 @@ import {
 	Volume2,
 	VolumeX,
 	Zap,
-	Globe,
-	Phone,
 } from "lucide-react";
 import { useState } from "react";
 

@@ -226,7 +226,9 @@ export default async function TreatmentHistoryPage() {
 											<div className="mt-2 flex items-center space-x-4 text-gray-500 text-sm">
 												<div className="flex items-center">
 													<Calendar className="mr-1 h-4 w-4" />
-													{appointment.start ? formatDate(appointment.start) : "Date TBD"}
+													{appointment.start
+														? formatDate(appointment.start)
+														: "Date TBD"}
 												</div>
 												<div className="flex items-center">
 													<User className="mr-1 h-4 w-4" />
@@ -256,7 +258,7 @@ export default async function TreatmentHistoryPage() {
 								<Link href="/patient/appointments/book">
 									<button
 										type="button"
-										className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-gray-900 hover:bg-blue-700"
+										className="mt-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-gray-900 text-sm hover:bg-blue-700"
 									>
 										Book Your First Appointment
 									</button>

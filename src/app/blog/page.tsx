@@ -1,5 +1,5 @@
-import { ArrowRight, Calendar, Heart, Search, User } from "lucide-react";
 import { HeaderLogo } from "@/components/ui/tooth-logo";
+import { ArrowRight, Calendar, Heart, Search, User } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -207,7 +207,7 @@ export default function BlogPage() {
 										className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 									/>
 									<div className="absolute top-4 left-4">
-										<span className="rounded-full bg-blue-600 px-3 py-1 font-medium text-sm text-gray-900">
+										<span className="rounded-full bg-blue-600 px-3 py-1 font-medium text-gray-900 text-sm">
 											{post.category}
 										</span>
 									</div>

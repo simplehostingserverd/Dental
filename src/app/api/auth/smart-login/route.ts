@@ -1,7 +1,7 @@
-import { PracticeAuthService } from "@/lib/auth/practice-auth";
 import { PatientAuthService } from "@/lib/auth/patient-auth";
-import { verifyUserLogin } from "@/lib/test-users-server";
+import { PracticeAuthService } from "@/lib/auth/practice-auth";
 import { QuantumCrypto } from "@/lib/quantum-crypto";
+import { verifyUserLogin } from "@/lib/test-users-server";
 import { type NextRequest, NextResponse } from "next/server";
 
 interface LoginRequestBody {
@@ -14,11 +14,14 @@ interface LoginRequestBody {
 /**
  * Get redirect URL based on user role
  */
-function getRedirectUrl(role: string, userType: 'practice' | 'patient'): string {
-	if (userType === 'patient') {
+function getRedirectUrl(
+	role: string,
+	userType: "practice" | "patient",
+): string {
+	if (userType === "patient") {
 		return "/patient/dashboard";
 	}
-	
+
 	switch (role.toLowerCase()) {
 		case "dentist":
 			return "/dashboard/dentist";
@@ -36,7 +39,7 @@ function getRedirectUrl(role: string, userType: 'practice' | 'patient'): string 
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
 	try {
-		const body = await request.json() as LoginRequestBody;
+		const body = (await request.json()) as LoginRequestBody;
 		const { email, password, twoFactorToken, rememberMe } = body;
 
 		// Validate required fields
@@ -62,8 +65,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 				const sessionToken = QuantumCrypto.generateSecureToken();
 
 				// Determine redirect URL based on role
-				const userType = testUser.role === 'patient' ? 'patient' : 'practice';
-				const redirectUrl = testUser.role === 'patient' ? '/patient/dashboard' : getRedirectUrl(testUser.role, userType);
+				const userType = testUser.role === "patient" ? "patient" : "practice";
+				const redirectUrl =
+					testUser.role === "patient"
+						? "/patient/dashboard"
+						: getRedirectUrl(testUser.role, userType);
 
 				// Sign the session data for security
 				const sessionData = JSON.stringify({
@@ -94,7 +100,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 				});
 
 				// Set appropriate cookies based on user type
-				if (testUser.role === 'patient') {
+				if (testUser.role === "patient") {
 					response.cookies.set("test-patient-token", sessionToken, {
 						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
@@ -137,13 +143,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 					path: "/",
 				});
 
-				response.cookies.set("test-user-first-name", testUser.profile.firstName, {
-					httpOnly: true,
-					secure: process.env.NODE_ENV === "production",
-					sameSite: "strict",
-					maxAge: 24 * 60 * 60, // 24 hours
-					path: "/",
-				});
+				response.cookies.set(
+					"test-user-first-name",
+					testUser.profile.firstName,
+					{
+						httpOnly: true,
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "strict",
+						maxAge: 24 * 60 * 60, // 24 hours
+						path: "/",
+					},
+				);
 
 				response.cookies.set("test-user-last-name", testUser.profile.lastName, {
 					httpOnly: true,
@@ -168,7 +178,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 			);
 
 			if (practiceResult.success) {
-				const redirectUrl = getRedirectUrl(practiceResult.user?.role || "", "practice");
+				const redirectUrl = getRedirectUrl(
+					practiceResult.user?.role || "",
+					"practice",
+				);
 
 				const response = NextResponse.json({
 					success: true,
@@ -229,7 +242,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 			{ error: "Invalid email or password" },
 			{ status: 401 },
 		);
-
 	} catch (error) {
 		console.error("Smart login API error:", error);
 		return NextResponse.json(

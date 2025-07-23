@@ -1,39 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { 
-	FileText, 
-	Plus, 
-	Edit, 
-	Eye, 
-	Search, 
-	Filter,
-	Download,
-	Upload,
-	RefreshCw,
-	Clock,
-	CheckCircle,
-	XCircle,
-	AlertTriangle,
-	DollarSign,
-	Calendar,
-	User,
-	Building2
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import {
 	Dialog,
 	DialogContent,
@@ -43,6 +12,37 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
+import {
+	AlertTriangle,
+	Building2,
+	Calendar,
+	CheckCircle,
+	Clock,
+	DollarSign,
+	Download,
+	Edit,
+	Eye,
+	FileText,
+	Filter,
+	Plus,
+	RefreshCw,
+	Search,
+	Upload,
+	User,
+	XCircle,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface Claim {
 	id: string;
@@ -56,7 +56,14 @@ interface Claim {
 	totalAmount: number;
 	paidAmount: number;
 	patientResponsibility: number;
-	status: "draft" | "submitted" | "accepted" | "rejected" | "paid" | "partial" | "appealed";
+	status:
+		| "draft"
+		| "submitted"
+		| "accepted"
+		| "rejected"
+		| "paid"
+		| "partial"
+		| "appealed";
 	procedures: ClaimProcedure[];
 	eobReceived: boolean;
 	eobDate?: string;
@@ -127,9 +134,9 @@ export default function ClaimsManagementPage() {
 			payerId: "DELTA001",
 			serviceDate: "2024-01-10",
 			submissionDate: "2024-01-12",
-			totalAmount: 850.00,
-			paidAmount: 680.00,
-			patientResponsibility: 170.00,
+			totalAmount: 850.0,
+			paidAmount: 680.0,
+			patientResponsibility: 170.0,
 			status: "paid",
 			procedures: [
 				{
@@ -137,26 +144,26 @@ export default function ClaimsManagementPage() {
 					procedureCode: "D0150",
 					description: "Comprehensive oral evaluation",
 					quantity: 1,
-					chargedAmount: 150.00,
-					allowedAmount: 120.00,
-					paidAmount: 120.00,
+					chargedAmount: 150.0,
+					allowedAmount: 120.0,
+					paidAmount: 120.0,
 					deductible: 0,
 					copay: 0,
 					coinsurance: 0,
-					status: "approved"
+					status: "approved",
 				},
 				{
 					id: "2",
 					procedureCode: "D1110",
 					description: "Prophylaxis - adult",
 					quantity: 1,
-					chargedAmount: 200.00,
-					allowedAmount: 160.00,
-					paidAmount: 160.00,
+					chargedAmount: 200.0,
+					allowedAmount: 160.0,
+					paidAmount: 160.0,
 					deductible: 0,
 					copay: 0,
 					coinsurance: 0,
-					status: "approved"
+					status: "approved",
 				},
 				{
 					id: "3",
@@ -164,18 +171,18 @@ export default function ClaimsManagementPage() {
 					description: "Crown - porcelain fused to metal",
 					tooth: "14",
 					quantity: 1,
-					chargedAmount: 500.00,
-					allowedAmount: 400.00,
-					paidAmount: 400.00,
-					deductible: 50.00,
+					chargedAmount: 500.0,
+					allowedAmount: 400.0,
+					paidAmount: 400.0,
+					deductible: 50.0,
 					copay: 0,
-					coinsurance: 120.00,
-					status: "approved"
-				}
+					coinsurance: 120.0,
+					status: "approved",
+				},
 			],
 			eobReceived: true,
 			eobDate: "2024-01-20",
-			lastUpdated: "2024-01-20"
+			lastUpdated: "2024-01-20",
 		},
 		{
 			id: "2",
@@ -186,7 +193,7 @@ export default function ClaimsManagementPage() {
 			payerId: "METLIFE001",
 			serviceDate: "2024-01-15",
 			submissionDate: "2024-01-16",
-			totalAmount: 1200.00,
+			totalAmount: 1200.0,
 			paidAmount: 0,
 			patientResponsibility: 0,
 			status: "submitted",
@@ -197,13 +204,13 @@ export default function ClaimsManagementPage() {
 					description: "Molar endodontic therapy",
 					tooth: "19",
 					quantity: 1,
-					chargedAmount: 800.00,
+					chargedAmount: 800.0,
 					allowedAmount: 0,
 					paidAmount: 0,
 					deductible: 0,
 					copay: 0,
 					coinsurance: 0,
-					status: "pending"
+					status: "pending",
 				},
 				{
 					id: "5",
@@ -211,17 +218,17 @@ export default function ClaimsManagementPage() {
 					description: "Crown - porcelain fused to metal",
 					tooth: "19",
 					quantity: 1,
-					chargedAmount: 400.00,
+					chargedAmount: 400.0,
 					allowedAmount: 0,
 					paidAmount: 0,
 					deductible: 0,
 					copay: 0,
 					coinsurance: 0,
-					status: "pending"
-				}
+					status: "pending",
+				},
 			],
 			eobReceived: false,
-			lastUpdated: "2024-01-16"
+			lastUpdated: "2024-01-16",
 		},
 		{
 			id: "3",
@@ -232,9 +239,9 @@ export default function ClaimsManagementPage() {
 			payerId: "CIGNA001",
 			serviceDate: "2024-01-08",
 			submissionDate: "2024-01-10",
-			totalAmount: 300.00,
+			totalAmount: 300.0,
 			paidAmount: 0,
-			patientResponsibility: 300.00,
+			patientResponsibility: 300.0,
 			status: "rejected",
 			procedures: [
 				{
@@ -243,36 +250,40 @@ export default function ClaimsManagementPage() {
 					description: "Amalgam - one surface, primary or permanent",
 					tooth: "12",
 					quantity: 1,
-					chargedAmount: 300.00,
+					chargedAmount: 300.0,
 					allowedAmount: 0,
 					paidAmount: 0,
 					deductible: 0,
 					copay: 0,
 					coinsurance: 0,
-					status: "denied"
-				}
+					status: "denied",
+				},
 			],
 			eobReceived: true,
 			eobDate: "2024-01-18",
 			denialReason: "Procedure not covered under current plan",
 			appealDeadline: "2024-02-18",
-			lastUpdated: "2024-01-18"
-		}
+			lastUpdated: "2024-01-18",
+		},
 	];
 
-	const filteredClaims = claims.filter(claim => {
-		const matchesSearch = claim.claimNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	const filteredClaims = claims.filter((claim) => {
+		const matchesSearch =
+			claim.claimNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			claim.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			claim.insurancePayer.toLowerCase().includes(searchTerm.toLowerCase());
-		
-		const matchesStatus = statusFilter === "all" || claim.status === statusFilter;
-		
+
+		const matchesStatus =
+			statusFilter === "all" || claim.status === statusFilter;
+
 		let matchesDate = true;
 		if (dateFilter !== "all") {
 			const claimDate = new Date(claim.serviceDate);
 			const now = new Date();
-			const daysDiff = Math.floor((now.getTime() - claimDate.getTime()) / (1000 * 60 * 60 * 24));
-			
+			const daysDiff = Math.floor(
+				(now.getTime() - claimDate.getTime()) / (1000 * 60 * 60 * 24),
+			);
+
 			switch (dateFilter) {
 				case "7days":
 					matchesDate = daysDiff <= 7;
@@ -285,38 +296,51 @@ export default function ClaimsManagementPage() {
 					break;
 			}
 		}
-		
+
 		return matchesSearch && matchesStatus && matchesDate;
 	});
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "draft": return "bg-gray-100 text-gray-800";
-			case "submitted": return "bg-blue-100 text-blue-800";
-			case "accepted": return "bg-green-100 text-green-800";
-			case "rejected": return "bg-red-100 text-red-800";
-			case "paid": return "bg-green-100 text-green-800";
-			case "partial": return "bg-yellow-100 text-yellow-800";
-			case "appealed": return "bg-purple-100 text-purple-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "draft":
+				return "bg-gray-100 text-gray-800";
+			case "submitted":
+				return "bg-blue-100 text-blue-800";
+			case "accepted":
+				return "bg-green-100 text-green-800";
+			case "rejected":
+				return "bg-red-100 text-red-800";
+			case "paid":
+				return "bg-green-100 text-green-800";
+			case "partial":
+				return "bg-yellow-100 text-yellow-800";
+			case "appealed":
+				return "bg-purple-100 text-purple-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const getStatusIcon = (status: string) => {
 		switch (status) {
-			case "submitted": return <Clock className="h-3 w-3" />;
-			case "accepted": 
-			case "paid": return <CheckCircle className="h-3 w-3" />;
-			case "rejected": return <XCircle className="h-3 w-3" />;
-			case "partial": return <AlertTriangle className="h-3 w-3" />;
-			default: return <FileText className="h-3 w-3" />;
+			case "submitted":
+				return <Clock className="h-3 w-3" />;
+			case "accepted":
+			case "paid":
+				return <CheckCircle className="h-3 w-3" />;
+			case "rejected":
+				return <XCircle className="h-3 w-3" />;
+			case "partial":
+				return <AlertTriangle className="h-3 w-3" />;
+			default:
+				return <FileText className="h-3 w-3" />;
 		}
 	};
 
 	const handleSubmitClaim = async (claimId: string) => {
 		try {
 			const response = await fetch(`/api/claims/${claimId}/submit`, {
-				method: "POST"
+				method: "POST",
 			});
 			if (response.ok) {
 				alert("Claim submitted successfully!");
@@ -346,12 +370,14 @@ export default function ClaimsManagementPage() {
 
 	const claimStats = {
 		total: claims.length,
-		submitted: claims.filter(c => c.status === "submitted").length,
-		paid: claims.filter(c => c.status === "paid").length,
-		rejected: claims.filter(c => c.status === "rejected").length,
+		submitted: claims.filter((c) => c.status === "submitted").length,
+		paid: claims.filter((c) => c.status === "paid").length,
+		rejected: claims.filter((c) => c.status === "rejected").length,
 		totalBilled: claims.reduce((sum, c) => sum + c.totalAmount, 0),
 		totalPaid: claims.reduce((sum, c) => sum + c.paidAmount, 0),
-		pendingAmount: claims.filter(c => c.status === "submitted").reduce((sum, c) => sum + c.totalAmount, 0)
+		pendingAmount: claims
+			.filter((c) => c.status === "submitted")
+			.reduce((sum, c) => sum + c.totalAmount, 0),
 	};
 
 	return (
@@ -368,23 +394,23 @@ export default function ClaimsManagementPage() {
 								<div className="flex items-baseline space-x-4">
 									<Link
 										href="/dashboard"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Dashboard
 									</Link>
 									<Link
 										href="/dashboard/billing"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Billing
 									</Link>
 									<Link
 										href="/dashboard/insurance"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Insurance
 									</Link>
-									<span className="rounded-md bg-gray-900 px-3 py-2 text-white text-sm font-medium">
+									<span className="rounded-md bg-gray-900 px-3 py-2 font-medium text-sm text-white">
 										Claims
 									</span>
 								</div>
@@ -408,8 +434,12 @@ export default function ClaimsManagementPage() {
 			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="font-bold text-3xl text-gray-900">Claims Management</h1>
-					<p className="mt-2 text-gray-600">Create, track, and manage insurance claims and EOBs</p>
+					<h1 className="font-bold text-3xl text-gray-900">
+						Claims Management
+					</h1>
+					<p className="mt-2 text-gray-600">
+						Create, track, and manage insurance claims and EOBs
+					</p>
 				</div>
 
 				{/* Stats Cards */}
@@ -418,9 +448,15 @@ export default function ClaimsManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Total Claims</p>
-									<p className="font-bold text-2xl text-gray-900">{claimStats.total}</p>
-									<p className="text-green-600 text-sm">+{claimStats.submitted} pending</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Total Claims
+									</p>
+									<p className="font-bold text-2xl text-gray-900">
+										{claimStats.total}
+									</p>
+									<p className="text-green-600 text-sm">
+										+{claimStats.submitted} pending
+									</p>
 								</div>
 								<FileText className="h-8 w-8 text-blue-600" />
 							</div>
@@ -430,11 +466,15 @@ export default function ClaimsManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Total Billed</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Total Billed
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
 										${claimStats.totalBilled.toLocaleString()}
 									</p>
-									<p className="text-blue-600 text-sm">${claimStats.pendingAmount.toLocaleString()} pending</p>
+									<p className="text-blue-600 text-sm">
+										${claimStats.pendingAmount.toLocaleString()} pending
+									</p>
 								</div>
 								<DollarSign className="h-8 w-8 text-green-600" />
 							</div>
@@ -444,12 +484,18 @@ export default function ClaimsManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Total Paid</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Total Paid
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
 										${claimStats.totalPaid.toLocaleString()}
 									</p>
 									<p className="text-green-600 text-sm">
-										{((claimStats.totalPaid / claimStats.totalBilled) * 100).toFixed(1)}% collection rate
+										{(
+											(claimStats.totalPaid / claimStats.totalBilled) *
+											100
+										).toFixed(1)}
+										% collection rate
 									</p>
 								</div>
 								<CheckCircle className="h-8 w-8 text-green-600" />
@@ -460,10 +506,17 @@ export default function ClaimsManagementPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Rejected Claims</p>
-									<p className="font-bold text-2xl text-gray-900">{claimStats.rejected}</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Rejected Claims
+									</p>
+									<p className="font-bold text-2xl text-gray-900">
+										{claimStats.rejected}
+									</p>
 									<p className="text-red-600 text-sm">
-										{((claimStats.rejected / claimStats.total) * 100).toFixed(1)}% rejection rate
+										{((claimStats.rejected / claimStats.total) * 100).toFixed(
+											1,
+										)}
+										% rejection rate
 									</p>
 								</div>
 								<XCircle className="h-8 w-8 text-red-600" />
@@ -476,12 +529,12 @@ export default function ClaimsManagementPage() {
 				<div className="mb-6 flex flex-wrap items-center justify-between gap-4">
 					<div className="flex space-x-4">
 						<div className="relative">
-							<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+							<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 							<Input
 								placeholder="Search claims..."
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
-								className="pl-10 w-64"
+								className="w-64 pl-10"
 							/>
 						</div>
 						<Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -531,11 +584,16 @@ export default function ClaimsManagementPage() {
 					<CardContent>
 						<div className="space-y-4">
 							{filteredClaims.map((claim) => (
-								<div key={claim.id} className="rounded-lg border border-gray-200 bg-white p-4">
+								<div
+									key={claim.id}
+									className="rounded-lg border border-gray-200 bg-white p-4"
+								>
 									<div className="flex items-start justify-between">
 										<div className="flex-1">
 											<div className="flex items-center space-x-3">
-												<h3 className="font-medium text-gray-900">{claim.claimNumber}</h3>
+												<h3 className="font-medium text-gray-900">
+													{claim.claimNumber}
+												</h3>
 												<Badge className={getStatusColor(claim.status)}>
 													{getStatusIcon(claim.status)}
 													<span className="ml-1">{claim.status}</span>
@@ -546,24 +604,32 @@ export default function ClaimsManagementPage() {
 													</Badge>
 												)}
 											</div>
-											<div className="mt-2 grid grid-cols-3 gap-4 text-sm text-gray-600">
+											<div className="mt-2 grid grid-cols-3 gap-4 text-gray-600 text-sm">
 												<div>
-													<span className="font-medium">Patient:</span> {claim.patientName}
+													<span className="font-medium">Patient:</span>{" "}
+													{claim.patientName}
 												</div>
 												<div>
-													<span className="font-medium">Insurance:</span> {claim.insurancePayer}
+													<span className="font-medium">Insurance:</span>{" "}
+													{claim.insurancePayer}
 												</div>
 												<div>
-													<span className="font-medium">Service Date:</span> {claim.serviceDate}
+													<span className="font-medium">Service Date:</span>{" "}
+													{claim.serviceDate}
 												</div>
 												<div>
-													<span className="font-medium">Total Amount:</span> ${claim.totalAmount.toFixed(2)}
+													<span className="font-medium">Total Amount:</span> $
+													{claim.totalAmount.toFixed(2)}
 												</div>
 												<div>
-													<span className="font-medium">Paid Amount:</span> ${claim.paidAmount.toFixed(2)}
+													<span className="font-medium">Paid Amount:</span> $
+													{claim.paidAmount.toFixed(2)}
 												</div>
 												<div>
-													<span className="font-medium">Patient Responsibility:</span> ${claim.patientResponsibility.toFixed(2)}
+													<span className="font-medium">
+														Patient Responsibility:
+													</span>{" "}
+													${claim.patientResponsibility.toFixed(2)}
 												</div>
 											</div>
 											{claim.denialReason && (
@@ -573,7 +639,8 @@ export default function ClaimsManagementPage() {
 													</p>
 													{claim.appealDeadline && (
 														<p className="text-red-600 text-sm">
-															<strong>Appeal Deadline:</strong> {claim.appealDeadline}
+															<strong>Appeal Deadline:</strong>{" "}
+															{claim.appealDeadline}
 														</p>
 													)}
 												</div>

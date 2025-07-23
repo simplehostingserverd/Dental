@@ -33,11 +33,16 @@ export function Header({ user }: HeaderProps) {
 		}
 
 		// Clear all authentication cookies
-		document.cookie = "practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-user-role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-user-email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-user-role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-user-email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
 
 		// Clear localStorage
 		localStorage.removeItem("testUser");
@@ -46,7 +51,7 @@ export function Header({ user }: HeaderProps) {
 		window.location.href = "/auth/signin";
 	};
 	return (
-		<header className="dashboard-header border-b border-slate-200 px-6 py-4">
+		<header className="dashboard-header border-slate-200 border-b px-6 py-4">
 			<div className="flex items-center justify-between">
 				{/* Search */}
 				<div className="max-w-lg flex-1">
@@ -65,10 +70,10 @@ export function Header({ user }: HeaderProps) {
 					{/* Notifications */}
 					<button
 						type="button"
-						className="relative p-3 text-slate-500 transition-all duration-300 hover:text-slate-700 hover:bg-slate-100 rounded-lg"
+						className="relative rounded-lg p-3 text-slate-500 transition-all duration-300 hover:bg-slate-100 hover:text-slate-700"
 					>
 						<Bell className="h-5 w-5" />
-						<span className="absolute top-1 right-1 h-3 w-3 rounded-full bg-gradient-to-r from-red-500 to-pink-500 animate-pulse" />
+						<span className="absolute top-1 right-1 h-3 w-3 animate-pulse rounded-full bg-gradient-to-r from-red-500 to-pink-500" />
 					</button>
 
 					{/* Language switcher */}
@@ -76,13 +81,13 @@ export function Header({ user }: HeaderProps) {
 
 					{/* User menu */}
 					<DropdownMenu>
-						<DropdownMenuTrigger className="flex items-center space-x-3 font-medium text-slate-700 text-sm transition-all duration-300 hover:text-slate-900 hover:bg-slate-100 rounded-lg p-2">
+						<DropdownMenuTrigger className="flex items-center space-x-3 rounded-lg p-2 font-medium text-slate-700 text-sm transition-all duration-300 hover:bg-slate-100 hover:text-slate-900">
 							<Avatar className="h-9 w-9 ring-2 ring-indigo-100">
 								<AvatarImage
 									src="/placeholder-avatar.jpg"
 									alt={getUserDisplayName(user)}
 								/>
-								<AvatarFallback className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold">
+								<AvatarFallback className="bg-gradient-to-r from-indigo-500 to-purple-500 font-semibold text-white">
 									{getUserInitials(user.firstName, user.lastName)}
 								</AvatarFallback>
 							</Avatar>

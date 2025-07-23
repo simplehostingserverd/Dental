@@ -4,9 +4,9 @@ import "@/styles/globals.css";
 // import { StackProvider, StackTheme } from "@stackframe/stack";
 // import { stackClientApp } from "@/lib/stack-client";
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { Inter } from "next/font/google";
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 
 import { TranslationProvider } from "@/components/providers/translation-provider";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -27,22 +27,30 @@ const inter = Inter({
 
 export default async function RootLayout({
 	children,
-	params
+	params,
 }: Readonly<{
-	children: React.ReactNode,
-	params: { locale?: string }
+	children: React.ReactNode;
+	params: { locale?: string };
 }>) {
 	// Get the locale from the URL or use the default locale
-	const locale = params.locale || 'en';
+	const locale = params.locale || "en";
 
 	// Get the messages for the current locale
 	const messages = await getMessages({ locale });
 
 	return (
-		<html lang={locale} className={`${inter.variable}`} suppressHydrationWarning>
+		<html
+			lang={locale}
+			className={`${inter.variable}`}
+			suppressHydrationWarning
+		>
 			<head>
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
-				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+				<link
+					rel="preconnect"
+					href="https://fonts.gstatic.com"
+					crossOrigin="anonymous"
+				/>
 				<link rel="dns-prefetch" href="https://images.unsplash.com" />
 			</head>
 			<body className="preload">

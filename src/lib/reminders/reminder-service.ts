@@ -1,11 +1,11 @@
-import { db } from "@/server/db";
 import { SmsService } from "@/lib/sms/sms-service";
 import { AutoTranslator } from "@/lib/translation/auto-translator";
+import { db } from "@/server/db";
 
 export interface ReminderTemplate {
 	id: string;
 	name: string;
-	type: 'sms' | 'email' | 'call';
+	type: "sms" | "email" | "call";
 	timing: number; // Hours before appointment
 	message: string;
 	isActive: boolean;
@@ -14,7 +14,7 @@ export interface ReminderTemplate {
 
 export interface ReminderSchedule {
 	appointmentId: string;
-	reminderType: 'sms' | 'email' | 'call';
+	reminderType: "sms" | "email" | "call";
 	scheduledFor: Date;
 	templateId?: string;
 	customMessage?: string;
@@ -38,17 +38,17 @@ export class ReminderService {
 		const appointment = await db.appointment.findUnique({
 			where: { id: appointmentId },
 			include: {
-				patient: true
-			}
+				patient: true,
+			},
 		});
 
 		if (!appointment) {
-			throw new Error('Appointment not found');
+			throw new Error("Appointment not found");
 		}
 
 		// Get active reminder templates
 		const templates = await this.getReminderTemplates();
-		const activeTemplates = templates.filter(t => t.isActive);
+		const activeTemplates = templates.filter((t) => t.isActive);
 
 		// Schedule reminders based on templates
 		for (const template of activeTemplates) {
@@ -63,8 +63,8 @@ export class ReminderService {
 						reminderType: template.type,
 						scheduledFor,
 						message: template.message,
-						status: 'pending'
-					}
+						status: "pending",
+					},
 				});
 			}
 		}
@@ -75,45 +75,45 @@ export class ReminderService {
 	 */
 	async processPendingReminders(): Promise<void> {
 		const now = new Date();
-		
+
 		const pendingReminders = await db.appointmentReminder.findMany({
 			where: {
-				status: 'pending',
+				status: "pending",
 				scheduledFor: {
-					lte: now
-				}
+					lte: now,
+				},
 			},
 			include: {
 				appointment: {
 					include: {
-						patient: true
-					}
-				}
-			}
+						patient: true,
+					},
+				},
+			},
 		});
 
 		for (const reminder of pendingReminders) {
 			try {
 				await this.sendReminder(reminder);
-				
+
 				await db.appointmentReminder.update({
 					where: { id: reminder.id },
 					data: {
-						status: 'sent',
+						status: "sent",
 						sentAt: new Date(),
-						attempts: reminder.attempts + 1
-					}
+						attempts: reminder.attempts + 1,
+					},
 				});
 			} catch (error) {
 				console.error(`Failed to send reminder ${reminder.id}:`, error);
-				
+
 				await db.appointmentReminder.update({
 					where: { id: reminder.id },
 					data: {
-						status: 'failed',
+						status: "failed",
 						attempts: reminder.attempts + 1,
-						lastAttempt: new Date()
-					}
+						lastAttempt: new Date(),
+					},
 				});
 			}
 		}
@@ -128,19 +128,19 @@ export class ReminderService {
 
 		// Process message with variables
 		const processedMessage = await this.processReminderMessage(
-			reminder.message || '',
+			reminder.message || "",
 			appointment,
-			patient
+			patient,
 		);
 
 		switch (reminder.reminderType) {
-			case 'sms':
+			case "sms":
 				await this.sendSmsReminder(patient, processedMessage);
 				break;
-			case 'email':
+			case "email":
 				await this.sendEmailReminder(patient, processedMessage);
 				break;
-			case 'call':
+			case "call":
 				await this.scheduleCallReminder(patient, appointment);
 				break;
 		}
@@ -151,22 +151,25 @@ export class ReminderService {
 	 */
 	private async sendSmsReminder(patient: any, message: string): Promise<void> {
 		if (!patient.phone) {
-			throw new Error('Patient has no phone number');
+			throw new Error("Patient has no phone number");
 		}
 
 		await this.smsService.sendSms({
 			to: patient.phone,
 			message,
-			patientId: patient.id
+			patientId: patient.id,
 		});
 	}
 
 	/**
 	 * Send email reminder
 	 */
-	private async sendEmailReminder(patient: any, message: string): Promise<void> {
+	private async sendEmailReminder(
+		patient: any,
+		message: string,
+	): Promise<void> {
 		if (!patient.email) {
-			throw new Error('Patient has no email address');
+			throw new Error("Patient has no email address");
 		}
 
 		// Email implementation would go here
@@ -177,7 +180,10 @@ export class ReminderService {
 	/**
 	 * Schedule call reminder
 	 */
-	private async scheduleCallReminder(patient: any, appointment: any): Promise<void> {
+	private async scheduleCallReminder(
+		patient: any,
+		appointment: any,
+	): Promise<void> {
 		// This would integrate with the VoIP system to schedule a call
 		console.log(`Call reminder scheduled for ${patient.phone}`);
 	}
@@ -188,10 +194,10 @@ export class ReminderService {
 	private async processReminderMessage(
 		template: string,
 		appointment: any,
-		patient: any
+		patient: any,
 	): Promise<string> {
 		const practice = await db.practice.findUnique({
-			where: { id: this.practiceId }
+			where: { id: this.practiceId },
 		});
 
 		const variables = {
@@ -199,19 +205,19 @@ export class ReminderService {
 			appointmentDate: appointment.date.toLocaleDateString(),
 			appointmentTime: appointment.time,
 			providerName: appointment.dentistName,
-			practiceName: practice?.name || 'Dental Practice',
-			practicePhone: practice?.phone || '',
-			appointmentType: appointment.type
+			practiceName: practice?.name || "Dental Practice",
+			practicePhone: practice?.phone || "",
+			appointmentType: appointment.type,
 		};
 
 		let message = template;
 		for (const [key, value] of Object.entries(variables)) {
-			message = message.replace(new RegExp(`{${key}}`, 'g'), value);
+			message = message.replace(new RegExp(`{${key}}`, "g"), value);
 		}
 
 		// Auto-translate if patient prefers Spanish
 		const patientPreferences = patient.medicalHistory as any;
-		if (patientPreferences?.preferredLanguage === 'es') {
+		if (patientPreferences?.preferredLanguage === "es") {
 			const translation = await this.translator.translateToSpanish(message);
 			message = translation.translatedText;
 		}
@@ -227,39 +233,55 @@ export class ReminderService {
 		// In a real implementation, these would be stored in the database
 		return [
 			{
-				id: 'sms_24h',
-				name: '24 Hour SMS Reminder',
-				type: 'sms',
+				id: "sms_24h",
+				name: "24 Hour SMS Reminder",
+				type: "sms",
 				timing: 24,
-				message: 'Hi {patientName}, this is a reminder that you have an appointment tomorrow at {appointmentTime} with {providerName}. Please reply CONFIRM or call us at {practicePhone}.',
+				message:
+					"Hi {patientName}, this is a reminder that you have an appointment tomorrow at {appointmentTime} with {providerName}. Please reply CONFIRM or call us at {practicePhone}.",
 				isActive: true,
-				variables: ['patientName', 'appointmentTime', 'providerName', 'practicePhone']
+				variables: [
+					"patientName",
+					"appointmentTime",
+					"providerName",
+					"practicePhone",
+				],
 			},
 			{
-				id: 'sms_2h',
-				name: '2 Hour SMS Reminder',
-				type: 'sms',
+				id: "sms_2h",
+				name: "2 Hour SMS Reminder",
+				type: "sms",
 				timing: 2,
-				message: 'Hi {patientName}, your appointment with {providerName} is in 2 hours at {appointmentTime}. Please arrive 15 minutes early.',
+				message:
+					"Hi {patientName}, your appointment with {providerName} is in 2 hours at {appointmentTime}. Please arrive 15 minutes early.",
 				isActive: true,
-				variables: ['patientName', 'providerName', 'appointmentTime']
+				variables: ["patientName", "providerName", "appointmentTime"],
 			},
 			{
-				id: 'email_24h',
-				name: '24 Hour Email Reminder',
-				type: 'email',
+				id: "email_24h",
+				name: "24 Hour Email Reminder",
+				type: "email",
 				timing: 24,
-				message: 'Dear {patientName}, this is a reminder that you have an appointment scheduled for {appointmentDate} at {appointmentTime} with {providerName}.',
+				message:
+					"Dear {patientName}, this is a reminder that you have an appointment scheduled for {appointmentDate} at {appointmentTime} with {providerName}.",
 				isActive: false,
-				variables: ['patientName', 'appointmentDate', 'appointmentTime', 'providerName']
-			}
+				variables: [
+					"patientName",
+					"appointmentDate",
+					"appointmentTime",
+					"providerName",
+				],
+			},
 		];
 	}
 
 	/**
 	 * Update reminder template
 	 */
-	async updateReminderTemplate(templateId: string, updates: Partial<ReminderTemplate>): Promise<void> {
+	async updateReminderTemplate(
+		templateId: string,
+		updates: Partial<ReminderTemplate>,
+	): Promise<void> {
 		// In a real implementation, this would update the database
 		console.log(`Updating template ${templateId}:`, updates);
 	}
@@ -271,27 +293,30 @@ export class ReminderService {
 		await db.appointmentReminder.updateMany({
 			where: {
 				appointmentId,
-				status: 'pending'
+				status: "pending",
 			},
 			data: {
-				status: 'cancelled'
-			}
+				status: "cancelled",
+			},
 		});
 	}
 
 	/**
 	 * Reschedule reminders for an appointment
 	 */
-	async rescheduleReminders(appointmentId: string, newDate: Date): Promise<void> {
+	async rescheduleReminders(
+		appointmentId: string,
+		newDate: Date,
+	): Promise<void> {
 		// Cancel existing reminders
 		await this.cancelReminders(appointmentId);
-		
+
 		// Update appointment date
 		await db.appointment.update({
 			where: { id: appointmentId },
-			data: { date: newDate }
+			data: { date: newDate },
 		});
-		
+
 		// Schedule new reminders
 		await this.scheduleReminders(appointmentId);
 	}
@@ -304,31 +329,31 @@ export class ReminderService {
 			where: {
 				createdAt: {
 					gte: startDate,
-					lte: endDate
-				}
-			}
+					lte: endDate,
+				},
+			},
 		});
 
 		const totalScheduled = reminders.length;
-		const totalSent = reminders.filter(r => r.status === 'sent').length;
-		const totalFailed = reminders.filter(r => r.status === 'failed').length;
-		const totalPending = reminders.filter(r => r.status === 'pending').length;
+		const totalSent = reminders.filter((r) => r.status === "sent").length;
+		const totalFailed = reminders.filter((r) => r.status === "failed").length;
+		const totalPending = reminders.filter((r) => r.status === "pending").length;
 
 		return {
 			totalScheduled,
 			totalSent,
 			totalFailed,
 			totalPending,
-			successRate: totalSent / (totalSent + totalFailed) * 100,
+			successRate: (totalSent / (totalSent + totalFailed)) * 100,
 			remindersByType: this.groupRemindersByType(reminders),
-			remindersByDay: this.groupRemindersByDay(reminders)
+			remindersByDay: this.groupRemindersByDay(reminders),
 		};
 	}
 
 	private groupRemindersByType(reminders: any[]) {
 		const groups: Record<string, number> = {};
-		
-		reminders.forEach(reminder => {
+
+		reminders.forEach((reminder) => {
 			groups[reminder.reminderType] = (groups[reminder.reminderType] || 0) + 1;
 		});
 
@@ -337,9 +362,9 @@ export class ReminderService {
 
 	private groupRemindersByDay(reminders: any[]) {
 		const groups: Record<string, number> = {};
-		
-		reminders.forEach(reminder => {
-			const day = reminder.createdAt.toISOString().split('T')[0];
+
+		reminders.forEach((reminder) => {
+			const day = reminder.createdAt.toISOString().split("T")[0];
 			groups[day] = (groups[day] || 0) + 1;
 		});
 
@@ -352,7 +377,7 @@ export class ReminderService {
 	static async startReminderProcessor() {
 		// This would be called by a cron job or background task
 		const practices = await db.practice.findMany({
-			where: { isActive: true }
+			where: { isActive: true },
 		});
 
 		for (const practice of practices) {

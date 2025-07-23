@@ -211,10 +211,16 @@ export default function ChartingPage() {
 			condition: newCondition.condition,
 			treatment: newCondition.treatment,
 			status: "planned" as const,
-			priority: (newCondition.priority || "medium") as "low" | "medium" | "high" | "urgent",
+			priority: (newCondition.priority || "medium") as
+				| "low"
+				| "medium"
+				| "high"
+				| "urgent",
 			insuranceCovered: true, // Default, can be updated
 			estimatedCost: 0, // Will be calculated based on treatment
-			dateAdded: new Date().toISOString().split("T")[0] || new Date().toLocaleDateString(),
+			dateAdded:
+				new Date().toISOString().split("T")[0] ||
+				new Date().toLocaleDateString(),
 			notes: newCondition.notes || "",
 		}));
 

@@ -87,9 +87,10 @@ export async function PUT(
 			newStartDateTime.setHours(hours, minutes, 0, 0);
 
 			// Calculate duration from original appointment
-			const originalDuration = appointment.end && appointment.start
-				? appointment.end.getTime() - appointment.start.getTime()
-				: 60 * 60 * 1000; // Default 1 hour if times are null
+			const originalDuration =
+				appointment.end && appointment.start
+					? appointment.end.getTime() - appointment.start.getTime()
+					: 60 * 60 * 1000; // Default 1 hour if times are null
 			const newEndDateTime = new Date(
 				newStartDateTime.getTime() + originalDuration,
 			);

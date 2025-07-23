@@ -23,7 +23,9 @@ export default function DentistSignInPage() {
 					<div className="mb-8 text-center">
 						<div className="mb-6 flex items-center justify-center">
 							<HeaderLogo className="text-blue-600" />
-							<span className="font-bold text-3xl text-gray-900">Cognident</span>
+							<span className="font-bold text-3xl text-gray-900">
+								Cognident
+							</span>
 						</div>
 						<h2 className="mb-2 font-bold text-2xl text-gray-900">
 							Dentist Portal

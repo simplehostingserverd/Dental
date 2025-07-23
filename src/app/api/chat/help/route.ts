@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { TogetherAIService } from "@/lib/ai/together-ai";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 		if (!message) {
 			return NextResponse.json(
 				{ error: "Message is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 		console.error("Help chat error:", error);
 		return NextResponse.json(
 			{ error: "Failed to generate response" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

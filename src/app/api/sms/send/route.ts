@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { SmsService } from "@/lib/sms/sms-service";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 		if (!practiceId || !to || !message) {
 			return NextResponse.json(
 				{ error: "Practice ID, phone number, and message are required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -19,16 +19,13 @@ export async function POST(request: NextRequest) {
 			message,
 			patientId,
 			templateId,
-			variables
+			variables,
 		});
 
 		return NextResponse.json(result);
 	} catch (error) {
 		console.error("SMS send error:", error);
-		return NextResponse.json(
-			{ error: "Failed to send SMS" },
-			{ status: 500 }
-		);
+		return NextResponse.json({ error: "Failed to send SMS" }, { status: 500 });
 	}
 }
 
@@ -36,12 +33,12 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
 	try {
 		const { searchParams } = new URL(request.url);
-		const practiceId = searchParams.get('practiceId');
+		const practiceId = searchParams.get("practiceId");
 
 		if (!practiceId) {
 			return NextResponse.json(
 				{ error: "Practice ID is required" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -53,7 +50,7 @@ export async function GET(request: NextRequest) {
 		console.error("SMS templates error:", error);
 		return NextResponse.json(
 			{ error: "Failed to fetch SMS templates" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

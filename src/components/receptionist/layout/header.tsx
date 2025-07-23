@@ -1,5 +1,7 @@
 "use client";
 
+import { LanguageSwitcher } from "@/components/language/language-switcher";
+import { CallInterface } from "@/components/receptionist/call-interface";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +11,6 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { CallInterface } from "@/components/receptionist/call-interface";
-import { LanguageSwitcher } from "@/components/language/language-switcher";
 import {
 	AlertCircle,
 	Bell,
@@ -48,11 +48,16 @@ export function ReceptionistHeader() {
 		}
 
 		// Clear all authentication cookies
-		document.cookie = "practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-user-role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		document.cookie = "test-user-email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"practice-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-user-role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie =
+			"test-user-email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
 
 		// Clear localStorage
 		localStorage.removeItem("testUser");

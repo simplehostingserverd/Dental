@@ -1,19 +1,19 @@
 "use client";
 
-import { HeaderLogo } from "@/components/ui/tooth-logo";
+import { LiveAgentChatbot } from "@/components/chat/live-agent-chatbot";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { LiveAgentChatbot } from "@/components/chat/live-agent-chatbot";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
 	Clock,
+	Headphones,
 	Mail,
 	MapPin,
+	MessageSquare,
 	Phone,
 	Send,
-	MessageSquare,
 	Users,
-	Headphones,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -30,7 +30,7 @@ export default function ContactPage() {
 	const [submitted, setSubmitted] = useState(false);
 
 	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({
@@ -44,10 +44,10 @@ export default function ContactPage() {
 		setIsSubmitting(true);
 
 		try {
-			const response = await fetch('/api/contact', {
-				method: 'POST',
+			const response = await fetch("/api/contact", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(formData),
 			});
@@ -55,11 +55,11 @@ export default function ContactPage() {
 			if (response.ok) {
 				setSubmitted(true);
 			} else {
-				throw new Error('Failed to send message');
+				throw new Error("Failed to send message");
 			}
 		} catch (error) {
-			console.error('Error sending message:', error);
-			alert('Failed to send message. Please try again.');
+			console.error("Error sending message:", error);
+			alert("Failed to send message. Please try again.");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -75,48 +75,47 @@ export default function ContactPage() {
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
 			{/* Navigation */}
-			<nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+			<nav className="sticky top-0 z-50 border-slate-200 border-b bg-white/95 shadow-sm backdrop-blur-sm">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex h-20 items-center justify-between">
 						<Link href="/" className="flex items-center">
 							<HeaderLogo className="text-indigo-600" />
-							<span className="font-bold text-xl text-slate-800">Cognident</span>
+							<span className="font-bold text-slate-800 text-xl">
+								Cognident
+							</span>
 						</Link>
 						<div className="hidden items-center space-x-8 md:flex">
 							<Link
 								href="/#features"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Features
 							</Link>
 							<Link
 								href="/#pricing"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Pricing
 							</Link>
 							<Link
 								href="/blog"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Blog
 							</Link>
 							<Link
 								href="/contact"
-								className="text-indigo-600 font-semibold transition-all duration-300 hover:text-indigo-700 hover:scale-105"
+								className="font-semibold text-indigo-600 transition-all duration-300 hover:scale-105 hover:text-indigo-700"
 							>
 								Contact
 							</Link>
 							<Link
 								href="/auth/signin"
-								className="text-slate-600 font-medium transition-all duration-300 hover:text-slate-900 hover:scale-105"
+								className="font-medium text-slate-600 transition-all duration-300 hover:scale-105 hover:text-slate-900"
 							>
 								Sign In
 							</Link>
-							<Link
-								href="/auth/signup"
-								className="dashboard-button"
-							>
+							<Link href="/auth/signup" className="dashboard-button">
 								Get Started
 							</Link>
 						</div>
@@ -125,10 +124,10 @@ export default function ContactPage() {
 			</nav>
 
 			{/* Hero Section */}
-			<section className="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 overflow-hidden">
-				<div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20"></div>
+			<section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 py-24">
+				<div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20" />
 				<div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-					<h1 className="mb-6 font-bold text-5xl lg:text-6xl text-white">
+					<h1 className="mb-6 font-bold text-5xl text-white lg:text-6xl">
 						Get in Touch with Cognident
 					</h1>
 					<p className="mb-8 text-indigo-100 text-xl leading-relaxed">
@@ -169,7 +168,9 @@ export default function ContactPage() {
 								Get detailed answers to your questions
 							</p>
 							<p className="font-semibold text-blue-600">hello@cognident.org</p>
-							<p className="text-gray-600 text-sm">We respond within 24 hours</p>
+							<p className="text-gray-600 text-sm">
+								We respond within 24 hours
+							</p>
 						</div>
 
 						<div className="rounded-lg border border-gray-700 bg-white p-6 text-center">
@@ -220,7 +221,7 @@ export default function ContactPage() {
 												required
 												value={formData.name}
 												onChange={handleInputChange}
-												className="bg-white border-gray-600 text-gray-900"
+												className="border-gray-600 bg-white text-gray-900"
 												placeholder="Your full name"
 											/>
 										</div>
@@ -238,7 +239,7 @@ export default function ContactPage() {
 												required
 												value={formData.email}
 												onChange={handleInputChange}
-												className="bg-white border-gray-600 text-gray-900"
+												className="border-gray-600 bg-white text-gray-900"
 												placeholder="your@email.com"
 											/>
 										</div>
@@ -257,7 +258,7 @@ export default function ContactPage() {
 											type="text"
 											value={formData.company}
 											onChange={handleInputChange}
-											className="bg-white border-gray-600 text-gray-900"
+											className="border-gray-600 bg-white text-gray-900"
 											placeholder="Your dental practice name"
 										/>
 									</div>
@@ -276,7 +277,7 @@ export default function ContactPage() {
 											required
 											value={formData.subject}
 											onChange={handleInputChange}
-											className="bg-white border-gray-600 text-gray-900"
+											className="border-gray-600 bg-white text-gray-900"
 											placeholder="What can we help you with?"
 										/>
 									</div>
@@ -295,7 +296,7 @@ export default function ContactPage() {
 											rows={6}
 											value={formData.message}
 											onChange={handleInputChange}
-											className="bg-white border-gray-600 text-gray-900"
+											className="border-gray-600 bg-white text-gray-900"
 											placeholder="Tell us more about your needs..."
 										/>
 									</div>
@@ -329,7 +330,7 @@ export default function ContactPage() {
 										<p className="text-gray-600">
 											222 E Van Buren St.
 											<br />
-											Harlingen, TX  78550
+											Harlingen, TX 78550
 											<br />
 											United States
 										</p>

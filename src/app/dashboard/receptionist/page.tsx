@@ -393,7 +393,9 @@ export default function ReceptionistDashboard() {
 						className="w-48"
 					/>
 				</div>
-				<div className="text-gray-600 text-sm">{selectedDate ? formatDate(selectedDate) : ""}</div>
+				<div className="text-gray-600 text-sm">
+					{selectedDate ? formatDate(selectedDate) : ""}
+				</div>
 			</div>
 
 			{/* Today's Schedule */}

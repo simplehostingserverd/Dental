@@ -1,45 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import {
-	DollarSign,
-	Plus,
-	Edit,
-	Eye,
-	Search,
-	Filter,
-	Download,
-	Upload,
-	RefreshCw,
-	Clock,
-	CheckCircle,
-	XCircle,
-	AlertTriangle,
-	TrendingUp,
-	FileText,
-	CreditCard,
-	Building2,
-	User,
-	Calendar,
-	Receipt,
-	Banknote,
-	PieChart,
-	Settings
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { HeaderLogo } from "@/components/ui/tooth-logo";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import {
 	Dialog,
 	DialogContent,
@@ -49,13 +12,56 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HeaderLogo } from "@/components/ui/tooth-logo";
+import {
+	AlertTriangle,
+	Banknote,
+	Building2,
+	Calendar,
+	CheckCircle,
+	Clock,
+	CreditCard,
+	DollarSign,
+	Download,
+	Edit,
+	Eye,
+	FileText,
+	Filter,
+	PieChart,
+	Plus,
+	Receipt,
+	RefreshCw,
+	Search,
+	Settings,
+	TrendingUp,
+	Upload,
+	User,
+	XCircle,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface LedgerEntry {
 	id: string;
 	patientId: string;
 	patientName: string;
 	transactionDate: string;
-	type: "charge" | "payment" | "adjustment" | "refund" | "insurance_payment" | "writeoff";
+	type:
+		| "charge"
+		| "payment"
+		| "adjustment"
+		| "refund"
+		| "insurance_payment"
+		| "writeoff";
 	description: string;
 	procedureCode?: string;
 	amount: number;
@@ -144,10 +150,10 @@ export default function BillingPaymentsPage() {
 			type: "charge",
 			description: "Comprehensive oral evaluation",
 			procedureCode: "D0150",
-			amount: 150.00,
-			balance: 150.00,
+			amount: 150.0,
+			balance: 150.0,
 			status: "posted",
-			createdBy: "Dr. Johnson"
+			createdBy: "Dr. Johnson",
 		},
 		{
 			id: "2",
@@ -156,12 +162,12 @@ export default function BillingPaymentsPage() {
 			transactionDate: "2024-01-20",
 			type: "insurance_payment",
 			description: "Delta Dental payment",
-			amount: -120.00,
-			balance: 30.00,
+			amount: -120.0,
+			balance: 30.0,
 			insurancePayer: "Delta Dental",
 			claimId: "CLM-2024-001",
 			status: "posted",
-			createdBy: "System"
+			createdBy: "System",
 		},
 		{
 			id: "3",
@@ -170,11 +176,11 @@ export default function BillingPaymentsPage() {
 			transactionDate: "2024-01-22",
 			type: "payment",
 			description: "Patient payment - Credit Card",
-			amount: -30.00,
-			balance: 0.00,
+			amount: -30.0,
+			balance: 0.0,
 			paymentMethod: "Credit Card",
 			status: "posted",
-			createdBy: "Reception"
+			createdBy: "Reception",
 		},
 		{
 			id: "4",
@@ -184,11 +190,11 @@ export default function BillingPaymentsPage() {
 			type: "charge",
 			description: "Crown - porcelain fused to metal",
 			procedureCode: "D2750",
-			amount: 1200.00,
-			balance: 1200.00,
+			amount: 1200.0,
+			balance: 1200.0,
 			status: "posted",
-			createdBy: "Dr. Smith"
-		}
+			createdBy: "Dr. Smith",
+		},
 	];
 
 	// Mock data for accounts receivable
@@ -197,42 +203,42 @@ export default function BillingPaymentsPage() {
 			id: "1",
 			patientId: "PAT-002",
 			patientName: "Sarah Johnson",
-			totalBalance: 1200.00,
-			insuranceBalance: 800.00,
-			patientBalance: 400.00,
+			totalBalance: 1200.0,
+			insuranceBalance: 800.0,
+			patientBalance: 400.0,
 			lastPaymentDate: "2024-01-10",
-			lastPaymentAmount: 200.00,
+			lastPaymentAmount: 200.0,
 			agingBuckets: {
-				current: 1200.00,
+				current: 1200.0,
 				days30: 0,
 				days60: 0,
 				days90: 0,
-				days120Plus: 0
+				days120Plus: 0,
 			},
 			lastStatementDate: "2024-01-20",
 			paymentPlan: false,
-			collectionStatus: "current"
+			collectionStatus: "current",
 		},
 		{
 			id: "2",
 			patientId: "PAT-003",
 			patientName: "Michael Brown",
-			totalBalance: 850.00,
+			totalBalance: 850.0,
 			insuranceBalance: 0,
-			patientBalance: 850.00,
+			patientBalance: 850.0,
 			lastPaymentDate: "2023-12-15",
-			lastPaymentAmount: 100.00,
+			lastPaymentAmount: 100.0,
 			agingBuckets: {
 				current: 0,
 				days30: 0,
-				days60: 850.00,
+				days60: 850.0,
 				days90: 0,
-				days120Plus: 0
+				days120Plus: 0,
 			},
 			lastStatementDate: "2024-01-15",
 			paymentPlan: true,
-			collectionStatus: "past_due"
-		}
+			collectionStatus: "past_due",
+		},
 	];
 
 	// Mock data for invoices
@@ -245,20 +251,20 @@ export default function BillingPaymentsPage() {
 			serviceDate: "2024-01-15",
 			invoiceDate: "2024-01-16",
 			dueDate: "2024-02-15",
-			totalAmount: 150.00,
-			paidAmount: 150.00,
-			remainingBalance: 0.00,
+			totalAmount: 150.0,
+			paidAmount: 150.0,
+			remainingBalance: 0.0,
 			status: "paid",
 			procedures: [
 				{
 					procedureCode: "D0150",
 					description: "Comprehensive oral evaluation",
 					quantity: 1,
-					unitPrice: 150.00,
-					totalPrice: 150.00,
-					insuranceCovered: 120.00,
-					patientResponsibility: 30.00
-				}
+					unitPrice: 150.0,
+					totalPrice: 150.0,
+					insuranceCovered: 120.0,
+					patientResponsibility: 30.0,
+				},
 			],
 			paymentLink: "https://pay.cognident.org/inv-2024-001",
 			lastSentDate: "2024-01-16",
@@ -266,12 +272,12 @@ export default function BillingPaymentsPage() {
 				{
 					id: "1",
 					paymentDate: "2024-01-22",
-					amount: 30.00,
+					amount: 30.0,
 					paymentMethod: "Credit Card",
 					transactionId: "TXN-001",
-					processorFee: 1.20
-				}
-			]
+					processorFee: 1.2,
+				},
+			],
 		},
 		{
 			id: "2",
@@ -281,29 +287,30 @@ export default function BillingPaymentsPage() {
 			serviceDate: "2024-01-18",
 			invoiceDate: "2024-01-19",
 			dueDate: "2024-02-18",
-			totalAmount: 1200.00,
-			paidAmount: 0.00,
-			remainingBalance: 1200.00,
+			totalAmount: 1200.0,
+			paidAmount: 0.0,
+			remainingBalance: 1200.0,
 			status: "sent",
 			procedures: [
 				{
 					procedureCode: "D2750",
 					description: "Crown - porcelain fused to metal",
 					quantity: 1,
-					unitPrice: 1200.00,
-					totalPrice: 1200.00,
-					insuranceCovered: 800.00,
-					patientResponsibility: 400.00
-				}
+					unitPrice: 1200.0,
+					totalPrice: 1200.0,
+					insuranceCovered: 800.0,
+					patientResponsibility: 400.0,
+				},
 			],
 			paymentLink: "https://pay.cognident.org/inv-2024-002",
 			lastSentDate: "2024-01-19",
-			paymentHistory: []
-		}
+			paymentHistory: [],
+		},
 	];
 
-	const filteredEntries = ledgerEntries.filter(entry => {
-		const matchesSearch = entry.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	const filteredEntries = ledgerEntries.filter((entry) => {
+		const matchesSearch =
+			entry.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			entry.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			entry.procedureCode?.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -313,7 +320,9 @@ export default function BillingPaymentsPage() {
 		if (dateFilter !== "all") {
 			const entryDate = new Date(entry.transactionDate);
 			const now = new Date();
-			const daysDiff = Math.floor((now.getTime() - entryDate.getTime()) / (1000 * 60 * 60 * 24));
+			const daysDiff = Math.floor(
+				(now.getTime() - entryDate.getTime()) / (1000 * 60 * 60 * 24),
+			);
 
 			switch (dateFilter) {
 				case "7days":
@@ -333,41 +342,59 @@ export default function BillingPaymentsPage() {
 
 	const getTypeColor = (type: string) => {
 		switch (type) {
-			case "charge": return "bg-blue-100 text-blue-800";
-			case "payment": return "bg-green-100 text-green-800";
-			case "insurance_payment": return "bg-purple-100 text-purple-800";
-			case "adjustment": return "bg-yellow-100 text-yellow-800";
-			case "refund": return "bg-red-100 text-red-800";
-			case "writeoff": return "bg-gray-100 text-gray-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "charge":
+				return "bg-blue-100 text-blue-800";
+			case "payment":
+				return "bg-green-100 text-green-800";
+			case "insurance_payment":
+				return "bg-purple-100 text-purple-800";
+			case "adjustment":
+				return "bg-yellow-100 text-yellow-800";
+			case "refund":
+				return "bg-red-100 text-red-800";
+			case "writeoff":
+				return "bg-gray-100 text-gray-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "posted": return "bg-green-100 text-green-800";
-			case "pending": return "bg-yellow-100 text-yellow-800";
-			case "reversed": return "bg-red-100 text-red-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "posted":
+				return "bg-green-100 text-green-800";
+			case "pending":
+				return "bg-yellow-100 text-yellow-800";
+			case "reversed":
+				return "bg-red-100 text-red-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const getInvoiceStatusColor = (status: string) => {
 		switch (status) {
-			case "draft": return "bg-gray-100 text-gray-800";
-			case "sent": return "bg-blue-100 text-blue-800";
-			case "viewed": return "bg-purple-100 text-purple-800";
-			case "paid": return "bg-green-100 text-green-800";
-			case "overdue": return "bg-red-100 text-red-800";
-			case "cancelled": return "bg-gray-100 text-gray-800";
-			default: return "bg-gray-100 text-gray-800";
+			case "draft":
+				return "bg-gray-100 text-gray-800";
+			case "sent":
+				return "bg-blue-100 text-blue-800";
+			case "viewed":
+				return "bg-purple-100 text-purple-800";
+			case "paid":
+				return "bg-green-100 text-green-800";
+			case "overdue":
+				return "bg-red-100 text-red-800";
+			case "cancelled":
+				return "bg-gray-100 text-gray-800";
+			default:
+				return "bg-gray-100 text-gray-800";
 		}
 	};
 
 	const handleAutoPostEOB = async () => {
 		try {
 			const response = await fetch("/api/billing/auto-post-eob", {
-				method: "POST"
+				method: "POST",
 			});
 			if (response.ok) {
 				alert("EOB auto-posting completed!");
@@ -383,7 +410,7 @@ export default function BillingPaymentsPage() {
 	const handleSendStatement = async (patientId: string) => {
 		try {
 			const response = await fetch(`/api/billing/statements/${patientId}`, {
-				method: "POST"
+				method: "POST",
 			});
 			if (response.ok) {
 				alert("Statement sent successfully!");
@@ -398,13 +425,30 @@ export default function BillingPaymentsPage() {
 
 	const billingStats = {
 		totalAR: accountsReceivable.reduce((sum, ar) => sum + ar.totalBalance, 0),
-		insuranceAR: accountsReceivable.reduce((sum, ar) => sum + ar.insuranceBalance, 0),
-		patientAR: accountsReceivable.reduce((sum, ar) => sum + ar.patientBalance, 0),
-		currentAR: accountsReceivable.reduce((sum, ar) => sum + ar.agingBuckets.current, 0),
-		pastDueAR: accountsReceivable.reduce((sum, ar) => sum + ar.agingBuckets.days30 + ar.agingBuckets.days60 + ar.agingBuckets.days90 + ar.agingBuckets.days120Plus, 0),
+		insuranceAR: accountsReceivable.reduce(
+			(sum, ar) => sum + ar.insuranceBalance,
+			0,
+		),
+		patientAR: accountsReceivable.reduce(
+			(sum, ar) => sum + ar.patientBalance,
+			0,
+		),
+		currentAR: accountsReceivable.reduce(
+			(sum, ar) => sum + ar.agingBuckets.current,
+			0,
+		),
+		pastDueAR: accountsReceivable.reduce(
+			(sum, ar) =>
+				sum +
+				ar.agingBuckets.days30 +
+				ar.agingBuckets.days60 +
+				ar.agingBuckets.days90 +
+				ar.agingBuckets.days120Plus,
+			0,
+		),
 		totalInvoices: invoices.length,
-		paidInvoices: invoices.filter(inv => inv.status === "paid").length,
-		overdueInvoices: invoices.filter(inv => inv.status === "overdue").length
+		paidInvoices: invoices.filter((inv) => inv.status === "paid").length,
+		overdueInvoices: invoices.filter((inv) => inv.status === "overdue").length,
 	};
 
 	return (
@@ -421,22 +465,22 @@ export default function BillingPaymentsPage() {
 								<div className="flex items-baseline space-x-4">
 									<Link
 										href="/dashboard"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Dashboard
 									</Link>
-									<span className="rounded-md bg-gray-900 px-3 py-2 text-white text-sm font-medium">
+									<span className="rounded-md bg-gray-900 px-3 py-2 font-medium text-sm text-white">
 										Billing
 									</span>
 									<Link
 										href="/dashboard/claims"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Claims
 									</Link>
 									<Link
 										href="/dashboard/financing"
-										className="rounded-md px-3 py-2 text-gray-500 text-sm font-medium hover:bg-gray-100 hover:text-gray-900"
+										className="rounded-md px-3 py-2 font-medium text-gray-500 text-sm hover:bg-gray-100 hover:text-gray-900"
 									>
 										Financing
 									</Link>
@@ -461,8 +505,12 @@ export default function BillingPaymentsPage() {
 			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="font-bold text-3xl text-gray-900">Billing & Payments</h1>
-					<p className="mt-2 text-gray-600">Manage ledger, accounts receivable, and payment processing</p>
+					<h1 className="font-bold text-3xl text-gray-900">
+						Billing & Payments
+					</h1>
+					<p className="mt-2 text-gray-600">
+						Manage ledger, accounts receivable, and payment processing
+					</p>
 				</div>
 
 				{/* Stats Cards */}
@@ -471,7 +519,7 @@ export default function BillingPaymentsPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Total A/R</p>
+									<p className="font-medium text-gray-600 text-sm">Total A/R</p>
 									<p className="font-bold text-2xl text-gray-900">
 										${billingStats.totalAR.toLocaleString()}
 									</p>
@@ -487,12 +535,18 @@ export default function BillingPaymentsPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Insurance A/R</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Insurance A/R
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
 										${billingStats.insuranceAR.toLocaleString()}
 									</p>
 									<p className="text-blue-600 text-sm">
-										{((billingStats.insuranceAR / billingStats.totalAR) * 100).toFixed(1)}% of total
+										{(
+											(billingStats.insuranceAR / billingStats.totalAR) *
+											100
+										).toFixed(1)}
+										% of total
 									</p>
 								</div>
 								<Building2 className="h-8 w-8 text-purple-600" />
@@ -503,12 +557,18 @@ export default function BillingPaymentsPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Patient A/R</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Patient A/R
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
 										${billingStats.patientAR.toLocaleString()}
 									</p>
 									<p className="text-green-600 text-sm">
-										{((billingStats.patientAR / billingStats.totalAR) * 100).toFixed(1)}% of total
+										{(
+											(billingStats.patientAR / billingStats.totalAR) *
+											100
+										).toFixed(1)}
+										% of total
 									</p>
 								</div>
 								<User className="h-8 w-8 text-green-600" />
@@ -519,10 +579,18 @@ export default function BillingPaymentsPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center justify-between">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">Collection Rate</p>
+									<p className="font-medium text-gray-600 text-sm">
+										Collection Rate
+									</p>
 									<p className="font-bold text-2xl text-gray-900">
-										{billingStats.totalInvoices > 0 ?
-											((billingStats.paidInvoices / billingStats.totalInvoices) * 100).toFixed(1) : 0}%
+										{billingStats.totalInvoices > 0
+											? (
+													(billingStats.paidInvoices /
+														billingStats.totalInvoices) *
+													100
+												).toFixed(1)
+											: 0}
+										%
 									</p>
 									<p className="text-orange-600 text-sm">
 										{billingStats.overdueInvoices} overdue
@@ -548,12 +616,12 @@ export default function BillingPaymentsPage() {
 						<div className="mb-6 flex flex-wrap items-center justify-between gap-4">
 							<div className="flex space-x-4">
 								<div className="relative">
-									<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+									<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
 									<Input
 										placeholder="Search transactions..."
 										value={searchTerm}
 										onChange={(e) => setSearchTerm(e.target.value)}
-										className="pl-10 w-64"
+										className="w-64 pl-10"
 									/>
 								</div>
 								<Select value={filterType} onValueChange={setFilterType}>
@@ -594,44 +662,62 @@ export default function BillingPaymentsPage() {
 							<CardContent>
 								<div className="space-y-4">
 									{filteredEntries.map((entry) => (
-										<div key={entry.id} className="rounded-lg border border-gray-200 bg-white p-4">
+										<div
+											key={entry.id}
+											className="rounded-lg border border-gray-200 bg-white p-4"
+										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<span className="font-medium text-gray-900">{entry.patientName}</span>
+														<span className="font-medium text-gray-900">
+															{entry.patientName}
+														</span>
 														<Badge className={getTypeColor(entry.type)}>
-															{entry.type.replace('_', ' ')}
+															{entry.type.replace("_", " ")}
 														</Badge>
 														<Badge className={getStatusColor(entry.status)}>
 															{entry.status}
 														</Badge>
 													</div>
-													<div className="mt-2 grid grid-cols-3 gap-4 text-sm text-gray-600">
+													<div className="mt-2 grid grid-cols-3 gap-4 text-gray-600 text-sm">
 														<div>
-															<span className="font-medium">Date:</span> {entry.transactionDate}
+															<span className="font-medium">Date:</span>{" "}
+															{entry.transactionDate}
 														</div>
 														<div>
-															<span className="font-medium">Description:</span> {entry.description}
+															<span className="font-medium">Description:</span>{" "}
+															{entry.description}
 														</div>
 														<div>
-															<span className="font-medium">Procedure:</span> {entry.procedureCode || "N/A"}
+															<span className="font-medium">Procedure:</span>{" "}
+															{entry.procedureCode || "N/A"}
 														</div>
 														<div>
 															<span className="font-medium">Amount:</span>
-															<span className={entry.amount >= 0 ? "text-red-600" : "text-green-600"}>
+															<span
+																className={
+																	entry.amount >= 0
+																		? "text-red-600"
+																		: "text-green-600"
+																}
+															>
 																${Math.abs(entry.amount).toFixed(2)}
 															</span>
 														</div>
 														<div>
-															<span className="font-medium">Balance:</span> ${entry.balance.toFixed(2)}
+															<span className="font-medium">Balance:</span> $
+															{entry.balance.toFixed(2)}
 														</div>
 														<div>
-															<span className="font-medium">Created By:</span> {entry.createdBy}
+															<span className="font-medium">Created By:</span>{" "}
+															{entry.createdBy}
 														</div>
 													</div>
 													{entry.notes && (
 														<div className="mt-2 rounded bg-gray-50 p-2">
-															<p className="text-gray-700 text-sm">{entry.notes}</p>
+															<p className="text-gray-700 text-sm">
+																{entry.notes}
+															</p>
 														</div>
 													)}
 												</div>
@@ -644,10 +730,7 @@ export default function BillingPaymentsPage() {
 														<Eye className="h-4 w-4" />
 													</Button>
 													{entry.status === "pending" && (
-														<Button
-															variant="outline"
-															size="sm"
-														>
+														<Button variant="outline" size="sm">
 															<Edit className="h-4 w-4" />
 														</Button>
 													)}
@@ -668,38 +751,68 @@ export default function BillingPaymentsPage() {
 							<CardContent>
 								<div className="space-y-4">
 									{accountsReceivable.map((ar) => (
-										<div key={ar.id} className="rounded-lg border border-gray-200 bg-white p-4">
+										<div
+											key={ar.id}
+											className="rounded-lg border border-gray-200 bg-white p-4"
+										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<h3 className="font-medium text-gray-900">{ar.patientName}</h3>
-														<Badge className={ar.collectionStatus === "current" ? "bg-green-100 text-green-800" :
-															ar.collectionStatus === "past_due" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"}>
-															{ar.collectionStatus?.replace('_', ' ')}
+														<h3 className="font-medium text-gray-900">
+															{ar.patientName}
+														</h3>
+														<Badge
+															className={
+																ar.collectionStatus === "current"
+																	? "bg-green-100 text-green-800"
+																	: ar.collectionStatus === "past_due"
+																		? "bg-yellow-100 text-yellow-800"
+																		: "bg-red-100 text-red-800"
+															}
+														>
+															{ar.collectionStatus?.replace("_", " ")}
 														</Badge>
 														{ar.paymentPlan && (
 															<Badge variant="outline">Payment Plan</Badge>
 														)}
 													</div>
-													<div className="mt-2 grid grid-cols-3 gap-4 text-sm text-gray-600">
+													<div className="mt-2 grid grid-cols-3 gap-4 text-gray-600 text-sm">
 														<div>
-															<span className="font-medium">Total Balance:</span> ${ar.totalBalance.toFixed(2)}
+															<span className="font-medium">
+																Total Balance:
+															</span>{" "}
+															${ar.totalBalance.toFixed(2)}
 														</div>
 														<div>
-															<span className="font-medium">Insurance:</span> ${ar.insuranceBalance.toFixed(2)}
+															<span className="font-medium">Insurance:</span> $
+															{ar.insuranceBalance.toFixed(2)}
 														</div>
 														<div>
-															<span className="font-medium">Patient:</span> ${ar.patientBalance.toFixed(2)}
+															<span className="font-medium">Patient:</span> $
+															{ar.patientBalance.toFixed(2)}
 														</div>
 													</div>
 													<div className="mt-3">
-														<h4 className="font-medium text-gray-900 text-sm">Aging Buckets:</h4>
-														<div className="mt-1 grid grid-cols-5 gap-4 text-sm text-gray-600">
-															<div>Current: ${ar.agingBuckets.current.toFixed(2)}</div>
-															<div>30 days: ${ar.agingBuckets.days30.toFixed(2)}</div>
-															<div>60 days: ${ar.agingBuckets.days60.toFixed(2)}</div>
-															<div>90 days: ${ar.agingBuckets.days90.toFixed(2)}</div>
-															<div>120+ days: ${ar.agingBuckets.days120Plus.toFixed(2)}</div>
+														<h4 className="font-medium text-gray-900 text-sm">
+															Aging Buckets:
+														</h4>
+														<div className="mt-1 grid grid-cols-5 gap-4 text-gray-600 text-sm">
+															<div>
+																Current: ${ar.agingBuckets.current.toFixed(2)}
+															</div>
+															<div>
+																30 days: ${ar.agingBuckets.days30.toFixed(2)}
+															</div>
+															<div>
+																60 days: ${ar.agingBuckets.days60.toFixed(2)}
+															</div>
+															<div>
+																90 days: ${ar.agingBuckets.days90.toFixed(2)}
+															</div>
+															<div>
+																120+ days: $
+																{ar.agingBuckets.days120Plus.toFixed(2)}
+															</div>
 														</div>
 													</div>
 												</div>
@@ -734,40 +847,58 @@ export default function BillingPaymentsPage() {
 							<CardContent>
 								<div className="space-y-4">
 									{invoices.map((invoice) => (
-										<div key={invoice.id} className="rounded-lg border border-gray-200 bg-white p-4">
+										<div
+											key={invoice.id}
+											className="rounded-lg border border-gray-200 bg-white p-4"
+										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<h3 className="font-medium text-gray-900">{invoice.invoiceNumber}</h3>
-														<Badge className={getInvoiceStatusColor(invoice.status)}>
+														<h3 className="font-medium text-gray-900">
+															{invoice.invoiceNumber}
+														</h3>
+														<Badge
+															className={getInvoiceStatusColor(invoice.status)}
+														>
 															{invoice.status}
 														</Badge>
 													</div>
-													<div className="mt-2 grid grid-cols-3 gap-4 text-sm text-gray-600">
+													<div className="mt-2 grid grid-cols-3 gap-4 text-gray-600 text-sm">
 														<div>
-															<span className="font-medium">Patient:</span> {invoice.patientName}
+															<span className="font-medium">Patient:</span>{" "}
+															{invoice.patientName}
 														</div>
 														<div>
-															<span className="font-medium">Service Date:</span> {invoice.serviceDate}
+															<span className="font-medium">Service Date:</span>{" "}
+															{invoice.serviceDate}
 														</div>
 														<div>
-															<span className="font-medium">Due Date:</span> {invoice.dueDate}
+															<span className="font-medium">Due Date:</span>{" "}
+															{invoice.dueDate}
 														</div>
 														<div>
-															<span className="font-medium">Total Amount:</span> ${invoice.totalAmount.toFixed(2)}
+															<span className="font-medium">Total Amount:</span>{" "}
+															${invoice.totalAmount.toFixed(2)}
 														</div>
 														<div>
-															<span className="font-medium">Paid Amount:</span> ${invoice.paidAmount.toFixed(2)}
+															<span className="font-medium">Paid Amount:</span>{" "}
+															${invoice.paidAmount.toFixed(2)}
 														</div>
 														<div>
-															<span className="font-medium">Remaining:</span> ${invoice.remainingBalance.toFixed(2)}
+															<span className="font-medium">Remaining:</span> $
+															{invoice.remainingBalance.toFixed(2)}
 														</div>
 													</div>
 													{invoice.paymentLink && (
 														<div className="mt-2 rounded bg-blue-50 p-2">
 															<p className="text-blue-800 text-sm">
 																<strong>Payment Link:</strong>
-																<a href={invoice.paymentLink} className="ml-1 underline" target="_blank" rel="noopener noreferrer">
+																<a
+																	href={invoice.paymentLink}
+																	className="ml-1 underline"
+																	target="_blank"
+																	rel="noopener noreferrer"
+																>
 																	{invoice.paymentLink}
 																</a>
 															</p>
@@ -775,10 +906,7 @@ export default function BillingPaymentsPage() {
 													)}
 												</div>
 												<div className="flex space-x-2">
-													<Button
-														variant="outline"
-														size="sm"
-													>
+													<Button variant="outline" size="sm">
 														<Eye className="h-4 w-4" />
 													</Button>
 													{invoice.status !== "paid" && (
@@ -804,10 +932,14 @@ export default function BillingPaymentsPage() {
 								<CardTitle>Online Payment Portal</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="text-center py-8">
+								<div className="py-8 text-center">
 									<CreditCard className="mx-auto h-12 w-12 text-gray-400" />
-									<h3 className="mt-4 font-medium text-gray-900">Payment Portal Management</h3>
-									<p className="mt-2 text-gray-600">Configure and manage online payment portals for patients</p>
+									<h3 className="mt-4 font-medium text-gray-900">
+										Payment Portal Management
+									</h3>
+									<p className="mt-2 text-gray-600">
+										Configure and manage online payment portals for patients
+									</p>
 									<div className="mt-6 flex justify-center space-x-4">
 										<Button>
 											<Plus className="mr-2 h-4 w-4" />

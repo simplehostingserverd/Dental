@@ -510,7 +510,7 @@ export default function ProfilePage() {
 								<button
 									type="submit"
 									disabled={isSaving}
-									className="flex items-center rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-gray-900 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+									className="flex items-center rounded-md bg-blue-600 px-4 py-2 font-medium text-gray-900 text-sm hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 								>
 									{isSaving ? (
 										<div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

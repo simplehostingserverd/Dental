@@ -37,12 +37,14 @@ export const createTRPCContext = async (opts: {
 	const practiceId = opts.headers.get("x-practice-id");
 	const userRole = opts.headers.get("x-user-role");
 
-	const user = userId ? {
-		id: userId,
-		email: userEmail,
-		practiceId,
-		role: userRole,
-	} : null;
+	const user = userId
+		? {
+				id: userId,
+				email: userEmail,
+				practiceId,
+				role: userRole,
+			}
+		: null;
 
 	return {
 		db,

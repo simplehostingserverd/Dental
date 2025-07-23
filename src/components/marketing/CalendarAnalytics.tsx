@@ -200,7 +200,11 @@ export default function CalendarAnalytics({
 				<div className="flex items-center space-x-3">
 					<Select
 						value={selectedTimeframe}
-						onValueChange={(value) => setSelectedTimeframe(value as "year" | "week" | "month" | "quarter")}
+						onValueChange={(value) =>
+							setSelectedTimeframe(
+								value as "year" | "week" | "month" | "quarter",
+							)
+						}
 					>
 						<SelectTrigger className="w-32">
 							<SelectValue />
