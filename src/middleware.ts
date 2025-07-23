@@ -74,10 +74,12 @@ export async function middleware(request: NextRequest) {
 		}
 	}
 
-	// Check for protected routes
+	// Check for protected routes (including Spanish routes)
 	if (
 		pathnameWithoutLocale.startsWith("/dashboard") ||
-		pathnameWithoutLocale.startsWith("/receptionist")
+		pathnameWithoutLocale.startsWith("/receptionist") ||
+		pathname.startsWith("/es/receptionist") ||
+		pathname.startsWith("/es/dashboard")
 	) {
 		try {
 			// Check for practice authentication token
@@ -135,12 +137,15 @@ export async function middleware(request: NextRequest) {
 				return applySecurityMiddleware(request, response);
 			}
 
-			// No authentication found, redirect to login
+			// No authentication found, redirect to appropriate login
 			logger.warn("Authentication failed - redirecting to login", {
 				pathname,
 				ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown",
 			});
-			return NextResponse.redirect(new URL("/auth/signin", request.url));
+
+			// Redirect to Spanish login for Spanish routes
+			const loginUrl = pathname.startsWith("/es/") ? "/es/auth/signin" : "/auth/signin";
+			return NextResponse.redirect(new URL(loginUrl, request.url));
 		} catch (error) {
 			// Log the error
 			logger.error("Authentication error in middleware", 
@@ -148,8 +153,9 @@ export async function middleware(request: NextRequest) {
 				error
 			);
 			
-			// Invalid token, redirect to login
-			return NextResponse.redirect(new URL("/auth/signin", request.url));
+			// Invalid token, redirect to appropriate login
+			const loginUrl = pathname.startsWith("/es/") ? "/es/auth/signin" : "/auth/signin";
+			return NextResponse.redirect(new URL(loginUrl, request.url));
 		}
 	}
 

@@ -13,17 +13,17 @@ import {
 	UserCheck,
 	FileText,
 	CreditCard,
-	Camera,
-	Printer,
-	QrCode
+	Stethoscope,
+	MapPin,
+	Timer,
+	Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { HeaderLogo } from "@/components/ui/tooth-logo";
+import { Textarea } from "@/components/ui/textarea";
 import {
 	Select,
 	SelectContent,
@@ -31,75 +31,72 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Spanish translations
 const translations = {
 	title: "Check-in de Pacientes",
 	subtitle: "Gestiona el registro de llegada de pacientes",
 	todayAppointments: "Citas de Hoy",
-	checkInProcess: "Proceso de Check-in",
 	searchPatient: "Buscar paciente...",
 	patientInfo: "Información del Paciente",
 	appointmentDetails: "Detalles de la Cita",
-	checkInNotes: "Notas de Check-in",
-	paymentStatus: "Estado de Pago",
-	documents: "Documentos",
+	checkInProcess: "Proceso de Check-in",
+	waitingRoom: "Sala de Espera",
 	checkIn: "Registrar Llegada",
 	checkOut: "Registrar Salida",
 	noShow: "No Asistió",
-	reschedule: "Reprogramar",
-	cancel: "Cancelar",
-	print: "Imprimir",
+	arrived: "Llegó",
+	waiting: "Esperando",
+	inTreatment: "En Tratamiento",
+	completed: "Completado",
+	cancelled: "Cancelado",
 	navigation: {
 		dashboard: "Panel Principal",
 		appointments: "Citas",
 		patients: "Pacientes",
 		communications: "Comunicaciones"
 	},
-	appointmentStatus: {
-		scheduled: "Programada",
-		confirmed: "Confirmada",
-		checkedIn: "Registrado",
-		inProgress: "En Progreso",
-		completed: "Completada",
-		cancelled: "Cancelada",
-		noShow: "No Asistió"
+	checkInSteps: {
+		arrival: "Llegada",
+		documentation: "Documentación",
+		payment: "Pago",
+		waiting: "Sala de Espera",
+		treatment: "Tratamiento"
 	},
-	paymentStatus: {
-		pending: "Pendiente",
-		partial: "Parcial",
-		paid: "Pagado",
-		insurance: "Seguro"
+	actions: {
+		checkIn: "Check-in",
+		viewDetails: "Ver Detalles",
+		updateStatus: "Actualizar Estado",
+		sendToTreatment: "Enviar a Tratamiento",
+		markCompleted: "Marcar Completado"
 	}
 };
 
-interface TodayAppointment {
+interface Patient {
+	id: string;
+	name: string;
+	phone: string;
+	email: string;
+	emergencyContact?: string;
+}
+
+interface Appointment {
 	id: string;
 	time: string;
-	patient: {
-		id: string;
-		name: string;
-		phone: string;
-		email: string;
-		dateOfBirth: string;
-		address: string;
-		emergencyContact: string;
-	};
+	duration: number;
+	patient: Patient;
 	dentist: string;
 	treatment: string;
-	duration: number;
-	status: "scheduled" | "confirmed" | "checkedIn" | "inProgress" | "completed" | "cancelled" | "noShow";
-	paymentStatus: "pending" | "partial" | "paid" | "insurance";
-	estimatedCost: number;
-	notes?: string;
+	status: "scheduled" | "arrived" | "waiting" | "inTreatment" | "completed" | "cancelled" | "noShow";
 	checkInTime?: string;
-	checkOutTime?: string;
+	notes?: string;
+	paymentStatus: "pending" | "partial" | "completed";
+	insuranceVerified: boolean;
 }
 
 export default function SpanishCheckInPage() {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [selectedAppointment, setSelectedAppointment] = useState<TodayAppointment | null>(null);
+	const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 	const [checkInNotes, setCheckInNotes] = useState("");
 	const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -110,111 +107,95 @@ export default function SpanishCheckInPage() {
 	}, []);
 
 	// Mock data for today's appointments
-	const todayAppointments: TodayAppointment[] = [
+	const appointments: Appointment[] = [
 		{
 			id: "1",
 			time: "09:00",
+			duration: 30,
 			patient: {
-				id: "p1",
+				id: "1",
 				name: "María González",
 				phone: "+52 55 1234 5678",
 				email: "maria@email.com",
-				dateOfBirth: "1985-03-15",
-				address: "Av. Reforma 123, Col. Centro, CDMX",
 				emergencyContact: "+52 55 9876 5432"
 			},
 			dentist: "Dr. Roberto Sánchez",
 			treatment: "Limpieza Dental",
-			duration: 30,
-			status: "confirmed",
-			paymentStatus: "pending",
-			estimatedCost: 800,
-			notes: "Primera visita del año"
+			status: "arrived",
+			checkInTime: "08:55",
+			paymentStatus: "completed",
+			insuranceVerified: true
 		},
 		{
 			id: "2",
 			time: "09:30",
+			duration: 60,
 			patient: {
-				id: "p2",
+				id: "2",
 				name: "Carlos Hernández",
 				phone: "+52 55 2345 6789",
-				email: "carlos@email.com",
-				dateOfBirth: "1978-07-22",
-				address: "Calle Juárez 456, Col. Roma, CDMX",
-				emergencyContact: "+52 55 8765 4321"
+				email: "carlos@email.com"
 			},
 			dentist: "Dra. Patricia Mendoza",
 			treatment: "Endodoncia",
-			duration: 90,
-			status: "checkedIn",
-			paymentStatus: "insurance",
-			estimatedCost: 3500,
+			status: "waiting",
 			checkInTime: "09:25",
-			notes: "Paciente con seguro dental"
+			paymentStatus: "partial",
+			insuranceVerified: false
 		},
 		{
 			id: "3",
-			time: "11:00",
+			time: "10:30",
+			duration: 45,
 			patient: {
-				id: "p3",
+				id: "3",
 				name: "Ana López",
 				phone: "+52 55 3456 7890",
-				email: "ana@email.com",
-				dateOfBirth: "1992-11-08",
-				address: "Insurgentes Sur 789, Col. Del Valle, CDMX",
-				emergencyContact: "+52 55 7654 3210"
+				email: "ana@email.com"
 			},
 			dentist: "Dr. Roberto Sánchez",
 			treatment: "Empaste",
-			duration: 45,
-			status: "scheduled",
-			paymentStatus: "pending",
-			estimatedCost: 1200
+			status: "inTreatment",
+			checkInTime: "10:25",
+			paymentStatus: "completed",
+			insuranceVerified: true
 		},
 		{
 			id: "4",
-			time: "14:00",
+			time: "11:15",
+			duration: 30,
 			patient: {
-				id: "p4",
+				id: "4",
 				name: "Luis Morales",
 				phone: "+52 55 4567 8901",
-				email: "luis@email.com",
-				dateOfBirth: "1980-05-30",
-				address: "Polanco 321, Col. Polanco, CDMX",
-				emergencyContact: "+52 55 6543 2109"
+				email: "luis@email.com"
 			},
 			dentist: "Dr. Miguel Torres",
 			treatment: "Revisión General",
-			duration: 30,
-			status: "completed",
-			paymentStatus: "paid",
-			estimatedCost: 600,
-			checkInTime: "13:55",
-			checkOutTime: "14:35"
+			status: "scheduled",
+			paymentStatus: "pending",
+			insuranceVerified: false
 		},
 		{
 			id: "5",
-			time: "15:30",
+			time: "14:00",
+			duration: 90,
 			patient: {
-				id: "p5",
+				id: "5",
 				name: "Carmen Ruiz",
 				phone: "+52 55 5678 9012",
-				email: "carmen@email.com",
-				dateOfBirth: "1975-12-12",
-				address: "Condesa 654, Col. Condesa, CDMX",
-				emergencyContact: "+52 55 5432 1098"
+				email: "carmen@email.com"
 			},
 			dentist: "Dra. Laura Jiménez",
 			treatment: "Implante",
-			duration: 120,
 			status: "scheduled",
-			paymentStatus: "partial",
-			estimatedCost: 8500,
-			notes: "Pago inicial realizado"
+			paymentStatus: "pending",
+			insuranceVerified: true
 		}
 	];
 
-	const filteredAppointments = todayAppointments.filter(appointment =>
+	// Filter appointments
+	const filteredAppointments = appointments.filter(appointment =>
 		appointment.patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 		appointment.patient.phone.includes(searchTerm) ||
 		appointment.treatment.toLowerCase().includes(searchTerm.toLowerCase())
@@ -223,9 +204,9 @@ export default function SpanishCheckInPage() {
 	const getStatusColor = (status: string) => {
 		switch (status) {
 			case "scheduled": return "bg-blue-100 text-blue-800";
-			case "confirmed": return "bg-green-100 text-green-800";
-			case "checkedIn": return "bg-purple-100 text-purple-800";
-			case "inProgress": return "bg-yellow-100 text-yellow-800";
+			case "arrived": return "bg-green-100 text-green-800";
+			case "waiting": return "bg-yellow-100 text-yellow-800";
+			case "inTreatment": return "bg-purple-100 text-purple-800";
 			case "completed": return "bg-gray-100 text-gray-800";
 			case "cancelled": return "bg-red-100 text-red-800";
 			case "noShow": return "bg-orange-100 text-orange-800";
@@ -233,67 +214,60 @@ export default function SpanishCheckInPage() {
 		}
 	};
 
+	const getStatusIcon = (status: string) => {
+		switch (status) {
+			case "arrived": return <UserCheck className="h-3 w-3" />;
+			case "waiting": return <Clock className="h-3 w-3" />;
+			case "inTreatment": return <Stethoscope className="h-3 w-3" />;
+			case "completed": return <CheckCircle className="h-3 w-3" />;
+			case "cancelled": return <AlertCircle className="h-3 w-3" />;
+			default: return <Calendar className="h-3 w-3" />;
+		}
+	};
+
 	const getPaymentStatusColor = (status: string) => {
 		switch (status) {
-			case "pending": return "bg-red-100 text-red-800";
+			case "completed": return "bg-green-100 text-green-800";
 			case "partial": return "bg-yellow-100 text-yellow-800";
-			case "paid": return "bg-green-100 text-green-800";
-			case "insurance": return "bg-blue-100 text-blue-800";
+			case "pending": return "bg-red-100 text-red-800";
 			default: return "bg-gray-100 text-gray-800";
 		}
 	};
 
-	const handleCheckIn = async (appointmentId: string) => {
-		try {
-			// Here you would call the API to check in the patient
-			console.log("Checking in appointment:", appointmentId);
-			
-			// Update the appointment status locally for demo
-			const appointment = todayAppointments.find(a => a.id === appointmentId);
-			if (appointment) {
-				appointment.status = "checkedIn";
-				appointment.checkInTime = currentTime.toLocaleTimeString('es-MX', { 
-					hour: '2-digit', 
-					minute: '2-digit' 
-				});
-			}
-			
-			alert("Paciente registrado exitosamente");
-		} catch (error) {
-			console.error("Error checking in patient:", error);
-			alert("Error al registrar al paciente");
+	const handleCheckIn = (appointmentId: string) => {
+		// Here you would call the API to update the appointment status
+		console.log("Checking in appointment:", appointmentId);
+		// Update local state for demo
+		const appointment = appointments.find(a => a.id === appointmentId);
+		if (appointment) {
+			appointment.status = "arrived";
+			appointment.checkInTime = currentTime.toLocaleTimeString('es-MX', { 
+				hour: '2-digit', 
+				minute: '2-digit' 
+			});
 		}
 	};
 
-	const handleStatusUpdate = async (appointmentId: string, newStatus: string) => {
-		try {
-			// Here you would call the API to update the appointment status
-			console.log("Updating appointment status:", appointmentId, newStatus);
-			
-			const appointment = todayAppointments.find(a => a.id === appointmentId);
-			if (appointment) {
-				appointment.status = newStatus as any;
-				if (newStatus === "completed") {
-					appointment.checkOutTime = currentTime.toLocaleTimeString('es-MX', { 
-						hour: '2-digit', 
-						minute: '2-digit' 
-					});
-				}
-			}
-			
-			alert("Estado actualizado exitosamente");
-		} catch (error) {
-			console.error("Error updating appointment status:", error);
-			alert("Error al actualizar el estado");
-		}
+	const handleStatusUpdate = (appointmentId: string, newStatus: string) => {
+		// Here you would call the API to update the appointment status
+		console.log("Updating status:", appointmentId, newStatus);
 	};
 
-	const formatCurrency = (amount: number) => {
-		return new Intl.NumberFormat('es-MX', {
-			style: 'currency',
-			currency: 'MXN'
-		}).format(amount);
+	const getWaitingTime = (checkInTime?: string) => {
+		if (!checkInTime) return null;
+		const timeParts = checkInTime.split(':').map(Number);
+		if (timeParts.length !== 2) return null;
+		const [hours, minutes] = timeParts;
+		if (hours === undefined || minutes === undefined) return null;
+		const checkIn = new Date();
+		checkIn.setHours(hours, minutes, 0, 0);
+		const now = new Date();
+		const diffMs = now.getTime() - checkIn.getTime();
+		const diffMins = Math.floor(diffMs / (1000 * 60));
+		return diffMins;
 	};
+
+	const waitingPatients = appointments.filter(a => a.status === "waiting" || a.status === "arrived");
 
 	return (
 		<div className="min-h-screen bg-gray-900 text-white">
@@ -334,17 +308,12 @@ export default function SpanishCheckInPage() {
 								</div>
 							</div>
 						</div>
-						<div className="flex items-center space-x-4">
-							<span className="text-gray-300 text-sm">
-								{currentTime.toLocaleString('es-MX', {
-									weekday: 'long',
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric',
-									hour: '2-digit',
-									minute: '2-digit'
-								})}
-							</span>
+						<div className="text-gray-300 text-sm">
+							{currentTime.toLocaleString('es-MX', {
+								weekday: 'long',
+								hour: '2-digit',
+								minute: '2-digit'
+							})}
 						</div>
 					</div>
 				</div>
@@ -358,25 +327,22 @@ export default function SpanishCheckInPage() {
 					<p className="mt-2 text-gray-400">{translations.subtitle}</p>
 				</div>
 
-				<div className="grid gap-8 lg:grid-cols-2">
+				<div className="grid gap-8 lg:grid-cols-3">
 					{/* Today's Appointments */}
-					<div>
+					<div className="lg:col-span-2">
 						<Card className="border-gray-700 bg-gray-800">
 							<CardHeader>
 								<div className="flex items-center justify-between">
 									<CardTitle className="text-white">{translations.todayAppointments}</CardTitle>
-									<Badge variant="outline" className="border-gray-600 text-gray-300">
-										{filteredAppointments.length} citas
-									</Badge>
-								</div>
-								<div className="relative">
-									<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-									<Input
-										placeholder={translations.searchPatient}
-										value={searchTerm}
-										onChange={(e) => setSearchTerm(e.target.value)}
-										className="border-gray-600 bg-gray-700 pl-10 text-white placeholder-gray-400"
-									/>
+									<div className="relative">
+										<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+										<Input
+											placeholder={translations.searchPatient}
+											value={searchTerm}
+											onChange={(e) => setSearchTerm(e.target.value)}
+											className="border-gray-600 bg-gray-700 pl-10 text-white placeholder-gray-400 w-64"
+										/>
+									</div>
 								</div>
 							</CardHeader>
 							<CardContent>
@@ -384,76 +350,109 @@ export default function SpanishCheckInPage() {
 									{filteredAppointments.map((appointment) => (
 										<div
 											key={appointment.id}
-											className={`cursor-pointer rounded-lg border p-4 transition-colors ${
-												selectedAppointment?.id === appointment.id
-													? "border-blue-500 bg-blue-900/20"
-													: "border-gray-700 bg-gray-900 hover:bg-gray-800"
-											}`}
-											onClick={() => setSelectedAppointment(appointment)}
+											className="rounded-lg border border-gray-700 bg-gray-900 p-4 transition-colors hover:bg-gray-800"
 										>
 											<div className="flex items-start justify-between">
 												<div className="flex-1">
 													<div className="flex items-center space-x-3">
-														<Clock className="h-4 w-4 text-gray-400" />
-														<span className="font-medium text-white">{appointment.time}</span>
+														<div className="flex items-center space-x-2">
+															<Clock className="h-4 w-4 text-gray-400" />
+															<span className="font-medium text-white">
+																{appointment.time} ({appointment.duration} min)
+															</span>
+														</div>
 														<Badge className={getStatusColor(appointment.status)}>
-															{translations.appointmentStatus[appointment.status]}
+															{getStatusIcon(appointment.status)}
+															<span className="ml-1">
+																{appointment.status === "scheduled" ? "Programada" :
+																 appointment.status === "arrived" ? "Llegó" :
+																 appointment.status === "waiting" ? "Esperando" :
+																 appointment.status === "inTreatment" ? "En Tratamiento" :
+																 appointment.status === "completed" ? "Completado" :
+																 appointment.status === "cancelled" ? "Cancelado" :
+																 appointment.status === "noShow" ? "No Asistió" :
+																 appointment.status}
+															</span>
 														</Badge>
+														{appointment.checkInTime && (
+															<Badge variant="outline" className="border-gray-600 text-gray-300">
+																<Timer className="mr-1 h-3 w-3" />
+																{getWaitingTime(appointment.checkInTime)} min
+															</Badge>
+														)}
 													</div>
 													<div className="mt-2">
 														<div className="flex items-center space-x-2">
 															<User className="h-4 w-4 text-gray-400" />
 															<span className="font-medium text-white">{appointment.patient.name}</span>
+															<span className="text-gray-400">•</span>
+															<span className="text-gray-400">{appointment.patient.phone}</span>
 														</div>
 														<div className="mt-1 text-gray-300 text-sm">
-															{appointment.dentist} • {appointment.treatment}
+															<span className="font-medium">{appointment.dentist}</span> • {appointment.treatment}
 														</div>
-														<div className="mt-1 flex items-center space-x-4 text-gray-400 text-sm">
-															<span>{appointment.duration} min</span>
+														<div className="mt-2 flex items-center space-x-4">
 															<Badge className={getPaymentStatusColor(appointment.paymentStatus)}>
-																{translations.paymentStatus[appointment.paymentStatus]}
+																<CreditCard className="mr-1 h-3 w-3" />
+																{appointment.paymentStatus === "completed" ? "Pagado" : 
+																 appointment.paymentStatus === "partial" ? "Pago Parcial" : "Pendiente"}
+															</Badge>
+															<Badge className={appointment.insuranceVerified ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
+																<FileText className="mr-1 h-3 w-3" />
+																{appointment.insuranceVerified ? "Seguro Verificado" : "Verificar Seguro"}
 															</Badge>
 														</div>
 													</div>
 												</div>
-												<div className="flex flex-col items-end space-y-2">
-													{appointment.status === "confirmed" && (
+												<div className="flex flex-col space-y-2">
+													{appointment.status === "scheduled" && (
 														<Button
 															size="sm"
-															onClick={(e) => {
-																e.stopPropagation();
-																handleCheckIn(appointment.id);
-															}}
+															onClick={() => handleCheckIn(appointment.id)}
 															className="bg-green-600 hover:bg-green-700"
 														>
-															<UserCheck className="mr-1 h-3 w-3" />
-															Check-in
+															<UserCheck className="mr-2 h-4 w-4" />
+															{translations.actions.checkIn}
 														</Button>
 													)}
-													{appointment.status === "checkedIn" && (
+													{appointment.status === "arrived" && (
 														<Button
 															size="sm"
-															onClick={(e) => {
-																e.stopPropagation();
-																handleStatusUpdate(appointment.id, "inProgress");
-															}}
+															onClick={() => handleStatusUpdate(appointment.id, "waiting")}
 															className="bg-yellow-600 hover:bg-yellow-700"
 														>
-															Iniciar
+															<Clock className="mr-2 h-4 w-4" />
+															A Sala de Espera
 														</Button>
 													)}
-													{appointment.status === "inProgress" && (
+													{appointment.status === "waiting" && (
 														<Button
 															size="sm"
-															onClick={(e) => {
-																e.stopPropagation();
-																handleStatusUpdate(appointment.id, "completed");
-															}}
-															className="bg-blue-600 hover:bg-blue-700"
+															onClick={() => handleStatusUpdate(appointment.id, "inTreatment")}
+															className="bg-purple-600 hover:bg-purple-700"
 														>
-															Completar
+															<Stethoscope className="mr-2 h-4 w-4" />
+															{translations.actions.sendToTreatment}
 														</Button>
 													)}
+													{appointment.status === "inTreatment" && (
+														<Button
+															size="sm"
+															onClick={() => handleStatusUpdate(appointment.id, "completed")}
+															className="bg-gray-600 hover:bg-gray-700"
+														>
+															<CheckCircle className="mr-2 h-4 w-4" />
+															{translations.actions.markCompleted}
+														</Button>
+													)}
+													<Button
+														variant="outline"
+														size="sm"
+														onClick={() => setSelectedAppointment(appointment)}
+														className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
+													>
+														{translations.actions.viewDetails}
+													</Button>
 												</div>
 											</div>
 										</div>
@@ -463,150 +462,83 @@ export default function SpanishCheckInPage() {
 						</Card>
 					</div>
 
-					{/* Patient Details */}
-					<div>
-						{selectedAppointment ? (
-							<Card className="border-gray-700 bg-gray-800">
-								<CardHeader>
-									<CardTitle className="text-white">{translations.checkInProcess}</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<Tabs defaultValue="patient" className="w-full">
-										<TabsList className="grid w-full grid-cols-3 bg-gray-700">
-											<TabsTrigger value="patient" className="text-white">Paciente</TabsTrigger>
-											<TabsTrigger value="appointment" className="text-white">Cita</TabsTrigger>
-											<TabsTrigger value="payment" className="text-white">Pago</TabsTrigger>
-										</TabsList>
-
-										<TabsContent value="patient" className="space-y-4">
-											<div>
-												<h3 className="mb-3 font-medium text-white">{translations.patientInfo}</h3>
-												<div className="space-y-2 text-sm">
-													<div className="flex justify-between">
-														<span className="text-gray-400">Nombre:</span>
-														<span className="text-white">{selectedAppointment.patient.name}</span>
+					{/* Waiting Room Status */}
+					<div className="space-y-6">
+						<Card className="border-gray-700 bg-gray-800">
+							<CardHeader>
+								<CardTitle className="flex items-center text-white">
+									<Users className="mr-2 h-5 w-5" />
+									{translations.waitingRoom}
+								</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<div className="space-y-3">
+									{waitingPatients.length === 0 ? (
+										<p className="text-center text-gray-400">No hay pacientes esperando</p>
+									) : (
+										waitingPatients.map((appointment) => (
+											<div key={appointment.id} className="rounded-lg border border-gray-700 bg-gray-900 p-3">
+												<div className="flex items-center justify-between">
+													<div>
+														<p className="font-medium text-white">{appointment.patient.name}</p>
+														<p className="text-gray-400 text-sm">{appointment.treatment}</p>
 													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Teléfono:</span>
-														<span className="text-white">{selectedAppointment.patient.phone}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Email:</span>
-														<span className="text-white">{selectedAppointment.patient.email}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Fecha de Nacimiento:</span>
-														<span className="text-white">{selectedAppointment.patient.dateOfBirth}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Dirección:</span>
-														<span className="text-white">{selectedAppointment.patient.address}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Contacto de Emergencia:</span>
-														<span className="text-white">{selectedAppointment.patient.emergencyContact}</span>
-													</div>
-												</div>
-											</div>
-										</TabsContent>
-
-										<TabsContent value="appointment" className="space-y-4">
-											<div>
-												<h3 className="mb-3 font-medium text-white">{translations.appointmentDetails}</h3>
-												<div className="space-y-2 text-sm">
-													<div className="flex justify-between">
-														<span className="text-gray-400">Hora:</span>
-														<span className="text-white">{selectedAppointment.time}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Duración:</span>
-														<span className="text-white">{selectedAppointment.duration} minutos</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Dentista:</span>
-														<span className="text-white">{selectedAppointment.dentist}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Tratamiento:</span>
-														<span className="text-white">{selectedAppointment.treatment}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Estado:</span>
-														<Badge className={getStatusColor(selectedAppointment.status)}>
-															{translations.appointmentStatus[selectedAppointment.status]}
+													<div className="text-right">
+														<Badge className={getStatusColor(appointment.status)}>
+															{getStatusIcon(appointment.status)}
 														</Badge>
-													</div>
-													{selectedAppointment.checkInTime && (
-														<div className="flex justify-between">
-															<span className="text-gray-400">Hora de Llegada:</span>
-															<span className="text-white">{selectedAppointment.checkInTime}</span>
-														</div>
-													)}
-													{selectedAppointment.checkOutTime && (
-														<div className="flex justify-between">
-															<span className="text-gray-400">Hora de Salida:</span>
-															<span className="text-white">{selectedAppointment.checkOutTime}</span>
-														</div>
-													)}
-												</div>
-											</div>
-
-											<div>
-												<Label htmlFor="checkInNotes" className="text-gray-300">
-													{translations.checkInNotes}
-												</Label>
-												<Textarea
-													id="checkInNotes"
-													value={checkInNotes}
-													onChange={(e) => setCheckInNotes(e.target.value)}
-													className="border-gray-600 bg-gray-700 text-white placeholder-gray-400"
-													placeholder="Notas adicionales del check-in..."
-													rows={3}
-												/>
-											</div>
-										</TabsContent>
-
-										<TabsContent value="payment" className="space-y-4">
-											<div>
-												<h3 className="mb-3 font-medium text-white">{translations.paymentStatus}</h3>
-												<div className="space-y-2 text-sm">
-													<div className="flex justify-between">
-														<span className="text-gray-400">Costo Estimado:</span>
-														<span className="text-white">{formatCurrency(selectedAppointment.estimatedCost)}</span>
-													</div>
-													<div className="flex justify-between">
-														<span className="text-gray-400">Estado de Pago:</span>
-														<Badge className={getPaymentStatusColor(selectedAppointment.paymentStatus)}>
-															{translations.paymentStatus[selectedAppointment.paymentStatus]}
-														</Badge>
+														{appointment.checkInTime && (
+															<p className="mt-1 text-gray-400 text-xs">
+																{getWaitingTime(appointment.checkInTime)} min
+															</p>
+														)}
 													</div>
 												</div>
 											</div>
+										))
+									)}
+								</div>
+							</CardContent>
+						</Card>
 
-											<div className="flex space-x-2">
-												<Button variant="outline" size="sm" className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600">
-													<CreditCard className="mr-2 h-4 w-4" />
-													Procesar Pago
-												</Button>
-												<Button variant="outline" size="sm" className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600">
-													<Printer className="mr-2 h-4 w-4" />
-													Imprimir Recibo
-												</Button>
-											</div>
-										</TabsContent>
-									</Tabs>
-								</CardContent>
-							</Card>
-						) : (
-							<Card className="border-gray-700 bg-gray-800">
-								<CardContent className="py-12 text-center">
-									<UserCheck className="mx-auto h-12 w-12 text-gray-400" />
-									<p className="mt-4 text-gray-400">
-										Selecciona una cita para ver los detalles del check-in
-									</p>
-								</CardContent>
-							</Card>
-						)}
+						{/* Quick Stats */}
+						<Card className="border-gray-700 bg-gray-800">
+							<CardHeader>
+								<CardTitle className="text-white">Estadísticas del Día</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<div className="space-y-3">
+									<div className="flex justify-between">
+										<span className="text-gray-400">Total de Citas:</span>
+										<span className="font-medium text-white">{appointments.length}</span>
+									</div>
+									<div className="flex justify-between">
+										<span className="text-gray-400">Check-ins:</span>
+										<span className="font-medium text-white">
+											{appointments.filter(a => a.status !== "scheduled").length}
+										</span>
+									</div>
+									<div className="flex justify-between">
+										<span className="text-gray-400">En Espera:</span>
+										<span className="font-medium text-white">
+											{appointments.filter(a => a.status === "waiting" || a.status === "arrived").length}
+										</span>
+									</div>
+									<div className="flex justify-between">
+										<span className="text-gray-400">En Tratamiento:</span>
+										<span className="font-medium text-white">
+											{appointments.filter(a => a.status === "inTreatment").length}
+										</span>
+									</div>
+									<div className="flex justify-between">
+										<span className="text-gray-400">Completadas:</span>
+										<span className="font-medium text-white">
+											{appointments.filter(a => a.status === "completed").length}
+										</span>
+									</div>
+								</div>
+							</CardContent>
+						</Card>
 					</div>
 				</div>
 			</main>
