@@ -1,16 +1,8 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
 	content: [
-		"./src/pages/**/*.{ts,tsx}",
-		"./src/components/**/*.{ts,tsx}",
-		"./src/app/**/*.{ts,tsx}",
+		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 	],
-	darkMode: false, // Disable dark mode for better visibility
-	theme: {
-		extend: {},
-	},
-	plugins: [],
 };
-
-export default config;

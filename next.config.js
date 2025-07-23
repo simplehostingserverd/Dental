@@ -12,8 +12,28 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const config = {
 	output: "standalone",
 	compress: true,
+	poweredByHeader: false,
+	reactStrictMode: true,
 	experimental: {
-		optimizePackageImports: ["@tanstack/react-query", "superjson"],
+		optimizePackageImports: ["@tanstack/react-query", "superjson", "lucide-react"],
+		optimizeCss: true,
+	},
+	turbopack: {
+		rules: {
+			'*.svg': {
+				loaders: ['@svgr/webpack'],
+				as: '*.js',
+			},
+		},
+	},
+	compiler: {
+		removeConsole: process.env.NODE_ENV === "production",
+	},
+	images: {
+		formats: ['image/webp', 'image/avif'],
+		minimumCacheTTL: 60,
+		dangerouslyAllowSVG: true,
+		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 	},
 	// Force dynamic rendering for dashboard routes that use authentication
 	async headers() {
@@ -24,6 +44,23 @@ const config = {
 					{
 						key: 'Cache-Control',
 						value: 'no-cache, no-store, must-revalidate',
+					},
+				],
+			},
+			{
+				source: '/(.*)',
+				headers: [
+					{
+						key: 'X-Content-Type-Options',
+						value: 'nosniff',
+					},
+					{
+						key: 'X-Frame-Options',
+						value: 'DENY',
+					},
+					{
+						key: 'X-XSS-Protection',
+						value: '1; mode=block',
 					},
 				],
 			},

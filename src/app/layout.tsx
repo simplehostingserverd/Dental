@@ -20,7 +20,9 @@ export const metadata: Metadata = {
 const inter = Inter({
 	subsets: ["latin"],
 	variable: "--font-inter",
-	weight: ["300", "400", "500", "600", "700", "800", "900"],
+	weight: ["400", "500", "600", "700"],
+	display: "swap",
+	preload: true,
 });
 
 export default async function RootLayout({
@@ -38,7 +40,12 @@ export default async function RootLayout({
 
 	return (
 		<html lang={locale} className={`${inter.variable}`} suppressHydrationWarning>
-			<body>
+			<head>
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+				<link rel="dns-prefetch" href="https://images.unsplash.com" />
+			</head>
+			<body className="preload">
 				{/* Temporarily disable Stack Auth to debug the error */}
 				{/* <StackProvider app={stackClientApp}>
 					<StackTheme> */}
@@ -49,6 +56,16 @@ export default async function RootLayout({
 				</NextIntlClientProvider>
 				{/* </StackTheme>
 				</StackProvider> */}
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `
+							// Remove preload class after page loads
+							window.addEventListener('load', () => {
+								document.body.classList.remove('preload');
+							});
+						`,
+					}}
+				/>
 			</body>
 		</html>
 	);
