@@ -22,11 +22,12 @@ let posts: any[] = [
 // GET /api/receptionist/marketing/posts/[id] - Get single post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const user = await getCurrentUser();
-    
+
     if (!user || user.type !== "practice") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -55,17 +56,18 @@ export async function GET(
 // PUT /api/receptionist/marketing/posts/[id] - Update specific post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const user = await getCurrentUser();
-    
+
     if (!user || user.type !== "practice") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    
+
     const postIndex = posts.findIndex(
       p => p.id === params.id && p.practiceId === user.id
     );
@@ -75,7 +77,7 @@ export async function PUT(
     }
 
     const existingPost = posts[postIndex];
-    
+
     // Don't allow editing published posts
     if (existingPost.status === "published") {
       return NextResponse.json(
@@ -111,11 +113,12 @@ export async function PUT(
 // DELETE /api/receptionist/marketing/posts/[id] - Delete specific post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const user = await getCurrentUser();
-    
+
     if (!user || user.type !== "practice") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -129,7 +132,7 @@ export async function DELETE(
     }
 
     const post = posts[postIndex];
-    
+
     // Don't allow deleting published posts
     if (post.status === "published") {
       return NextResponse.json(
@@ -156,11 +159,12 @@ export async function DELETE(
 // PATCH /api/receptionist/marketing/posts/[id] - Partial update (e.g., publish, schedule)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const user = await getCurrentUser();
-    
+
     if (!user || user.type !== "practice") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
