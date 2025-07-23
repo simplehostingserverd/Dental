@@ -122,11 +122,17 @@ export default function MarketingPage() {
 			if (data.success) {
 				setPosts(data.data);
 			} else {
-				showToast("Error fetching posts", "error");
+				showToast({
+					type: "error",
+					title: "Error fetching posts"
+				});
 			}
 		} catch (error) {
 			console.error("Error fetching posts:", error);
-			showToast("Failed to fetch posts", "error");
+			showToast({
+				type: "error",
+				title: "Failed to fetch posts"
+			});
 		} finally {
 			setIsLoading(false);
 		}
@@ -140,11 +146,17 @@ export default function MarketingPage() {
 			if (data.success) {
 				setAnalytics(data.data);
 			} else {
-				showToast("Error fetching analytics", "error");
+				showToast({
+					type: "error",
+					title: "Error fetching analytics"
+				});
 			}
 		} catch (error) {
 			console.error("Error fetching analytics:", error);
-			showToast("Failed to fetch analytics", "error");
+			showToast({
+				type: "error",
+				title: "Failed to fetch analytics"
+			});
 		}
 	};
 
@@ -170,16 +182,25 @@ export default function MarketingPage() {
 			const data = await response.json();
 
 			if (data.success) {
-				showToast(data.message || "Post created successfully", "success");
+				showToast({
+					type: "success",
+					title: data.message || "Post created successfully"
+				});
 				await fetchPosts(); // Refresh posts
 				setShowCreatePostDialog(false);
 				resetForm();
 			} else {
-				showToast(data.error || "Failed to create post", "error");
+				showToast({
+					type: "error",
+					title: data.error || "Failed to create post"
+				});
 			}
 		} catch (error) {
 			console.error("Error creating post:", error);
-			showToast("Failed to create post", "error");
+			showToast({
+				type: "error",
+				title: "Failed to create post"
+			});
 		} finally {
 			setIsPosting(false);
 		}
@@ -200,13 +221,22 @@ export default function MarketingPage() {
 
 			if (data.success) {
 				setAnalytics(data.data);
-				showToast("Analytics refreshed successfully", "success");
+				showToast({
+					type: "success",
+					title: "Analytics refreshed successfully"
+				});
 			} else {
-				showToast("Failed to refresh analytics", "error");
+				showToast({
+					type: "error",
+					title: "Failed to refresh analytics"
+				});
 			}
 		} catch (error) {
 			console.error("Error refreshing analytics:", error);
-			showToast("Failed to refresh analytics", "error");
+			showToast({
+				type: "error",
+				title: "Failed to refresh analytics"
+			});
 		} finally {
 			setIsLoading(false);
 		}
@@ -321,7 +351,7 @@ export default function MarketingPage() {
 		},
 		{
 			id: "3",
-			platform: "twitter",
+			platform: "x",
 			content:
 				"Quick tip: Brush your teeth for at least 2 minutes, twice a day! ⏰🦷 #DentalTips #OralHealth",
 			scheduledFor: new Date("2025-07-18T09:00:00Z"),

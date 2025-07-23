@@ -67,11 +67,11 @@ export async function getCurrentUser(): Promise<User | null> {
     }
     
     // Fallback to practice admin for development
-    return mockUsers["practice-1"];
+    return mockUsers["practice-1"] || null;
   } catch (error) {
     console.error("Error getting current user:", error);
     // Return practice admin as fallback for development
-    return mockUsers["practice-1"];
+    return mockUsers["practice-1"] || null;
   }
 }
 
@@ -115,7 +115,7 @@ export async function getUserFromRequest(request: NextRequest): Promise<User | n
       const token = authHeader.substring(7);
       // Decode JWT token and get user info
       // For now, return mock user
-      return mockUsers["practice-1"];
+      return mockUsers["practice-1"] || null;
     }
 
     // Try to get from cookies or session
