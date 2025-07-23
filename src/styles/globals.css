@@ -5,6 +5,30 @@
 		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+/* CSS Variables for shadcn/ui components */
+:root {
+	--background: 255 255 255; /* white */
+	--foreground: 17 24 39; /* gray-900 */
+	--card: 255 255 255; /* white */
+	--card-foreground: 17 24 39; /* gray-900 */
+	--popover: 255 255 255; /* white */
+	--popover-foreground: 17 24 39; /* gray-900 */
+	--primary: 59 130 246; /* blue-500 */
+	--primary-foreground: 255 255 255; /* white */
+	--secondary: 243 244 246; /* gray-100 */
+	--secondary-foreground: 17 24 39; /* gray-900 */
+	--muted: 243 244 246; /* gray-100 */
+	--muted-foreground: 107 114 128; /* gray-500 */
+	--accent: 243 244 246; /* gray-100 */
+	--accent-foreground: 17 24 39; /* gray-900 */
+	--destructive: 239 68 68; /* red-500 */
+	--destructive-foreground: 255 255 255; /* white */
+	--border: 209 213 219; /* gray-300 */
+	--input: 209 213 219; /* gray-300 */
+	--ring: 59 130 246; /* blue-500 */
+	--radius: 0.5rem;
+}
+
 /* Smooth transitions */
 * {
 	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s
@@ -14,4 +38,52 @@
 /* Prevent transition on page load */
 .preload * {
 	transition: none !important;
+}
+
+/* Ensure proper text visibility and contrast */
+body {
+	background-color: #f9fafb; /* gray-50 */
+	color: #111827; /* gray-900 */
+}
+
+/* Override any dark mode text colors */
+* {
+	color: inherit;
+}
+
+/* Ensure proper contrast for text elements */
+h1, h2, h3, h4, h5, h6 {
+	color: #111827 !important; /* gray-900 */
+}
+
+p, span, div {
+	color: #374151; /* gray-700 */
+}
+
+/* Muted text should still be visible */
+.text-muted-foreground {
+	color: #6b7280 !important; /* gray-500 */
+}
+
+/* Ensure input fields are visible */
+input, textarea, select {
+	background-color: white !important;
+	color: #111827 !important; /* gray-900 */
+	border-color: #d1d5db !important; /* gray-300 */
+}
+
+/* Ensure buttons have proper contrast */
+button {
+	color: inherit;
+}
+
+/* Card backgrounds */
+.card, [class*="card"] {
+	background-color: white !important;
+	color: #111827 !important;
+}
+
+/* Badge text visibility */
+.badge, [class*="badge"] {
+	color: inherit !important;
 }
