@@ -72,7 +72,7 @@
 		"@types/qrcode": "^1.5.5",
 		"@types/three": "^0.178.1",
 		"@types/validator": "^13.15.2",
-		"axios": "^1.10.0",
+		"axios": "^1.11.0",
 		"bcryptjs": "^3.0.2",
 		"canvg": "^4.0.2",
 		"class-variance-authority": "^0.7.1",
