@@ -4,6 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import {
 	Select,
 	SelectContent,
@@ -11,6 +19,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { HeaderLogo } from "@/components/ui/tooth-logo";
 import {
 	Calendar,
@@ -24,6 +33,7 @@ import {
 	Phone,
 	Plus,
 	Search,
+	Trash2,
 	Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -74,6 +84,10 @@ const translations = {
 export default function SpanishPatientsPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterStatus, setFilterStatus] = useState("all");
+	const [editingPatient, setEditingPatient] = useState<any>(null);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [patientToDelete, setPatientToDelete] = useState<any>(null);
 
 	// Mock patients data
 	const patients = [
@@ -201,6 +215,69 @@ export default function SpanishPatientsPage() {
 			month: "short",
 			day: "numeric",
 		});
+	};
+
+	const handleEditPatient = (patient: any) => {
+		setEditingPatient({ ...patient });
+		setIsEditModalOpen(true);
+	};
+
+	const handleSaveEdit = async () => {
+		try {
+			const response = await fetch(`/api/dashboard/patients/${editingPatient.id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(editingPatient),
+			});
+
+			if (response.ok) {
+				alert("Paciente actualizado exitosamente");
+				setIsEditModalOpen(false);
+				setEditingPatient(null);
+				// Refresh the page or update the local state
+				window.location.reload();
+			} else {
+				alert("Error al actualizar el paciente");
+			}
+		} catch (error) {
+			console.error("Error updating patient:", error);
+			alert("Error al actualizar el paciente");
+		}
+	};
+
+	const handleDeletePatient = (patient: any) => {
+		setPatientToDelete(patient);
+		setIsDeleteModalOpen(true);
+	};
+
+	const confirmDelete = async () => {
+		try {
+			const response = await fetch(`/api/dashboard/patients/${patientToDelete.id}`, {
+				method: "DELETE",
+			});
+
+			if (response.ok) {
+				alert("Paciente eliminado exitosamente");
+				setIsDeleteModalOpen(false);
+				setPatientToDelete(null);
+				// Refresh the page or update the local state
+				window.location.reload();
+			} else {
+				alert("Error al eliminar el paciente");
+			}
+		} catch (error) {
+			console.error("Error deleting patient:", error);
+			alert("Error al eliminar el paciente");
+		}
+	};
+
+	const handleEditInputChange = (field: string, value: string) => {
+		setEditingPatient((prev: any) => ({
+			...prev,
+			[field]: value,
+		}));
 	};
 
 	return (
@@ -422,13 +499,15 @@ export default function SpanishPatientsPage() {
 											</td>
 											<td className="py-4">
 												<div className="flex items-center space-x-2">
-													<Button
-														size="sm"
-														variant="ghost"
-														className="text-gray-400 hover:text-white"
-													>
-														<Eye className="h-4 w-4" />
-													</Button>
+													<Link href={`/es/receptionist/patients/${patient.id}`}>
+														<Button
+															size="sm"
+															variant="ghost"
+															className="text-gray-400 hover:text-white"
+														>
+															<Eye className="h-4 w-4" />
+														</Button>
+													</Link>
 													<Button
 														size="sm"
 														variant="ghost"
@@ -454,8 +533,17 @@ export default function SpanishPatientsPage() {
 														size="sm"
 														variant="ghost"
 														className="text-gray-400 hover:text-white"
+														onClick={() => handleEditPatient(patient)}
 													>
 														<Edit className="h-4 w-4" />
+													</Button>
+													<Button
+														size="sm"
+														variant="ghost"
+														className="text-gray-400 hover:text-red-400"
+														onClick={() => handleDeletePatient(patient)}
+													>
+														<Trash2 className="h-4 w-4" />
 													</Button>
 												</div>
 											</td>
@@ -467,6 +555,199 @@ export default function SpanishPatientsPage() {
 					</CardContent>
 				</Card>
 			</main>
+
+			{/* Edit Patient Modal */}
+			<Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+				<DialogContent className="max-w-2xl border-gray-700 bg-gray-800">
+					<DialogHeader>
+						<DialogTitle className="text-white">Editar Paciente</DialogTitle>
+					</DialogHeader>
+					{editingPatient && (
+						<div className="space-y-4">
+							<div className="grid gap-4 md:grid-cols-2">
+								<div>
+									<Label htmlFor="edit-firstName" className="text-gray-300">
+										Nombre(s)
+									</Label>
+									<Input
+										id="edit-firstName"
+										value={editingPatient.name?.split(" ")[0] || ""}
+										onChange={(e) => {
+											const lastName = editingPatient.name?.split(" ").slice(1).join(" ") || "";
+											handleEditInputChange("name", `${e.target.value} ${lastName}`);
+										}}
+										className="border-gray-600 bg-gray-700 text-white"
+									/>
+								</div>
+								<div>
+									<Label htmlFor="edit-lastName" className="text-gray-300">
+										Apellidos
+									</Label>
+									<Input
+										id="edit-lastName"
+										value={editingPatient.name?.split(" ").slice(1).join(" ") || ""}
+										onChange={(e) => {
+											const firstName = editingPatient.name?.split(" ")[0] || "";
+											handleEditInputChange("name", `${firstName} ${e.target.value}`);
+										}}
+										className="border-gray-600 bg-gray-700 text-white"
+									/>
+								</div>
+							</div>
+
+							<div className="grid gap-4 md:grid-cols-2">
+								<div>
+									<Label htmlFor="edit-email" className="text-gray-300">
+										Correo Electrónico
+									</Label>
+									<Input
+										id="edit-email"
+										type="email"
+										value={editingPatient.email || ""}
+										onChange={(e) => handleEditInputChange("email", e.target.value)}
+										className="border-gray-600 bg-gray-700 text-white"
+									/>
+								</div>
+								<div>
+									<Label htmlFor="edit-phone" className="text-gray-300">
+										Teléfono
+									</Label>
+									<Input
+										id="edit-phone"
+										value={editingPatient.phone || ""}
+										onChange={(e) => handleEditInputChange("phone", e.target.value)}
+										className="border-gray-600 bg-gray-700 text-white"
+									/>
+								</div>
+							</div>
+
+							<div className="grid gap-4 md:grid-cols-2">
+								<div>
+									<Label htmlFor="edit-age" className="text-gray-300">
+										Edad
+									</Label>
+									<Input
+										id="edit-age"
+										type="number"
+										value={editingPatient.age || ""}
+										onChange={(e) => handleEditInputChange("age", e.target.value)}
+										className="border-gray-600 bg-gray-700 text-white"
+									/>
+								</div>
+								<div>
+									<Label htmlFor="edit-gender" className="text-gray-300">
+										Género
+									</Label>
+									<Select
+										value={editingPatient.gender || ""}
+										onValueChange={(value) => handleEditInputChange("gender", value)}
+									>
+										<SelectTrigger className="border-gray-600 bg-gray-700 text-white">
+											<SelectValue placeholder="Seleccionar..." />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="Masculino">Masculino</SelectItem>
+											<SelectItem value="Femenino">Femenino</SelectItem>
+											<SelectItem value="Otro">Otro</SelectItem>
+										</SelectContent>
+									</Select>
+								</div>
+							</div>
+
+							<div>
+								<Label htmlFor="edit-address" className="text-gray-300">
+									Dirección
+								</Label>
+								<Textarea
+									id="edit-address"
+									value={editingPatient.address || ""}
+									onChange={(e) => handleEditInputChange("address", e.target.value)}
+									className="border-gray-600 bg-gray-700 text-white"
+									rows={2}
+								/>
+							</div>
+
+							<div>
+								<Label htmlFor="edit-insurance" className="text-gray-300">
+									Seguro Médico
+								</Label>
+								<Input
+									id="edit-insurance"
+									value={editingPatient.insurance || ""}
+									onChange={(e) => handleEditInputChange("insurance", e.target.value)}
+									className="border-gray-600 bg-gray-700 text-white"
+								/>
+							</div>
+
+							<div>
+								<Label htmlFor="edit-emergencyContact" className="text-gray-300">
+									Contacto de Emergencia
+								</Label>
+								<Input
+									id="edit-emergencyContact"
+									value={editingPatient.emergencyContact || ""}
+									onChange={(e) => handleEditInputChange("emergencyContact", e.target.value)}
+									className="border-gray-600 bg-gray-700 text-white"
+								/>
+							</div>
+
+							<div className="flex justify-end space-x-4 pt-4">
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => setIsEditModalOpen(false)}
+									className="border-gray-600 text-gray-300 hover:bg-gray-700"
+								>
+									Cancelar
+								</Button>
+								<Button
+									onClick={handleSaveEdit}
+									className="bg-blue-600 hover:bg-blue-700"
+								>
+									Guardar Cambios
+								</Button>
+							</div>
+						</div>
+					)}
+				</DialogContent>
+			</Dialog>
+
+			{/* Delete Confirmation Modal */}
+			<Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+				<DialogContent className="border-gray-700 bg-gray-800">
+					<DialogHeader>
+						<DialogTitle className="text-white">Confirmar Eliminación</DialogTitle>
+					</DialogHeader>
+					{patientToDelete && (
+						<div className="space-y-4">
+							<p className="text-gray-300">
+								¿Estás seguro de que deseas eliminar al paciente{" "}
+								<span className="font-semibold text-white">{patientToDelete.name}</span>?
+							</p>
+							<p className="text-gray-400 text-sm">
+								Esta acción no se puede deshacer. Se eliminarán todos los datos del paciente,
+								incluyendo historial médico y citas.
+							</p>
+							<div className="flex justify-end space-x-4 pt-4">
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => setIsDeleteModalOpen(false)}
+									className="border-gray-600 text-gray-300 hover:bg-gray-700"
+								>
+									Cancelar
+								</Button>
+								<Button
+									onClick={confirmDelete}
+									className="bg-red-600 hover:bg-red-700"
+								>
+									Eliminar Paciente
+								</Button>
+							</div>
+						</div>
+					)}
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 }
