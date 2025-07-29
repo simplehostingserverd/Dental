@@ -1,41 +1,51 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { db } from "@/server/db";
-import { z } from "zod";
 import { parse } from "csv-parse/sync";
+import { type NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
+import { z } from "zod";
 
 // Validation schema for patient data
 const PatientImportSchema = z.object({
 	firstName: z.string().min(1, "First name is required"),
 	lastName: z.string().min(1, "Last name is required"),
-	dateOfBirth: z.string().refine((date) => !isNaN(Date.parse(date)), "Invalid date format"),
+	dateOfBirth: z
+		.string()
+		.refine((date) => !Number.isNaN(Date.parse(date)), "Invalid date format"),
 	gender: z.string().optional(),
 	phone: z.string().optional(),
 	email: z.string().email().optional().or(z.literal("")),
-	address: z.object({
-		street: z.string().optional(),
-		city: z.string().optional(),
-		state: z.string().optional(),
-		zipCode: z.string().optional(),
-		country: z.string().optional(),
-	}).optional(),
-	emergencyContact: z.object({
-		name: z.string().optional(),
-		phone: z.string().optional(),
-		relationship: z.string().optional(),
-	}).optional(),
-	insurance: z.object({
-		provider: z.string().optional(),
-		policyNumber: z.string().optional(),
-		groupNumber: z.string().optional(),
-	}).optional(),
-	medicalHistory: z.object({
-		allergies: z.array(z.string()).optional(),
-		medications: z.array(z.string()).optional(),
-		conditions: z.array(z.string()).optional(),
-		notes: z.string().optional(),
-	}).optional(),
+	address: z
+		.object({
+			street: z.string().optional(),
+			city: z.string().optional(),
+			state: z.string().optional(),
+			zipCode: z.string().optional(),
+			country: z.string().optional(),
+		})
+		.optional(),
+	emergencyContact: z
+		.object({
+			name: z.string().optional(),
+			phone: z.string().optional(),
+			relationship: z.string().optional(),
+		})
+		.optional(),
+	insurance: z
+		.object({
+			provider: z.string().optional(),
+			policyNumber: z.string().optional(),
+			groupNumber: z.string().optional(),
+		})
+		.optional(),
+	medicalHistory: z
+		.object({
+			allergies: z.array(z.string()).optional(),
+			medications: z.array(z.string()).optional(),
+			conditions: z.array(z.string()).optional(),
+			notes: z.string().optional(),
+		})
+		.optional(),
 });
 
 interface ImportProgress {
@@ -59,7 +69,7 @@ export async function POST(request: NextRequest) {
 		if (user.role !== "ADMIN" && user.role !== "DENTIST") {
 			return NextResponse.json(
 				{ error: "Insufficient permissions" },
-				{ status: 403 }
+				{ status: 403 },
 			);
 		}
 
@@ -72,7 +82,10 @@ export async function POST(request: NextRequest) {
 		}
 
 		if (!practiceId) {
-			return NextResponse.json({ error: "Practice ID is required" }, { status: 400 });
+			return NextResponse.json(
+				{ error: "Practice ID is required" },
+				{ status: 400 },
+			);
 		}
 
 		// Verify user has access to this practice
@@ -90,7 +103,7 @@ export async function POST(request: NextRequest) {
 		if (!practice) {
 			return NextResponse.json(
 				{ error: "Practice not found or access denied" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
@@ -102,7 +115,7 @@ export async function POST(request: NextRequest) {
 		// Parse file based on extension
 		try {
 			switch (fileExtension) {
-				case "csv":
+				case "csv": {
 					const csvText = new TextDecoder().decode(fileBuffer);
 					rawData = parse(csvText, {
 						columns: true,
@@ -110,33 +123,44 @@ export async function POST(request: NextRequest) {
 						trim: true,
 					});
 					break;
+				}
 
 				case "xlsx":
-				case "xls":
+				case "xls": {
 					const workbook = XLSX.read(fileBuffer, { type: "buffer" });
 					const sheetName = workbook.SheetNames[0];
+					if (!sheetName) {
+						throw new Error("No sheets found in the Excel file");
+					}
 					const worksheet = workbook.Sheets[sheetName];
+					if (!worksheet) {
+						throw new Error("Could not read worksheet");
+					}
 					rawData = XLSX.utils.sheet_to_json(worksheet);
 					break;
+				}
 
-				case "json":
+				case "json": {
 					const jsonText = new TextDecoder().decode(fileBuffer);
 					rawData = JSON.parse(jsonText);
 					if (!Array.isArray(rawData)) {
 						rawData = [rawData];
 					}
 					break;
+				}
 
 				default:
 					return NextResponse.json(
-						{ error: "Unsupported file format. Please use CSV, Excel, or JSON." },
-						{ status: 400 }
+						{
+							error: "Unsupported file format. Please use CSV, Excel, or JSON.",
+						},
+						{ status: 400 },
 					);
 			}
 		} catch (error) {
 			return NextResponse.json(
 				{ error: "Failed to parse file. Please check the file format." },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -175,9 +199,7 @@ export async function POST(request: NextRequest) {
 									{ dateOfBirth: new Date(validatedData.dateOfBirth) },
 								],
 							},
-							...(validatedData.email
-								? [{ email: validatedData.email }]
-								: []),
+							...(validatedData.email ? [{ email: validatedData.email }] : []),
 						],
 					},
 				});
@@ -201,10 +223,10 @@ export async function POST(request: NextRequest) {
 						gender: validatedData.gender,
 						phone: validatedData.phone,
 						email: validatedData.email || null,
-						address: validatedData.address || null,
-						emergencyContact: validatedData.emergencyContact || null,
-						insurance: validatedData.insurance || null,
-						medicalHistory: validatedData.medicalHistory || null,
+						address: validatedData.address || undefined,
+						emergencyContact: validatedData.emergencyContact || undefined,
+						insurance: validatedData.insurance || undefined,
+						medicalHistory: validatedData.medicalHistory || undefined,
 						practiceId: practiceId,
 						totalVisits: 0,
 						outstandingBalance: 0,
@@ -253,7 +275,7 @@ export async function POST(request: NextRequest) {
 		console.error("Data import error:", error);
 		return NextResponse.json(
 			{ error: "Internal server error during import" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -262,34 +284,34 @@ export async function POST(request: NextRequest) {
 function normalizePatientData(row: any): any {
 	const fieldMappings: Record<string, string> = {
 		// Name fields
-		"first_name": "firstName",
-		"firstname": "firstName",
-		"first": "firstName",
-		"last_name": "lastName",
-		"lastname": "lastName",
-		"last": "lastName",
-		
+		first_name: "firstName",
+		firstname: "firstName",
+		first: "firstName",
+		last_name: "lastName",
+		lastname: "lastName",
+		last: "lastName",
+
 		// Date fields
-		"date_of_birth": "dateOfBirth",
-		"dob": "dateOfBirth",
-		"birth_date": "dateOfBirth",
-		"birthdate": "dateOfBirth",
-		
+		date_of_birth: "dateOfBirth",
+		dob: "dateOfBirth",
+		birth_date: "dateOfBirth",
+		birthdate: "dateOfBirth",
+
 		// Contact fields
-		"phone_number": "phone",
-		"telephone": "phone",
-		"mobile": "phone",
-		"email_address": "email",
-		
+		phone_number: "phone",
+		telephone: "phone",
+		mobile: "phone",
+		email_address: "email",
+
 		// Address fields
-		"street_address": "address.street",
-		"address_line_1": "address.street",
-		"city": "address.city",
-		"state": "address.state",
-		"zip_code": "address.zipCode",
-		"zip": "address.zipCode",
-		"postal_code": "address.zipCode",
-		"country": "address.country",
+		street_address: "address.street",
+		address_line_1: "address.street",
+		city: "address.city",
+		state: "address.state",
+		zip_code: "address.zipCode",
+		zip: "address.zipCode",
+		postal_code: "address.zipCode",
+		country: "address.country",
 	};
 
 	const normalized: any = {};
@@ -297,11 +319,13 @@ function normalizePatientData(row: any): any {
 	// Copy and normalize field names
 	for (const [key, value] of Object.entries(row)) {
 		const normalizedKey = fieldMappings[key.toLowerCase()] || key;
-		
+
 		if (normalizedKey.includes(".")) {
 			const [parent, child] = normalizedKey.split(".");
-			if (!normalized[parent]) normalized[parent] = {};
-			normalized[parent][child] = value;
+			if (parent && child) {
+				if (!normalized[parent]) normalized[parent] = {};
+				(normalized[parent] as Record<string, unknown>)[child] = value;
+			}
 		} else {
 			normalized[normalizedKey] = value;
 		}

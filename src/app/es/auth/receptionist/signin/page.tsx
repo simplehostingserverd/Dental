@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, MapPin, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ArrowLeft, Eye, EyeOff, MapPin } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function MexicanReceptionistSignInPage() {
 	const router = useRouter();
@@ -36,7 +36,7 @@ export default function MexicanReceptionistSignInPage() {
 				// Redirect to appropriate dashboard
 				router.push(data.redirectUrl || "/receptionist");
 			} else {
-				alert("Error de inicio de sesión: " + data.error);
+				alert(`Error de inicio de sesión: ${data.error}`);
 			}
 		} catch (error) {
 			alert("Error de conexión. Por favor intente de nuevo.");
@@ -51,36 +51,131 @@ export default function MexicanReceptionistSignInPage() {
 			<div className="absolute inset-0 overflow-hidden opacity-10">
 				<div className="h-full w-full bg-gradient-to-br from-green-100 to-red-100">
 					{/* Reception Desk Illustration */}
-					<svg viewBox="0 0 800 600" className="h-full w-full" aria-label="Reception desk background">
+					<svg
+						viewBox="0 0 800 600"
+						className="h-full w-full"
+						aria-label="Reception desk background"
+					>
 						<title>Reception desk background</title>
 						{/* Reception desk */}
-						<rect x="150" y="350" width="200" height="80" rx="10" fill="#f3f4f6" stroke="#6b7280" strokeWidth="2"/>
-						<rect x="160" y="330" width="180" height="20" rx="5" fill="#9ca3af"/>
-						
+						<rect
+							x="150"
+							y="350"
+							width="200"
+							height="80"
+							rx="10"
+							fill="#f3f4f6"
+							stroke="#6b7280"
+							strokeWidth="2"
+						/>
+						<rect
+							x="160"
+							y="330"
+							width="180"
+							height="20"
+							rx="5"
+							fill="#9ca3af"
+						/>
+
 						{/* Computer monitor */}
-						<rect x="200" y="280" width="80" height="50" rx="5" fill="#1f2937" stroke="#374151" strokeWidth="2"/>
-						<rect x="205" y="285" width="70" height="40" fill="#3b82f6"/>
-						<rect x="230" y="330" width="20" height="20" fill="#6b7280"/>
-						
+						<rect
+							x="200"
+							y="280"
+							width="80"
+							height="50"
+							rx="5"
+							fill="#1f2937"
+							stroke="#374151"
+							strokeWidth="2"
+						/>
+						<rect x="205" y="285" width="70" height="40" fill="#3b82f6" />
+						<rect x="230" y="330" width="20" height="20" fill="#6b7280" />
+
 						{/* Phone */}
-						<rect x="300" y="340" width="30" height="15" rx="3" fill="#374151"/>
-						<circle cx="315" cy="347" r="2" fill="#10b981"/>
-						
+						<rect
+							x="300"
+							y="340"
+							width="30"
+							height="15"
+							rx="3"
+							fill="#374151"
+						/>
+						<circle cx="315" cy="347" r="2" fill="#10b981" />
+
 						{/* Filing cabinet */}
-						<rect x="450" y="300" width="60" height="100" rx="5" fill="#e5e7eb" stroke="#9ca3af" strokeWidth="2"/>
-						<rect x="460" y="320" width="40" height="3" fill="#6b7280"/>
-						<rect x="460" y="340" width="40" height="3" fill="#6b7280"/>
-						<rect x="460" y="360" width="40" height="3" fill="#6b7280"/>
-						
+						<rect
+							x="450"
+							y="300"
+							width="60"
+							height="100"
+							rx="5"
+							fill="#e5e7eb"
+							stroke="#9ca3af"
+							strokeWidth="2"
+						/>
+						<rect x="460" y="320" width="40" height="3" fill="#6b7280" />
+						<rect x="460" y="340" width="40" height="3" fill="#6b7280" />
+						<rect x="460" y="360" width="40" height="3" fill="#6b7280" />
+
 						{/* Waiting chairs */}
-						<rect x="100" y="450" width="40" height="40" rx="5" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
-						<rect x="160" y="450" width="40" height="40" rx="5" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
-						<rect x="220" y="450" width="40" height="40" rx="5" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
-						
+						<rect
+							x="100"
+							y="450"
+							width="40"
+							height="40"
+							rx="5"
+							fill="#dbeafe"
+							stroke="#3b82f6"
+							strokeWidth="2"
+						/>
+						<rect
+							x="160"
+							y="450"
+							width="40"
+							height="40"
+							rx="5"
+							fill="#dbeafe"
+							stroke="#3b82f6"
+							strokeWidth="2"
+						/>
+						<rect
+							x="220"
+							y="450"
+							width="40"
+							height="40"
+							rx="5"
+							fill="#dbeafe"
+							stroke="#3b82f6"
+							strokeWidth="2"
+						/>
+
 						{/* Window */}
-						<rect x="50" y="100" width="100" height="80" rx="5" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
-						<line x1="100" y1="100" x2="100" y2="180" stroke="#3b82f6" strokeWidth="1"/>
-						<line x1="50" y1="140" x2="150" y2="140" stroke="#3b82f6" strokeWidth="1"/>
+						<rect
+							x="50"
+							y="100"
+							width="100"
+							height="80"
+							rx="5"
+							fill="#dbeafe"
+							stroke="#3b82f6"
+							strokeWidth="2"
+						/>
+						<line
+							x1="100"
+							y1="100"
+							x2="100"
+							y2="180"
+							stroke="#3b82f6"
+							strokeWidth="1"
+						/>
+						<line
+							x1="50"
+							y1="140"
+							x2="150"
+							y2="140"
+							stroke="#3b82f6"
+							strokeWidth="1"
+						/>
 					</svg>
 				</div>
 			</div>
@@ -103,7 +198,7 @@ export default function MexicanReceptionistSignInPage() {
 						<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
 							<MapPin className="h-8 w-8 text-blue-600" />
 						</div>
-						<h1 className="text-2xl font-bold text-gray-900">
+						<h1 className="font-bold text-2xl text-gray-900">
 							Acceso para Recepcionistas
 						</h1>
 						<p className="mt-2 text-gray-600">
@@ -196,9 +291,7 @@ export default function MexicanReceptionistSignInPage() {
 						<p className="text-blue-700 text-sm">
 							Email: recepcionista@cognident.org
 						</p>
-						<p className="text-blue-700 text-sm">
-							Contraseña: recepcion123
-						</p>
+						<p className="text-blue-700 text-sm">Contraseña: recepcion123</p>
 					</div>
 				</div>
 
@@ -207,9 +300,7 @@ export default function MexicanReceptionistSignInPage() {
 					<p className="text-gray-500 text-sm">
 						Soporte técnico: +52 55 1234-5678
 					</p>
-					<p className="text-gray-500 text-sm">
-						mexico@cognident.org
-					</p>
+					<p className="text-gray-500 text-sm">mexico@cognident.org</p>
 				</div>
 			</div>
 		</div>

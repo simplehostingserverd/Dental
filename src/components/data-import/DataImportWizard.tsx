@@ -1,14 +1,26 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Upload, FileText, AlertCircle, CheckCircle, Download } from "lucide-react";
+import {
+	AlertCircle,
+	CheckCircle,
+	Download,
+	FileText,
+	Upload,
+} from "lucide-react";
+import { useRef, useState } from "react";
 
 interface ImportProgress {
 	total: number;
@@ -23,7 +35,10 @@ interface DataImportWizardProps {
 	onImportComplete?: (result: any) => void;
 }
 
-export default function DataImportWizard({ practiceId, onImportComplete }: DataImportWizardProps) {
+export default function DataImportWizard({
+	practiceId,
+	onImportComplete,
+}: DataImportWizardProps) {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [isUploading, setIsUploading] = useState(false);
 	const [progress, setProgress] = useState<ImportProgress | null>(null);
@@ -102,8 +117,8 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 		];
 
 		const csvContent = [
-			Object.keys(template[0]).join(","),
-			...template.map(row => Object.values(row).join(",")),
+			Object.keys(template[0] || {}).join(","),
+			...template.map((row) => Object.values(row).join(",")),
 		].join("\n");
 
 		const blob = new Blob([csvContent], { type: "text/csv" });
@@ -118,7 +133,7 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 	const downloadErrorReport = () => {
 		if (!progress?.errors.length) return;
 
-		const errorReport = progress.errors.map(error => ({
+		const errorReport = progress.errors.map((error) => ({
 			row: error.row,
 			error: error.error,
 			data: JSON.stringify(error.data),
@@ -126,7 +141,7 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 
 		const csvContent = [
 			"Row,Error,Data",
-			...errorReport.map(row => `${row.row},"${row.error}","${row.data}"`),
+			...errorReport.map((row) => `${row.row},"${row.error}","${row.data}"`),
 		].join("\n");
 
 		const blob = new Blob([csvContent], { type: "text/csv" });
@@ -139,7 +154,7 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 	};
 
 	return (
-		<Card className="w-full max-w-4xl mx-auto">
+		<Card className="mx-auto w-full max-w-4xl">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<Upload className="h-5 w-5" />
@@ -175,7 +190,7 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 										className="cursor-pointer"
 									/>
 								</div>
-								<p className="text-sm text-gray-500 mt-1">
+								<p className="mt-1 text-gray-500 text-sm">
 									Formatos soportados: CSV, Excel (.xlsx, .xls), JSON
 								</p>
 							</div>
@@ -199,18 +214,20 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 									{isUploading ? "Importando..." : "Iniciar Importación"}
 								</Button>
 								<Button variant="outline" onClick={downloadTemplate}>
-									<Download className="h-4 w-4 mr-2" />
+									<Download className="mr-2 h-4 w-4" />
 									Descargar Plantilla
 								</Button>
 							</div>
 						</div>
 
 						<div className="space-y-4">
-							<h3 className="text-lg font-semibold">Formato de Datos Requerido</h3>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+							<h3 className="font-semibold text-lg">
+								Formato de Datos Requerido
+							</h3>
+							<div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-2">
 								<div>
 									<h4 className="font-medium">Campos Obligatorios:</h4>
-									<ul className="list-disc list-inside space-y-1 text-gray-600">
+									<ul className="list-inside list-disc space-y-1 text-gray-600">
 										<li>firstName (Nombre)</li>
 										<li>lastName (Apellido)</li>
 										<li>dateOfBirth (Fecha de Nacimiento)</li>
@@ -218,7 +235,7 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 								</div>
 								<div>
 									<h4 className="font-medium">Campos Opcionales:</h4>
-									<ul className="list-disc list-inside space-y-1 text-gray-600">
+									<ul className="list-inside list-disc space-y-1 text-gray-600">
 										<li>gender (Género)</li>
 										<li>phone (Teléfono)</li>
 										<li>email (Correo Electrónico)</li>
@@ -235,35 +252,46 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 						{isUploading && (
 							<div className="space-y-4">
 								<div className="text-center">
-									<h3 className="text-lg font-semibold">Importando Datos...</h3>
+									<h3 className="font-semibold text-lg">Importando Datos...</h3>
 									<p className="text-gray-600">
 										Por favor espere mientras procesamos su archivo
 									</p>
 								</div>
-								<div className="w-full bg-gray-200 rounded-full h-2">
-									<div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{ width: "50%" }} />
+								<div className="h-2 w-full rounded-full bg-gray-200">
+									<div
+										className="h-2 animate-pulse rounded-full bg-blue-600"
+										style={{ width: "50%" }}
+									/>
 								</div>
 							</div>
 						)}
 
 						{progress && (
 							<div className="space-y-4">
-								<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+								<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
 									<div className="text-center">
-										<div className="text-2xl font-bold text-blue-600">{progress.total}</div>
-										<div className="text-sm text-gray-600">Total</div>
+										<div className="font-bold text-2xl text-blue-600">
+											{progress.total}
+										</div>
+										<div className="text-gray-600 text-sm">Total</div>
 									</div>
 									<div className="text-center">
-										<div className="text-2xl font-bold text-green-600">{progress.successful}</div>
-										<div className="text-sm text-gray-600">Exitosos</div>
+										<div className="font-bold text-2xl text-green-600">
+											{progress.successful}
+										</div>
+										<div className="text-gray-600 text-sm">Exitosos</div>
 									</div>
 									<div className="text-center">
-										<div className="text-2xl font-bold text-red-600">{progress.failed}</div>
-										<div className="text-sm text-gray-600">Fallidos</div>
+										<div className="font-bold text-2xl text-red-600">
+											{progress.failed}
+										</div>
+										<div className="text-gray-600 text-sm">Fallidos</div>
 									</div>
 									<div className="text-center">
-										<div className="text-2xl font-bold text-gray-600">{progress.processed}</div>
-										<div className="text-sm text-gray-600">Procesados</div>
+										<div className="font-bold text-2xl text-gray-600">
+											{progress.processed}
+										</div>
+										<div className="text-gray-600 text-sm">Procesados</div>
 									</div>
 								</div>
 								<Progress value={(progress.processed / progress.total) * 100} />
@@ -277,9 +305,7 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 								{importResult.success ? (
 									<Alert>
 										<CheckCircle className="h-4 w-4" />
-										<AlertDescription>
-											{importResult.message}
-										</AlertDescription>
+										<AlertDescription>{importResult.message}</AlertDescription>
 									</Alert>
 								) : (
 									<Alert variant="destructive">
@@ -292,21 +318,29 @@ export default function DataImportWizard({ practiceId, onImportComplete }: DataI
 
 								{progress && progress.errors.length > 0 && (
 									<div className="space-y-2">
-										<div className="flex justify-between items-center">
+										<div className="flex items-center justify-between">
 											<h4 className="font-medium">Errores de Importación</h4>
-											<Button variant="outline" size="sm" onClick={downloadErrorReport}>
-												<Download className="h-4 w-4 mr-2" />
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={downloadErrorReport}
+											>
+												<Download className="mr-2 h-4 w-4" />
 												Descargar Reporte de Errores
 											</Button>
 										</div>
-										<div className="max-h-60 overflow-y-auto border rounded p-4">
+										<div className="max-h-60 overflow-y-auto rounded border p-4">
 											{progress.errors.slice(0, 10).map((error, index) => (
-												<div key={index} className="text-sm py-1 border-b last:border-b-0">
-													<span className="font-medium">Fila {error.row}:</span> {error.error}
+												<div
+													key={index}
+													className="border-b py-1 text-sm last:border-b-0"
+												>
+													<span className="font-medium">Fila {error.row}:</span>{" "}
+													{error.error}
 												</div>
 											))}
 											{progress.errors.length > 10 && (
-												<div className="text-sm text-gray-500 pt-2">
+												<div className="pt-2 text-gray-500 text-sm">
 													... y {progress.errors.length - 10} errores más
 												</div>
 											)}

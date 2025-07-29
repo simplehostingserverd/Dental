@@ -1,11 +1,17 @@
-import { getCurrentUser } from "@/lib/auth/get-user";
-import { redirect } from "next/navigation";
-import { db } from "@/server/db";
 import DataImportWizard from "@/components/data-import/DataImportWizard";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Database, Users, Shield, FileText, ArrowLeft } from "lucide-react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { getCurrentUser } from "@/lib/auth/get-user";
+import { db } from "@/server/db";
+import { ArrowLeft, Database, FileText, Shield, Users } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function DataImportPageES() {
 	const user = await getCurrentUser();
@@ -40,7 +46,7 @@ export default async function DataImportPageES() {
 		<div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-red-50 p-6">
 			<div className="container mx-auto space-y-6">
 				{/* Header */}
-				<div className="flex items-center gap-4 mb-6">
+				<div className="mb-6 flex items-center gap-4">
 					<Link
 						href="/es/dashboard"
 						className="flex items-center text-gray-600 hover:text-gray-900"
@@ -52,11 +58,12 @@ export default async function DataImportPageES() {
 
 				<div className="flex items-center justify-between">
 					<div>
-						<h1 className="text-3xl font-bold tracking-tight text-gray-900">
+						<h1 className="font-bold text-3xl text-gray-900 tracking-tight">
 							Importación de Datos de Pacientes
 						</h1>
-						<p className="text-gray-600 mt-2">
-							Importe sus 6,500+ pacientes existentes de manera segura y eficiente
+						<p className="mt-2 text-gray-600">
+							Importe sus 6,500+ pacientes existentes de manera segura y
+							eficiente
 						</p>
 					</div>
 				</div>
@@ -70,32 +77,44 @@ export default async function DataImportPageES() {
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 							<div className="flex items-center gap-3">
-								<div className="p-3 bg-green-100 rounded-lg">
+								<div className="rounded-lg bg-green-100 p-3">
 									<Users className="h-6 w-6 text-green-600" />
 								</div>
 								<div>
-									<div className="font-semibold text-gray-900">{practiceUser.practice.name}</div>
-									<div className="text-sm text-gray-600">Clínica Dental Mexicana</div>
+									<div className="font-semibold text-gray-900">
+										{practiceUser.practice.name}
+									</div>
+									<div className="text-gray-600 text-sm">
+										Clínica Dental Mexicana
+									</div>
 								</div>
 							</div>
 							<div className="flex items-center gap-3">
-								<div className="p-3 bg-blue-100 rounded-lg">
+								<div className="rounded-lg bg-blue-100 p-3">
 									<Users className="h-6 w-6 text-blue-600" />
 								</div>
 								<div>
-									<div className="font-semibold text-gray-900">{patientCount.toLocaleString()}</div>
-									<div className="text-sm text-gray-600">Pacientes Registrados</div>
+									<div className="font-semibold text-gray-900">
+										{patientCount.toLocaleString()}
+									</div>
+									<div className="text-gray-600 text-sm">
+										Pacientes Registrados
+									</div>
 								</div>
 							</div>
 							<div className="flex items-center gap-3">
-								<div className="p-3 bg-red-100 rounded-lg">
+								<div className="rounded-lg bg-red-100 p-3">
 									<Shield className="h-6 w-6 text-red-600" />
 								</div>
 								<div>
-									<div className="font-semibold text-gray-900">ID: {practiceUser.practice.id.slice(0, 8)}...</div>
-									<div className="text-sm text-gray-600">Identificador Único</div>
+									<div className="font-semibold text-gray-900">
+										ID: {practiceUser.practice.id.slice(0, 8)}...
+									</div>
+									<div className="text-gray-600 text-sm">
+										Identificador Único
+									</div>
 								</div>
 							</div>
 						</div>
@@ -106,10 +125,12 @@ export default async function DataImportPageES() {
 				<Alert className="border-green-200 bg-green-50">
 					<Shield className="h-4 w-4 text-green-600" />
 					<AlertDescription className="text-green-800">
-						<strong>🔒 Seguridad Garantizada:</strong> Sus datos están protegidos con cifrado de nivel bancario. 
-						Cada clínica dental tiene un ID único que garantiza el aislamiento completo de datos. 
-						Los pacientes de "Beautiful Smiles Dental Clinic", "Creative Smile Dental Clinic" y 
-						"Wizard Dental Clinic" permanecen completamente separados y seguros.
+						<strong>🔒 Seguridad Garantizada:</strong> Sus datos están
+						protegidos con cifrado de nivel bancario. Cada clínica dental tiene
+						un ID único que garantiza el aislamiento completo de datos. Los
+						pacientes de "Beautiful Smiles Dental Clinic", "Creative Smile
+						Dental Clinic" y "Wizard Dental Clinic" permanecen completamente
+						separados y seguros.
 					</AlertDescription>
 				</Alert>
 
@@ -125,21 +146,39 @@ export default async function DataImportPageES() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-							<div className="p-4 bg-white rounded-lg border border-blue-200">
-								<h4 className="font-semibold text-blue-800 mb-2">🏥 Beautiful Smiles Dental Clinic</h4>
-								<p className="text-sm text-blue-700">ID único asignado automáticamente</p>
-								<p className="text-xs text-blue-600 mt-1">Datos completamente aislados</p>
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+							<div className="rounded-lg border border-blue-200 bg-white p-4">
+								<h4 className="mb-2 font-semibold text-blue-800">
+									🏥 Beautiful Smiles Dental Clinic
+								</h4>
+								<p className="text-blue-700 text-sm">
+									ID único asignado automáticamente
+								</p>
+								<p className="mt-1 text-blue-600 text-xs">
+									Datos completamente aislados
+								</p>
 							</div>
-							<div className="p-4 bg-white rounded-lg border border-blue-200">
-								<h4 className="font-semibold text-blue-800 mb-2">😊 Creative Smile Dental Clinic</h4>
-								<p className="text-sm text-blue-700">ID único asignado automáticamente</p>
-								<p className="text-xs text-blue-600 mt-1">Datos completamente aislados</p>
+							<div className="rounded-lg border border-blue-200 bg-white p-4">
+								<h4 className="mb-2 font-semibold text-blue-800">
+									😊 Creative Smile Dental Clinic
+								</h4>
+								<p className="text-blue-700 text-sm">
+									ID único asignado automáticamente
+								</p>
+								<p className="mt-1 text-blue-600 text-xs">
+									Datos completamente aislados
+								</p>
 							</div>
-							<div className="p-4 bg-white rounded-lg border border-blue-200">
-								<h4 className="font-semibold text-blue-800 mb-2">🧙‍♂️ Wizard Dental Clinic</h4>
-								<p className="text-sm text-blue-700">ID único asignado automáticamente</p>
-								<p className="text-xs text-blue-600 mt-1">Datos completamente aislados</p>
+							<div className="rounded-lg border border-blue-200 bg-white p-4">
+								<h4 className="mb-2 font-semibold text-blue-800">
+									🧙‍♂️ Wizard Dental Clinic
+								</h4>
+								<p className="text-blue-700 text-sm">
+									ID único asignado automáticamente
+								</p>
+								<p className="mt-1 text-blue-600 text-xs">
+									Datos completamente aislados
+								</p>
 							</div>
 						</div>
 					</CardContent>
@@ -157,9 +196,11 @@ export default async function DataImportPageES() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 							<div className="space-y-3">
-								<h4 className="font-semibold text-green-600">✅ Para Importación Masiva</h4>
+								<h4 className="font-semibold text-green-600">
+									✅ Para Importación Masiva
+								</h4>
 								<ul className="space-y-2 text-sm">
 									<li>• Divida archivos grandes en lotes de 1,000 pacientes</li>
 									<li>• Use la plantilla CSV proporcionada</li>
@@ -171,7 +212,9 @@ export default async function DataImportPageES() {
 								</ul>
 							</div>
 							<div className="space-y-3">
-								<h4 className="font-semibold text-red-600">⚠️ Evite Estos Errores</h4>
+								<h4 className="font-semibold text-red-600">
+									⚠️ Evite Estos Errores
+								</h4>
 								<ul className="space-y-2 text-sm">
 									<li>• No mezcle datos de diferentes clínicas</li>
 									<li>• No use caracteres especiales en nombres</li>
@@ -187,7 +230,7 @@ export default async function DataImportPageES() {
 				</Card>
 
 				{/* Import Wizard */}
-				<DataImportWizard 
+				<DataImportWizard
 					practiceId={practiceUser.practice.id}
 					onImportComplete={(result) => {
 						console.log("Importación completada:", result);
@@ -197,12 +240,16 @@ export default async function DataImportPageES() {
 				{/* Support Information */}
 				<Card className="border-gray-200 bg-white/90 backdrop-blur-sm">
 					<CardHeader>
-						<CardTitle className="text-gray-800">🇲🇽 Soporte para Clínicas Mexicanas</CardTitle>
+						<CardTitle className="text-gray-800">
+							🇲🇽 Soporte para Clínicas Mexicanas
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 							<div>
-								<h4 className="font-semibold mb-3 text-green-600">Soporte Técnico 24/7</h4>
+								<h4 className="mb-3 font-semibold text-green-600">
+									Soporte Técnico 24/7
+								</h4>
 								<div className="space-y-2 text-sm">
 									<div className="flex items-center gap-2">
 										<span>📧</span>
@@ -223,13 +270,55 @@ export default async function DataImportPageES() {
 								</div>
 							</div>
 							<div>
-								<h4 className="font-semibold mb-3 text-blue-600">Recursos Especializados</h4>
+								<h4 className="mb-3 font-semibold text-blue-600">
+									Recursos Especializados
+								</h4>
 								<div className="space-y-2 text-sm">
-									<div>• <a href="/es/help/importacion-masiva" className="text-blue-600 hover:underline">Guía de Importación Masiva</a></div>
-									<div>• <a href="/es/help/formatos-mexico" className="text-blue-600 hover:underline">Formatos para Clínicas Mexicanas</a></div>
-									<div>• <a href="/es/help/seguridad-datos" className="text-blue-600 hover:underline">Seguridad y Privacidad</a></div>
-									<div>• <a href="/es/help/multi-clinica" className="text-blue-600 hover:underline">Gestión Multi-Clínica</a></div>
-									<div>• <a href="/es/help/cumplimiento-nom" className="text-blue-600 hover:underline">Cumplimiento NOM-004-SSA3</a></div>
+									<div>
+										•{" "}
+										<a
+											href="/es/help/importacion-masiva"
+											className="text-blue-600 hover:underline"
+										>
+											Guía de Importación Masiva
+										</a>
+									</div>
+									<div>
+										•{" "}
+										<a
+											href="/es/help/formatos-mexico"
+											className="text-blue-600 hover:underline"
+										>
+											Formatos para Clínicas Mexicanas
+										</a>
+									</div>
+									<div>
+										•{" "}
+										<a
+											href="/es/help/seguridad-datos"
+											className="text-blue-600 hover:underline"
+										>
+											Seguridad y Privacidad
+										</a>
+									</div>
+									<div>
+										•{" "}
+										<a
+											href="/es/help/multi-clinica"
+											className="text-blue-600 hover:underline"
+										>
+											Gestión Multi-Clínica
+										</a>
+									</div>
+									<div>
+										•{" "}
+										<a
+											href="/es/help/cumplimiento-nom"
+											className="text-blue-600 hover:underline"
+										>
+											Cumplimiento NOM-004-SSA3
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>

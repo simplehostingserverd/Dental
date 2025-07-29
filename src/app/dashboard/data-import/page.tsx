@@ -1,10 +1,16 @@
-import { getCurrentUser } from "@/lib/auth/get-user";
-import { redirect } from "next/navigation";
-import { db } from "@/server/db";
 import DataImportWizard from "@/components/data-import/DataImportWizard";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Database, Users, Shield, FileText } from "lucide-react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { getCurrentUser } from "@/lib/auth/get-user";
+import { db } from "@/server/db";
+import { Database, FileText, Shield, Users } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function DataImportPage() {
 	const user = await getCurrentUser();
@@ -36,10 +42,12 @@ export default async function DataImportPage() {
 	});
 
 	return (
-		<div className="container mx-auto py-6 space-y-6">
+		<div className="container mx-auto space-y-6 py-6">
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-3xl font-bold tracking-tight">Importación de Datos</h1>
+					<h1 className="font-bold text-3xl tracking-tight">
+						Importación de Datos
+					</h1>
 					<p className="text-muted-foreground">
 						Importe datos de pacientes existentes a su práctica dental
 					</p>
@@ -55,32 +63,36 @@ export default async function DataImportPage() {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 						<div className="flex items-center gap-3">
-							<div className="p-2 bg-blue-100 rounded-lg">
+							<div className="rounded-lg bg-blue-100 p-2">
 								<Users className="h-5 w-5 text-blue-600" />
 							</div>
 							<div>
-								<div className="font-semibold">{practiceUser.practice.name}</div>
-								<div className="text-sm text-gray-600">Práctica Dental</div>
+								<div className="font-semibold">
+									{practiceUser.practice.name}
+								</div>
+								<div className="text-gray-600 text-sm">Práctica Dental</div>
 							</div>
 						</div>
 						<div className="flex items-center gap-3">
-							<div className="p-2 bg-green-100 rounded-lg">
+							<div className="rounded-lg bg-green-100 p-2">
 								<Users className="h-5 w-5 text-green-600" />
 							</div>
 							<div>
 								<div className="font-semibold">{patientCount}</div>
-								<div className="text-sm text-gray-600">Pacientes Actuales</div>
+								<div className="text-gray-600 text-sm">Pacientes Actuales</div>
 							</div>
 						</div>
 						<div className="flex items-center gap-3">
-							<div className="p-2 bg-purple-100 rounded-lg">
+							<div className="rounded-lg bg-purple-100 p-2">
 								<Shield className="h-5 w-5 text-purple-600" />
 							</div>
 							<div>
-								<div className="font-semibold">ID: {practiceUser.practice.id}</div>
-								<div className="text-sm text-gray-600">Identificador Único</div>
+								<div className="font-semibold">
+									ID: {practiceUser.practice.id}
+								</div>
+								<div className="text-gray-600 text-sm">Identificador Único</div>
 							</div>
 						</div>
 					</div>
@@ -91,9 +103,10 @@ export default async function DataImportPage() {
 			<Alert>
 				<Shield className="h-4 w-4" />
 				<AlertDescription>
-					<strong>Seguridad de Datos:</strong> Todos los datos importados están protegidos por cifrado y 
-					aislamiento de práctica. Los datos de su clínica están completamente separados de otras prácticas 
-					y cumplen con las regulaciones de privacidad médica.
+					<strong>Seguridad de Datos:</strong> Todos los datos importados están
+					protegidos por cifrado y aislamiento de práctica. Los datos de su
+					clínica están completamente separados de otras prácticas y cumplen con
+					las regulaciones de privacidad médica.
 				</AlertDescription>
 			</Alert>
 
@@ -109,9 +122,11 @@ export default async function DataImportPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 						<div className="space-y-3">
-							<h4 className="font-semibold text-green-600">✓ Mejores Prácticas</h4>
+							<h4 className="font-semibold text-green-600">
+								✓ Mejores Prácticas
+							</h4>
 							<ul className="space-y-2 text-sm">
 								<li>• Descargue y use la plantilla proporcionada</li>
 								<li>• Verifique que las fechas estén en formato YYYY-MM-DD</li>
@@ -122,7 +137,9 @@ export default async function DataImportPage() {
 							</ul>
 						</div>
 						<div className="space-y-3">
-							<h4 className="font-semibold text-red-600">⚠ Evite Estos Errores</h4>
+							<h4 className="font-semibold text-red-600">
+								⚠ Evite Estos Errores
+							</h4>
 							<ul className="space-y-2 text-sm">
 								<li>• No incluya pacientes duplicados</li>
 								<li>• No use caracteres especiales en nombres</li>
@@ -137,7 +154,7 @@ export default async function DataImportPage() {
 			</Card>
 
 			{/* Import Wizard */}
-			<DataImportWizard 
+			<DataImportWizard
 				practiceId={practiceUser.practice.id}
 				onImportComplete={(result) => {
 					// Handle import completion
@@ -151,11 +168,12 @@ export default async function DataImportPage() {
 					<CardTitle>¿Necesita Ayuda?</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
-							<h4 className="font-semibold mb-2">Soporte Técnico</h4>
-							<p className="text-sm text-gray-600 mb-2">
-								Si tiene problemas con la importación de datos, nuestro equipo está aquí para ayudar.
+							<h4 className="mb-2 font-semibold">Soporte Técnico</h4>
+							<p className="mb-2 text-gray-600 text-sm">
+								Si tiene problemas con la importación de datos, nuestro equipo
+								está aquí para ayudar.
 							</p>
 							<div className="space-y-1 text-sm">
 								<div>📧 Email: soporte@cognident.org</div>
@@ -164,12 +182,44 @@ export default async function DataImportPage() {
 							</div>
 						</div>
 						<div>
-							<h4 className="font-semibold mb-2">Recursos Adicionales</h4>
+							<h4 className="mb-2 font-semibold">Recursos Adicionales</h4>
 							<div className="space-y-2 text-sm">
-								<div>• <a href="/help/data-import" className="text-blue-600 hover:underline">Guía de Importación Detallada</a></div>
-								<div>• <a href="/help/data-format" className="text-blue-600 hover:underline">Formatos de Datos Soportados</a></div>
-								<div>• <a href="/help/troubleshooting" className="text-blue-600 hover:underline">Solución de Problemas</a></div>
-								<div>• <a href="/help/security" className="text-blue-600 hover:underline">Seguridad y Privacidad</a></div>
+								<div>
+									•{" "}
+									<a
+										href="/help/data-import"
+										className="text-blue-600 hover:underline"
+									>
+										Guía de Importación Detallada
+									</a>
+								</div>
+								<div>
+									•{" "}
+									<a
+										href="/help/data-format"
+										className="text-blue-600 hover:underline"
+									>
+										Formatos de Datos Soportados
+									</a>
+								</div>
+								<div>
+									•{" "}
+									<a
+										href="/help/troubleshooting"
+										className="text-blue-600 hover:underline"
+									>
+										Solución de Problemas
+									</a>
+								</div>
+								<div>
+									•{" "}
+									<a
+										href="/help/security"
+										className="text-blue-600 hover:underline"
+									>
+										Seguridad y Privacidad
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>

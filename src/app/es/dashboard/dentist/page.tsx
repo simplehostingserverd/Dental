@@ -1,22 +1,28 @@
-import { getCurrentUser } from "@/lib/auth/get-user";
-import { redirect } from "next/navigation";
-import { db } from "@/server/db";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-	Calendar, 
-	Users, 
-	Clock, 
-	TrendingUp, 
-	FileText, 
-	Stethoscope,
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { getCurrentUser } from "@/lib/auth/get-user";
+import { db } from "@/server/db";
+import {
 	AlertCircle,
+	Calendar,
 	CheckCircle,
+	Clock,
+	FileText,
+	Settings,
+	Stethoscope,
+	TrendingUp,
 	Upload,
-	Settings
+	Users,
 } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function DentistDashboardES() {
 	const user = await getCurrentUser();
@@ -43,56 +49,60 @@ export default async function DentistDashboardES() {
 
 	// Get dashboard statistics
 	const today = new Date();
-	const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-	const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+	const startOfDay = new Date(
+		today.getFullYear(),
+		today.getMonth(),
+		today.getDate(),
+	);
+	const endOfDay = new Date(
+		today.getFullYear(),
+		today.getMonth(),
+		today.getDate() + 1,
+	);
 
-	const [
-		todayAppointments,
-		totalPatients,
-		pendingTreatments,
-		recentPatients
-	] = await Promise.all([
-		db.appointment.count({
-			where: {
-				practiceUserId: user.id,
-				start: {
-					gte: startOfDay,
-					lt: endOfDay,
+	const [todayAppointments, totalPatients, pendingTreatments, recentPatients] =
+		await Promise.all([
+			db.appointment.count({
+				where: {
+					practiceUserId: user.id,
+					start: {
+						gte: startOfDay,
+						lt: endOfDay,
+					},
+					status: { notIn: ["CANCELED"] },
 				},
-				status: { notIn: ["CANCELED"] },
-			},
-		}),
-		db.patient.count({
-			where: { practiceId: practiceUser.practice.id },
-		}),
-		db.treatmentPlan.count({
-			where: {
-				patient: { practiceId: practiceUser.practice.id },
-				status: "PENDING",
-			},
-		}),
-		db.patient.findMany({
-			where: { practiceId: practiceUser.practice.id },
-			orderBy: { createdAt: "desc" },
-			take: 5,
-			select: {
-				id: true,
-				firstName: true,
-				lastName: true,
-				createdAt: true,
-				lastVisit: true,
-			},
-		}),
-	]);
+			}),
+			db.patient.count({
+				where: { practiceId: practiceUser.practice.id },
+			}),
+			db.treatment.count({
+				where: {
+					patient: { practiceId: practiceUser.practice.id },
+					status: "PLANNED",
+				},
+			}),
+			db.patient.findMany({
+				where: { practiceId: practiceUser.practice.id },
+				orderBy: { createdAt: "desc" },
+				take: 5,
+				select: {
+					id: true,
+					firstName: true,
+					lastName: true,
+					createdAt: true,
+					lastVisit: true,
+				},
+			}),
+		]);
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-red-50">
 			{/* Header */}
-			<div className="bg-white/80 backdrop-blur-sm border-b border-green-200">
+			<div className="border-green-200 border-b bg-white/80 backdrop-blur-sm">
 				<div className="container mx-auto px-6 py-4">
 					<div className="flex items-center justify-between">
 						<div>
-							<h1 className="text-2xl font-bold text-gray-900">
+							<h1 className="font-bold text-2xl text-gray-900">
 								Panel del Dentista - {practiceUser.practice.name}
 							</h1>
 							<p className="text-gray-600">
@@ -100,10 +110,16 @@ export default async function DentistDashboardES() {
 							</p>
 						</div>
 						<div className="flex items-center gap-3">
-							<Badge variant="outline" className="border-green-600 text-green-600">
+							<Badge
+								variant="outline"
+								className="border-green-600 text-green-600"
+							>
 								🇲🇽 México
 							</Badge>
-							<Badge variant="outline" className="border-blue-600 text-blue-600">
+							<Badge
+								variant="outline"
+								className="border-blue-600 text-blue-600"
+							>
 								ID: {practiceUser.practice.id.slice(0, 8)}...
 							</Badge>
 						</div>
@@ -113,22 +129,24 @@ export default async function DentistDashboardES() {
 
 			<div className="container mx-auto px-6 py-8">
 				{/* Quick Stats */}
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+				<div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
 					<Card className="border-green-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-green-800">
+							<CardTitle className="font-medium text-green-800 text-sm">
 								Citas de Hoy
 							</CardTitle>
 							<Calendar className="h-4 w-4 text-green-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-green-700">{todayAppointments}</div>
-							<p className="text-xs text-green-600">
-								{new Date().toLocaleDateString('es-MX', { 
-									weekday: 'long', 
-									year: 'numeric', 
-									month: 'long', 
-									day: 'numeric' 
+							<div className="font-bold text-2xl text-green-700">
+								{todayAppointments}
+							</div>
+							<p className="text-green-600 text-xs">
+								{new Date().toLocaleDateString("es-MX", {
+									weekday: "long",
+									year: "numeric",
+									month: "long",
+									day: "numeric",
 								})}
 							</p>
 						</CardContent>
@@ -136,46 +154,44 @@ export default async function DentistDashboardES() {
 
 					<Card className="border-blue-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-blue-800">
+							<CardTitle className="font-medium text-blue-800 text-sm">
 								Total Pacientes
 							</CardTitle>
 							<Users className="h-4 w-4 text-blue-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-blue-700">{totalPatients.toLocaleString()}</div>
-							<p className="text-xs text-blue-600">
-								Registrados en la clínica
-							</p>
+							<div className="font-bold text-2xl text-blue-700">
+								{totalPatients.toLocaleString()}
+							</div>
+							<p className="text-blue-600 text-xs">Registrados en la clínica</p>
 						</CardContent>
 					</Card>
 
 					<Card className="border-orange-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-orange-800">
+							<CardTitle className="font-medium text-orange-800 text-sm">
 								Tratamientos Pendientes
 							</CardTitle>
 							<Clock className="h-4 w-4 text-orange-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-orange-700">{pendingTreatments}</div>
-							<p className="text-xs text-orange-600">
-								Requieren atención
-							</p>
+							<div className="font-bold text-2xl text-orange-700">
+								{pendingTreatments}
+							</div>
+							<p className="text-orange-600 text-xs">Requieren atención</p>
 						</CardContent>
 					</Card>
 
 					<Card className="border-purple-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-purple-800">
+							<CardTitle className="font-medium text-purple-800 text-sm">
 								Eficiencia
 							</CardTitle>
 							<TrendingUp className="h-4 w-4 text-purple-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-purple-700">94%</div>
-							<p className="text-xs text-purple-600">
-								Promedio mensual
-							</p>
+							<div className="font-bold text-2xl text-purple-700">94%</div>
+							<p className="text-purple-600 text-xs">Promedio mensual</p>
 						</CardContent>
 					</Card>
 				</div>
@@ -192,27 +208,39 @@ export default async function DentistDashboardES() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
 							<Link href="/es/dashboard/patients">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-green-200 hover:bg-green-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-green-200 hover:bg-green-50"
+								>
 									<Users className="h-6 w-6 text-green-600" />
 									<span className="text-sm">Pacientes</span>
 								</Button>
 							</Link>
 							<Link href="/es/dashboard/appointments">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-blue-200 hover:bg-blue-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-blue-200 hover:bg-blue-50"
+								>
 									<Calendar className="h-6 w-6 text-blue-600" />
 									<span className="text-sm">Citas</span>
 								</Button>
 							</Link>
 							<Link href="/es/dashboard/treatment-plans">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-purple-200 hover:bg-purple-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-purple-200 hover:bg-purple-50"
+								>
 									<FileText className="h-6 w-6 text-purple-600" />
 									<span className="text-sm">Tratamientos</span>
 								</Button>
 							</Link>
 							<Link href="/es/dashboard/data-import">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-red-200 hover:bg-red-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-red-200 hover:bg-red-50"
+								>
 									<Upload className="h-6 w-6 text-red-600" />
 									<span className="text-sm">Importar Datos</span>
 								</Button>
@@ -222,35 +250,45 @@ export default async function DentistDashboardES() {
 				</Card>
 
 				{/* Recent Activity */}
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 					<Card className="border-gray-200 bg-white/90 backdrop-blur-sm">
 						<CardHeader>
-							<CardTitle className="text-gray-800">Pacientes Recientes</CardTitle>
-							<CardDescription>
-								Últimos pacientes registrados
-							</CardDescription>
+							<CardTitle className="text-gray-800">
+								Pacientes Recientes
+							</CardTitle>
+							<CardDescription>Últimos pacientes registrados</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
 								{recentPatients.map((patient) => (
-									<div key={patient.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+									<div
+										key={patient.id}
+										className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
+									>
 										<div>
 											<div className="font-medium text-gray-900">
 												{patient.firstName} {patient.lastName}
 											</div>
-											<div className="text-sm text-gray-600">
-												Registrado: {patient.createdAt.toLocaleDateString('es-MX')}
+											<div className="text-gray-600 text-sm">
+												Registrado:{" "}
+												{patient.createdAt.toLocaleDateString("es-MX")}
 											</div>
 										</div>
 										<div className="text-right">
 											{patient.lastVisit ? (
-												<Badge variant="outline" className="border-green-600 text-green-600">
-													<CheckCircle className="h-3 w-3 mr-1" />
+												<Badge
+													variant="outline"
+													className="border-green-600 text-green-600"
+												>
+													<CheckCircle className="mr-1 h-3 w-3" />
 													Activo
 												</Badge>
 											) : (
-												<Badge variant="outline" className="border-orange-600 text-orange-600">
-													<AlertCircle className="h-3 w-3 mr-1" />
+												<Badge
+													variant="outline"
+													className="border-orange-600 text-orange-600"
+												>
+													<AlertCircle className="mr-1 h-3 w-3" />
 													Nuevo
 												</Badge>
 											)}
@@ -263,35 +301,41 @@ export default async function DentistDashboardES() {
 
 					<Card className="border-gray-200 bg-white/90 backdrop-blur-sm">
 						<CardHeader>
-							<CardTitle className="text-gray-800">Información de la Clínica</CardTitle>
-							<CardDescription>
-								Detalles de su práctica dental
-							</CardDescription>
+							<CardTitle className="text-gray-800">
+								Información de la Clínica
+							</CardTitle>
+							<CardDescription>Detalles de su práctica dental</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
 								<div className="flex justify-between">
 									<span className="text-gray-600">Nombre:</span>
-									<span className="font-medium">{practiceUser.practice.name}</span>
+									<span className="font-medium">
+										{practiceUser.practice.name}
+									</span>
 								</div>
 								<div className="flex justify-between">
 									<span className="text-gray-600">Ubicación:</span>
-									<span className="font-medium">{practiceUser.practice.city}, {practiceUser.practice.state}</span>
+									<span className="font-medium">
+										{practiceUser.practice.city}, {practiceUser.practice.state}
+									</span>
 								</div>
 								<div className="flex justify-between">
 									<span className="text-gray-600">Teléfono:</span>
-									<span className="font-medium">{practiceUser.practice.phone}</span>
+									<span className="font-medium">
+										{practiceUser.practice.phone}
+									</span>
 								</div>
 								<div className="flex justify-between">
 									<span className="text-gray-600">ID Único:</span>
-									<span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
+									<span className="rounded bg-gray-100 px-2 py-1 font-mono text-sm">
 										{practiceUser.practice.id}
 									</span>
 								</div>
 								<div className="pt-4">
 									<Link href="/es/dashboard/settings">
 										<Button variant="outline" className="w-full">
-											<Settings className="h-4 w-4 mr-2" />
+											<Settings className="mr-2 h-4 w-4" />
 											Configuración
 										</Button>
 									</Link>
@@ -304,7 +348,9 @@ export default async function DentistDashboardES() {
 				{/* Footer */}
 				<div className="mt-8 text-center text-gray-500 text-sm">
 					<p>🇲🇽 Sistema de Gestión Dental para México | Cognident</p>
-					<p>Datos seguros y aislados por clínica | Soporte: mexico@cognident.org</p>
+					<p>
+						Datos seguros y aislados por clínica | Soporte: mexico@cognident.org
+					</p>
 				</div>
 			</div>
 		</div>

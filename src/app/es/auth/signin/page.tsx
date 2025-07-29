@@ -50,34 +50,114 @@ export default function MexicoSignInPage() {
 			<div className="absolute inset-0 overflow-hidden opacity-10">
 				<div className="h-full w-full bg-gradient-to-br from-green-100 to-red-100">
 					{/* Dental Office Illustration */}
-					<svg viewBox="0 0 800 600" className="h-full w-full" aria-label="Dental office background">
+					<svg
+						viewBox="0 0 800 600"
+						className="h-full w-full"
+						aria-label="Dental office background"
+					>
 						<title>Dental office background</title>
 						{/* Modern dental chair */}
-						<rect x="200" y="300" width="120" height="80" rx="10" fill="#e5e7eb" stroke="#6b7280" strokeWidth="2"/>
-						<rect x="220" y="280" width="80" height="20" rx="10" fill="#9ca3af"/>
+						<rect
+							x="200"
+							y="300"
+							width="120"
+							height="80"
+							rx="10"
+							fill="#e5e7eb"
+							stroke="#6b7280"
+							strokeWidth="2"
+						/>
+						<rect
+							x="220"
+							y="280"
+							width="80"
+							height="20"
+							rx="10"
+							fill="#9ca3af"
+						/>
 
 						{/* Dental light */}
-						<circle cx="350" cy="200" r="30" fill="#fbbf24" stroke="#f59e0b" strokeWidth="3"/>
-						<line x1="350" y1="230" x2="350" y2="280" stroke="#6b7280" strokeWidth="4"/>
+						<circle
+							cx="350"
+							cy="200"
+							r="30"
+							fill="#fbbf24"
+							stroke="#f59e0b"
+							strokeWidth="3"
+						/>
+						<line
+							x1="350"
+							y1="230"
+							x2="350"
+							y2="280"
+							stroke="#6b7280"
+							strokeWidth="4"
+						/>
 
 						{/* Medical cabinet */}
-						<rect x="500" y="250" width="80" height="120" rx="5" fill="#f3f4f6" stroke="#9ca3af" strokeWidth="2"/>
-						<rect x="510" y="260" width="60" height="15" fill="#3b82f6"/>
-						<rect x="510" y="285" width="60" height="15" fill="#10b981"/>
-						<rect x="510" y="310" width="60" height="15" fill="#ef4444"/>
+						<rect
+							x="500"
+							y="250"
+							width="80"
+							height="120"
+							rx="5"
+							fill="#f3f4f6"
+							stroke="#9ca3af"
+							strokeWidth="2"
+						/>
+						<rect x="510" y="260" width="60" height="15" fill="#3b82f6" />
+						<rect x="510" y="285" width="60" height="15" fill="#10b981" />
+						<rect x="510" y="310" width="60" height="15" fill="#ef4444" />
 
 						{/* Dental tools */}
-						<line x1="100" y1="200" x2="120" y2="180" stroke="#6b7280" strokeWidth="3"/>
-						<line x1="110" y1="210" x2="130" y2="190" stroke="#6b7280" strokeWidth="3"/>
-						<circle cx="125" r="5" fill="#9ca3af"/>
+						<line
+							x1="100"
+							y1="200"
+							x2="120"
+							y2="180"
+							stroke="#6b7280"
+							strokeWidth="3"
+						/>
+						<line
+							x1="110"
+							y1="210"
+							x2="130"
+							y2="190"
+							stroke="#6b7280"
+							strokeWidth="3"
+						/>
+						<circle cx="125" r="5" fill="#9ca3af" />
 
 						{/* Window with natural light */}
-						<rect x="50" y="100" width="100" height="80" rx="5" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
-						<line x1="100" y1="100" x2="100" y2="180" stroke="#3b82f6" strokeWidth="1"/>
-						<line x1="50" y1="140" x2="150" y2="140" stroke="#3b82f6" strokeWidth="1"/>
+						<rect
+							x="50"
+							y="100"
+							width="100"
+							height="80"
+							rx="5"
+							fill="#dbeafe"
+							stroke="#3b82f6"
+							strokeWidth="2"
+						/>
+						<line
+							x1="100"
+							y1="100"
+							x2="100"
+							y2="180"
+							stroke="#3b82f6"
+							strokeWidth="1"
+						/>
+						<line
+							x1="50"
+							y1="140"
+							x2="150"
+							y2="140"
+							stroke="#3b82f6"
+							strokeWidth="1"
+						/>
 					</svg>
 				</div>
-
+			</div>
 
 			<div className="relative z-10 w-full max-w-md">
 				{/* Back to Landing */}

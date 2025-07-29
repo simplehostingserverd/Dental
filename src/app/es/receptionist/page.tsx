@@ -1,24 +1,30 @@
-import { getCurrentUser } from "@/lib/auth/get-user";
-import { redirect } from "next/navigation";
-import { db } from "@/server/db";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { getCurrentUser } from "@/lib/auth/get-user";
+import { db } from "@/server/db";
+import {
+	Bell,
 	Calendar,
-	Users,
-	Phone,
+	Clock,
 	CreditCard,
 	FileText,
 	MapPin,
-	Clock,
+	MessageSquare,
+	Phone,
+	Settings,
 	TrendingUp,
 	Upload,
-	Settings,
-	MessageSquare,
-	Bell
+	Users,
 } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function ReceptionistDashboardES() {
 	const user = await getCurrentUser();
@@ -45,13 +51,21 @@ export default async function ReceptionistDashboardES() {
 
 	// Get dashboard statistics
 	const today = new Date();
-	const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-	const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+	const startOfDay = new Date(
+		today.getFullYear(),
+		today.getMonth(),
+		today.getDate(),
+	);
+	const endOfDay = new Date(
+		today.getFullYear(),
+		today.getMonth(),
+		today.getDate() + 1,
+	);
 	const [
 		todayAppointments,
 		totalPatients,
 		pendingPayments,
-		recentAppointments
+		recentAppointments,
 	] = await Promise.all([
 		db.appointment.count({
 			where: {
@@ -69,7 +83,7 @@ export default async function ReceptionistDashboardES() {
 		db.patient.count({
 			where: {
 				practiceId: practiceUser.practice.id,
-				outstandingBalance: { gt: 0 }
+				outstandingBalance: { gt: 0 },
 			},
 		}),
 		db.appointment.findMany({
@@ -104,11 +118,11 @@ export default async function ReceptionistDashboardES() {
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-red-50">
 			{/* Header */}
-			<div className="bg-white/80 backdrop-blur-sm border-b border-blue-200">
+			<div className="border-blue-200 border-b bg-white/80 backdrop-blur-sm">
 				<div className="container mx-auto px-6 py-4">
 					<div className="flex items-center justify-between">
 						<div>
-							<h1 className="text-2xl font-bold text-gray-900">
+							<h1 className="font-bold text-2xl text-gray-900">
 								Panel de Recepción - {practiceUser.practice.name}
 							</h1>
 							<p className="text-gray-600">
@@ -116,10 +130,16 @@ export default async function ReceptionistDashboardES() {
 							</p>
 						</div>
 						<div className="flex items-center gap-3">
-							<Badge variant="outline" className="border-green-600 text-green-600">
+							<Badge
+								variant="outline"
+								className="border-green-600 text-green-600"
+							>
 								🇲🇽 México
 							</Badge>
-							<Badge variant="outline" className="border-blue-600 text-blue-600">
+							<Badge
+								variant="outline"
+								className="border-blue-600 text-blue-600"
+							>
 								ID: {practiceUser.practice.id.slice(0, 8)}...
 							</Badge>
 						</div>
@@ -129,22 +149,24 @@ export default async function ReceptionistDashboardES() {
 
 			<div className="container mx-auto px-6 py-8">
 				{/* Quick Stats */}
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+				<div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
 					<Card className="border-blue-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-blue-800">
+							<CardTitle className="font-medium text-blue-800 text-sm">
 								Citas de Hoy
 							</CardTitle>
 							<Calendar className="h-4 w-4 text-blue-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-blue-700">{todayAppointments}</div>
-							<p className="text-xs text-blue-600">
-								{new Date().toLocaleDateString('es-MX', {
-									weekday: 'long',
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric'
+							<div className="font-bold text-2xl text-blue-700">
+								{todayAppointments}
+							</div>
+							<p className="text-blue-600 text-xs">
+								{new Date().toLocaleDateString("es-MX", {
+									weekday: "long",
+									year: "numeric",
+									month: "long",
+									day: "numeric",
 								})}
 							</p>
 						</CardContent>
@@ -152,14 +174,16 @@ export default async function ReceptionistDashboardES() {
 
 					<Card className="border-green-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-green-800">
+							<CardTitle className="font-medium text-green-800 text-sm">
 								Total Pacientes
 							</CardTitle>
 							<Users className="h-4 w-4 text-green-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-green-700">{totalPatients.toLocaleString()}</div>
-							<p className="text-xs text-green-600">
+							<div className="font-bold text-2xl text-green-700">
+								{totalPatients.toLocaleString()}
+							</div>
+							<p className="text-green-600 text-xs">
 								Registrados en la clínica
 							</p>
 						</CardContent>
@@ -167,31 +191,29 @@ export default async function ReceptionistDashboardES() {
 
 					<Card className="border-orange-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-orange-800">
+							<CardTitle className="font-medium text-orange-800 text-sm">
 								Pagos Pendientes
 							</CardTitle>
 							<CreditCard className="h-4 w-4 text-orange-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-orange-700">{pendingPayments}</div>
-							<p className="text-xs text-orange-600">
-								Requieren seguimiento
-							</p>
+							<div className="font-bold text-2xl text-orange-700">
+								{pendingPayments}
+							</div>
+							<p className="text-orange-600 text-xs">Requieren seguimiento</p>
 						</CardContent>
 					</Card>
 
 					<Card className="border-purple-200 bg-white/80 backdrop-blur-sm">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-purple-800">
+							<CardTitle className="font-medium text-purple-800 text-sm">
 								Eficiencia
 							</CardTitle>
 							<TrendingUp className="h-4 w-4 text-purple-600" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold text-purple-700">96%</div>
-							<p className="text-xs text-purple-600">
-								Atención al cliente
-							</p>
+							<div className="font-bold text-2xl text-purple-700">96%</div>
+							<p className="text-purple-600 text-xs">Atención al cliente</p>
 						</CardContent>
 					</Card>
 				</div>
@@ -208,26 +230,39 @@ export default async function ReceptionistDashboardES() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
 							<Link href="/es/receptionist/patients">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-blue-200 hover:bg-blue-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-blue-200 hover:bg-blue-50"
+								>
 									<Users className="h-6 w-6 text-blue-600" />
 									<span className="text-sm">Pacientes</span>
 								</Button>
+							</Link>
 							<Link href="/es/receptionist/appointments">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-green-200 hover:bg-green-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-green-200 hover:bg-green-50"
+								>
 									<Calendar className="h-6 w-6 text-green-600" />
 									<span className="text-sm">Citas</span>
 								</Button>
 							</Link>
 							<Link href="/es/receptionist/billing">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-orange-200 hover:bg-orange-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-orange-200 hover:bg-orange-50"
+								>
 									<CreditCard className="h-6 w-6 text-orange-600" />
 									<span className="text-sm">Facturación</span>
 								</Button>
 							</Link>
 							<Link href="/es/dashboard/data-import">
-								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-red-200 hover:bg-red-50">
+								<Button
+									variant="outline"
+									className="flex h-20 w-full flex-col gap-2 border-red-200 hover:bg-red-50"
+								>
 									<Upload className="h-6 w-6 text-red-600" />
 									<span className="text-sm">Importar Datos</span>
 								</Button>
@@ -237,49 +272,55 @@ export default async function ReceptionistDashboardES() {
 				</Card>
 
 				{/* Today's Schedule and Communication Tools */}
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 					<Card className="border-gray-200 bg-white/90 backdrop-blur-sm">
 						<CardHeader>
 							<CardTitle className="flex items-center gap-2 text-gray-800">
 								<Clock className="h-5 w-5" />
 								Agenda de Hoy
 							</CardTitle>
-							<CardDescription>
-								Próximas citas programadas
-							</CardDescription>
+							<CardDescription>Próximas citas programadas</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
 								{recentAppointments.length > 0 ? (
 									recentAppointments.map((appointment) => (
-										<div key={appointment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+										<div
+											key={appointment.id}
+											className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
+										>
 											<div>
 												<div className="font-medium text-gray-900">
-													{appointment.patient.firstName} {appointment.patient.lastName}
+													{appointment.patient.firstName}{" "}
+													{appointment.patient.lastName}
 												</div>
-												<div className="text-sm text-gray-600">
-													Dr. {appointment.practiceUser.firstName} {appointment.practiceUser.lastName}
+												<div className="text-gray-600 text-sm">
+													Dr. {appointment.practiceUser?.firstName}{" "}
+													{appointment.practiceUser?.lastName}
 												</div>
-												<div className="text-xs text-gray-500">
+												<div className="text-gray-500 text-xs">
 													{appointment.patient.phone}
 												</div>
 											</div>
 											<div className="text-right">
 												<div className="font-medium text-blue-600">
-													{appointment.start.toLocaleTimeString('es-MX', {
-														hour: '2-digit',
-														minute: '2-digit'
+													{appointment.start?.toLocaleTimeString("es-MX", {
+														hour: "2-digit",
+														minute: "2-digit",
 													})}
 												</div>
-												<Badge variant="outline" className="border-green-600 text-green-600 text-xs">
+												<Badge
+													variant="outline"
+													className="border-green-600 text-green-600 text-xs"
+												>
 													{appointment.status}
 												</Badge>
 											</div>
 										</div>
 									))
 								) : (
-									<div className="text-center py-8 text-gray-500">
-										<Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+									<div className="py-8 text-center text-gray-500">
+										<Calendar className="mx-auto mb-4 h-12 w-12 text-gray-300" />
 										<p>No hay citas programadas para hoy</p>
 									</div>
 								)}
@@ -301,25 +342,25 @@ export default async function ReceptionistDashboardES() {
 							<div className="space-y-4">
 								<Link href="/es/receptionist/communication">
 									<Button variant="outline" className="w-full justify-start">
-										<MessageSquare className="h-4 w-4 mr-2" />
+										<MessageSquare className="mr-2 h-4 w-4" />
 										Mensajes y WhatsApp
 									</Button>
 								</Link>
 								<Link href="/es/receptionist/reminders">
 									<Button variant="outline" className="w-full justify-start">
-										<Bell className="h-4 w-4 mr-2" />
+										<Bell className="mr-2 h-4 w-4" />
 										Recordatorios de Citas
 									</Button>
 								</Link>
 								<Link href="/es/receptionist/reports">
 									<Button variant="outline" className="w-full justify-start">
-										<FileText className="h-4 w-4 mr-2" />
+										<FileText className="mr-2 h-4 w-4" />
 										Reportes y Estadísticas
 									</Button>
 								</Link>
 								<Link href="/es/receptionist/settings">
 									<Button variant="outline" className="w-full justify-start">
-										<Settings className="h-4 w-4 mr-2" />
+										<Settings className="mr-2 h-4 w-4" />
 										Configuración
 									</Button>
 								</Link>
@@ -331,15 +372,15 @@ export default async function ReceptionistDashboardES() {
 				{/* Practice Information */}
 				<Card className="mt-6 border-gray-200 bg-white/90 backdrop-blur-sm">
 					<CardHeader>
-						<CardTitle className="text-gray-800">Información de la Clínica</CardTitle>
-						<CardDescription>
-							Detalles de contacto y ubicación
-						</CardDescription>
+						<CardTitle className="text-gray-800">
+							Información de la Clínica
+						</CardTitle>
+						<CardDescription>Detalles de contacto y ubicación</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+						<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 							<div>
-								<h4 className="font-semibold mb-2 text-gray-800">Contacto</h4>
+								<h4 className="mb-2 font-semibold text-gray-800">Contacto</h4>
 								<div className="space-y-1 text-sm">
 									<div>📞 {practiceUser.practice.phone}</div>
 									<div>📧 {practiceUser.practice.email}</div>
@@ -347,15 +388,17 @@ export default async function ReceptionistDashboardES() {
 								</div>
 							</div>
 							<div>
-								<h4 className="font-semibold mb-2 text-gray-800">Ubicación</h4>
+								<h4 className="mb-2 font-semibold text-gray-800">Ubicación</h4>
 								<div className="space-y-1 text-sm">
 									<div>📍 {practiceUser.practice.address}</div>
-									<div>{practiceUser.practice.city}, {practiceUser.practice.state}</div>
+									<div>
+										{practiceUser.practice.city}, {practiceUser.practice.state}
+									</div>
 									<div>CP: {practiceUser.practice.zipCode}</div>
 								</div>
 							</div>
 							<div>
-								<h4 className="font-semibold mb-2 text-gray-800">Sistema</h4>
+								<h4 className="mb-2 font-semibold text-gray-800">Sistema</h4>
 								<div className="space-y-1 text-sm">
 									<div>🆔 ID: {practiceUser.practice.id}</div>
 									<div>🕐 Zona: {practiceUser.practice.timezone}</div>
@@ -369,7 +412,9 @@ export default async function ReceptionistDashboardES() {
 				{/* Footer */}
 				<div className="mt-8 text-center text-gray-500 text-sm">
 					<p>🇲🇽 Sistema de Gestión Dental para México | Cognident</p>
-					<p>Datos seguros y aislados por clínica | Soporte: mexico@cognident.org</p>
+					<p>
+						Datos seguros y aislados por clínica | Soporte: mexico@cognident.org
+					</p>
 				</div>
 			</div>
 		</div>

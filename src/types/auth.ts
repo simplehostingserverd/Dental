@@ -66,6 +66,11 @@ export interface LoginResponse {
 		lastName: string;
 		email: string;
 		role?: PracticeRole;
+		practiceId?: string;
+		practice?: {
+			id: string;
+			name: string;
+		};
 	};
 	requiresTwoFactor?: boolean;
 	error?: string;

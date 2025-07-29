@@ -17,17 +17,20 @@ interface LoginRequestBody {
 function detectPracticeLocale(practiceId?: string, practiceData?: any): string {
 	// Check if this is a Mexican practice (redirect to Spanish dashboard)
 	const mexicanPracticeIds = [
-		'beautiful-smiles-mx-001',
-		'creative-smile-mx-002',
-		'wizard-dental-mx-003'
+		"beautiful-smiles-mx-001",
+		"creative-smile-mx-002",
+		"wizard-dental-mx-003",
 	];
 
 	// Check practice ID patterns
 	if (practiceId) {
-		if (mexicanPracticeIds.includes(practiceId) || practiceId.includes('-mx-')) {
+		if (
+			mexicanPracticeIds.includes(practiceId) ||
+			practiceId.includes("-mx-")
+		) {
 			return "es";
 		}
-		if (practiceId.includes('-us-') || practiceId.includes('-en-')) {
+		if (practiceId.includes("-us-") || practiceId.includes("-en-")) {
 			return "en";
 		}
 	}
@@ -38,33 +41,47 @@ function detectPracticeLocale(practiceId?: string, practiceData?: any): string {
 		if (practiceData.country === "Mexico" || practiceData.country === "MX") {
 			return "es";
 		}
-		if (practiceData.country === "United States" || practiceData.country === "US") {
+		if (
+			practiceData.country === "United States" ||
+			practiceData.country === "US"
+		) {
 			return "en";
 		}
 
 		// Check timezone for Mexican timezones
-		if (practiceData.timezone && (
-			practiceData.timezone.includes("Mexico") ||
-			practiceData.timezone.includes("Tijuana") ||
-			practiceData.timezone.includes("Chihuahua") ||
-			practiceData.timezone.includes("Mazatlan")
-		)) {
+		if (
+			practiceData.timezone &&
+			(practiceData.timezone.includes("Mexico") ||
+				practiceData.timezone.includes("Tijuana") ||
+				practiceData.timezone.includes("Chihuahua") ||
+				practiceData.timezone.includes("Mazatlan"))
+		) {
 			return "es";
 		}
 
 		// Check phone number patterns (Mexican numbers start with +52)
-		if (practiceData.phone && practiceData.phone.startsWith("+52")) {
+		if (practiceData.phone?.startsWith("+52")) {
 			return "es";
 		}
 
 		// Check address for Mexican states
 		const mexicanStates = [
-			"Baja California", "Sonora", "Chihuahua", "Nuevo León", "Tamaulipas",
-			"Jalisco", "Ciudad de México", "CDMX", "Mexico City"
+			"Baja California",
+			"Sonora",
+			"Chihuahua",
+			"Nuevo León",
+			"Tamaulipas",
+			"Jalisco",
+			"Ciudad de México",
+			"CDMX",
+			"Mexico City",
 		];
-		if (practiceData.state && mexicanStates.some(state =>
-			practiceData.state.toLowerCase().includes(state.toLowerCase())
-		)) {
+		if (
+			practiceData.state &&
+			mexicanStates.some((state) =>
+				practiceData.state.toLowerCase().includes(state.toLowerCase()),
+			)
+		) {
 			return "es";
 		}
 	}
@@ -262,8 +279,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 						practiceContext: {
 							practiceId: practiceResult.user.practiceId,
 							practiceName: practiceResult.user.practice?.name,
-							isSpanishPractice: ['beautiful-smiles-mx-001', 'creative-smile-mx-002', 'wizard-dental-mx-003'].includes(practiceResult.user.practiceId || ''),
-						}
+							isSpanishPractice: [
+								"beautiful-smiles-mx-001",
+								"creative-smile-mx-002",
+								"wizard-dental-mx-003",
+							].includes(practiceResult.user.practiceId || ""),
+						},
 					},
 					redirectUrl,
 					userType: "practice",
@@ -279,17 +300,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 					});
 
 					// Set practice context cookie for middleware
-					response.cookies.set("practice-context", JSON.stringify({
-						practiceId: practiceResult.user.practiceId,
-						practiceName: practiceResult.user.practice?.name,
-						isSpanishPractice: ['beautiful-smiles-mx-001', 'creative-smile-mx-002', 'wizard-dental-mx-003'].includes(practiceResult.user.practiceId || ''),
-					}), {
-						httpOnly: true,
-						secure: process.env.NODE_ENV === "production",
-						sameSite: "strict",
-						maxAge: rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60,
-						path: "/",
-					});
+					response.cookies.set(
+						"practice-context",
+						JSON.stringify({
+							practiceId: practiceResult.user.practiceId,
+							practiceName: practiceResult.user.practice?.name,
+							isSpanishPractice: [
+								"beautiful-smiles-mx-001",
+								"creative-smile-mx-002",
+								"wizard-dental-mx-003",
+							].includes(practiceResult.user.practiceId || ""),
+						}),
+						{
+							httpOnly: true,
+							secure: process.env.NODE_ENV === "production",
+							sameSite: "strict",
+							maxAge: rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60,
+							path: "/",
+						},
+					);
 				}
 
 				return response;
@@ -309,8 +338,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 				const redirectUrl = getRedirectUrl(
 					"patient",
 					"patient",
-					patientResult.user?.practiceId,
-					patientResult.user?.practice,
+					patientResult.user?.patient?.practiceId,
+					undefined,
 				);
 
 				const response = NextResponse.json({
