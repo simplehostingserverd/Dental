@@ -1,6 +1,9 @@
 # Use the official Node.js LTS image
-# Updated for Coolify deployment v0.1.3 - Yarn package manager
+# Updated for Coolify deployment v0.1.4 - pnpm package manager
 FROM node:20-alpine AS base
+
+# Install pnpm globally
+RUN npm install -g pnpm
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -8,8 +11,8 @@ RUN apk add --no-cache libc6-compat curl
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* ./
-RUN yarn install --frozen-lockfile && yarn cache clean
+COPY package.json pnpm-lock.yaml* .npmrc ./
+RUN pnpm install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -21,15 +24,15 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Generate Prisma client and build
-RUN yarn prisma generate
+RUN pnpm prisma generate
 RUN --mount=type=cache,target=/app/.next/cache \
-    yarn build
+    pnpm build
 
 # Install production dependencies
 FROM base AS prod-deps
 WORKDIR /app
-COPY package.json yarn.lock* ./
-RUN yarn install --frozen-lockfile --production && yarn cache clean
+COPY package.json pnpm-lock.yaml* .npmrc ./
+RUN pnpm install --frozen-lockfile --prod
 
 # Production image, copy all the files and run next
 FROM base AS runner

@@ -12,25 +12,36 @@ interface LoginRequestBody {
 }
 
 /**
- * Get redirect URL based on user role
+ * Get redirect URL based on user role and practice context
  */
 function getRedirectUrl(
 	role: string,
 	userType: "practice" | "patient",
+	practiceId?: string,
 ): string {
 	if (userType === "patient") {
 		return "/patient/dashboard";
 	}
 
+	// Check if this is a Mexican practice (redirect to Spanish dashboard)
+	const mexicanPracticeIds = [
+		'beautiful-smiles-mx-001',
+		'creative-smile-mx-002',
+		'wizard-dental-mx-003'
+	];
+
+	const isSpanishPractice = practiceId && mexicanPracticeIds.includes(practiceId);
+	const baseUrl = isSpanishPractice ? "/es" : "";
+
 	switch (role.toLowerCase()) {
 		case "dentist":
-			return "/dashboard/dentist";
+			return `${baseUrl}/dashboard/dentist`;
 		case "receptionist":
-			return "/receptionist";
+			return `${baseUrl}/receptionist`;
 		case "admin":
-			return "/dashboard";
+			return `${baseUrl}/dashboard`;
 		default:
-			return "/dashboard";
+			return `${baseUrl}/dashboard`;
 	}
 }
 
@@ -177,21 +188,42 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 				ip,
 			);
 
-			if (practiceResult.success) {
+			if (practiceResult.success && practiceResult.user) {
 				const redirectUrl = getRedirectUrl(
-					practiceResult.user?.role || "",
+					practiceResult.user.role || "",
 					"practice",
+					practiceResult.user.practiceId,
 				);
 
 				const response = NextResponse.json({
 					success: true,
-					user: practiceResult.user,
+					user: {
+						...practiceResult.user,
+						practiceContext: {
+							practiceId: practiceResult.user.practiceId,
+							practiceName: practiceResult.user.practice?.name,
+							isSpanishPractice: ['beautiful-smiles-mx-001', 'creative-smile-mx-002', 'wizard-dental-mx-003'].includes(practiceResult.user.practiceId || ''),
+						}
+					},
 					redirectUrl,
 					userType: "practice",
 				});
 
 				if (practiceResult.token) {
 					response.cookies.set("practice-auth-token", practiceResult.token, {
+						httpOnly: true,
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "strict",
+						maxAge: rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60,
+						path: "/",
+					});
+
+					// Set practice context cookie for middleware
+					response.cookies.set("practice-context", JSON.stringify({
+						practiceId: practiceResult.user.practiceId,
+						practiceName: practiceResult.user.practice?.name,
+						isSpanishPractice: ['beautiful-smiles-mx-001', 'creative-smile-mx-002', 'wizard-dental-mx-003'].includes(practiceResult.user.practiceId || ''),
+					}), {
 						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "strict",
