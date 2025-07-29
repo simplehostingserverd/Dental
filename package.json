@@ -26,6 +26,7 @@
 		"reset-passwords": "tsx scripts/reset-passwords.ts",
 		"test-mexican-logins": "tsx scripts/test-mexican-logins.ts",
 		"create-mexican-demo": "tsx scripts/create-mexican-demo-data.ts",
+		"setup-mexican-practices": "tsx scripts/setup-mexican-practices.ts",
 		"check-env": "node scripts/check-env.js",
 		"db:reset": "pnpx prisma migrate reset --force && pnpm run seed",
 		"test": "playwright test",

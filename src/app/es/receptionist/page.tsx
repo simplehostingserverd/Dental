@@ -214,302 +214,164 @@ export default async function ReceptionistDashboardES() {
 									<Users className="h-6 w-6 text-blue-600" />
 									<span className="text-sm">Pacientes</span>
 								</Button>
+							<Link href="/es/receptionist/appointments">
+								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-green-200 hover:bg-green-50">
+									<Calendar className="h-6 w-6 text-green-600" />
+									<span className="text-sm">Citas</span>
+								</Button>
 							</Link>
-		{
-			title: translations.actions.sendReminder,
-			icon: MessageSquare,
-			href: "/es/receptionist/communications",
-			color: "bg-purple-600 hover:bg-purple-700",
-		},
-		{
-			title: translations.actions.processPayment,
-			icon: DollarSign,
-			href: "/es/receptionist/billing",
-			color: "bg-orange-600 hover:bg-orange-700",
-		},
-		{
-			title: translations.actions.viewSchedule,
-			icon: Calendar,
-			href: "/es/receptionist/schedule",
-			color: "bg-indigo-600 hover:bg-indigo-700",
-		},
-		{
-			title: translations.actions.managePatients,
-			icon: Users,
-			href: "/es/receptionist/patients",
-			color: "bg-teal-600 hover:bg-teal-700",
-		},
-	];
-
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case "confirmed":
-				return "bg-green-100 text-green-800";
-			case "waiting":
-				return "bg-orange-100 text-orange-800";
-			case "scheduled":
-				return "bg-blue-100 text-blue-800";
-			case "completed":
-				return "bg-gray-100 text-gray-800";
-			case "cancelled":
-				return "bg-red-100 text-red-800";
-			default:
-				return "bg-gray-100 text-gray-800";
-		}
-	};
-
-	const getStatusText = (status: string) => {
-		return (
-			translations.status[status as keyof typeof translations.status] || status
-		);
-	};
-
-	return (
-		<div className="min-h-screen bg-gray-900 text-white">
-			{/* Navigation Header */}
-			<nav className="border-gray-700 border-b bg-gray-800">
-				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="flex h-16 items-center justify-between">
-						<div className="flex items-center">
-							<Link href="/es" className="flex items-center">
-								<HeaderLogo className="text-white" />
+							<Link href="/es/receptionist/billing">
+								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-orange-200 hover:bg-orange-50">
+									<CreditCard className="h-6 w-6 text-orange-600" />
+									<span className="text-sm">Facturación</span>
+								</Button>
 							</Link>
-							<div className="ml-6 hidden md:block">
-								<div className="flex items-baseline space-x-4">
-									<Link
-										href="/es/receptionist"
-										className="rounded-md bg-gray-900 px-3 py-2 font-medium text-sm text-white"
-									>
-										{translations.navigation.dashboard}
-									</Link>
-									<Link
-										href="/es/receptionist/appointments"
-										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
-									>
-										{translations.navigation.appointments}
-									</Link>
-									<Link
-										href="/es/receptionist/patients"
-										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
-									>
-										{translations.navigation.patients}
-									</Link>
-									<Link
-										href="/es/receptionist/communications"
-										className="rounded-md px-3 py-2 font-medium text-gray-300 text-sm hover:bg-gray-700 hover:text-white"
-									>
-										{translations.navigation.communications}
-									</Link>
-								</div>
-							</div>
+							<Link href="/es/dashboard/data-import">
+								<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-red-200 hover:bg-red-50">
+									<Upload className="h-6 w-6 text-red-600" />
+									<span className="text-sm">Importar Datos</span>
+								</Button>
+							</Link>
 						</div>
-						<div className="flex items-center space-x-4">
-							<span className="text-gray-300 text-sm">
-								{currentTime.toLocaleString("es-MX", {
-									weekday: "long",
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-									hour: "2-digit",
-									minute: "2-digit",
-								})}
-							</span>
-							<Link
-								href="/es/receptionist/settings"
-								className="rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700"
-							>
-								{translations.navigation.settings}
-							</Link>
-							<button
-								onClick={handleLogout}
-								className="rounded-md bg-red-600 px-4 py-2 font-medium text-sm text-white hover:bg-red-700"
-							>
-								Cerrar Sesión
-							</button>
-						</div>
-					</div>
-				</div>
-			</nav>
+					</CardContent>
+				</Card>
 
-			{/* Main Content */}
-			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-				{/* Header */}
-				<div className="mb-8">
-					<h1 className="font-bold text-3xl text-white">
-						{translations.title}
-					</h1>
-					<p className="mt-2 text-gray-400">{translations.subtitle}</p>
-				</div>
-
-				{/* Stats Overview */}
-				<div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-					{todayStats.map((stat, index) => {
-						const IconComponent = stat.icon;
-						return (
-							<Card key={index} className="border-gray-700 bg-gray-800">
-								<CardContent className="p-6">
-									<div className="flex items-center justify-between">
-										<div>
-											<p className="font-medium text-gray-400 text-sm">
-												{stat.title}
-											</p>
-											<p className="font-bold text-2xl text-white">
-												{stat.value}
-											</p>
-											<p className="text-green-400 text-sm">{stat.change}</p>
-										</div>
-										<IconComponent className={`h-8 w-8 ${stat.color}`} />
-									</div>
-								</CardContent>
-							</Card>
-						);
-					})}
-				</div>
-
-				{/* Quick Actions */}
-				<div className="mb-8">
-					<h2 className="mb-4 font-semibold text-white text-xl">
-						{translations.quickActions}
-					</h2>
-					<div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
-						{quickActions.map((action, index) => {
-							const IconComponent = action.icon;
-							return (
-								<Link key={index} href={action.href}>
-									<Card className="border-gray-700 bg-gray-800 transition-all hover:bg-gray-700">
-										<CardContent className="p-4 text-center">
-											<div
-												className={`mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg ${action.color}`}
-											>
-												<IconComponent className="h-6 w-6 text-white" />
-											</div>
-											<p className="font-medium text-sm text-white">
-												{action.title}
-											</p>
-										</CardContent>
-									</Card>
-								</Link>
-							);
-						})}
-					</div>
-				</div>
-
-				{/* Main Dashboard Grid */}
-				<div className="grid gap-8 lg:grid-cols-2">
-					{/* Upcoming Appointments */}
-					<Card className="border-gray-700 bg-gray-800">
+				{/* Today's Schedule and Communication Tools */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					<Card className="border-gray-200 bg-white/90 backdrop-blur-sm">
 						<CardHeader>
-							<CardTitle className="text-white">
-								{translations.upcomingAppointments}
+							<CardTitle className="flex items-center gap-2 text-gray-800">
+								<Clock className="h-5 w-5" />
+								Agenda de Hoy
 							</CardTitle>
+							<CardDescription>
+								Próximas citas programadas
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
-								{upcomingAppointments.map((appointment) => (
-									<div
-										key={appointment.id}
-										className="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-900 p-4"
-									>
-										<div className="flex items-center space-x-4">
-											<div className="text-center">
-												<p className="font-semibold text-blue-400">
-													{appointment.time}
-												</p>
-											</div>
+								{recentAppointments.length > 0 ? (
+									recentAppointments.map((appointment) => (
+										<div key={appointment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
 											<div>
-												<p className="font-medium text-white">
-													{appointment.patient}
-												</p>
-												<p className="text-gray-400 text-sm">
-													{appointment.type}
-												</p>
+												<div className="font-medium text-gray-900">
+													{appointment.patient.firstName} {appointment.patient.lastName}
+												</div>
+												<div className="text-sm text-gray-600">
+													Dr. {appointment.practiceUser.firstName} {appointment.practiceUser.lastName}
+												</div>
+												<div className="text-xs text-gray-500">
+													{appointment.patient.phone}
+												</div>
+											</div>
+											<div className="text-right">
+												<div className="font-medium text-blue-600">
+													{appointment.start.toLocaleTimeString('es-MX', {
+														hour: '2-digit',
+														minute: '2-digit'
+													})}
+												</div>
+												<Badge variant="outline" className="border-green-600 text-green-600 text-xs">
+													{appointment.status}
+												</Badge>
 											</div>
 										</div>
-										<div className="flex items-center space-x-2">
-											<Badge className={getStatusColor(appointment.status)}>
-												{getStatusText(appointment.status)}
-											</Badge>
-											<Button
-												size="sm"
-												variant="ghost"
-												className="text-gray-400 hover:text-white"
-											>
-												<Phone className="h-4 w-4" />
-											</Button>
-											<Button
-												size="sm"
-												variant="ghost"
-												className="text-gray-400 hover:text-white"
-											>
-												<MessageSquare className="h-4 w-4" />
-											</Button>
-										</div>
+									))
+								) : (
+									<div className="text-center py-8 text-gray-500">
+										<Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+										<p>No hay citas programadas para hoy</p>
 									</div>
-								))}
+								)}
 							</div>
 						</CardContent>
 					</Card>
 
-					{/* Communications Hub */}
-					<Card className="border-gray-700 bg-gray-800">
+					<Card className="border-gray-200 bg-white/90 backdrop-blur-sm">
 						<CardHeader>
-							<CardTitle className="text-white">
-								{translations.communications}
+							<CardTitle className="flex items-center gap-2 text-gray-800">
+								<Phone className="h-5 w-5" />
+								Herramientas de Comunicación
 							</CardTitle>
+							<CardDescription>
+								Gestión de comunicación con pacientes
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
-								<div className="grid gap-4 md:grid-cols-3">
-									<Link href="/es/receptionist/communications/whatsapp">
-										<Card className="border-gray-600 bg-gray-700 transition-all hover:bg-gray-600">
-											<CardContent className="p-4 text-center">
-												<div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-green-600">
-													<MessageSquare className="h-5 w-5 text-white" />
-												</div>
-												<p className="font-medium text-sm text-white">
-													WhatsApp
-												</p>
-												<p className="text-gray-400 text-xs">5 mensajes</p>
-											</CardContent>
-										</Card>
-									</Link>
-									<Link href="/es/receptionist/communications/telegram">
-										<Card className="border-gray-600 bg-gray-700 transition-all hover:bg-gray-600">
-											<CardContent className="p-4 text-center">
-												<div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
-													<MessageSquare className="h-5 w-5 text-white" />
-												</div>
-												<p className="font-medium text-sm text-white">
-													Telegram
-												</p>
-												<p className="text-gray-400 text-xs">2 mensajes</p>
-											</CardContent>
-										</Card>
-									</Link>
-									<Link href="/es/receptionist/communications/signal">
-										<Card className="border-gray-600 bg-gray-700 transition-all hover:bg-gray-600">
-											<CardContent className="p-4 text-center">
-												<div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600">
-													<MessageSquare className="h-5 w-5 text-white" />
-												</div>
-												<p className="font-medium text-sm text-white">Signal</p>
-												<p className="text-gray-400 text-xs">1 mensaje</p>
-											</CardContent>
-										</Card>
-									</Link>
-								</div>
-								<div className="mt-4">
-									<Link href="/es/receptionist/communications">
-										<Button className="w-full bg-blue-600 hover:bg-blue-700">
-											Ver Todas las Comunicaciones
-										</Button>
-									</Link>
-								</div>
+								<Link href="/es/receptionist/communication">
+									<Button variant="outline" className="w-full justify-start">
+										<MessageSquare className="h-4 w-4 mr-2" />
+										Mensajes y WhatsApp
+									</Button>
+								</Link>
+								<Link href="/es/receptionist/reminders">
+									<Button variant="outline" className="w-full justify-start">
+										<Bell className="h-4 w-4 mr-2" />
+										Recordatorios de Citas
+									</Button>
+								</Link>
+								<Link href="/es/receptionist/reports">
+									<Button variant="outline" className="w-full justify-start">
+										<FileText className="h-4 w-4 mr-2" />
+										Reportes y Estadísticas
+									</Button>
+								</Link>
+								<Link href="/es/receptionist/settings">
+									<Button variant="outline" className="w-full justify-start">
+										<Settings className="h-4 w-4 mr-2" />
+										Configuración
+									</Button>
+								</Link>
 							</div>
 						</CardContent>
 					</Card>
 				</div>
-			</main>
+
+				{/* Practice Information */}
+				<Card className="mt-6 border-gray-200 bg-white/90 backdrop-blur-sm">
+					<CardHeader>
+						<CardTitle className="text-gray-800">Información de la Clínica</CardTitle>
+						<CardDescription>
+							Detalles de contacto y ubicación
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+							<div>
+								<h4 className="font-semibold mb-2 text-gray-800">Contacto</h4>
+								<div className="space-y-1 text-sm">
+									<div>📞 {practiceUser.practice.phone}</div>
+									<div>📧 {practiceUser.practice.email}</div>
+									<div>🌐 {practiceUser.practice.website}</div>
+								</div>
+							</div>
+							<div>
+								<h4 className="font-semibold mb-2 text-gray-800">Ubicación</h4>
+								<div className="space-y-1 text-sm">
+									<div>📍 {practiceUser.practice.address}</div>
+									<div>{practiceUser.practice.city}, {practiceUser.practice.state}</div>
+									<div>CP: {practiceUser.practice.zipCode}</div>
+								</div>
+							</div>
+							<div>
+								<h4 className="font-semibold mb-2 text-gray-800">Sistema</h4>
+								<div className="space-y-1 text-sm">
+									<div>🆔 ID: {practiceUser.practice.id}</div>
+									<div>🕐 Zona: {practiceUser.practice.timezone}</div>
+									<div>✅ Estado: Activo</div>
+								</div>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Footer */}
+				<div className="mt-8 text-center text-gray-500 text-sm">
+					<p>🇲🇽 Sistema de Gestión Dental para México | Cognident</p>
+					<p>Datos seguros y aislados por clínica | Soporte: mexico@cognident.org</p>
+				</div>
+			</div>
 		</div>
 	);
 }
