@@ -12,17 +12,9 @@ interface LoginRequestBody {
 }
 
 /**
- * Get redirect URL based on user role and practice context
+ * Detect practice locale based on various factors
  */
-function getRedirectUrl(
-	role: string,
-	userType: "practice" | "patient",
-	practiceId?: string,
-): string {
-	if (userType === "patient") {
-		return "/patient/dashboard";
-	}
-
+function detectPracticeLocale(practiceId?: string, practiceData?: any): string {
 	// Check if this is a Mexican practice (redirect to Spanish dashboard)
 	const mexicanPracticeIds = [
 		'beautiful-smiles-mx-001',
@@ -30,14 +22,81 @@ function getRedirectUrl(
 		'wizard-dental-mx-003'
 	];
 
-	const isSpanishPractice = practiceId && mexicanPracticeIds.includes(practiceId);
-	const baseUrl = isSpanishPractice ? "/es" : "";
+	// Check practice ID patterns
+	if (practiceId) {
+		if (mexicanPracticeIds.includes(practiceId) || practiceId.includes('-mx-')) {
+			return "es";
+		}
+		if (practiceId.includes('-us-') || practiceId.includes('-en-')) {
+			return "en";
+		}
+	}
+
+	// Check practice data for locale indicators
+	if (practiceData) {
+		// Check country field
+		if (practiceData.country === "Mexico" || practiceData.country === "MX") {
+			return "es";
+		}
+		if (practiceData.country === "United States" || practiceData.country === "US") {
+			return "en";
+		}
+
+		// Check timezone for Mexican timezones
+		if (practiceData.timezone && (
+			practiceData.timezone.includes("Mexico") ||
+			practiceData.timezone.includes("Tijuana") ||
+			practiceData.timezone.includes("Chihuahua") ||
+			practiceData.timezone.includes("Mazatlan")
+		)) {
+			return "es";
+		}
+
+		// Check phone number patterns (Mexican numbers start with +52)
+		if (practiceData.phone && practiceData.phone.startsWith("+52")) {
+			return "es";
+		}
+
+		// Check address for Mexican states
+		const mexicanStates = [
+			"Baja California", "Sonora", "Chihuahua", "Nuevo León", "Tamaulipas",
+			"Jalisco", "Ciudad de México", "CDMX", "Mexico City"
+		];
+		if (practiceData.state && mexicanStates.some(state =>
+			practiceData.state.toLowerCase().includes(state.toLowerCase())
+		)) {
+			return "es";
+		}
+	}
+
+	// Default to English
+	return "en";
+}
+
+/**
+ * Get redirect URL based on user role, practice context, and locale
+ */
+function getRedirectUrl(
+	role: string,
+	userType: "practice" | "patient",
+	practiceId?: string,
+	practiceData?: any,
+): string {
+	if (userType === "patient") {
+		// For patients, detect locale and redirect accordingly
+		const locale = detectPracticeLocale(practiceId, practiceData);
+		return locale === "es" ? "/es/patient/dashboard" : "/dashboard/patient";
+	}
+
+	// Detect locale for practice users
+	const locale = detectPracticeLocale(practiceId, practiceData);
+	const baseUrl = locale === "es" ? "/es" : "";
 
 	switch (role.toLowerCase()) {
 		case "dentist":
 			return `${baseUrl}/dashboard/dentist`;
 		case "receptionist":
-			return `${baseUrl}/receptionist`;
+			return `${baseUrl}/dashboard/receptionist`;
 		case "admin":
 			return `${baseUrl}/dashboard`;
 		default:
@@ -193,6 +252,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 					practiceResult.user.role || "",
 					"practice",
 					practiceResult.user.practiceId,
+					practiceResult.user.practice,
 				);
 
 				const response = NextResponse.json({
@@ -246,10 +306,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 			);
 
 			if (patientResult.success) {
+				const redirectUrl = getRedirectUrl(
+					"patient",
+					"patient",
+					patientResult.user?.practiceId,
+					patientResult.user?.practice,
+				);
+
 				const response = NextResponse.json({
 					success: true,
 					user: patientResult.user,
-					redirectUrl: "/patient/dashboard",
+					redirectUrl,
 					userType: "patient",
 				});
 

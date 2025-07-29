@@ -2,7 +2,9 @@
 	"name": "coredentalapp",
 	"version": "0.1.5",
 	"private": true,
+	"packageManager": "pnpm@10.13.1",
 	"scripts": {
+		"preinstall": "npx only-allow pnpm",
 		"build": "next build",
 		"start": "next start",
 		"dev": "next dev",

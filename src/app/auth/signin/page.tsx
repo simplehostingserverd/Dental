@@ -8,17 +8,18 @@ import { useState } from "react";
 
 /**
  * Get default redirect path based on user type and role
+ * This is a fallback - the smart login API will provide the correct redirect URL
  */
 function getDefaultRedirectPath(userType: string, role?: string): string {
 	if (userType === "patient") {
-		return "/patient/dashboard";
+		return "/dashboard/patient";
 	} else {
 		const userRole = role?.toLowerCase();
 		switch (userRole) {
 			case "dentist":
 				return "/dashboard/dentist";
 			case "receptionist":
-				return "/receptionist";
+				return "/dashboard/receptionist";
 			case "admin":
 				return "/dashboard";
 			default:

@@ -1,6 +1,9 @@
 "use client";
 
 import { HeaderLogo } from "@/components/ui/tooth-logo";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	BarChart3,
 	Bell,
@@ -14,332 +17,367 @@ import {
 	Settings,
 	TrendingUp,
 	Users,
+	Activity,
+	CheckCircle,
+	Phone,
+	MessageSquare
 } from "lucide-react";
-import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+interface Appointment {
+	id: string;
+	patient: {
+		firstName: string;
+		lastName: string;
+		phone: string;
+	};
+	start: Date;
+	status: string;
+	procedure: string;
+}
+
+interface PracticeUser {
+	id: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	role: string;
+	practice: {
+		id: string;
+		name: string;
+		address: string;
+		city: string;
+		state: string;
+		zipCode: string;
+		phone: string;
+		email: string;
+		website: string;
+		timezone: string;
+	};
+}
+
 export default function DentistDashboard() {
-	const [currentTime, setCurrentTime] = useState(
-		new Date().toLocaleTimeString(),
-	);
+	const router = useRouter();
+	const [practiceUser, setPracticeUser] = useState<PracticeUser | null>(null);
+	const [recentAppointments, setRecentAppointments] = useState<Appointment[]>([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		document.title = "Cognident - Dentist Dashboard";
+
+		const fetchData = async () => {
+			try {
+				const [userResponse, appointmentsResponse] = await Promise.all([
+					fetch("/api/auth/me"),
+					fetch("/api/appointments/today")
+				]);
+
+				if (userResponse.ok) {
+					const userData = await userResponse.json();
+					setPracticeUser(userData.user);
+				}
+
+				if (appointmentsResponse.ok) {
+					const appointmentsData = await appointmentsResponse.json();
+					setRecentAppointments(appointmentsData.appointments || []);
+				}
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchData();
 	}, []);
 
 	const handleLogout = async () => {
 		try {
-			await fetch("/api/test-auth/logout", { method: "POST" });
-			localStorage.removeItem("testUser");
-			window.location.href = "/test-login";
+			await fetch("/api/auth/logout", { method: "POST" });
+			router.push("/auth/signin");
 		} catch (error) {
 			console.error("Logout error:", error);
-			// Fallback: clear localStorage and redirect
-			localStorage.removeItem("testUser");
-			window.location.href = "/test-login";
 		}
 	};
 
-	// Sample data
-	const todayStats = {
-		appointments: 12,
-		patients: 8,
-		revenue: 3250,
-		procedures: 15,
-	};
+	if (loading) {
+		return (
+			<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+				<div className="text-center">
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+					<p className="text-gray-600">Loading dashboard...</p>
+				</div>
+			</div>
+		);
+	}
 
-	const upcomingAppointments = [
-		{
-			id: 1,
-			patient: "Sarah Johnson",
-			time: "9:00 AM",
-			procedure: "Cleaning",
-			status: "confirmed",
-		},
-		{
-			id: 2,
-			patient: "Michael Chen",
-			time: "10:30 AM",
-			procedure: "Root Canal",
-			status: "confirmed",
-		},
-		{
-			id: 3,
-			patient: "Emily Davis",
-			time: "2:00 PM",
-			procedure: "Crown Prep",
-			status: "pending",
-		},
-		{
-			id: 4,
-			patient: "Robert Wilson",
-			time: "3:30 PM",
-			procedure: "Consultation",
-			status: "confirmed",
-		},
-	];
-
-	const recentPatients = [
-		{
-			id: 1,
-			name: "Alice Brown",
-			lastVisit: "2025-01-15",
-			nextAppointment: "2025-02-15",
-			status: "active",
-		},
-		{
-			id: 2,
-			name: "David Lee",
-			lastVisit: "2025-01-14",
-			nextAppointment: "2025-03-14",
-			status: "active",
-		},
-		{
-			id: 3,
-			name: "Maria Garcia",
-			lastVisit: "2025-01-13",
-			nextAppointment: "Pending",
-			status: "follow-up",
-		},
+	const todayStats = [
+		{ title: "Today's Patients", value: recentAppointments.length, icon: Users, color: "text-blue-600" },
+		{ title: "Completed", value: recentAppointments.filter(a => a.status === "completed").length, icon: CheckCircle, color: "text-green-600" },
+		{ title: "Pending", value: recentAppointments.filter(a => a.status === "scheduled").length, icon: Clock, color: "text-orange-600" },
+		{ title: "Revenue", value: "$2,450", icon: DollarSign, color: "text-purple-600" }
 	];
 
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
-			{/* Header */}
-			<header className="border-gray-700 border-b bg-gray-800">
-				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="flex h-16 items-center justify-between">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+			{/* Navigation Header */}
+			<nav className="bg-white border-b border-gray-200 shadow-sm">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div className="flex justify-between h-16 items-center">
 						<div className="flex items-center">
-							<HeaderLogo className="text-white" />
-							<span className="ml-4 text-gray-400">Dentist Dashboard</span>
+							<Link href="/" className="flex items-center">
+								<HeaderLogo className="text-blue-600" />
+							</Link>
+							<div className="hidden md:block ml-6">
+								<div className="flex items-baseline space-x-4">
+									<Link href="/dashboard/dentist" className="bg-blue-100 text-blue-700 px-3 py-2 rounded-md text-sm font-medium">
+										Dashboard
+									</Link>
+									<Link href="/dashboard/appointments" className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+										Appointments
+									</Link>
+									<Link href="/dashboard/patients" className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+										Patients
+									</Link>
+									<Link href="/dashboard/treatments" className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+										Treatments
+									</Link>
+								</div>
+							</div>
 						</div>
 						<div className="flex items-center space-x-4">
-							<div className="relative">
-								<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-gray-400" />
-								<input
-									type="text"
-									placeholder="Search patients..."
-									className="rounded-md border border-gray-600 bg-gray-700 py-2 pr-4 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-								/>
-							</div>
-							<button className="relative p-2 text-gray-400 hover:text-white">
-								<Bell className="h-5 w-5" />
-								<span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500" />
-							</button>
-							<button className="p-2 text-gray-400 hover:text-white">
-								<Settings className="h-5 w-5" />
-							</button>
-							<button
-								onClick={handleLogout}
-								className="p-2 text-gray-400 transition-colors hover:text-red-400"
-								title="Logout"
-							>
-								<LogOut className="h-5 w-5" />
-							</button>
-							<div className="text-gray-400 text-sm">
-								Dr. Smith | {currentTime}
-							</div>
-						</div>
-					</div>
-				</div>
-			</header>
-
-			<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-				{/* Welcome Section */}
-				<div className="mb-8">
-					<h1 className="mb-2 font-bold text-3xl">Good morning, Dr. Smith</h1>
-					<p className="text-gray-400">
-						Here's what's happening in your practice today.
-					</p>
-				</div>
-
-				{/* Stats Cards */}
-				<div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-					<div className="rounded-lg bg-gray-800 p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-gray-400 text-sm">Today's Appointments</p>
-								<p className="font-bold text-2xl text-white">
-									{todayStats.appointments}
-								</p>
-							</div>
-							<Calendar className="h-8 w-8 text-blue-400" />
-						</div>
-						<div className="mt-2 flex items-center text-sm">
-							<TrendingUp className="mr-1 h-4 w-4 text-green-400" />
-							<span className="text-green-400">+12%</span>
-							<span className="ml-1 text-gray-400">from yesterday</span>
-						</div>
-					</div>
-
-					<div className="rounded-lg bg-gray-800 p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-gray-400 text-sm">Patients Seen</p>
-								<p className="font-bold text-2xl text-white">
-									{todayStats.patients}
-								</p>
-							</div>
-							<Users className="h-8 w-8 text-green-400" />
-						</div>
-						<div className="mt-2 flex items-center text-sm">
-							<TrendingUp className="mr-1 h-4 w-4 text-green-400" />
-							<span className="text-green-400">+8%</span>
-							<span className="ml-1 text-gray-400">from yesterday</span>
-						</div>
-					</div>
-
-					<div className="rounded-lg bg-gray-800 p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-gray-400 text-sm">Today's Revenue</p>
-								<p className="font-bold text-2xl text-white">
-									${todayStats.revenue.toLocaleString()}
-								</p>
-							</div>
-							<DollarSign className="h-8 w-8 text-yellow-400" />
-						</div>
-						<div className="mt-2 flex items-center text-sm">
-							<TrendingUp className="mr-1 h-4 w-4 text-green-400" />
-							<span className="text-green-400">+15%</span>
-							<span className="ml-1 text-gray-400">from yesterday</span>
-						</div>
-					</div>
-
-					<div className="rounded-lg bg-gray-800 p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-gray-400 text-sm">Procedures</p>
-								<p className="font-bold text-2xl text-white">
-									{todayStats.procedures}
-								</p>
-							</div>
-							<FileText className="h-8 w-8 text-purple-400" />
-						</div>
-						<div className="mt-2 flex items-center text-sm">
-							<TrendingUp className="mr-1 h-4 w-4 text-green-400" />
-							<span className="text-green-400">+5%</span>
-							<span className="ml-1 text-gray-400">from yesterday</span>
-						</div>
-					</div>
-				</div>
-
-				<div className="grid gap-8 lg:grid-cols-2">
-					{/* Today's Appointments */}
-					<div className="rounded-lg bg-gray-800 p-6">
-						<div className="mb-6 flex items-center justify-between">
-							<h2 className="font-semibold text-xl">Today's Appointments</h2>
-							<button className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 font-medium text-sm transition-colors hover:bg-blue-700">
-								<Plus className="mr-2 h-4 w-4" />
-								New Appointment
-							</button>
-						</div>
-						<div className="space-y-4">
-							{upcomingAppointments.map((appointment) => (
-								<div
-									key={appointment.id}
-									className="flex items-center justify-between rounded-lg bg-gray-700 p-4"
-								>
-									<div className="flex items-center space-x-4">
-										<div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
-											<Clock className="h-5 w-5" />
-										</div>
-										<div>
-											<p className="font-medium">{appointment.patient}</p>
-											<p className="text-gray-400 text-sm">
-												{appointment.procedure}
-											</p>
-										</div>
-									</div>
-									<div className="text-right">
-										<p className="font-medium">{appointment.time}</p>
-										<span
-											className={`inline-flex rounded-full px-2 py-1 font-semibold text-xs ${
-												appointment.status === "confirmed"
-													? "bg-green-600 text-white"
-													: "bg-yellow-600 text-white"
-											}`}
-										>
-											{appointment.status}
-										</span>
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-
-					{/* Recent Patients */}
-					<div className="rounded-lg bg-gray-800 p-6">
-						<div className="mb-6 flex items-center justify-between">
-							<h2 className="font-semibold text-xl">Recent Patients</h2>
-							<Link
-								href="/patients"
-								className="font-medium text-blue-400 text-sm hover:text-blue-300"
-							>
-								View All
+							<span className="text-sm text-gray-500">
+								{new Date().toLocaleDateString('en-US', {
+									weekday: 'long',
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric'
+								})}
+							</span>
+							<Link href="/dashboard/settings" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium">
+								Settings
 							</Link>
-						</div>
-						<div className="space-y-4">
-							{recentPatients.map((patient) => (
-								<div
-									key={patient.id}
-									className="flex items-center justify-between rounded-lg bg-gray-700 p-4"
-								>
-									<div className="flex items-center space-x-4">
-										<div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-600">
-											<Users className="h-5 w-5" />
-										</div>
-										<div>
-											<p className="font-medium">{patient.name}</p>
-											<p className="text-gray-400 text-sm">
-												Last visit: {patient.lastVisit}
-											</p>
-										</div>
-									</div>
-									<div className="text-right">
-										<p className="text-gray-300 text-sm">
-											Next: {patient.nextAppointment}
-										</p>
-										<span
-											className={`inline-flex rounded-full px-2 py-1 font-semibold text-xs ${
-												patient.status === "active"
-													? "bg-green-600 text-white"
-													: "bg-orange-600 text-white"
-											}`}
-										>
-											{patient.status}
-										</span>
-									</div>
-								</div>
-							))}
+							<button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+								Sign Out
+							</button>
 						</div>
 					</div>
+				</div>
+			</nav>
+
+			{/* Main Content */}
+			<main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+				{/* Header */}
+				<div className="mb-8">
+					<h1 className="text-3xl font-bold text-gray-900">
+						Welcome back, Dr. {practiceUser?.firstName}
+					</h1>
+					<p className="mt-2 text-gray-600">Here's what's happening at your practice today.</p>
+				</div>
+
+				{/* Stats Overview */}
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+					{todayStats.map((stat, index) => {
+						const IconComponent = stat.icon;
+						return (
+							<Card key={index} className="bg-white border-gray-200">
+								<CardContent className="p-6">
+									<div className="flex items-center justify-between">
+										<div>
+											<p className="text-sm font-medium text-gray-600">{stat.title}</p>
+											<p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+										</div>
+										<IconComponent className={`h-8 w-8 ${stat.color}`} />
+									</div>
+								</CardContent>
+							</Card>
+						);
+					})}
 				</div>
 
 				{/* Quick Actions */}
-				<div className="mt-8 rounded-lg bg-gray-800 p-6">
-					<h2 className="mb-6 font-semibold text-xl">Quick Actions</h2>
-					<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-						<button className="flex flex-col items-center rounded-lg bg-gray-700 p-4 transition-colors hover:bg-gray-600">
-							<Calendar className="mb-2 h-8 w-8 text-blue-400" />
-							<span className="font-medium text-sm">Schedule Appointment</span>
-						</button>
-						<button className="flex flex-col items-center rounded-lg bg-gray-700 p-4 transition-colors hover:bg-gray-600">
-							<Users className="mb-2 h-8 w-8 text-green-400" />
-							<span className="font-medium text-sm">Add Patient</span>
-						</button>
-						<button className="flex flex-col items-center rounded-lg bg-gray-700 p-4 transition-colors hover:bg-gray-600">
-							<FileText className="mb-2 h-8 w-8 text-purple-400" />
-							<span className="font-medium text-sm">Create Treatment Plan</span>
-						</button>
-						<button className="flex flex-col items-center rounded-lg bg-gray-700 p-4 transition-colors hover:bg-gray-600">
-							<BarChart3 className="mb-2 h-8 w-8 text-yellow-400" />
-							<span className="font-medium text-sm">View Reports</span>
-						</button>
+				<div className="mb-8">
+					<h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+						<Link href="/dashboard/appointments/new">
+							<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-blue-200 hover:bg-blue-50">
+								<Calendar className="h-6 w-6 text-blue-600" />
+								<span className="text-sm">New Appointment</span>
+							</Button>
+						</Link>
+						<Link href="/dashboard/patients/new">
+							<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-green-200 hover:bg-green-50">
+								<Users className="h-6 w-6 text-green-600" />
+								<span className="text-sm">Add Patient</span>
+							</Button>
+						</Link>
+						<Link href="/dashboard/treatments">
+							<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-purple-200 hover:bg-purple-50">
+								<Activity className="h-6 w-6 text-purple-600" />
+								<span className="text-sm">Treatment Plans</span>
+							</Button>
+						</Link>
+						<Link href="/dashboard/reports">
+							<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-orange-200 hover:bg-orange-50">
+								<FileText className="h-6 w-6 text-orange-600" />
+								<span className="text-sm">Reports</span>
+							</Button>
+						</Link>
+						<Link href="/dashboard/billing">
+							<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-indigo-200 hover:bg-indigo-50">
+								<DollarSign className="h-6 w-6 text-indigo-600" />
+								<span className="text-sm">Billing</span>
+							</Button>
+						</Link>
+						<Link href="/dashboard/settings">
+							<Button variant="outline" className="w-full h-20 flex flex-col gap-2 border-gray-200 hover:bg-gray-50">
+								<Settings className="h-6 w-6 text-gray-600" />
+								<span className="text-sm">Settings</span>
+							</Button>
+						</Link>
 					</div>
 				</div>
-			</div>
+
+				{/* Main Dashboard Grid */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					{/* Today's Schedule */}
+					<Card className="bg-white border-gray-200">
+						<CardHeader>
+							<CardTitle className="flex items-center gap-2 text-gray-800">
+								<Clock className="h-5 w-5" />
+								Today's Schedule
+							</CardTitle>
+							<CardDescription>
+								Upcoming appointments
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<div className="space-y-4">
+								{recentAppointments.length > 0 ? (
+									recentAppointments.map((appointment) => (
+										<div key={appointment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+											<div>
+												<div className="font-medium text-gray-900">
+													{appointment.patient.firstName} {appointment.patient.lastName}
+												</div>
+												<div className="text-sm text-gray-600">
+													{appointment.procedure || "General Consultation"}
+												</div>
+												<div className="text-xs text-gray-500">
+													{appointment.patient.phone}
+												</div>
+											</div>
+											<div className="text-right">
+												<div className="font-medium text-blue-600">
+													{appointment.start.toLocaleTimeString('en-US', {
+														hour: '2-digit',
+														minute: '2-digit'
+													})}
+												</div>
+												<Badge variant="outline" className="border-green-600 text-green-600 text-xs">
+													{appointment.status}
+												</Badge>
+											</div>
+										</div>
+									))
+								) : (
+									<div className="text-center py-8 text-gray-500">
+										<Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+										<p>No appointments scheduled for today</p>
+									</div>
+								)}
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* Practice Tools */}
+					<Card className="bg-white border-gray-200">
+						<CardHeader>
+							<CardTitle className="flex items-center gap-2 text-gray-800">
+								<Activity className="h-5 w-5" />
+								Practice Management
+							</CardTitle>
+							<CardDescription>
+								Essential tools and resources
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<div className="space-y-4">
+								<Link href="/dashboard/patients">
+									<Button variant="outline" className="w-full justify-start">
+										<Users className="h-4 w-4 mr-2" />
+										Patient Records
+									</Button>
+								</Link>
+								<Link href="/dashboard/treatments">
+									<Button variant="outline" className="w-full justify-start">
+										<Activity className="h-4 w-4 mr-2" />
+										Treatment Plans
+									</Button>
+								</Link>
+								<Link href="/dashboard/billing">
+									<Button variant="outline" className="w-full justify-start">
+										<DollarSign className="h-4 w-4 mr-2" />
+										Billing & Insurance
+									</Button>
+								</Link>
+								<Link href="/dashboard/reports">
+									<Button variant="outline" className="w-full justify-start">
+										<FileText className="h-4 w-4 mr-2" />
+										Analytics & Reports
+									</Button>
+								</Link>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
+
+				{/* Practice Information */}
+				<Card className="mt-6 bg-white border-gray-200">
+					<CardHeader>
+						<CardTitle className="text-gray-800">Practice Information</CardTitle>
+						<CardDescription>
+							Contact details and location
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+							<div>
+								<h4 className="font-semibold mb-2 text-gray-800">Contact</h4>
+								<div className="space-y-1 text-sm">
+									<div>📞 {practiceUser?.practice.phone}</div>
+									<div>📧 {practiceUser?.practice.email}</div>
+									<div>🌐 {practiceUser?.practice.website}</div>
+								</div>
+							</div>
+							<div>
+								<h4 className="font-semibold mb-2 text-gray-800">Location</h4>
+								<div className="space-y-1 text-sm">
+									<div>📍 {practiceUser?.practice.address}</div>
+									<div>{practiceUser?.practice.city}, {practiceUser?.practice.state}</div>
+									<div>ZIP: {practiceUser?.practice.zipCode}</div>
+								</div>
+							</div>
+							<div>
+								<h4 className="font-semibold mb-2 text-gray-800">System</h4>
+								<div className="space-y-1 text-sm">
+									<div>🆔 ID: {practiceUser?.practice.id}</div>
+									<div>🕐 Timezone: {practiceUser?.practice.timezone}</div>
+									<div>✅ Status: Active</div>
+								</div>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Footer */}
+				<div className="mt-8 text-center text-gray-500 text-sm">
+					<p>🇺🇸 Dental Practice Management System | Cognident</p>
+					<p>Secure and isolated practice data | Support: support@cognident.org</p>
+				</div>
+			</main>
 		</div>
 	);
 }
