@@ -15,18 +15,18 @@ interface SampleUser {
 }
 
 const SAMPLE_USERS: SampleUser[] = [
-  // DENTIST USERS
+  // DOCTOR USERS (Dentists)
   {
     email: 'dentist@cognident.org',
     password: 'dentist123',
-    role: 'DENTIST',
+    role: 'DOCTOR',
     firstName: 'Dr. Sarah',
     lastName: 'Johnson',
   },
   {
     email: 'dentist.es@cognident.org',
     password: 'dentista123',
-    role: 'DENTIST',
+    role: 'DOCTOR',
     firstName: 'Dr. Carlos',
     lastName: 'Rodriguez',
   },
@@ -47,22 +47,6 @@ const SAMPLE_USERS: SampleUser[] = [
     lastName: 'Martinez',
   },
 
-  // PATIENT USERS
-  {
-    email: 'patient@cognident.org',
-    password: 'patient123',
-    role: 'PATIENT',
-    firstName: 'John',
-    lastName: 'Smith',
-  },
-  {
-    email: 'paciente@cognident.org',
-    password: 'paciente123',
-    role: 'PATIENT',
-    firstName: 'Miguel',
-    lastName: 'Hernandez',
-  },
-
   // ADMIN USERS
   {
     email: 'admin@cognident.org',
@@ -72,29 +56,38 @@ const SAMPLE_USERS: SampleUser[] = [
     lastName: 'User',
   },
 
-  // EMPLOYEE USERS
+  // ASSISTANT USERS
   {
-    email: 'employee@cognident.org',
-    password: 'employee123',
-    role: 'EMPLOYEE',
+    email: 'assistant@cognident.org',
+    password: 'assistant123',
+    role: 'ASSISTANT',
     firstName: 'Lisa',
     lastName: 'Wilson',
   },
   {
-    email: 'empleado@cognident.org',
-    password: 'empleado123',
-    role: 'EMPLOYEE',
+    email: 'asistente@cognident.org',
+    password: 'asistente123',
+    role: 'ASSISTANT',
     firstName: 'Roberto',
     lastName: 'Lopez',
+  },
+
+  // HYGIENIST USERS
+  {
+    email: 'hygienist@cognident.org',
+    password: 'hygienist123',
+    role: 'HYGIENIST',
+    firstName: 'Jennifer',
+    lastName: 'Davis',
   },
 
   // PRACTICE MANAGER
   {
     email: 'manager@cognident.org',
     password: 'manager123',
-    role: 'PRACTICE_MANAGER',
-    firstName: 'Jennifer',
-    lastName: 'Davis',
+    role: 'MANAGER',
+    firstName: 'Michael',
+    lastName: 'Brown',
   },
 ];
 
@@ -169,30 +162,7 @@ async function createSampleUsers() {
           }
         });
 
-        // Create role-specific records
-        if (userData.role === 'PATIENT') {
-          await prisma.patient.create({
-            data: {
-              firstName: userData.firstName,
-              lastName: userData.lastName,
-              practiceId: practice.id,
-              dateOfBirth: new Date('1990-01-01'),
-              phone: '+1-555-0123',
-              email: userData.email,
-              address: {
-                street: '456 Patient Ave',
-                city: 'City',
-                state: 'ST',
-                zipCode: '12345'
-              },
-              emergencyContact: {
-                name: 'Emergency Contact',
-                phone: '+1-555-0911',
-                relationship: 'Spouse'
-              },
-            }
-          });
-        }
+
 
         console.log(`✅ Created ${userData.role}: ${userData.email}`);
       } catch (error) {
@@ -200,7 +170,71 @@ async function createSampleUsers() {
       }
     }
 
-    console.log('\n🎉 Sample users created successfully!\n');
+    // Create sample patients separately
+    const samplePatients = [
+      {
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'patient@cognident.org',
+        phone: '+1-555-0123',
+        dateOfBirth: new Date('1985-03-15'),
+      },
+      {
+        firstName: 'Miguel',
+        lastName: 'Hernandez',
+        email: 'paciente@cognident.org',
+        phone: '+1-555-0124',
+        dateOfBirth: new Date('1990-07-22'),
+      },
+      {
+        firstName: 'Emily',
+        lastName: 'Johnson',
+        email: 'emily.patient@cognident.org',
+        phone: '+1-555-0125',
+        dateOfBirth: new Date('1988-11-08'),
+      },
+    ];
+
+    for (const patientData of samplePatients) {
+      try {
+        const existingPatient = await prisma.patient.findFirst({
+          where: { email: patientData.email }
+        });
+
+        if (existingPatient) {
+          console.log(`⚠️  Patient ${patientData.email} already exists, skipping...`);
+          continue;
+        }
+
+        await prisma.patient.create({
+          data: {
+            firstName: patientData.firstName,
+            lastName: patientData.lastName,
+            email: patientData.email,
+            phone: patientData.phone,
+            dateOfBirth: patientData.dateOfBirth,
+            practiceId: practice.id,
+            address: {
+              street: '456 Patient Ave',
+              city: 'Healthcare City',
+              state: 'HC',
+              zipCode: '12345'
+            },
+            emergencyContact: {
+              name: 'Emergency Contact',
+              phone: '+1-555-0911',
+              relationship: 'Spouse'
+            },
+          }
+        });
+
+        console.log(`✅ Created PATIENT: ${patientData.email}`);
+      } catch (error) {
+        console.error(`❌ Error creating patient ${patientData.email}:`, error);
+      }
+    }
+
+    console.log('\n🎉 Sample users and patients created successfully!\n');
     
   } catch (error) {
     console.error('❌ Error creating sample users:', error);

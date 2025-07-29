@@ -46,88 +46,38 @@ export default function MexicoSignInPage() {
 
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-white to-red-50 p-4">
-			{/* Mexico Map Background */}
-			<div className="absolute inset-0 overflow-hidden opacity-5">
-				<svg
-					viewBox="0 0 1000 600"
-					className="h-full w-full"
-					aria-label="Mexico map background"
-				>
-					<title>Mexico map background</title>
-					{/* Detailed Mexico Map Outline */}
-					<path
-						d="M80 320 L120 280 L180 250 L250 220 L320 200 L400 180 L480 170 L560 180 L640 200 L720 230 L780 260 L820 300 L850 340 L830 380 L800 420 L750 450 L700 470 L650 485 L600 500 L550 510 L500 515 L450 510 L400 500 L350 485 L300 470 L250 450 L200 420 L150 380 L120 350 Z"
-						fill="url(#mexicoMapGradient)"
-						stroke="#059669"
-						strokeWidth="3"
-					/>
+			{/* Dental Office Background */}
+			<div className="absolute inset-0 overflow-hidden opacity-10">
+				<div className="h-full w-full bg-gradient-to-br from-green-100 to-red-100">
+					{/* Dental Office Illustration */}
+					<svg viewBox="0 0 800 600" className="h-full w-full" aria-label="Dental office background">
+						<title>Dental office background</title>
+						{/* Modern dental chair */}
+						<rect x="200" y="300" width="120" height="80" rx="10" fill="#e5e7eb" stroke="#6b7280" strokeWidth="2"/>
+						<rect x="220" y="280" width="80" height="20" rx="10" fill="#9ca3af"/>
 
-					{/* Baja California Peninsula */}
-					<path
-						d="M80 250 L100 200 L120 180 L140 200 L160 240 L150 280 L130 300 L110 290 L90 270 Z"
-						fill="url(#mexicoMapGradient)"
-						stroke="#059669"
-						strokeWidth="2"
-					/>
+						{/* Dental light */}
+						<circle cx="350" cy="200" r="30" fill="#fbbf24" stroke="#f59e0b" strokeWidth="3"/>
+						<line x1="350" y1="230" x2="350" y2="280" stroke="#6b7280" strokeWidth="4"/>
 
-					{/* Yucatan Peninsula */}
-					<path
-						d="M550 380 L600 360 L650 370 L680 390 L670 420 L640 430 L600 425 L570 410 Z"
-						fill="url(#mexicoMapGradient)"
-						stroke="#059669"
-						strokeWidth="2"
-					/>
+						{/* Medical cabinet */}
+						<rect x="500" y="250" width="80" height="120" rx="5" fill="#f3f4f6" stroke="#9ca3af" strokeWidth="2"/>
+						<rect x="510" y="260" width="60" height="15" fill="#3b82f6"/>
+						<rect x="510" y="285" width="60" height="15" fill="#10b981"/>
+						<rect x="510" y="310" width="60" height="15" fill="#ef4444"/>
 
-					<defs>
-						<linearGradient
-							id="mexicoMapGradient"
-							x1="0%"
-							y1="0%"
-							x2="100%"
-							y2="100%"
-						>
-							<stop offset="0%" stopColor="#059669" stopOpacity="0.3" />
-							<stop offset="33%" stopColor="#ffffff" stopOpacity="0.5" />
-							<stop offset="66%" stopColor="#dc2626" stopOpacity="0.3" />
-							<stop offset="100%" stopColor="#059669" stopOpacity="0.2" />
-						</linearGradient>
-						<radialGradient id="cityGlow">
-							<stop offset="0%" stopColor="#dc2626" stopOpacity="0.8" />
-							<stop offset="100%" stopColor="#dc2626" stopOpacity="0.2" />
-						</radialGradient>
-					</defs>
+						{/* Dental tools */}
+						<line x1="100" y1="200" x2="120" y2="180" stroke="#6b7280" strokeWidth="3"/>
+						<line x1="110" y1="210" x2="130" y2="190" stroke="#6b7280" strokeWidth="3"/>
+						<circle cx="125" r="5" fill="#9ca3af"/>
 
-					{/* Major Cities with Glow Effect */}
-					{majorCities.map((city, index) => (
-						<g key={index}>
-							<circle
-								cx={city.x}
-								cy={city.y}
-								r={city.size === "large" ? 12 : city.size === "medium" ? 8 : 6}
-								fill="url(#cityGlow)"
-							/>
-							<circle
-								cx={city.x}
-								cy={city.y}
-								r={city.size === "large" ? 8 : city.size === "medium" ? 5 : 3}
-								fill="#dc2626"
-							/>
-							<text
-								x={city.x + 15}
-								y={city.y + 5}
-								className="fill-gray-600 font-medium text-xs"
-							>
-								{city.name}
-							</text>
-						</g>
-					))}
+						{/* Window with natural light */}
+						<rect x="50" y="100" width="100" height="80" rx="5" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
+						<line x1="100" y1="100" x2="100" y2="180" stroke="#3b82f6" strokeWidth="1"/>
+						<line x1="50" y1="140" x2="150" y2="140" stroke="#3b82f6" strokeWidth="1"/>
+					</svg>
+				</div>
 
-					{/* Decorative Elements */}
-					<circle cx="100" cy="150" r="3" fill="#fbbf24" opacity="0.6" />
-					<circle cx="850" cy="200" r="4" fill="#fbbf24" opacity="0.6" />
-					<circle cx="200" cy="500" r="2" fill="#fbbf24" opacity="0.6" />
-				</svg>
-			</div>
 
 			<div className="relative z-10 w-full max-w-md">
 				{/* Back to Landing */}
@@ -238,20 +188,24 @@ export default function MexicoSignInPage() {
 
 						{/* Quick Access Options */}
 						<div className="space-y-3">
-							<Button
-								variant="outline"
-								className="h-12 w-full border-green-200 hover:bg-green-50"
-							>
-								<Stethoscope className="mr-2 h-5 w-5 text-green-600" />
-								Acceso para Dentistas
-							</Button>
-							<Button
-								variant="outline"
-								className="h-12 w-full border-blue-200 hover:bg-blue-50"
-							>
-								<MapPin className="mr-2 h-5 w-5 text-blue-600" />
-								Acceso para Recepcionistas
-							</Button>
+							<Link href="/es/auth/dentist/signin">
+								<Button
+									variant="outline"
+									className="h-12 w-full border-green-200 hover:bg-green-50"
+								>
+									<Stethoscope className="mr-2 h-5 w-5 text-green-600" />
+									Acceso para Dentistas
+								</Button>
+							</Link>
+							<Link href="/es/auth/receptionist/signin">
+								<Button
+									variant="outline"
+									className="h-12 w-full border-blue-200 hover:bg-blue-50"
+								>
+									<MapPin className="mr-2 h-5 w-5 text-blue-600" />
+									Acceso para Recepcionistas
+								</Button>
+							</Link>
 						</div>
 
 						{/* Links */}
